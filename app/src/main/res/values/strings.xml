@@ -1,11 +1,20 @@
 <resources>
-    <string name="app_name">Wi-Fi Provisioner</string>
+    <string name="app_name">nRF Wi-Fi Provisioner</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
+    <string name="add_device">Add device</string>
     <string name="previous">Previous</string>
+    <string name="close_app">Button which closes application.</string>
+    <string name="app_info">Application allows to provision Sheliak devices. After selecting device the app will connect to obtain status data.\n\nIf needed the device can be provision to one of the available Wifi’s which are visible from Sheliak.</string>
+
+    <string name="set_password">Set password</string>
+    <string name="password">Password</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="accept">Accept</string>
+    <string name="error_password_empty">Password cannot be empty.</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

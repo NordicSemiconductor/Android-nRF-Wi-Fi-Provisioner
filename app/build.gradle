@@ -13,7 +13,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.nordicsemi.memfault"
+        applicationId "com.nordicsemi.wifi.provisioner"
         minSdk 24
         targetSdk 32
         versionCode 1

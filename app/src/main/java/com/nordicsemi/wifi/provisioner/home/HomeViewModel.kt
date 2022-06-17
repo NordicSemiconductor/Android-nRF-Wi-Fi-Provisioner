@@ -1,11 +1,9 @@
 package com.nordicsemi.wifi.provisioner.home
 
 import android.bluetooth.BluetoothDevice
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -19,20 +17,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    @ApplicationContext
-    private val context: Context,
     private val navigationManager: NavigationManager
 ) : ViewModel() {
 
     private val _status = MutableStateFlow<Boolean>(true)
     val status = _status.asStateFlow()
 
-    init {
-        requestBluetoothDevice()
-    }
-
-    fun navigateBack() {
-        navigationManager.navigateUp()
+    fun onEvent(event: HomeScreenViewEvent) {
+        when (event) {
+            HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK -> requestBluetoothDevice()
+            HomeScreenViewEvent.FINISH -> navigationManager.navigateUp()
+        }.exhaustive
     }
 
     private fun requestBluetoothDevice() {

@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android-Memfault-Library"
+rootProject.name = "Android-nRF-Wifi-Provisioner"
 include ':app'
 
 if (file('../Android-Common-Libraries').exists()) {
