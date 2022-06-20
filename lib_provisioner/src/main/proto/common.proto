@@ -1,0 +1,80 @@
+syntax = "proto2";
+
+option java_multiple_files = true;
+option java_package = "no.nordicsemi.android.wifi";
+
+// Common ENUMs
+
+/* The Op Code for requests. */
+enum OpCode {
+  // Returns the device status.
+  // 
+  // Request parameters:
+  //  - none
+  // Response parameters:
+  //  - DeviceStatus
+  GET_STATUS    = 0;
+
+  // Starts Wifi scan.
+  //
+  // Request parameters:
+  //  - ScanParams
+  // Response parameters:
+  //  - none
+  START_SCAN    = 1;
+
+  // Manually stops Wifi scan.
+  //
+  // Request parameters:
+  //  - none
+  // Response parameters:
+  //  - none
+  STOP_SCAN     = 2;
+
+  // Used to provision the Host to the given WiFi network.
+  //
+  // Request parameters:
+  //  - WifiConfig
+  // Response parameters:
+  //  - none
+  SET_CONFIG    = 3;
+
+  // Erases previously saved configuration.
+  //
+  // Request parameters:
+  //  - none
+  // Response parameters:
+  //  - none
+  FORGET_CONFIG = 4;
+}
+
+/* Status. */
+enum Status {
+  // Returned when the request was successfully processed.	
+  SUCCESS                = 0;
+  // Returned when the request cannot be processed due to invalid arguments.
+  // For example, if the required argument is missing.
+  INVALID_ARGUMENT       = 1;
+  // Returned when failed to decode the request.
+  INVALID_PROTO          = 2;
+  // Returned in case of internal error. Hopefully never.
+  INTERNAL_ERROR         = 3;
+}
+
+/* Wi-Fi Band. */
+enum Band {
+  BAND_ANY    = 0;
+  BAND_2_4_GH = 1;
+  BAND_5_GH   = 2;  
+}
+
+/* Wi-Fi Authentication Mode. */
+enum AuthMode {
+  OPEN                   = 0;
+  WEP                    = 1;
+  WPA_PSK                = 2;
+  WPA2_PSK               = 3;
+  WPA_WPA2_PSK           = 4;
+  WPA2_ENTERPRISE        = 5;
+  // Note: More modes can be added in the future.
+}
