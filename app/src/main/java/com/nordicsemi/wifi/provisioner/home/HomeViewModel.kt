@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import no.nordicsemi.android.navigation.*
+import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
 import no.nordicsemi.ui.scanner.ScannerDestinationId
 import no.nordicsemi.ui.scanner.ui.exhaustive
 import no.nordicsemi.ui.scanner.ui.getDevice
@@ -51,7 +52,7 @@ class HomeViewModel @Inject constructor(
     private val navigationManager: NavigationManager
 ) : ViewModel() {
 
-    private val _status = MutableStateFlow<Boolean>(true)
+    private val _status = MutableStateFlow<HomeViewEntity>(IdleHomeViewEntity)
     val status = _status.asStateFlow()
 
     fun onEvent(event: HomeScreenViewEvent) {
@@ -74,13 +75,13 @@ class HomeViewModel @Inject constructor(
     private fun handleArgs(args: DestinationResult) {
         when (args) {
             is CancelDestinationResult -> navigationManager.navigateUp()
-            is SuccessDestinationResult -> installBluetoothDevice(args.getDevice().device)
+            is SuccessDestinationResult -> installBluetoothDevice(args.getDevice())
         }.exhaustive
     }
 
-    private fun installBluetoothDevice(device: BluetoothDevice) {
-
+    private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
+        _status.value = DeviceSelectedEntity(device)
     }
 }
 
-private val HRS_SERVICE_UUID: UUID = UUID.fromString("0000180D-0000-1000-8000-00805f9b34fb")
+private val HRS_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")

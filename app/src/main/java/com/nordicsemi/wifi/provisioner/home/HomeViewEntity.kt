@@ -31,12 +31,12 @@
 
 package com.nordicsemi.wifi.provisioner.home
 
-import android.bluetooth.BluetoothDevice
+import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
 
 sealed interface HomeViewEntity
 
 object IdleHomeViewEntity : HomeViewEntity
 
-data class DeviceSelectedEntity(val device: BluetoothDevice) : HomeViewEntity
+data class DeviceSelectedEntity(val device: DiscoveredBluetoothDevice) : HomeViewEntity
 
-data class NetworkSelectedEntity(val device: BluetoothDevice) : HomeViewEntity
+data class NetworkSelectedEntity(val device: DiscoveredBluetoothDevice) : HomeViewEntity

@@ -47,6 +47,8 @@
     <string name="accept">Accept</string>
     <string name="error_password_empty">Password cannot be empty.</string>
 
+    <string name="cd_wifi_available">Wifi is available.</string>
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

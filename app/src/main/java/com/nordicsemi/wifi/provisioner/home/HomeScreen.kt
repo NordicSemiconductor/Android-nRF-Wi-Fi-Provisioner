@@ -34,6 +34,7 @@ package com.nordicsemi.wifi.provisioner.home
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -45,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.wifi.provisioner.R
+import no.nordicsemi.ui.scanner.ui.exhaustive
 
 enum class HomeScreenViewEvent {
     ON_SELECT_BUTTON_CLICK, FINISH
@@ -53,7 +55,8 @@ enum class HomeScreenViewEvent {
 @Composable
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
-    val state = viewModel.status.collectAsState()
+    val state = viewModel.status.collectAsState().value
+    val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Column {
         CloseIconAppBar(stringResource(id = R.string.app_name)) {
@@ -61,17 +64,17 @@ fun HomeScreen() {
         }
 
         Column(modifier = Modifier.padding(16.dp)) {
-            SelectDeviceSection { viewModel.onEvent(it) }
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            Text(text = stringResource(id = R.string.app_info))
+            when (state) {
+                IdleHomeViewEntity -> DeviceNotSelectedSection(onEvent)
+                is DeviceSelectedEntity -> DeviceSelectedSection(state.device.displayNameOrAddress(), onEvent)
+                is NetworkSelectedEntity -> NetworkSelectedSection(state.device.displayNameOrAddress(), onEvent)
+            }.exhaustive
         }
     }
 }
 
 @Composable
-private fun SelectDeviceSection(onEvent: (HomeScreenViewEvent) -> Unit) {
+private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
             Icon(Icons.Default.Add, contentDescription = stringResource(id = R.string.add_device))
@@ -80,5 +83,35 @@ private fun SelectDeviceSection(onEvent: (HomeScreenViewEvent) -> Unit) {
         Spacer(modifier = Modifier.size(16.dp))
 
         Text(text = stringResource(id = R.string.add_device))
+    }
+
+    Spacer(modifier = Modifier.size(16.dp))
+
+    Text(text = stringResource(id = R.string.app_info))
+}
+
+@Composable
+private fun DeviceSelectedSection(deviceName: String, onEvent: (HomeScreenViewEvent) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
+            Icon(Icons.Default.Wifi, contentDescription = stringResource(id = R.string.cd_wifi_available))
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Text(text = deviceName)
+    }
+}
+
+@Composable
+private fun NetworkSelectedSection(deviceName: String, onEvent: (HomeScreenViewEvent) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
+            Icon(Icons.Default.Wifi, contentDescription = stringResource(id = R.string.cd_wifi_available))
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Text(text = deviceName)
     }
 }
