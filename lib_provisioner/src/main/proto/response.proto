@@ -3,17 +3,9 @@ syntax = "proto2";
 import "common.proto";
 
 option java_multiple_files = true;
-option java_package = "no.nordicsemi.android.wifi";
+option java_package = "no.nordicsemi.android.wifi.provisioning";
 
 // Responses
-
-/* The state of Wi-Fi station. */
-enum WifiState {
-  CONNECTED              = 0;
-  CONNECTING             = 1;
-  DISCONNECTED           = 2;
-  CONNECTION_FAILED      = 3;
-}
 
 /* Connection failure reason. */
 enum WifiConnectionFailureReason {

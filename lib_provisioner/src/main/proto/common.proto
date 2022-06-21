@@ -1,7 +1,7 @@
 syntax = "proto2";
 
 option java_multiple_files = true;
-option java_package = "no.nordicsemi.android.wifi";
+option java_package = "no.nordicsemi.android.wifi.provisioning";
 
 // Common ENUMs
 
@@ -59,6 +59,16 @@ enum Status {
   INVALID_PROTO          = 2;
   // Returned in case of internal error. Hopefully never.
   INTERNAL_ERROR         = 3;
+}
+
+/* The state of Wi-Fi station. */
+enum WifiState {
+  DISCONNECTED           = 0;
+  AUTHENTICATION         = 1;
+  ASSOCIATION            = 2;
+  OBTAINING_IP           = 3;
+  CONNECTED              = 4;
+  CONNECTION_FAILED      = 5;
 }
 
 /* Wi-Fi Band. */

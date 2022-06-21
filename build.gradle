@@ -5,4 +5,5 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
     id 'com.google.dagger.hilt.android' version '2.42' apply false
     id "com.google.protobuf" version "0.8.18" apply false
+    id "com.squareup.wire" version "4.4.0" apply false
 }

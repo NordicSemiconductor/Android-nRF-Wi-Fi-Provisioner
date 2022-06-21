@@ -3,7 +3,7 @@ syntax = "proto2";
 import "common.proto";
 
 option java_multiple_files = true;
-option java_package = "no.nordicsemi.android.wifi";
+option java_package = "no.nordicsemi.android.wifi.provisioning";
 
 // States are sent over Data Out characteristic
 
@@ -18,19 +18,11 @@ message ScanRecord {
 }
 
 /* 
-  Provisioniong states are reported during SET_CONFIG phase until the state changes 
-  to CONNECTED or CONNECTION_FAILED.
- */
-enum ProvisioningState {
-  AUTHENTICATION    = 0;
-  ASSOCIATION       = 1;
-  OBTAINING_IP      = 2;
-  CONNECTED         = 3;
-  CONNECTION_FAILED = 4;
-}
-
-/* This type is returned by the Data Out characteristic using notifications. */
+  This type is returned by the Data Out characteristic using notifications. 
+  Scan records are returned when WiFi scanning is enabled.
+  WiFi state is notified whenever connection state changes, or during provisioning.
+  */
 message Result {
-  optional ScanRecord scan_record              = 1;
-  optional ProvisioningState provisoning_state = 2;
+  optional ScanRecord scan_record = 1;
+  optional WifiState state        = 2;
 }
