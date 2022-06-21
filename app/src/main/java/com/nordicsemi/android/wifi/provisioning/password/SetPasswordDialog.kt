@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.password
+package com.nordicsemi.android.wifi.provisioning.password
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable

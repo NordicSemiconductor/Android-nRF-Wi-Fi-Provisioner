@@ -34,7 +34,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".WifiProvisionerApplication"
+        android:name="com.nordicsemi.android.wifi.provisioning.WifiProvisionerApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -45,7 +45,7 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="com.nordicsemi.android.wifi.provisioning.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.SplashScreen">

@@ -29,19 +29,31 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.repository
+package com.nordicsemi.android.wifi.provisioning
 
-import javax.inject.Inject
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import dagger.hilt.android.AndroidEntryPoint
+import no.nordicsemi.android.navigation.NavigationView
+import no.nordicsemi.android.theme.NordicActivity
+import no.nordicsemi.android.theme.NordicTheme
+import no.nordicsemi.ui.scanner.ScannerDestinations
 
-class PasswordManager @Inject constructor() {
+@AndroidEntryPoint
+class MainActivity : NordicActivity() {
 
-    private val passwords = mutableMapOf<String, String>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    fun getPasswordOrNull(ssid: String): String? {
-        return passwords[ssid]
-    }
-
-    fun storePassword(ssid: String, password: String) {
-        passwords[ssid] = password
+        setContent {
+            NordicTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    NavigationView(HomeDestinations + ScannerDestinations)
+                }
+            }
+        }
     }
 }

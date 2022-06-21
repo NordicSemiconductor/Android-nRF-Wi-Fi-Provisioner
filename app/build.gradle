@@ -9,11 +9,11 @@ android {
     ext.kotlin_version = '1.6.21'
     ext.compose_version = '1.2.0-beta02'
 
-    namespace 'com.nordicsemi.wifi.provisioner'
+    namespace 'com.nordicsemi.android.wifi.provisioning'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.nordicsemi.wifi.provisioner"
+        applicationId "com.nordicsemi.android.wifi.provisioning"
         minSdk 24
         targetSdk 32
         versionCode 1

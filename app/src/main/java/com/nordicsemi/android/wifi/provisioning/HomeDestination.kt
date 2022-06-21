@@ -29,9 +29,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner
+package com.nordicsemi.android.wifi.provisioning
 
-import com.nordicsemi.wifi.provisioner.home.HomeScreen
+import com.nordicsemi.android.wifi.provisioning.home.HomeScreen
 import no.nordicsemi.android.navigation.ComposeDestination
 import no.nordicsemi.android.navigation.ComposeDestinations
 import no.nordicsemi.android.navigation.DestinationId

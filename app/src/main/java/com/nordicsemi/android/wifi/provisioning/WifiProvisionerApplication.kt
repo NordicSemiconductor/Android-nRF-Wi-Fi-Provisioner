@@ -29,14 +29,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.home
+package com.nordicsemi.android.wifi.provisioning
 
-import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-sealed interface HomeViewEntity
-
-object IdleHomeViewEntity : HomeViewEntity
-
-data class DeviceSelectedEntity(val device: DiscoveredBluetoothDevice) : HomeViewEntity
-
-data class NetworkSelectedEntity(val device: DiscoveredBluetoothDevice) : HomeViewEntity
+@HiltAndroidApp
+class WifiProvisionerApplication : Application() {
+}

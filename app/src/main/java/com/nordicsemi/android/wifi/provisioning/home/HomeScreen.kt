@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.home
+package com.nordicsemi.android.wifi.provisioning.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
