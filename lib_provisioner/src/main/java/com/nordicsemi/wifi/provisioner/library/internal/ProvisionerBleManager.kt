@@ -28,9 +28,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.nordicsemi.wifi.provisioner.library
+package com.nordicsemi.wifi.provisioner.library.internal
 
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
@@ -43,6 +44,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.ktx.asValidResponseFlow
+import no.nordicsemi.android.ble.ktx.suspend
 import no.nordicsemi.android.ble.ktx.suspendForValidResponse
 import no.nordicsemi.android.logger.NordicLogger
 import no.nordicsemi.android.wifi.provisioning.*
@@ -77,6 +79,21 @@ internal class ProvisionerBleManager(
 
     override fun getMinLogPriority(): Int {
         return Log.VERBOSE
+    }
+
+    suspend fun start(device: BluetoothDevice) {
+        try {
+            connect(device)
+                .useAutoConnect(false)
+                .retry(3, 100)
+                .suspend()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    suspend fun release() {
+        disconnect().suspend()
     }
 
     private inner class ProvisioningManagerGattCallback : BleManagerGattCallback() {

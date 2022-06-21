@@ -29,13 +29,13 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.library
+package com.nordicsemi.wifi.provisioner.library.internal
 
 import android.bluetooth.BluetoothDevice
 import no.nordicsemi.android.ble.callback.profile.ProfileReadResponse
 import no.nordicsemi.android.ble.data.Data
 
-class ByteArrayReadResponse : ProfileReadResponse() {
+internal class ByteArrayReadResponse : ProfileReadResponse() {
 
     lateinit var value: ByteArray
 

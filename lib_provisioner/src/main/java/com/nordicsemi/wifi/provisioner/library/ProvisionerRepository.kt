@@ -31,21 +31,68 @@
 
 package com.nordicsemi.wifi.provisioner.library
 
-class ProvisionerRepository {
+import android.bluetooth.BluetoothDevice
+import android.content.Context
+import com.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
+import kotlinx.coroutines.CoroutineScope
+import no.nordicsemi.android.ble.ktx.state
+import no.nordicsemi.android.logger.LoggerAppRunner
+import no.nordicsemi.android.logger.NordicLogger
+
+class ProvisionerRepository internal constructor(
+    private val context: Context
+) {
+
+    private var manager: ProvisionerBleManager? = null
+
+    suspend fun start(device: BluetoothDevice, scope: CoroutineScope) {
+        manager = ProvisionerFactory.createBleManager(context, device)
+        manager?.start(device)
+    }
 
     suspend fun getStatus() {
-
+        manager?.getStatus()
     }
 
     suspend fun startScan() {
+        manager?.startScan()
+    }
 
+    suspend fun stopScan() {
+        manager?.stopScan()
     }
 
     suspend fun setConfig() {
-
+        manager?.provision()
     }
 
     suspend fun forgetConfig() {
+        manager?.forgetWifi()
+    }
 
+    suspend fun release() {
+        manager?.release()
+        manager = null
+    }
+
+    companion object {
+        fun newInstance(context: Context): ProvisionerRepository {
+            return ProvisionerFactory.createRepository(context)
+        }
+    }
+}
+
+internal object ProvisionerFactory {
+
+    fun createRepository(context: Context): ProvisionerRepository {
+        return ProvisionerRepository(context)
+    }
+
+    fun createBleManager(context: Context, device: BluetoothDevice): ProvisionerBleManager {
+        return ProvisionerBleManager(context, createNordicLogger(context, device.address))
+    }
+
+    private fun createNordicLogger(context: Context, address: String): NordicLogger {
+        return NordicLogger(context, LoggerAppRunner(context), "Wi-Fi", "Provisioner", address)
     }
 }

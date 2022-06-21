@@ -29,8 +29,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.library
+package com.nordicsemi.wifi.provisioner.library.internal
 
-class WifiProvisioner {
+internal sealed interface Request<T> {
 
+    companion object {
+        fun <T> createInitiated() = Initiated<T>()
+        fun <T> createSuccess(data: T) = Success(data)
+        fun <T> createError(error: Throwable) = Error<T>(error)
+    }
 }
+
+internal class Initiated<T> : Request<T>
+internal data class Success<T>(val data: T): Request<T>
+internal data class Error<T>(val error: Throwable): Request<T>

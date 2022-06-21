@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.library
+package com.nordicsemi.wifi.provisioner.library.internal
 
 import android.bluetooth.BluetoothDevice
 import android.util.Log
@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import no.nordicsemi.android.ble.observer.ConnectionObserver
 
-class ConnectionObserverAdapter : ConnectionObserver {
+internal class ConnectionObserverAdapter : ConnectionObserver {
 
     private val TAG = "BLE-CONNECTION"
 

@@ -29,8 +29,8 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.library
+package com.nordicsemi.wifi.provisioner.library.internal
 
-enum class ConnectionStatus {
+internal enum class ConnectionStatus {
     IDLE, CONNECTING, CONNECTED, SUCCESS, LINK_LOSS, DISCONNECTING, DISCONNECTED, UNKNOWN_ERROR, MISSING_SERVICE, FAIL_TO_CONNECT
 }
