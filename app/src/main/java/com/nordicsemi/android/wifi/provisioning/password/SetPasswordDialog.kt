@@ -36,7 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.stringResource
-import com.nordicsemi.wifi.provisioner.R
+import com.nordicsemi.android.wifi.provisioning.R
 
 sealed interface PasswordDialogEvent
 

@@ -36,14 +36,16 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import no.nordicsemi.android.ble.BleManager
-import no.nordicsemi.android.ble.WriteRequest
-import no.nordicsemi.android.ble.ktx.asFlow
-import no.nordicsemi.android.ble.ktx.suspend
+import no.nordicsemi.android.ble.ktx.asValidResponseFlow
+import no.nordicsemi.android.ble.ktx.suspendForValidResponse
 import no.nordicsemi.android.logger.NordicLogger
+import no.nordicsemi.android.wifi.provisioning.*
 import java.util.*
 
 val PROVISIONING_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")
@@ -53,7 +55,6 @@ private val DATA_OUT_CHARACTERISTIC_UUID = UUID.fromString("14387803-130c-49e7-b
 
 internal class ProvisionerBleManager(
     context: Context,
-    private val scope: CoroutineScope,
     private val logger: NordicLogger
 ) : BleManager(context) {
 
@@ -64,15 +65,10 @@ internal class ProvisionerBleManager(
 
     private var useLongWrite = true
 
-    private val data = MutableStateFlow(UARTData())
-    val dataHolder = ConnectionObserverAdapter<UARTData>()
+    val dataHolder = ConnectionObserverAdapter()
 
     init {
         connectionObserver = dataHolder
-
-        data.onEach {
-            dataHolder.setValue(it)
-        }.launchIn(scope)
     }
 
     override fun log(priority: Int, message: String) {
@@ -83,24 +79,11 @@ internal class ProvisionerBleManager(
         return Log.VERBOSE
     }
 
-    private inner class UARTManagerGattCallback : BleManagerGattCallback() {
+    private inner class ProvisioningManagerGattCallback : BleManagerGattCallback() {
 
         @SuppressLint("WrongConstant")
         override fun initialize() {
-            setNotificationCallback(txCharacteristic).asFlow()
-                .flowOn(Dispatchers.IO)
-                .map {
-                    val text: String = it.getStringValue(0) ?: String.EMPTY
-                    log(10, "\"$text\" received")
-                    val messages = data.value.messages + UARTRecord(text, UARTRecordType.OUTPUT)
-                    messages.takeLast(50)
-                }
-                .onEach {
-                    data.value = data.value.copy(messages = it)
-                }.launchIn(scope)
-
             requestMtu(517).enqueue()
-            enableNotifications(txCharacteristic).enqueue()
         }
 
         override fun isRequiredServiceSupported(gatt: BluetoothGatt): Boolean {
@@ -113,7 +96,7 @@ internal class ProvisionerBleManager(
             var writeRequest = false
             var writeCommand = false
 
-            rxCharacteristic?.let {
+            controlPointCharacteristic?.let {
                 val rxProperties: Int = it.properties
                 writeRequest = rxProperties and BluetoothGattCharacteristic.PROPERTY_WRITE > 0
                 writeCommand =
@@ -127,10 +110,7 @@ internal class ProvisionerBleManager(
                     useLongWrite = false
                 }
             }
-            gatt.getService(BATTERY_SERVICE_UUID)?.run {
-                batteryLevelCharacteristic = getCharacteristic(BATTERY_LEVEL_CHARACTERISTIC_UUID)
-            }
-            return rxCharacteristic != null && txCharacteristic != null && (writeRequest || writeCommand)
+            return versionCharacteristic != null && controlPointCharacteristic != null && dataOutCharacteristic != null && (writeRequest || writeCommand)
         }
 
         override fun onServicesInvalidated() {
@@ -141,32 +121,92 @@ internal class ProvisionerBleManager(
         }
     }
 
-    @SuppressLint("WrongConstant")
-    fun send(text: String) {
-        if (rxCharacteristic == null) return
-        scope.launchWithCatch {
-            val writeType = if (useLongWrite) {
-                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-            } else {
-                BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+    suspend fun getStatus(): DeviceStatus {
+        val request = Request(op_code = OpCode.GET_STATUS)
+        val response = waitForIndication(controlPointCharacteristic)
+            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .suspendForValidResponse<ByteArrayReadResponse>()
+
+        verifyResponseSuccess(response.value)
+
+        return Response.ADAPTER.decode(response.value).device_status!!
+    }
+
+    suspend fun startScan() = callbackFlow<Request<ScanRecord>> {
+        val request = Request(op_code = OpCode.START_SCAN)
+        val response = waitForIndication(controlPointCharacteristic)
+            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .suspendForValidResponse<ByteArrayReadResponse>()
+
+        if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
+            trySend(Request.createError(createResponseError()))
+        }
+
+        setNotificationCallback(dataOutCharacteristic)
+            .asValidResponseFlow<ByteArrayReadResponse>()
+            .onEach {
+                val result = Result.ADAPTER.decode(it.value)
+                trySend(Request.createSuccess(result.scan_record!!))
             }
-            val request: WriteRequest = writeCharacteristic(rxCharacteristic, text.toByteArray(), writeType)
-            if (!useLongWrite) {
-                request.split()
-            }
-            request.suspend()
-            data.value = data.value.copy(
-                messages = data.value.messages + UARTRecord(text, UARTRecordType.INPUT)
-            )
-            log(10, "\"$text\" sent")
+            .catch { trySend(Request.createError(it)) }
+            .launchIn(this)
+
+        awaitClose {
+            disableNotifications(dataOutCharacteristic)
         }
     }
 
-    fun clearItems() {
-        data.value = data.value.copy(messages = emptyList())
+    suspend fun stopScan() {
+        val request = Request(op_code = OpCode.STOP_SCAN)
+        val response = waitForIndication(controlPointCharacteristic)
+            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .suspendForValidResponse<ByteArrayReadResponse>()
+
+        verifyResponseSuccess(response.value)
     }
 
+    suspend fun provision() = callbackFlow<Request<WifiState>> {
+        val request = Request(op_code = OpCode.SET_CONFIG)
+        val response = waitForIndication(controlPointCharacteristic)
+            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .suspendForValidResponse<ByteArrayReadResponse>()
+
+        if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
+            trySend(Request.createError(createResponseError()))
+        }
+
+        setNotificationCallback(dataOutCharacteristic)
+            .asValidResponseFlow<ByteArrayReadResponse>()
+            .onEach {
+                val result = Result.ADAPTER.decode(it.value)
+                trySend(Request.createSuccess(result.state!!))
+            }
+            .catch { trySend(Request.createError(it)) }
+            .launchIn(this)
+
+        awaitClose {
+            disableNotifications(dataOutCharacteristic)
+        }
+    }
+
+    suspend fun forgetWifi() {
+        val request = Request(op_code = OpCode.FORGET_CONFIG)
+        val response = waitForIndication(controlPointCharacteristic)
+            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .suspendForValidResponse<ByteArrayReadResponse>()
+
+        verifyResponseSuccess(response.value)
+    }
+
+    private fun verifyResponseSuccess(response: ByteArray) {
+        if (Response.ADAPTER.decode(response).status != Status.SUCCESS) {
+            throw createResponseError()
+        }
+    }
+
+    private fun createResponseError() = IllegalArgumentException("Response should be success")
+
     override fun getGattCallback(): BleManagerGattCallback {
-        return UARTManagerGattCallback()
+        return ProvisioningManagerGattCallback()
     }
 }

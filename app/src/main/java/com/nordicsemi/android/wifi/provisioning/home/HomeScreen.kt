@@ -45,7 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.nordicsemi.wifi.provisioner.R
+import com.nordicsemi.android.wifi.provisioning.R
 import no.nordicsemi.ui.scanner.ui.exhaustive
 
 enum class HomeScreenViewEvent {

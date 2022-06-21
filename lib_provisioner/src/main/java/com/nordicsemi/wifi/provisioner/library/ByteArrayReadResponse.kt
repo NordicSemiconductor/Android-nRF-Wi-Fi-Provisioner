@@ -29,35 +29,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.android.wifi.provisioning.home
+package com.nordicsemi.wifi.provisioner.library
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.theme.R as mainR
-import com.nordicsemi.android.wifi.provisioning.R
+import android.bluetooth.BluetoothDevice
+import no.nordicsemi.android.ble.callback.profile.ProfileReadResponse
+import no.nordicsemi.android.ble.data.Data
 
-@Composable
-fun CloseIconAppBar(text: String, onClick: () -> Unit) {
-    SmallTopAppBar(
-        title = { Text(text, maxLines = 2) },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            scrolledContainerColor = MaterialTheme.colorScheme.primary,
-            containerColor = colorResource(id = mainR.color.appBarColor),
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        navigationIcon = {
-            IconButton(onClick = { onClick() }) {
-                Icon(
-                    Icons.Default.Close,
-                    contentDescription = stringResource(id = R.string.close_app),
-                )
-            }
-        }
-    )
+class ByteArrayReadResponse : ProfileReadResponse() {
+
+    lateinit var value: ByteArray
+
+    override fun onDataReceived(device: BluetoothDevice, data: Data) {
+        super.onDataReceived(device, data)
+
+        value = data.value ?: throw IllegalArgumentException("Read value cannot be null.")
+    }
 }
