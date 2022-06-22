@@ -70,7 +70,7 @@ class ProvisionerRepository internal constructor(
     }
 
     suspend fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
-        return manager?.provision()
+        return manager?.provision()!!
             .map { Resource.createSuccess(it.toDomain()) }
             .onStart { emit(Resource.createLoading()) }
             .catch { emit(Resource.createError(it)) }

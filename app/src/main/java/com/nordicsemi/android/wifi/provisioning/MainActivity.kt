@@ -40,7 +40,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import no.nordicsemi.android.navigation.NavigationView
 import no.nordicsemi.android.theme.NordicActivity
 import no.nordicsemi.android.theme.NordicTheme
-import no.nordicsemi.android.wifi.provisioning.OpCode
 import no.nordicsemi.ui.scanner.ScannerDestinations
 
 @AndroidEntryPoint
