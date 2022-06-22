@@ -33,9 +33,13 @@ package com.nordicsemi.wifi.provisioner.library
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
+import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
+import com.nordicsemi.wifi.provisioner.library.domain.toDomain
 import com.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 import kotlinx.coroutines.CoroutineScope
-import no.nordicsemi.android.ble.ktx.state
+import kotlinx.coroutines.flow.*
 import no.nordicsemi.android.logger.LoggerAppRunner
 import no.nordicsemi.android.logger.NordicLogger
 
@@ -50,29 +54,53 @@ class ProvisionerRepository internal constructor(
         manager?.start(device)
     }
 
-    suspend fun getStatus() {
-        manager?.getStatus()
+    suspend fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
+        return runTask { manager?.getStatus()?.toDomain()!! }
     }
 
-    suspend fun startScan() {
-        manager?.startScan()
+    suspend fun startScan(): Flow<Resource<ScanRecordDomain>> {
+        return manager?.startScan()!!
+            .map { Resource.createSuccess(it.toDomain()) }
+            .onStart { emit(Resource.createLoading()) }
+            .catch { emit(Resource.createError(it)) }
     }
 
-    suspend fun stopScan() {
-        manager?.stopScan()
+    suspend fun stopScan(): Flow<Resource<Unit>> {
+        return runTask { manager?.stopScan() }
     }
 
-    suspend fun setConfig() {
-        manager?.provision()
+    suspend fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
+        return manager?.provision()
+            .map { Resource.createSuccess(it.toDomain()) }
+            .onStart { emit(Resource.createLoading()) }
+            .catch { emit(Resource.createError(it)) }
     }
 
-    suspend fun forgetConfig() {
-        manager?.forgetWifi()
+    suspend fun forgetConfig(): Flow<Resource<Unit>> {
+        return runTask { manager?.forgetWifi() }
     }
 
     suspend fun release() {
         manager?.release()
         manager = null
+    }
+
+    private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
+        return flow {
+            emit(Resource.createLoading())
+            emit(Resource.createSuccess(block()))
+        }.catch {
+            emit(Resource.createError(it))
+        }
+    }
+
+    private fun <T> runFlowTask(block: suspend () -> Flow<T>): Flow<Resource<T>> {
+        return flow {
+            emit(Resource.createLoading())
+            emitAll(block().map { Resource.createSuccess(it) })
+        }.catch {
+            emit(Resource.createError(it))
+        }
     }
 
     companion object {

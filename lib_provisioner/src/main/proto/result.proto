@@ -9,12 +9,8 @@ option java_package = "no.nordicsemi.android.wifi.provisioning";
 
 /* Single Wi-Fi scan result. */
 message ScanRecord {
-  required bytes ssid             = 1;
-  required bytes bssid            = 2;
-  optional Band band              = 3;
-  required uint32 channel         = 4;
-  optional AuthMode auth          = 5;
-  optional int32 rssi             = 6;
+  optional WifiInfo wifi          = 1;
+  optional int32 rssi             = 2;
 }
 
 /* 
@@ -24,5 +20,22 @@ message ScanRecord {
   */
 message Result {
   optional ScanRecord scan_record = 1;
-  optional WifiState state        = 2;
+  optional ConnectionState state  = 2;
 }
+
+/*
+message Test {
+  message InnerTest {
+    required uint32 req_uint32 = 1;
+    optional uint32 opt_uint32 = 2;
+  }
+  required InnerTest req_inner_test = 1;
+  optional InnerTest opt_inner_test = 2;
+  optional AuthMode auto_mode       = 3;
+  oneof either {
+    bool null    = 4;
+    AuthMode am  = 5;
+    InnerTest it = 6;
+  }
+}
+*/

@@ -48,27 +48,41 @@ enum OpCode {
   FORGET_CONFIG = 4;
 }
 
-/* Status. */
+/* Response status code. */
 enum Status {
   // Returned when the request was successfully processed.	
-  SUCCESS                = 0;
+  SUCCESS                 = 0;
   // Returned when the request cannot be processed due to invalid arguments.
   // For example, if the required argument is missing.
-  INVALID_ARGUMENT       = 1;
+  INVALID_ARGUMENT        = 1;
   // Returned when failed to decode the request.
-  INVALID_PROTO          = 2;
+  INVALID_PROTO           = 2;
   // Returned in case of internal error. Hopefully never.
-  INTERNAL_ERROR         = 3;
+  INTERNAL_ERROR          = 3;
 }
 
 /* The state of Wi-Fi station. */
-enum WifiState {
-  DISCONNECTED           = 0;
-  AUTHENTICATION         = 1;
-  ASSOCIATION            = 2;
-  OBTAINING_IP           = 3;
-  CONNECTED              = 4;
-  CONNECTION_FAILED      = 5;
+enum ConnectionState {
+  DISCONNECTED            = 0;
+  AUTHENTICATION          = 1;
+  ASSOCIATION             = 2;
+  OBTAINING_IP            = 3;
+  CONNECTED               = 4;
+  CONNECTION_FAILED       = 5;
+}
+
+/* Connection failure reason. */
+enum ConnectionFailureReason {
+  // Authentication error.
+  AUTH_ERROR              = 0;
+  // The specified network could not be find.
+  NETWORK_NOT_FOUND       = 1;
+  // Timeout occurred.
+  TIMEOUT                 = 2;
+  // Could not obtain IP from provided provisioning information.
+  FAIL_IP                 = 3;
+  // Could not connect to provisioned network.
+  FAIL_CONN               = 4;
 }
 
 /* Wi-Fi Band. */
@@ -80,11 +94,20 @@ enum Band {
 
 /* Wi-Fi Authentication Mode. */
 enum AuthMode {
-  OPEN                   = 0;
-  WEP                    = 1;
-  WPA_PSK                = 2;
-  WPA2_PSK               = 3;
-  WPA_WPA2_PSK           = 4;
-  WPA2_ENTERPRISE        = 5;
+  OPEN                    = 0;
+  WEP                     = 1;
+  WPA_PSK                 = 2;
+  WPA2_PSK                = 3;
+  WPA_WPA2_PSK            = 4;
+  WPA2_ENTERPRISE         = 5;
   // Note: More modes can be added in the future.
+}
+
+/* Wi-Fi details. */
+message WifiInfo {
+  required bytes ssid     = 1;
+  required bytes bssid    = 2;
+  optional Band band      = 3;
+  required uint32 channel = 4;
+  optional AuthMode auth  = 5;
 }

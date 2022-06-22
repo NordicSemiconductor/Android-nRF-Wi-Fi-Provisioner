@@ -7,52 +7,35 @@ option java_package = "no.nordicsemi.android.wifi.provisioning";
 
 // Responses
 
-/* Connection failure reason. */
-enum WifiConnectionFailureReason {
-  // Authentication error.
-  AUTH_ERROR             = 0;
-  // The specified network could not be find.
-  NETWORK_NOT_FOUND      = 1;
-  // Timeout occurred.
-  TIMEOUT                = 2;
-  // Could not obtain IP from provided provisioning information.
-  FAIL_IP                = 3;
-  // Could not connect to provisioned network.
-  FAIL_CONN              = 4;
-}
-
 /* Information about the Wi-Fi connected state. */
-message WifiInfo {
-  optional string ip4_addr = 1;
-  required bytes ssid      = 2;
-  required bytes bssid     = 3;
-  optional Band band       = 4;
-  required uint32 channel  = 5;
-  optional AuthMode auth   = 6;
+message ConnectionInfo {
+  optional WifiInfo wifi   = 1;
+  optional string ip4_addr = 2;
 }
 
 /* Response payload for GET_STATUS request. */
 message DeviceStatus {
   // The current state of the Wifi connection.
-  optional WifiState state = 1;
+  optional ConnectionState state = 1;
   
   // Parameters:
 
-  // The network information is set when the state is CONNECTED.
-  optional WifiInfo info                      = 10;
+  // The network information if provisioned to a network.
+  // This can be set even if connection failed.
+  optional ConnectionInfo info            = 10;
   // The failure reason is set when the state is CONNECTION_FAILED.
-  optional WifiConnectionFailureReason reason = 11;
+  optional ConnectionFailureReason reason = 11;
 }
 
 /* A response type which is sent back from the device. */
 message Response {
   // Request op code.
-  optional OpCode request_op_code             = 1;
+  optional OpCode request_op_code         = 1;
   // Status of the operation.
-  optional Status status                      = 2;
+  optional Status status                  = 2;
 
   // Parameters:
 
   // The device status is set as a response to GET_STATUS.
-  optional DeviceStatus device_status         = 10;
+  optional DeviceStatus device_status     = 10;
 }

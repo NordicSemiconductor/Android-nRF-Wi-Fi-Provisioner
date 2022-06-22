@@ -17,12 +17,8 @@ message ScanParams {
 
 /* Wi-Fi provisioning configuration for SET_CONFIG request. */
 message WifiConfig {
-  required bytes ssid             = 1;
-  required bytes bssid            = 2;
-  optional bytes passphrase       = 3;
-  optional Band band              = 4;
-  required uint32 channel         = 5;
-  optional AuthMode auth          = 6;
+  optional WifiInfo wifi          = 1;
+  optional bytes passphrase       = 2;
 }
 
 /* The request type, sent to the device. */

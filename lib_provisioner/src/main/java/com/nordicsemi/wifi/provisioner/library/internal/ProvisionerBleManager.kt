@@ -39,7 +39,6 @@ import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import no.nordicsemi.android.ble.BleManager
@@ -149,23 +148,22 @@ internal class ProvisionerBleManager(
         return Response.ADAPTER.decode(response.value).device_status!!
     }
 
-    suspend fun startScan() = callbackFlow<Request<ScanRecord>> {
+    suspend fun startScan() = callbackFlow<ScanRecord> {
         val request = Request(op_code = OpCode.START_SCAN)
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
             .suspendForValidResponse<ByteArrayReadResponse>()
 
         if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
-            trySend(Request.createError(createResponseError()))
+            throw createResponseError()
         }
 
         setNotificationCallback(dataOutCharacteristic)
             .asValidResponseFlow<ByteArrayReadResponse>()
             .onEach {
                 val result = Result.ADAPTER.decode(it.value)
-                trySend(Request.createSuccess(result.scan_record!!))
+                trySend(result.scan_record!!)
             }
-            .catch { trySend(Request.createError(it)) }
             .launchIn(this)
 
         awaitClose {
@@ -182,23 +180,22 @@ internal class ProvisionerBleManager(
         verifyResponseSuccess(response.value)
     }
 
-    suspend fun provision() = callbackFlow<Request<WifiState>> {
+    suspend fun provision() = callbackFlow<ConnectionState> {
         val request = Request(op_code = OpCode.SET_CONFIG)
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
             .suspendForValidResponse<ByteArrayReadResponse>()
 
         if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
-            trySend(Request.createError(createResponseError()))
+            throw createResponseError()
         }
 
         setNotificationCallback(dataOutCharacteristic)
             .asValidResponseFlow<ByteArrayReadResponse>()
             .onEach {
                 val result = Result.ADAPTER.decode(it.value)
-                trySend(Request.createSuccess(result.state!!))
+                trySend(result.state!!)
             }
-            .catch { trySend(Request.createError(it)) }
             .launchIn(this)
 
         awaitClose {
