@@ -54,6 +54,10 @@ class ProvisionerRepository internal constructor(
         manager?.start(device)
     }
 
+    suspend fun readVersion(): Flow<Resource<String>> {
+        return runTask { manager?.getVersion()!! }
+    }
+
     suspend fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
         return runTask { manager?.getStatus()?.toDomain()!! }
     }
@@ -89,15 +93,6 @@ class ProvisionerRepository internal constructor(
         return flow {
             emit(Resource.createLoading())
             emit(Resource.createSuccess(block()))
-        }.catch {
-            emit(Resource.createError(it))
-        }
-    }
-
-    private fun <T> runFlowTask(block: suspend () -> Flow<T>): Flow<Resource<T>> {
-        return flow {
-            emit(Resource.createLoading())
-            emitAll(block().map { Resource.createSuccess(it) })
         }.catch {
             emit(Resource.createError(it))
         }

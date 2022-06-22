@@ -33,6 +33,7 @@ package com.nordicsemi.android.wifi.provisioning.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nordicsemi.wifi.provisioner.library.internal.PROVISIONING_SERVICE_UUID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -62,7 +63,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun requestBluetoothDevice() {
-        navigationManager.navigateTo(ScannerDestinationId, UUIDArgument(HRS_SERVICE_UUID))
+        navigationManager.navigateTo(ScannerDestinationId, UUIDArgument(PROVISIONING_SERVICE_UUID))
 
         navigationManager.recentResult.onEach {
             if (it.destinationId == ScannerDestinationId) {
@@ -82,5 +83,3 @@ class HomeViewModel @Inject constructor(
         _status.value = DeviceSelectedEntity(device)
     }
 }
-
-private val HRS_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")

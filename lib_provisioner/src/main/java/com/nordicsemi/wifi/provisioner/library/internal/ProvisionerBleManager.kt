@@ -59,7 +59,6 @@ internal class ProvisionerBleManager(
     private val logger: NordicLogger
 ) : BleManager(context) {
 
-    // For future use
     private var versionCharacteristic: BluetoothGattCharacteristic? = null
     private var controlPointCharacteristic: BluetoothGattCharacteristic? = null
     private var dataOutCharacteristic: BluetoothGattCharacteristic? = null
@@ -135,6 +134,11 @@ internal class ProvisionerBleManager(
             dataOutCharacteristic = null
             useLongWrite = true
         }
+    }
+
+    suspend fun getVersion(): String {
+        val response = readCharacteristic(versionCharacteristic).suspendForValidResponse<ByteArrayReadResponse>().value
+        return response.toString()
     }
 
     suspend fun getStatus(): DeviceStatus {
