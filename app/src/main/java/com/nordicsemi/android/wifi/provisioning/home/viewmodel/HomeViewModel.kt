@@ -29,28 +29,37 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.android.wifi.provisioning.home
+package com.nordicsemi.android.wifi.provisioning.home.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nordicsemi.android.wifi.provisioning.WifiScannerId
+import com.nordicsemi.android.wifi.provisioning.home.view.*
+import com.nordicsemi.wifi.provisioner.library.*
 import com.nordicsemi.wifi.provisioner.library.internal.PROVISIONING_SERVICE_UUID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import no.nordicsemi.android.navigation.*
 import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
 import no.nordicsemi.ui.scanner.ScannerDestinationId
 import no.nordicsemi.ui.scanner.ui.exhaustive
 import no.nordicsemi.ui.scanner.ui.getDevice
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    @ApplicationContext
+    private val context: Context,
     private val navigationManager: NavigationManager
 ) : ViewModel() {
+
+    private val repository = ProvisionerRepository.newInstance(context)
 
     private val _status = MutableStateFlow<HomeViewEntity>(IdleHomeViewEntity)
     val status = _status.asStateFlow()
@@ -59,6 +68,7 @@ class HomeViewModel @Inject constructor(
         when (event) {
             HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK -> requestBluetoothDevice()
             HomeScreenViewEvent.FINISH -> navigationManager.navigateUp()
+            HomeScreenViewEvent.SELECT_WIFI -> navigationManager.navigateTo(WifiScannerId)
         }.exhaustive
     }
 
@@ -81,5 +91,46 @@ class HomeViewModel @Inject constructor(
 
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
         _status.value = DeviceSelectedEntity(device)
+
+        viewModelScope.launchWithCatch {
+            repository.start(device.device, viewModelScope)
+            loadVersion()
+        }
+    }
+
+    private fun loadVersion() {
+        repository.readVersion().onEach {
+            val status = _status.value as DeviceSelectedEntity
+            _status.value = status.copy(version = it)
+
+            _status.value = when (it) {
+                is Error,
+                is Loading -> status.copy(version = it)
+                is Success -> VersionDownloadedEntity(status.device, it.data).also {
+                    loadStatus()
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun loadStatus() {
+        repository.getStatus().onEach {
+            val status = _status.value as VersionDownloadedEntity
+
+            _status.value = when (it) {
+                is Error,
+                is Loading -> status.copy(status = it)
+                is Success -> StatusDownloadedEntity(status.device, status.version, it.data).also {
+                    loadStatus()
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.launch {
+            repository.release()
+        }
     }
 }

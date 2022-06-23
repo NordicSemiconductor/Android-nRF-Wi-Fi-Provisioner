@@ -31,6 +31,7 @@
 
 package com.nordicsemi.wifi.provisioner.library
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
@@ -54,33 +55,33 @@ class ProvisionerRepository internal constructor(
         manager?.start(device)
     }
 
-    suspend fun readVersion(): Flow<Resource<String>> {
+    fun readVersion(): Flow<Resource<String>> {
         return runTask { manager?.getVersion()!! }
     }
 
-    suspend fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
+    fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
         return runTask { manager?.getStatus()?.toDomain()!! }
     }
 
-    suspend fun startScan(): Flow<Resource<ScanRecordDomain>> {
+    fun startScan(): Flow<Resource<ScanRecordDomain>> {
         return manager?.startScan()!!
             .map { Resource.createSuccess(it.toDomain()) }
             .onStart { emit(Resource.createLoading()) }
             .catch { emit(Resource.createError(it)) }
     }
 
-    suspend fun stopScan(): Flow<Resource<Unit>> {
+    fun stopScan(): Flow<Resource<Unit>> {
         return runTask { manager?.stopScan() }
     }
 
-    suspend fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
+    fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
         return manager?.provision()!!
             .map { Resource.createSuccess(it.toDomain()) }
             .onStart { emit(Resource.createLoading()) }
             .catch { emit(Resource.createError(it)) }
     }
 
-    suspend fun forgetConfig(): Flow<Resource<Unit>> {
+    fun forgetConfig(): Flow<Resource<Unit>> {
         return runTask { manager?.forgetWifi() }
     }
 
@@ -99,9 +100,17 @@ class ProvisionerRepository internal constructor(
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
+        private var instance: ProvisionerRepository? = null
+
         fun newInstance(context: Context): ProvisionerRepository {
-            return ProvisionerFactory.createRepository(context)
+            val app = context.applicationContext
+            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
+            instance = newInstance
+            return newInstance
         }
+
+        fun instance(): ProvisionerRepository = instance!! //TODO
     }
 }
 

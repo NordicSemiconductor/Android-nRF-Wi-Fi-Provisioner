@@ -152,7 +152,7 @@ internal class ProvisionerBleManager(
         return Response.ADAPTER.decode(response.value).device_status!!
     }
 
-    suspend fun startScan() = callbackFlow<ScanRecord> {
+    fun startScan() = callbackFlow<ScanRecord> {
         val request = Request(op_code = OpCode.START_SCAN)
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
@@ -184,7 +184,7 @@ internal class ProvisionerBleManager(
         verifyResponseSuccess(response.value)
     }
 
-    suspend fun provision() = callbackFlow<ConnectionState> {
+    fun provision() = callbackFlow<ConnectionState> {
         val request = Request(op_code = OpCode.SET_CONFIG)
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
