@@ -25,6 +25,9 @@ message DeviceStatus {
   optional ConnectionInfo info            = 10;
   // The failure reason is set when the state is CONNECTION_FAILED.
   optional ConnectionFailureReason reason = 11;
+  // Set if the device is scanning. 
+  // The period_ms contains remaining scanning period.
+  optional ScanParams scan_state          = 12;
 }
 
 /* A response type which is sent back from the device. */

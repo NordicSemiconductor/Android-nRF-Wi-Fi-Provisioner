@@ -103,6 +103,14 @@ enum AuthMode {
   // Note: More modes can be added in the future.
 }
 
+/* Scanning parameters. */
+message ScanParams {
+  optional Band band              = 1 [default = BAND_ANY];
+  optional bool passive           = 2 [default = false];
+  optional uint32 period_ms       = 3 [default = 0]; // 0 - no timeout
+  optional uint32 group_channels  = 4;
+}
+
 /* Wi-Fi details. */
 message WifiInfo {
   required bytes ssid     = 1;

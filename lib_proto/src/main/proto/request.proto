@@ -7,14 +7,6 @@ option java_package = "no.nordicsemi.android.wifi.provisioning";
 
 // Requests
 
-/* Scanning parameters. */
-message ScanParams {
-  optional Band band              = 1 [default = BAND_ANY];
-  optional bool passive           = 2 [default = false];
-  optional uint32 period_ms       = 3 [default = 0]; // 0 - no timeout
-  optional uint32 group_channels  = 4;
-}
-
 /* Wi-Fi provisioning configuration for SET_CONFIG request. */
 message WifiConfig {
   optional WifiInfo wifi          = 1;

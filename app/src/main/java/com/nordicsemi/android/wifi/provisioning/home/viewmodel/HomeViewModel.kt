@@ -93,7 +93,7 @@ class HomeViewModel @Inject constructor(
         _status.value = DeviceSelectedEntity(device)
 
         viewModelScope.launchWithCatch {
-            repository.start(device.device, viewModelScope)
+            repository.start(device.device)
             loadVersion()
         }
     }

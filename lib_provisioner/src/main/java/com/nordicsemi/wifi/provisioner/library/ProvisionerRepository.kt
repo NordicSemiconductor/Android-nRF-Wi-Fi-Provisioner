@@ -39,7 +39,6 @@ import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 import com.nordicsemi.wifi.provisioner.library.domain.toDomain
 import com.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import no.nordicsemi.android.logger.LoggerAppRunner
 import no.nordicsemi.android.logger.NordicLogger
@@ -50,7 +49,7 @@ class ProvisionerRepository internal constructor(
 
     private var manager: ProvisionerBleManager? = null
 
-    suspend fun start(device: BluetoothDevice, scope: CoroutineScope) {
+    suspend fun start(device: BluetoothDevice) {
         manager = ProvisionerFactory.createBleManager(context, device)
         manager?.start(device)
     }
