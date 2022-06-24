@@ -38,12 +38,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
 
-sealed interface PasswordDialogEvent
-
-data class PasswordSetDialogEvent(val password: String) : PasswordDialogEvent
-
-object DismissEvent : PasswordDialogEvent
-
 @Composable
 fun PasswordDialog(password: String?, onEvent: (PasswordDialogEvent) -> Unit) {
     val passwordField = rememberSaveable { mutableStateOf(password) }

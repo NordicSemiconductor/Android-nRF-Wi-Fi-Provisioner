@@ -32,6 +32,7 @@
 package com.nordicsemi.android.wifi.provisioning.home.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
@@ -117,12 +118,11 @@ class HomeViewModel @Inject constructor(
         repository.getStatus().onEach {
             val status = _status.value as VersionDownloadedEntity
 
+            Log.d("AAATESTAAA", "loadStatus: $it")
             _status.value = when (it) {
                 is Error,
                 is Loading -> status.copy(status = it)
-                is Success -> StatusDownloadedEntity(status.device, status.version, it.data).also {
-                    loadStatus()
-                }
+                is Success -> StatusDownloadedEntity(status.device, status.version, it.data)
             }
         }.launchIn(viewModelScope)
     }

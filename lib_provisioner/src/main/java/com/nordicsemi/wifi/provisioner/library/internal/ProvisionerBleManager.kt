@@ -98,7 +98,8 @@ internal class ProvisionerBleManager(
 
         @SuppressLint("WrongConstant")
         override fun initialize() {
-            requestMtu(517).enqueue()
+            enableIndications(controlPointCharacteristic).enqueue()
+            enableNotifications(dataOutCharacteristic).enqueue()
         }
 
         override fun isRequiredServiceSupported(gatt: BluetoothGatt): Boolean {
@@ -125,7 +126,7 @@ internal class ProvisionerBleManager(
                     useLongWrite = false
                 }
             }
-            return versionCharacteristic != null && controlPointCharacteristic != null && dataOutCharacteristic != null && (writeRequest || writeCommand)
+            return versionCharacteristic != null && controlPointCharacteristic != null && dataOutCharacteristic != null
         }
 
         override fun onServicesInvalidated() {
@@ -143,6 +144,7 @@ internal class ProvisionerBleManager(
 
     suspend fun getStatus(): DeviceStatus {
         val request = Request(op_code = OpCode.GET_STATUS)
+
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
             .suspendForValidResponse<ByteArrayReadResponse>()
@@ -151,8 +153,17 @@ internal class ProvisionerBleManager(
 
         return Response.ADAPTER.decode(response.value).device_status!!
     }
+    suspend fun scan() {
+        val request = Request(op_code = OpCode.START_SCAN)
 
-    fun startScan() = callbackFlow<ScanRecord> {
+        val response = waitForIndication(controlPointCharacteristic)
+            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .suspendForValidResponse<ByteArrayReadResponse>()
+
+        verifyResponseSuccess(response.value)
+    }
+
+    fun startScan() = callbackFlow {
         val request = Request(op_code = OpCode.START_SCAN)
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))

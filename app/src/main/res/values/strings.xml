@@ -86,6 +86,9 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
 
-    <string name="error_version">Error when reading version</string>
+    <string name="error_version">Error when reading version.</string>
+    <string name="error_status">Error when reading status.</string>
     <string name="dk_version">Firmware version: %s</string>
+    <string name="error_scanning">Error occurred during scanning.</string>
+    <string name="wifi_select">Select Wifi</string>
 </resources>

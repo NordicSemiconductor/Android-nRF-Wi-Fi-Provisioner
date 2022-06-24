@@ -72,7 +72,7 @@ fun HomeScreen() {
                 IdleHomeViewEntity -> DeviceNotSelectedSection(onEvent)
                 is DeviceSelectedEntity -> DeviceSelectedSection(state, onEvent)
                 is VersionDownloadedEntity -> VersionDownloadedSection(state, onEvent)
-                is StatusDownloadedEntity -> TODO()
+                is StatusDownloadedEntity -> StatusDownloadedSection(state, onEvent)
             }.exhaustive
         }
     }
@@ -145,18 +145,12 @@ private fun VersionDownloadedSection(viewEntity: VersionDownloadedEntity, onEven
     Spacer(modifier = Modifier.size(16.dp))
 
     StatusInfo(status = viewEntity.status)
-
-    Spacer(modifier = Modifier.size(16.dp))
-
-    Button(onClick = { onEvent(HomeScreenViewEvent.SELECT_WIFI) }) {
-        Text("Select Wifi")
-    }
 }
 
 @Composable
 private fun StatusInfo(status: Resource<DeviceStatusDomain>) {
     when (status) {
-        is Error -> Text(stringResource(id = R.string.error_version))
+        is Error -> Text(stringResource(id = R.string.error_status))
         is Loading -> CircularProgressIndicator()
         is Success -> StatusInfo(status = status.data)
     }.exhaustive
@@ -168,24 +162,30 @@ private fun StatusInfo(status: DeviceStatusDomain) {
 }
 
 @Composable
-private fun StatusDownloadedSection(viewEntity: VersionDownloadedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
-            Icon(Icons.Default.Wifi, contentDescription = stringResource(id = R.string.cd_wifi_available))
+private fun StatusDownloadedSection(viewEntity: StatusDownloadedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
+                Icon(Icons.Default.Wifi, contentDescription = stringResource(id = R.string.cd_wifi_available))
+            }
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            Text(text = viewEntity.device.displayNameOrAddress())
         }
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        Text(text = viewEntity.device.displayNameOrAddress())
-    }
+        VersionInfo(version = viewEntity.version)
 
-    Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(16.dp))
 
-    VersionInfo(version = viewEntity.version)
+        StatusInfo(viewEntity.status)
 
-    Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(16.dp))
 
-    Button(onClick = { onEvent(HomeScreenViewEvent.SELECT_WIFI) }) {
-        Text("Select Wifi")
+        Button(onClick = { onEvent(HomeScreenViewEvent.SELECT_WIFI) }) {
+            Text(stringResource(id = R.string.wifi_select))
+        }
     }
 }

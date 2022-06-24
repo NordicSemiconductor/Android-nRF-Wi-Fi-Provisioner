@@ -6,7 +6,7 @@ import com.nordicsemi.android.wifi.provisioning.wifi.view.NavigateUpEvent
 import com.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEntity
 import com.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEvent
 import com.nordicsemi.android.wifi.provisioning.wifi.view.WifiSelectedEvent
-import com.nordicsemi.wifi.provisioner.library.ProvisionerRepository
+import com.nordicsemi.wifi.provisioner.library.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,9 +28,17 @@ internal class WifiScannerViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
+//        viewModelScope.launch {
+//            repository.scan()
+//        }
         repository.startScan().onEach {
             val state = _state.value
-            _state.value = state.copy(recentItem = it)
+
+            _state.value = when (it) {
+                is Error -> state.copy(isLoading = false, isError = true)
+                is Loading -> state.copy(isLoading = true)
+                is Success -> state.copy(isLoading = false, isError = false, items = state.items + it.data)
+            }
         }.launchIn(viewModelScope)
     }
 
@@ -48,9 +56,3 @@ internal class WifiScannerViewModel @Inject constructor(
         }
     }
 }
-
-internal data class WifiScanFilter(
-    val filterUuidRequired: Boolean?,
-    val filterNearbyOnly: Boolean,
-    val filterWithNames: Boolean
-)

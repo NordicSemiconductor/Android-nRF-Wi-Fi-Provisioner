@@ -29,43 +29,10 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.library
+package com.nordicsemi.android.wifi.provisioning.password
 
-import android.annotation.SuppressLint
-import android.bluetooth.BluetoothDevice
-import android.content.Context
-import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import kotlinx.coroutines.flow.Flow
+sealed interface PasswordDialogEvent
 
-interface ProvisionerRepository {
+data class PasswordSetDialogEvent(val password: String) : PasswordDialogEvent
 
-    suspend fun start(device: BluetoothDevice)
-
-    fun readVersion(): Flow<Resource<String>>
-
-    fun getStatus(): Flow<Resource<DeviceStatusDomain>>
-
-    fun startScan(): Flow<Resource<ScanRecordDomain>>
-
-    fun stopScan(): Flow<Resource<Unit>>
-
-    fun setConfig(): Flow<Resource<WifiConnectionStateDomain>>
-
-    fun forgetConfig(): Flow<Resource<Unit>>
-
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        private var instance: ProvisionerRepositoryImpl? = null
-
-        fun newInstance(context: Context): ProvisionerRepositoryImpl {
-            val app = context.applicationContext
-            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
-            instance = newInstance
-            return newInstance
-        }
-
-        fun instance(): ProvisionerRepositoryImpl = instance!! //TODO
-    }
-}
+object DismissEvent : PasswordDialogEvent
