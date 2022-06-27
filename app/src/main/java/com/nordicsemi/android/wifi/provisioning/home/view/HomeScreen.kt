@@ -31,7 +31,6 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -122,6 +121,7 @@ private fun VersionInfo(version: Resource<VersionDomain>) {
 
 @Composable
 private fun VersionInfo(version: VersionDomain) {
+    Text(stringResource(id = R.string.dk_version, version.value))
     Text(stringResource(id = R.string.dk_version, version.value))
 }
 

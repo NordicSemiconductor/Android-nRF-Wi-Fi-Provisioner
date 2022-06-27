@@ -33,9 +33,7 @@ package com.nordicsemi.wifi.provisioner.library
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import android.util.Log
 import com.nordicsemi.wifi.provisioner.library.domain.*
-import com.nordicsemi.wifi.provisioner.library.domain.toDomain
 import com.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 import kotlinx.coroutines.flow.*
 import no.nordicsemi.android.logger.LoggerAppRunner

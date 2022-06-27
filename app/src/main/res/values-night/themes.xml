@@ -29,7 +29,7 @@
   ~ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.WiFiProvisioner" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->

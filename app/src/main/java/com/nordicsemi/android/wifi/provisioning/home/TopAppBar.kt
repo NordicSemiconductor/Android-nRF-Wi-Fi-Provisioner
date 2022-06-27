@@ -37,8 +37,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.theme.R as mainR
 import com.nordicsemi.android.wifi.provisioning.R
+import no.nordicsemi.android.theme.R as mainR
 
 @Composable
 fun CloseIconAppBar(text: String, onClick: () -> Unit) {
