@@ -31,9 +31,9 @@
 
 package com.nordicsemi.wifi.provisioner.library.domain
 
-data class DeviceStatusDomain(
-    val wifiState: WifiConnectionStateDomain,
-    val wifiInfo: ConnectionInfoDomain?,
-    val scanParamsDomain: ScanParamsDomain?,
-    val failureReason: WifiConnectionFailureReasonDomain
+data class ScanParamsDomain(
+    val band: BandDomain,
+    val passive: Boolean,
+    val periodMs: Int,
+    val groupChannels: Int
 )

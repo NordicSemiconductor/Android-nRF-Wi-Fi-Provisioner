@@ -36,8 +36,18 @@ import no.nordicsemi.android.wifi.provisioning.*
 internal fun DeviceStatus.toDomain(): DeviceStatusDomain {
     return DeviceStatusDomain(
         state!!.toDomain(),
-        info!!.toDomain(),
+        info?.toDomain(),
+        scan_state?.toDomain(),
         reason!!.toDomain()
+    )
+}
+
+internal fun ScanParams.toDomain(): ScanParamsDomain {
+    return ScanParamsDomain(
+        band!!.toDomain(),
+        passive!!,
+        period_ms!!,
+        group_channels!!
     )
 }
 
