@@ -36,6 +36,7 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 import kotlinx.coroutines.flow.Flow
 
@@ -43,7 +44,7 @@ interface ProvisionerRepository {
 
     suspend fun start(device: BluetoothDevice)
 
-    fun readVersion(): Flow<Resource<String>>
+    fun readVersion(): Flow<Resource<VersionDomain>>
 
     fun getStatus(): Flow<Resource<DeviceStatusDomain>>
 

@@ -52,6 +52,7 @@ import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
+import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import no.nordicsemi.ui.scanner.ui.exhaustive
 
 @Composable
@@ -59,8 +60,6 @@ fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
     val state = viewModel.status.collectAsState().value
     val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }
-
-    Log.d("AAATESTAAA", "state: $state")
 
     Column {
         CloseIconAppBar(stringResource(id = R.string.app_name)) {
@@ -113,7 +112,7 @@ private fun DeviceSelectedSection(viewEntity: DeviceSelectedEntity, onEvent: (Ho
 }
 
 @Composable
-private fun VersionInfo(version: Resource<String>) {
+private fun VersionInfo(version: Resource<VersionDomain>) {
     when (version) {
         is Error -> Text(stringResource(id = R.string.error_version))
         is Loading -> CircularProgressIndicator()
@@ -122,8 +121,8 @@ private fun VersionInfo(version: Resource<String>) {
 }
 
 @Composable
-private fun VersionInfo(version: String) {
-    Text(stringResource(id = R.string.dk_version, version))
+private fun VersionInfo(version: VersionDomain) {
+    Text(stringResource(id = R.string.dk_version, version.value))
 }
 
 @Composable

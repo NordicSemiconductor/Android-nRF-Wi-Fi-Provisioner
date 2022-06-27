@@ -34,6 +34,7 @@ package com.nordicsemi.android.wifi.provisioning.home.view
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
 
 sealed interface HomeViewEntity
@@ -42,25 +43,25 @@ object IdleHomeViewEntity : HomeViewEntity
 
 data class DeviceSelectedEntity(
     val device: DiscoveredBluetoothDevice,
-    val version: Resource<String> = Resource.createLoading()
+    val version: Resource<VersionDomain> = Resource.createLoading()
 ) : HomeViewEntity
 
 data class VersionDownloadedEntity(
     val device: DiscoveredBluetoothDevice,
-    val version: String,
+    val version: VersionDomain,
     val status: Resource<DeviceStatusDomain> = Resource.createLoading()
 ) : HomeViewEntity
 
 data class StatusDownloadedEntity(
     val device: DiscoveredBluetoothDevice,
-    val version: String,
+    val version: VersionDomain,
     val status: DeviceStatusDomain,
     val network: Resource<ScanRecordDomain> = Resource.createLoading()
 ) : HomeViewEntity
 
 data class NetworkSelectedEntity(
     val device: DiscoveredBluetoothDevice,
-    val version: String,
+    val version: VersionDomain,
     val network: ScanRecordDomain,
     val password: String? = null
 )

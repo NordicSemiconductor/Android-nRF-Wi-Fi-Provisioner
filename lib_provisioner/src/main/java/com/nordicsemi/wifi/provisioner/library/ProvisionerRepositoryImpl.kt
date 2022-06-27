@@ -34,9 +34,7 @@ package com.nordicsemi.wifi.provisioner.library
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.util.Log
-import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
+import com.nordicsemi.wifi.provisioner.library.domain.*
 import com.nordicsemi.wifi.provisioner.library.domain.toDomain
 import com.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 import kotlinx.coroutines.flow.*
@@ -54,14 +52,13 @@ class ProvisionerRepositoryImpl internal constructor(
         manager?.start(device)
     }
 
-    override fun readVersion(): Flow<Resource<String>> {
-        return runTask { manager?.getVersion()!! }
+    override fun readVersion(): Flow<Resource<VersionDomain>> {
+        return runTask { VersionDomain(manager?.getVersion()!!) }
     }
 
     override fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
         return runTask {
             val status = manager?.getStatus()
-            Log.d("AAATESTAAA", "response: $status")
             status?.toDomain()!!
         }
     }

@@ -29,44 +29,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.wifi.provisioner.library
+package com.nordicsemi.wifi.provisioner.library.domain
 
-import android.bluetooth.BluetoothDevice
-import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-
-class TestProvisionerRepository : ProvisionerRepository {
-    override suspend fun start(device: BluetoothDevice) {
-
-    }
-
-    override fun readVersion(): Flow<Resource<VersionDomain>> {
-        return flow {
-            
-        }
-    }
-
-    override fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun startScan(): Flow<Resource<ScanRecordDomain>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun stopScan(): Flow<Resource<Unit>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun forgetConfig(): Flow<Resource<Unit>> {
-        TODO("Not yet implemented")
-    }
-}
+data class VersionDomain(val value: String)

@@ -118,7 +118,6 @@ class HomeViewModel @Inject constructor(
         repository.getStatus().onEach {
             val status = _status.value as VersionDownloadedEntity
 
-            Log.d("AAATESTAAA", "loadStatus: $it")
             _status.value = when (it) {
                 is Error,
                 is Loading -> status.copy(status = it)
