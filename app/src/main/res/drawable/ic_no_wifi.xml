@@ -1,0 +1,40 @@
+<!--
+  ~ Copyright (c) 2022, Nordic Semiconductor
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without modification, are
+  ~ permitted provided that the following conditions are met:
+  ~
+  ~ 1. Redistributions of source code must retain the above copyright notice, this list of
+  ~ conditions and the following disclaimer.
+  ~
+  ~ 2. Redistributions in binary form must reproduce the above copyright notice, this list
+  ~ of conditions and the following disclaimer in the documentation and/or other materials
+  ~ provided with the distribution.
+  ~
+  ~ 3. Neither the name of the copyright holder nor the names of its contributors may be
+  ~ used to endorse or promote products derived from this software without specific prior
+  ~ written permission.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  ~ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+  ~ TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+  ~ PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  ~ HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  ~ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  ~ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+  ~ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+  ~ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  ~ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  ~ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/md_theme_onPrimary"
+        android:pathData="M12,12C9.97,12 8.1,12.67 6.6,13.8L4.8,11.4C6.81,9.89 9.3,9 12,9S17.19,9.89 19.2,11.4L17.92,13.1C17.55,13.17 17.18,13.27 16.84,13.41C15.44,12.5 13.78,12 12,12M21,9L22.8,6.6C19.79,4.34 16.05,3 12,3S4.21,4.34 1.2,6.6L3,9C5.5,7.12 8.62,6 12,6S18.5,7.12 21,9M12,15C10.65,15 9.4,15.45 8.4,16.2L12,21L13.04,19.61C13,19.41 13,19.21 13,19C13,17.66 13.44,16.43 14.19,15.43C13.5,15.16 12.77,15 12,15M21.12,15.46L19,17.59L16.88,15.47L15.47,16.88L17.59,19L15.47,21.12L16.88,22.54L19,20.41L21.12,22.54L22.54,21.12L20.41,19L22.54,16.88L21.12,15.46Z" />
+</vector>

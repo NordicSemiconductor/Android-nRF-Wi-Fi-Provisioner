@@ -88,9 +88,15 @@
 
     <string name="error_version">Error when reading version.</string>
     <string name="error_status">Error when reading status.</string>
-    <string name="dk_version">Firmware version: %s</string>
+    <string name="dk_version">Version</string>
+    <string name="wifi_state">Wifi state</string>
     <string name="error_scanning">Error occurred during scanning.</string>
     <string name="wifi_select">Select Wifi</string>
 
     <string name="cd_data_item_icon">Icon representing data available in the section.</string>
+
+    <string name="wifi_status_connecting">Connecting</string>
+    <string name="wifi_status_connected">Connected</string>
+    <string name="wifi_status_unprovisioned">Unprovisioned</string>
+    <string name="wifi_status_error">Error occured during provisioning.</string>
 </resources>

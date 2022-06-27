@@ -35,14 +35,12 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.shrinkOut
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +55,7 @@ import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
 
 @Composable
-private fun DataItem(
+fun DataItem(
     @DrawableRes
     iconRes: Int,
     title: String,
@@ -104,17 +102,22 @@ private fun DataItem(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = iconRes),
-            contentDescription = stringResource(id = R.string.cd_data_item_icon)
+            contentDescription = stringResource(id = R.string.cd_data_item_icon),
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         Spacer(modifier = Modifier.size(16.dp))
 
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = title)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge
+            )
 
-            Spacer(modifier = Modifier.size(4.dp))
-
-            Text(text = description)
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
 
         isExpanded?.let { ExpandedIcon(isExpanded = it) }

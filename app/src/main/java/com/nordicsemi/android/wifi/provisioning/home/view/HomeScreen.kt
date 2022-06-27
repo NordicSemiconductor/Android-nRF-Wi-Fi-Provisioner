@@ -34,7 +34,7 @@ package com.nordicsemi.android.wifi.provisioning.home.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Wifi
+import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -52,6 +52,7 @@ import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
 import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
+import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
 import no.nordicsemi.ui.scanner.ui.exhaustive
 
 @Composable
@@ -95,15 +96,7 @@ private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
 
 @Composable
 private fun DeviceSelectedSection(viewEntity: DeviceSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
-            Icon(Icons.Default.Wifi, contentDescription = stringResource(id = R.string.cd_wifi_available))
-        }
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Text(text = viewEntity.device.displayNameOrAddress())
-    }
+    BluetoothDevice(viewEntity.device, onEvent)
 
     Spacer(modifier = Modifier.size(16.dp))
 
@@ -121,21 +114,16 @@ private fun VersionInfo(version: Resource<VersionDomain>) {
 
 @Composable
 private fun VersionInfo(version: VersionDomain) {
-    Text(stringResource(id = R.string.dk_version, version.value))
-    Text(stringResource(id = R.string.dk_version, version.value))
+    DataItem(
+        iconRes = R.drawable.ic_version,
+        title = stringResource(id = R.string.dk_version),
+        description = version.value
+    )
 }
 
 @Composable
 private fun VersionDownloadedSection(viewEntity: VersionDownloadedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
-            Icon(Icons.Default.Wifi, contentDescription = stringResource(id = R.string.cd_wifi_available))
-        }
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Text(text = viewEntity.device.displayNameOrAddress())
-    }
+    BluetoothDevice(viewEntity.device, onEvent)
 
     Spacer(modifier = Modifier.size(16.dp))
 
@@ -157,21 +145,17 @@ private fun StatusInfo(status: Resource<DeviceStatusDomain>) {
 
 @Composable
 private fun StatusInfo(status: DeviceStatusDomain) {
-    Text(stringResource(id = R.string.dk_version, status))
+    DataItem(
+        iconRes = status.wifiState.toIcon(),
+        title = stringResource(id = R.string.dk_version),
+        description = status.wifiState.toDisplayString()
+    )
 }
 
 @Composable
 private fun StatusDownloadedSection(viewEntity: StatusDownloadedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
-                Icon(Icons.Default.Wifi, contentDescription = stringResource(id = R.string.cd_wifi_available))
-            }
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            Text(text = viewEntity.device.displayNameOrAddress())
-        }
+        BluetoothDevice(viewEntity.device, onEvent)
 
         Spacer(modifier = Modifier.size(16.dp))
 
@@ -186,5 +170,18 @@ private fun StatusDownloadedSection(viewEntity: StatusDownloadedEntity, onEvent:
         Button(onClick = { onEvent(HomeScreenViewEvent.SELECT_WIFI) }) {
             Text(stringResource(id = R.string.wifi_select))
         }
+    }
+}
+
+@Composable
+private fun BluetoothDevice(device: DiscoveredBluetoothDevice, onEvent: (HomeScreenViewEvent) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
+            Icon(Icons.Default.Bluetooth, contentDescription = stringResource(id = R.string.cd_wifi_available))
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Text(text = device.displayNameOrAddress())
     }
 }
