@@ -32,12 +32,12 @@
 package com.nordicsemi.wifi.provisioner.library
 
 import android.bluetooth.BluetoothDevice
-import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
+import com.nordicsemi.wifi.provisioner.library.domain.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+
+private const val DELAY_TIME = 1000L
 
 class TestProvisionerRepository : ProvisionerRepository {
     override suspend fun start(device: BluetoothDevice) {
@@ -46,27 +46,75 @@ class TestProvisionerRepository : ProvisionerRepository {
 
     override fun readVersion(): Flow<Resource<VersionDomain>> {
         return flow {
-            
+            emit(Resource.createLoading())
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(VersionDomain("1234")))
         }
     }
 
     override fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.createLoading())
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(createDeviceStatus()))
+        }
     }
 
     override fun startScan(): Flow<Resource<ScanRecordDomain>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.createLoading())
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(createScanRecord()))
+        }
     }
 
     override fun stopScan(): Flow<Resource<Unit>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.createLoading())
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(Unit))
+        }
     }
 
     override fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.createLoading())
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(WifiConnectionStateDomain.ASSOCIATION))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(WifiConnectionStateDomain.AUTHENTICATION))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(WifiConnectionStateDomain.OBTAINING_IP))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(WifiConnectionStateDomain.CONNECTED))
+        }
     }
 
     override fun forgetConfig(): Flow<Resource<Unit>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.createLoading())
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(Unit))
+        }
+    }
+
+    override suspend fun release() {
+
+    }
+
+    private fun createDeviceStatus(): DeviceStatusDomain {
+        return DeviceStatusDomain(
+            wifiState = WifiConnectionStateDomain.DISCONNECTED,
+            wifiInfo = null,
+            scanParamsDomain = null,
+            failureReason = null
+        )
+    }
+
+    private fun createScanRecord(): ScanRecordDomain {
+        return ScanRecordDomain(
+            rssi = 12,
+            wifiInfo = WifiInfoDomain("Good Wifi", "bssid", BandDomain.BAND_2_4_GH, 1, AuthModeDomain.OPEN)
+        )
     }
 }

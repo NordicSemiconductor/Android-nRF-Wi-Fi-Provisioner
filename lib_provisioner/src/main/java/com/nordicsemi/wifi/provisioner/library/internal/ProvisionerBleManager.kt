@@ -79,12 +79,14 @@ internal class ProvisionerBleManager(
         return Log.VERBOSE
     }
 
+    @SuppressLint("MissingPermission")
     suspend fun start(device: BluetoothDevice) {
         try {
             connect(device)
                 .useAutoConnect(false)
                 .retry(3, 100)
                 .suspend()
+            createBondInsecure().suspend()
         } catch (e: Exception) {
             e.printStackTrace()
         }

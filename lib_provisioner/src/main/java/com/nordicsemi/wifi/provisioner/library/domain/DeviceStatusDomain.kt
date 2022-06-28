@@ -35,5 +35,5 @@ data class DeviceStatusDomain(
     val wifiState: WifiConnectionStateDomain,
     val wifiInfo: ConnectionInfoDomain?,
     val scanParamsDomain: ScanParamsDomain?,
-    val failureReason: WifiConnectionFailureReasonDomain
+    val failureReason: WifiConnectionFailureReasonDomain?
 )

@@ -87,7 +87,7 @@ class ProvisionerRepositoryImpl internal constructor(
         return runTask { manager?.forgetWifi() }
     }
 
-    suspend fun release() {
+    override suspend fun release() {
         manager?.release()
         manager = null
     }
@@ -104,6 +104,8 @@ class ProvisionerRepositoryImpl internal constructor(
 }
 
 internal object ProvisionerFactory {
+
+    fun createTestRepository() = TestProvisionerRepository()
 
     fun createRepository(context: Context): ProvisionerRepositoryImpl {
         return ProvisionerRepositoryImpl(context)

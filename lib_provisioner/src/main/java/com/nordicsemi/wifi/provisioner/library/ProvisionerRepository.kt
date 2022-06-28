@@ -56,17 +56,20 @@ interface ProvisionerRepository {
 
     fun forgetConfig(): Flow<Resource<Unit>>
 
+    suspend fun release()
+
     companion object {
         @SuppressLint("StaticFieldLeak")
-        private var instance: ProvisionerRepositoryImpl? = null
+        private var instance: ProvisionerRepository? = null
 
-        fun newInstance(context: Context): ProvisionerRepositoryImpl {
+        fun newInstance(context: Context): ProvisionerRepository {
             val app = context.applicationContext
-            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
+//            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
+            val newInstance = instance ?: ProvisionerFactory.createTestRepository()
             instance = newInstance
             return newInstance
         }
 
-        fun instance(): ProvisionerRepositoryImpl = instance!! //TODO
+        fun instance(): ProvisionerRepository = instance!! //TODO
     }
 }
