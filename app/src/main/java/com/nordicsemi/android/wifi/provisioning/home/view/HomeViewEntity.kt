@@ -62,6 +62,7 @@ data class StatusDownloadedEntity(
 data class NetworkSelectedEntity(
     val device: DiscoveredBluetoothDevice,
     val version: VersionDomain,
-    val network: ScanRecordDomain,
+    val status: DeviceStatusDomain,
+    val selectedWifi: ScanRecordDomain,
     val password: String? = null
-)
+) : HomeViewEntity

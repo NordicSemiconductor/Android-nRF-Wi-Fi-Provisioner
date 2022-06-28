@@ -51,6 +51,7 @@ import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
+import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
 import no.nordicsemi.ui.scanner.ui.exhaustive
@@ -58,7 +59,7 @@ import no.nordicsemi.ui.scanner.ui.exhaustive
 @Composable
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
-    val state = viewModel.status.collectAsState().value
+    val state = viewModel.state.collectAsState().value
     val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Column {
@@ -72,6 +73,7 @@ fun HomeScreen() {
                 is DeviceSelectedEntity -> DeviceSelectedSection(state, onEvent)
                 is VersionDownloadedEntity -> VersionDownloadedSection(state, onEvent)
                 is StatusDownloadedEntity -> StatusDownloadedSection(state, onEvent)
+                is NetworkSelectedEntity -> NetworkSelectedSection(state, onEvent)
             }.exhaustive
         }
     }
@@ -147,7 +149,7 @@ private fun StatusInfo(status: Resource<DeviceStatusDomain>) {
 private fun StatusInfo(status: DeviceStatusDomain) {
     DataItem(
         iconRes = status.wifiState.toIcon(),
-        title = stringResource(id = R.string.dk_version),
+        title = stringResource(id = R.string.status_info),
         description = status.wifiState.toDisplayString()
     )
 }
@@ -155,19 +157,22 @@ private fun StatusInfo(status: DeviceStatusDomain) {
 @Composable
 private fun StatusDownloadedSection(viewEntity: StatusDownloadedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
-        BluetoothDevice(viewEntity.device, onEvent)
+        Column {
+            BluetoothDevice(viewEntity.device, onEvent)
 
-        Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(16.dp))
 
-        VersionInfo(version = viewEntity.version)
+            VersionInfo(version = viewEntity.version)
 
-        Spacer(modifier = Modifier.size(16.dp))
+            Spacer(modifier = Modifier.size(16.dp))
 
-        StatusInfo(viewEntity.status)
+            StatusInfo(viewEntity.status)
+        }
 
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Button(onClick = { onEvent(HomeScreenViewEvent.SELECT_WIFI) }) {
+        Button(
+            onClick = { onEvent(HomeScreenViewEvent.SELECT_WIFI) },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
             Text(stringResource(id = R.string.wifi_select))
         }
     }
@@ -183,5 +188,42 @@ private fun BluetoothDevice(device: DiscoveredBluetoothDevice, onEvent: (HomeScr
         Spacer(modifier = Modifier.size(16.dp))
 
         Text(text = device.displayNameOrAddress())
+    }
+}
+
+@Composable
+private fun SelectedWifi(record: ScanRecordDomain) {
+    DataItem(
+        iconRes = record.wifiInfo.authModeDomain.toIcon(),
+        title = stringResource(id = R.string.selected_wifi),
+        description = record.wifiInfo.ssid
+    )
+}
+
+@Composable
+private fun NetworkSelectedSection(viewEntity: NetworkSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column {
+            BluetoothDevice(viewEntity.device, onEvent)
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            VersionInfo(version = viewEntity.version)
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            StatusInfo(viewEntity.status)
+
+            Spacer(modifier = Modifier.size(32.dp))
+
+            SelectedWifi(viewEntity.selectedWifi)
+        }
+
+        Button(
+            onClick = { onEvent(HomeScreenViewEvent.SELECT_PASSWORD) },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            Text(stringResource(id = R.string.password_select))
+        }
     }
 }

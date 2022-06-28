@@ -2,6 +2,7 @@ package com.nordicsemi.android.wifi.provisioning.wifi.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nordicsemi.android.wifi.provisioning.WifiScannerId
 import com.nordicsemi.android.wifi.provisioning.wifi.view.NavigateUpEvent
 import com.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEntity
 import com.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEvent
@@ -10,13 +11,17 @@ import com.nordicsemi.wifi.provisioner.library.Error
 import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.ProvisionerRepository
 import com.nordicsemi.wifi.provisioner.library.Success
+import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import no.nordicsemi.android.navigation.AnyArgument
 import no.nordicsemi.android.navigation.NavigationManager
+import no.nordicsemi.android.navigation.SuccessDestinationResult
+import no.nordicsemi.ui.scanner.ScannerDestinationId
 import no.nordicsemi.ui.scanner.ui.exhaustive
 import javax.inject.Inject
 
@@ -31,9 +36,6 @@ internal class WifiScannerViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-//        viewModelScope.launch {
-//            repository.scan()
-//        }
         repository.startScan().onEach {
             val state = _state.value
 
@@ -48,8 +50,15 @@ internal class WifiScannerViewModel @Inject constructor(
     fun onEvent(event: WifiScannerViewEvent) {
         when (event) {
             NavigateUpEvent -> navigationManager.navigateUp()
-            is WifiSelectedEvent -> TODO()
+            is WifiSelectedEvent -> navigateUp(event.scanRecord)
         }.exhaustive
+    }
+
+    private fun navigateUp(scanRecord: ScanRecordDomain) {
+        navigationManager.navigateUp(
+            WifiScannerId,
+            SuccessDestinationResult(WifiScannerId, AnyArgument(scanRecord))
+        )
     }
 
     override fun onCleared() {

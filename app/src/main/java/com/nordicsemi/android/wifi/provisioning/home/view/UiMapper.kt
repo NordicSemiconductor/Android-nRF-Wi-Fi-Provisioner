@@ -35,6 +35,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
+import com.nordicsemi.wifi.provisioner.library.domain.AuthModeDomain
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 
 @DrawableRes
@@ -58,5 +59,17 @@ internal fun WifiConnectionStateDomain.toDisplayString(): String {
         WifiConnectionStateDomain.OBTAINING_IP -> R.string.wifi_status_connecting
         WifiConnectionStateDomain.CONNECTED -> R.string.wifi_status_connected
         WifiConnectionStateDomain.CONNECTION_FAILED -> R.string.wifi_status_error
-    }.let { stringResource(id = id) }
+    }.let { stringResource(id = it) }
+}
+
+@DrawableRes
+internal fun AuthModeDomain.toIcon(): Int {
+    return when (this) {
+        AuthModeDomain.OPEN -> R.drawable.ic_wifi_open
+        AuthModeDomain.WEP,
+        AuthModeDomain.WPA_PSK,
+        AuthModeDomain.WPA2_PSK,
+        AuthModeDomain.WPA_WPA2_PSK,
+        AuthModeDomain.WPA2_ENTERPRISE -> R.drawable.ic_wifi_lock
+    }
 }

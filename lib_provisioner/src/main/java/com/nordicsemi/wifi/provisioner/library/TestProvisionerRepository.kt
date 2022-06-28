@@ -65,6 +65,18 @@ class TestProvisionerRepository : ProvisionerRepository {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
             emit(Resource.createSuccess(createScanRecord()))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(createScanRecord()))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(createScanRecord()))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(createScanRecord()))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(createScanRecord()))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(createScanRecord()))
+            delay(DELAY_TIME)
+            emit(Resource.createSuccess(createScanRecord()))
         }
     }
 
