@@ -54,9 +54,9 @@ internal fun WifiConnectionStateDomain.toIcon(): Int {
 internal fun WifiConnectionStateDomain.toDisplayString(): String {
     return when (this) {
         WifiConnectionStateDomain.DISCONNECTED -> R.string.wifi_status_unprovisioned
-        WifiConnectionStateDomain.AUTHENTICATION,
-        WifiConnectionStateDomain.ASSOCIATION,
-        WifiConnectionStateDomain.OBTAINING_IP -> R.string.wifi_status_connecting
+        WifiConnectionStateDomain.AUTHENTICATION -> R.string.wifi_status_authentication
+        WifiConnectionStateDomain.ASSOCIATION -> R.string.wifi_status_association
+        WifiConnectionStateDomain.OBTAINING_IP -> R.string.wifi_status_obtaining_ip
         WifiConnectionStateDomain.CONNECTED -> R.string.wifi_status_connected
         WifiConnectionStateDomain.CONNECTION_FAILED -> R.string.wifi_status_error
     }.let { stringResource(id = it) }

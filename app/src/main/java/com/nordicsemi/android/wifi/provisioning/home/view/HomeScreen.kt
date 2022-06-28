@@ -58,6 +58,7 @@ import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
 import no.nordicsemi.ui.scanner.ui.exhaustive
 
@@ -79,6 +80,7 @@ fun HomeScreen() {
                 is VersionDownloadedEntity -> VersionDownloadedSection(state, onEvent)
                 is StatusDownloadedEntity -> StatusDownloadedSection(state, onEvent)
                 is NetworkSelectedEntity -> NetworkSelectedSection(state, onEvent)
+                is ProvisioningEntity -> ProvisioningSection(state, onEvent)
             }.exhaustive
         }
     }
@@ -292,6 +294,64 @@ private fun PasswordNotNeededSection(viewEntity: NetworkSelectedEntity, onEvent:
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Text(stringResource(id = R.string.provision))
+        }
+    }
+}
+
+@Composable
+private fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
+    when (status) {
+        is Error -> Text(stringResource(id = R.string.error_status))
+        is Loading -> CircularProgressIndicator()
+        is Success -> ProvisioningSection(status = status.data)
+    }.exhaustive
+}
+
+@Composable
+private fun ProvisioningSection(status: WifiConnectionStateDomain) {
+    DataItem(
+        iconRes = R.drawable.ic_upload_wifi ,
+        title = stringResource(id = R.string.provision_status),
+        description = status.toDisplayString()
+    )
+}
+
+@Composable
+private fun ProvisioningSection(viewEntity: ProvisioningEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column {
+            BluetoothDevice(viewEntity.device, onEvent)
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            VersionInfo(version = viewEntity.version)
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            StatusInfo(viewEntity.status)
+
+            Spacer(modifier = Modifier.size(32.dp))
+
+            SelectedWifi(viewEntity.selectedWifi)
+
+            viewEntity.password?.let {
+                Spacer(modifier = Modifier.size(32.dp))
+
+                PasswordSection()
+            }
+
+            Spacer(modifier = Modifier.size(32.dp))
+
+            ProvisioningSection(status = viewEntity.provisioningStatus)
+        }
+
+        if ((viewEntity.provisioningStatus as? Success<WifiConnectionStateDomain>)?.data == WifiConnectionStateDomain.CONNECTED) {
+            Button(
+                onClick = { onEvent(OnFinishedEvent) },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                Text(stringResource(id = R.string.finish))
+            }
         }
     }
 }

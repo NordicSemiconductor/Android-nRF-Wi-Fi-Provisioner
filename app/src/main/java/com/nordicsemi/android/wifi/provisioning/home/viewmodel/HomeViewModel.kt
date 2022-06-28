@@ -71,7 +71,7 @@ class HomeViewModel @Inject constructor(
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
             OnSelectButtonClickEvent -> requestBluetoothDevice()
             OnSelectWifiEvent -> navigationManager.navigateTo(WifiScannerId)
-            OnProvisionClickEvent -> TODO()
+            OnProvisionClickEvent -> provision()
         }.exhaustive
     }
 
@@ -153,6 +153,17 @@ class HomeViewModel @Inject constructor(
         val state = _state.value as NetworkSelectedEntity
 
         _state.value = state.copy(password = password)
+    }
+
+    private fun provision() {
+        val state = _state.value as NetworkSelectedEntity
+
+        _state.value = ProvisioningEntity(state.device, state.version, state.status, state.selectedWifi, state.password)
+        repository.setConfig().onEach {
+            val state = _state.value as ProvisioningEntity
+
+            _state.value = state.copy(provisioningStatus = it)
+        }.launchIn(viewModelScope)
     }
 
     override fun onCleared() {

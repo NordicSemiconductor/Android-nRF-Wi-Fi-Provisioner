@@ -41,6 +41,7 @@
     <string name="close_app">Button which closes application.</string>
     <string name="app_info">Application allows to provision Sheliak devices. After selecting device the app will connect to obtain status data.\n\nIf needed the device can be provision to one of the available Wifi’s which are visible from Sheliak.</string>
 
+    <string name="finish">Finish</string>
     <string name="set_password">Set password</string>
     <string name="password">Password</string>
     <string name="password_encoded">**** ****</string>
@@ -97,10 +98,14 @@
     <string name="wifi_select">Select Wifi</string>
     <string name="password_select">Select password</string>
     <string name="provision">Provision</string>
+    <string name="provision_status">Provisioning status</string>
 
     <string name="cd_data_item_icon">Icon representing data available in the section.</string>
 
     <string name="wifi_status_connecting">Connecting</string>
+    <string name="wifi_status_authentication">Authentication</string>
+    <string name="wifi_status_association">Association</string>
+    <string name="wifi_status_obtaining_ip">Obtaining IP</string>
     <string name="wifi_status_connected">Connected</string>
     <string name="wifi_status_unprovisioned">Unprovisioned</string>
     <string name="wifi_status_error">Error occured during provisioning.</string>
