@@ -38,6 +38,8 @@ import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -46,6 +48,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.CloseIconAppBar
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
+import com.nordicsemi.android.wifi.provisioning.password.DismissEvent
+import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
+import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
 import com.nordicsemi.wifi.provisioner.library.Error
 import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
@@ -64,7 +69,7 @@ fun HomeScreen() {
 
     Column {
         CloseIconAppBar(stringResource(id = R.string.app_name)) {
-            viewModel.onEvent(HomeScreenViewEvent.FINISH)
+            viewModel.onEvent(OnFinishedEvent)
         }
 
         Column(modifier = Modifier.padding(16.dp)) {
@@ -82,7 +87,7 @@ fun HomeScreen() {
 @Composable
 private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
+        FloatingActionButton(onClick = { onEvent(OnSelectButtonClickEvent) }) {
             Icon(Icons.Default.Add, contentDescription = stringResource(id = R.string.add_device))
         }
 
@@ -170,7 +175,7 @@ private fun StatusDownloadedSection(viewEntity: StatusDownloadedEntity, onEvent:
         }
 
         Button(
-            onClick = { onEvent(HomeScreenViewEvent.SELECT_WIFI) },
+            onClick = { onEvent(OnSelectWifiEvent) },
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Text(stringResource(id = R.string.wifi_select))
@@ -181,7 +186,7 @@ private fun StatusDownloadedSection(viewEntity: StatusDownloadedEntity, onEvent:
 @Composable
 private fun BluetoothDevice(device: DiscoveredBluetoothDevice, onEvent: (HomeScreenViewEvent) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK) }) {
+        FloatingActionButton(onClick = { onEvent(OnSelectButtonClickEvent) }) {
             Icon(Icons.Default.Bluetooth, contentDescription = stringResource(id = R.string.cd_wifi_available))
         }
 
@@ -201,7 +206,25 @@ private fun SelectedWifi(record: ScanRecordDomain) {
 }
 
 @Composable
+private fun PasswordSection() {
+    DataItem(
+        iconRes = R.drawable.ic_password ,
+        title = stringResource(id = R.string.password),
+        description = stringResource(id = R.string.password_encoded)
+    )
+}
+
+@Composable
 private fun NetworkSelectedSection(viewEntity: NetworkSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+    if (viewEntity.selectedWifi.isPasswordRequired() && viewEntity.password.isNullOrEmpty()) {
+        PasswordNeededSection(viewEntity, onEvent)
+    } else {
+        PasswordNotNeededSection(viewEntity, onEvent)
+    }
+}
+
+@Composable
+private fun PasswordNeededSection(viewEntity: NetworkSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
             BluetoothDevice(viewEntity.device, onEvent)
@@ -219,11 +242,56 @@ private fun NetworkSelectedSection(viewEntity: NetworkSelectedEntity, onEvent: (
             SelectedWifi(viewEntity.selectedWifi)
         }
 
+        val showDialog = rememberSaveable { mutableStateOf(false) }
+
+        if (showDialog.value) {
+            PasswordDialog {
+                when (it) {
+                    DismissEvent -> showDialog.value = false
+                    is PasswordSetDialogEvent -> onEvent(OnPasswordSelectedEvent(it.password))
+                }.exhaustive
+            }
+        }
+
         Button(
-            onClick = { onEvent(HomeScreenViewEvent.SELECT_PASSWORD) },
+            onClick = { showDialog.value = true },
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Text(stringResource(id = R.string.password_select))
+        }
+    }
+}
+
+@Composable
+private fun PasswordNotNeededSection(viewEntity: NetworkSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column {
+            BluetoothDevice(viewEntity.device, onEvent)
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            VersionInfo(version = viewEntity.version)
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            StatusInfo(viewEntity.status)
+
+            Spacer(modifier = Modifier.size(32.dp))
+
+            SelectedWifi(viewEntity.selectedWifi)
+
+            viewEntity.password?.let {
+                Spacer(modifier = Modifier.size(32.dp))
+
+                PasswordSection()
+            }
+        }
+
+        Button(
+            onClick = { onEvent(OnProvisionClickEvent) },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            Text(stringResource(id = R.string.provision))
         }
     }
 }

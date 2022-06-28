@@ -1,5 +1,13 @@
 package com.nordicsemi.android.wifi.provisioning.home.view
 
-enum class HomeScreenViewEvent {
-    ON_SELECT_BUTTON_CLICK, FINISH, SELECT_WIFI, SELECT_PASSWORD
-}
+sealed interface HomeScreenViewEvent
+
+object OnSelectButtonClickEvent : HomeScreenViewEvent
+
+object OnFinishedEvent : HomeScreenViewEvent
+
+object OnSelectWifiEvent : HomeScreenViewEvent
+
+data class OnPasswordSelectedEvent(val password: String) : HomeScreenViewEvent
+
+object OnProvisionClickEvent : HomeScreenViewEvent

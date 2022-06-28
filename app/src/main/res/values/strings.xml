@@ -43,6 +43,7 @@
 
     <string name="set_password">Set password</string>
     <string name="password">Password</string>
+    <string name="password_encoded">**** ****</string>
     <string name="dismiss">Dismiss</string>
     <string name="accept">Accept</string>
     <string name="error_password_empty">Password cannot be empty.</string>
@@ -95,6 +96,7 @@
     <string name="error_scanning">Error occurred during scanning.</string>
     <string name="wifi_select">Select Wifi</string>
     <string name="password_select">Select password</string>
+    <string name="provision">Provision</string>
 
     <string name="cd_data_item_icon">Icon representing data available in the section.</string>
 

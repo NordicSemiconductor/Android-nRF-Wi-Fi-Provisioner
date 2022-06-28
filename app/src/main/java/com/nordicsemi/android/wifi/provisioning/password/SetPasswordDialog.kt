@@ -42,8 +42,8 @@ import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
 
 @Composable
-fun PasswordDialog(password: String?, onEvent: (PasswordDialogEvent) -> Unit) {
-    val passwordField = rememberSaveable { mutableStateOf(password) }
+fun PasswordDialog(onEvent: (PasswordDialogEvent) -> Unit) {
+    val passwordField = rememberSaveable { mutableStateOf("") }
     val isError = rememberSaveable { mutableStateOf(false) }
 
     AlertDialog(
@@ -62,7 +62,7 @@ fun PasswordDialog(password: String?, onEvent: (PasswordDialogEvent) -> Unit) {
         confirmButton = {
             TextButton(onClick = {
                 passwordField.value.let {
-                    if (it == null) {
+                    if (it.isBlank()) {
                         isError.value = true
                     } else {
                         onEvent(PasswordSetDialogEvent(it))

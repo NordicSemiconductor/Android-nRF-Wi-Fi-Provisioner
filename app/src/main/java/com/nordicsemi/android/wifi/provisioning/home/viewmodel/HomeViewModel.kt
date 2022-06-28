@@ -52,7 +52,6 @@ import no.nordicsemi.ui.scanner.ScannerDestinationId
 import no.nordicsemi.ui.scanner.ui.exhaustive
 import no.nordicsemi.ui.scanner.ui.getDevice
 import javax.inject.Inject
-import javax.net.ssl.SSLEngineResult.Status
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -68,10 +67,11 @@ class HomeViewModel @Inject constructor(
 
     fun onEvent(event: HomeScreenViewEvent) {
         when (event) {
-            HomeScreenViewEvent.ON_SELECT_BUTTON_CLICK -> requestBluetoothDevice()
-            HomeScreenViewEvent.FINISH -> navigationManager.navigateUp()
-            HomeScreenViewEvent.SELECT_WIFI -> navigationManager.navigateTo(WifiScannerId)
-            HomeScreenViewEvent.SELECT_PASSWORD -> TODO()
+            OnFinishedEvent -> navigationManager.navigateUp()
+            is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
+            OnSelectButtonClickEvent -> requestBluetoothDevice()
+            OnSelectWifiEvent -> navigationManager.navigateTo(WifiScannerId)
+            OnProvisionClickEvent -> TODO()
         }.exhaustive
     }
 
@@ -147,6 +147,12 @@ class HomeViewModel @Inject constructor(
                 is Success -> StatusDownloadedEntity(state.device, state.version, it.data)
             }
         }.launchIn(viewModelScope)
+    }
+
+    private fun onPasswordSelected(password: String) {
+        val state = _state.value as NetworkSelectedEntity
+
+        _state.value = state.copy(password = password)
     }
 
     override fun onCleared() {

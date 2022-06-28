@@ -126,7 +126,7 @@ class TestProvisionerRepository : ProvisionerRepository {
     private fun createScanRecord(): ScanRecordDomain {
         return ScanRecordDomain(
             rssi = 12,
-            wifiInfo = WifiInfoDomain("Good Wifi", "bssid", BandDomain.BAND_2_4_GH, 1, AuthModeDomain.OPEN)
+            wifiInfo = WifiInfoDomain("Good Wifi", "bssid", BandDomain.BAND_2_4_GH, 1, AuthModeDomain.WEP)
         )
     }
 }
