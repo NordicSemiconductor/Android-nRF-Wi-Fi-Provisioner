@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import no.nordicsemi.android.navigation.AnyArgument
 import no.nordicsemi.android.navigation.NavigationManager
 import no.nordicsemi.android.navigation.SuccessDestinationResult
-import no.nordicsemi.ui.scanner.ScannerDestinationId
 import no.nordicsemi.ui.scanner.ui.exhaustive
 import javax.inject.Inject
 
@@ -49,22 +48,25 @@ internal class WifiScannerViewModel @Inject constructor(
 
     fun onEvent(event: WifiScannerViewEvent) {
         when (event) {
-            NavigateUpEvent -> navigationManager.navigateUp()
+            NavigateUpEvent -> navigateUp()
             is WifiSelectedEvent -> navigateUp(event.scanRecord)
         }.exhaustive
     }
 
-    private fun navigateUp(scanRecord: ScanRecordDomain) {
-        navigationManager.navigateUp(
-            WifiScannerId,
-            SuccessDestinationResult(WifiScannerId, AnyArgument(scanRecord))
-        )
+    private fun navigateUp() {
+        viewModelScope.launch {
+            repository.stopScanBlocking()
+            navigationManager.navigateUp()
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    private fun navigateUp(scanRecord: ScanRecordDomain) {
         viewModelScope.launch {
-            repository.stopScan()
+            repository.stopScanBlocking()
+            navigationManager.navigateUp(
+                WifiScannerId,
+                SuccessDestinationResult(WifiScannerId, AnyArgument(scanRecord))
+            )
         }
     }
 }

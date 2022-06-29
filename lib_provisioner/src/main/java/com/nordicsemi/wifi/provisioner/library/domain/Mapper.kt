@@ -31,18 +31,23 @@
 
 package com.nordicsemi.wifi.provisioner.library.domain
 
+import android.util.Log
 import no.nordicsemi.android.wifi.provisioning.*
+
+private const val TAG = "DOMAIN-MAPPER"
 
 internal fun DeviceStatus.toDomain(): DeviceStatusDomain {
     return DeviceStatusDomain(
-        state!!.toDomain(),
-        info?.toDomain(),
+        state?.toDomain() ?: WifiConnectionStateDomain.DISCONNECTED,
+//        info?.toDomain(),
+        null,
         scan_state?.toDomain(),
-        reason!!.toDomain()
+        reason?.toDomain()
     )
 }
 
 internal fun ScanParams.toDomain(): ScanParamsDomain {
+    Log.d(TAG, "mapper: $this")
     return ScanParamsDomain(
         band!!.toDomain(),
         passive!!,
@@ -106,5 +111,6 @@ internal fun WifiInfo.toDomain(): WifiInfoDomain {
 }
 
 internal fun ScanRecord.toDomain(): ScanRecordDomain {
+    Log.d(TAG, "mapper: $this")
     return ScanRecordDomain(rssi!!, wifi!!.toDomain())
 }

@@ -76,6 +76,10 @@ class ProvisionerRepositoryImpl internal constructor(
         return runTask { manager?.stopScan() }
     }
 
+    override suspend fun stopScanBlocking() {
+        manager?.stopScan()
+    }
+
     override fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
         return manager?.provision()!!
             .map { Resource.createSuccess(it.toDomain()) }

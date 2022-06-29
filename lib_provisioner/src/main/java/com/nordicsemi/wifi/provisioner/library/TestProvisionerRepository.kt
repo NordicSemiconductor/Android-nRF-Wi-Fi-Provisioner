@@ -88,6 +88,10 @@ class TestProvisionerRepository : ProvisionerRepository {
         }
     }
 
+    override suspend fun stopScanBlocking() {
+
+    }
+
     override fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
         return flow {
             emit(Resource.createLoading())

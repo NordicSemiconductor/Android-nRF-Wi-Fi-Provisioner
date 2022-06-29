@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
+import com.nordicsemi.android.wifi.provisioning.home.view.components.BackIconAppBar
 import com.nordicsemi.android.wifi.provisioning.home.view.components.CloseIconAppBar
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.android.wifi.provisioning.wifi.viewmodel.WifiScannerViewModel
@@ -35,7 +36,7 @@ internal fun WifiScannerScreen() {
     val onEvent: (WifiScannerViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        CloseIconAppBar(stringResource(id = R.string.wifi_title)) {
+        BackIconAppBar(stringResource(id = R.string.wifi_title)) {
             viewModel.onEvent(NavigateUpEvent)
         }
 

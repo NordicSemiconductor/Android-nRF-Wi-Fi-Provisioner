@@ -189,10 +189,15 @@ internal class ProvisionerBleManager(
     }
 
     suspend fun stopScan() {
+        Log.d("AAATESTAAA", "stop scan")
         val request = Request(op_code = OpCode.STOP_SCAN)
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
             .suspendForValidResponse<ByteArrayReadResponse>()
+
+        val decodedResponse = Response.ADAPTER.decode(response.value).status
+
+        Log.d("AAATESTAAA", "stop scan response: $decodedResponse")
 
         verifyResponseSuccess(response.value)
     }

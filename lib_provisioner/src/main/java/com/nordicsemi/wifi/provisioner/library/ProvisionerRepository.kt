@@ -52,6 +52,8 @@ interface ProvisionerRepository {
 
     fun stopScan(): Flow<Resource<Unit>>
 
+    suspend fun stopScanBlocking()
+
     fun setConfig(): Flow<Resource<WifiConnectionStateDomain>>
 
     fun forgetConfig(): Flow<Resource<Unit>>
@@ -64,8 +66,8 @@ interface ProvisionerRepository {
 
         fun newInstance(context: Context): ProvisionerRepository {
             val app = context.applicationContext
-//            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
-            val newInstance = instance ?: ProvisionerFactory.createTestRepository()
+            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
+//            val newInstance = instance ?: ProvisionerFactory.createTestRepository()
             instance = newInstance
             return newInstance
         }
