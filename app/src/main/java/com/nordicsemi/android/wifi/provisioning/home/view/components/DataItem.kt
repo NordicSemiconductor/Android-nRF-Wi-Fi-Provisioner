@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.android.wifi.provisioning.home.view
+package com.nordicsemi.android.wifi.provisioning.home.view.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility

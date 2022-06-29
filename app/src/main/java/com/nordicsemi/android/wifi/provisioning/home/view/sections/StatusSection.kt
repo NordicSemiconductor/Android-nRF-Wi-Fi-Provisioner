@@ -29,28 +29,38 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.android.wifi.provisioning.home.view
+package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.nordicsemi.android.wifi.provisioning.R
+import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
+import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorText
+import com.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
+import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
+import com.nordicsemi.wifi.provisioner.library.Error
+import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
+import no.nordicsemi.ui.scanner.ui.exhaustive
 
-data class HomeViewEntity(
-    val device: DiscoveredBluetoothDevice? = null,
-    val version: Resource<VersionDomain>? = null,
-    val status: Resource<DeviceStatusDomain>? = null,
-    val network: ScanRecordDomain? = null,
-    val password: String? = null,
-    val provisioningStatus: Resource<WifiConnectionStateDomain>? = null
-) {
+@Composable
+internal fun StatusSection(status: Resource<DeviceStatusDomain>) {
+    when (status) {
+        is Error -> ErrorText(stringResource(id = R.string.error_status))
+        is Loading -> CircularProgressIndicator()
+        is Success -> StatusSection(status = status.data)
+    }.exhaustive
+}
 
-    fun hasFinished(): Boolean {
-        val status = (provisioningStatus as? Success)?.data
-        return status == WifiConnectionStateDomain.CONNECTED
-                || status == WifiConnectionStateDomain.CONNECTION_FAILED
-    }
+@Composable
+private fun StatusSection(status: DeviceStatusDomain) {
+    DataItem(
+        iconRes = status.wifiState.toIcon(),
+        title = stringResource(id = R.string.status_info),
+        description = status.wifiState.toDisplayString()
+    )
 }

@@ -62,14 +62,14 @@ class HomeViewModel @Inject constructor(
 
     private val repository = ProvisionerRepository.newInstance(context)
 
-    private val _state = MutableStateFlow<HomeViewEntity>(IdleHomeViewEntity)
+    private val _state = MutableStateFlow<HomeViewEntity>(HomeViewEntity())
     val state = _state.asStateFlow()
 
     fun onEvent(event: HomeScreenViewEvent) {
         when (event) {
             OnFinishedEvent -> navigationManager.navigateUp()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
-            OnSelectButtonClickEvent -> requestBluetoothDevice()
+            OnSelectDeviceClickEvent -> requestBluetoothDevice()
             OnSelectWifiEvent -> navigationManager.navigateTo(WifiScannerId)
             OnProvisionClickEvent -> provision()
         }.exhaustive
@@ -106,14 +106,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun installWifi(scanRecord: ScanRecordDomain) {
-        val state = _state.value as StatusDownloadedEntity
-
-        _state.value = NetworkSelectedEntity(state.device, state.version, state.status, scanRecord)
+        _state.value = _state.value.copy(network = scanRecord)
     }
 
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
-        _state.value = DeviceSelectedEntity(device)
-
+        _state.value = _state.value.copy(device = device)
         viewModelScope.launchWithCatch {
             repository.start(device.device)
             loadVersion()
@@ -122,16 +119,9 @@ class HomeViewModel @Inject constructor(
 
     private fun loadVersion() {
         repository.readVersion().onEach {
-            val state = _state.value as DeviceSelectedEntity
-            _state.value = state.copy(version = it)
+            _state.value = _state.value.copy(version = it)
 
-            _state.value = when (it) {
-                is Error,
-                is Loading -> state.copy(version = it)
-                is Success -> VersionDownloadedEntity(state.device, it.data)
-            }
-
-            (_state.value as? VersionDownloadedEntity)?.let {
+            (_state.value.version as? Success)?.let {
                 loadStatus()
             }
         }.launchIn(viewModelScope)
@@ -139,30 +129,17 @@ class HomeViewModel @Inject constructor(
 
     private fun loadStatus() {
         repository.getStatus().onEach {
-            val state = _state.value as VersionDownloadedEntity
-
-            _state.value = when (it) {
-                is Error,
-                is Loading -> state.copy(status = it)
-                is Success -> StatusDownloadedEntity(state.device, state.version, it.data)
-            }
+            _state.value = _state.value.copy(status = it)
         }.launchIn(viewModelScope)
     }
 
     private fun onPasswordSelected(password: String) {
-        val state = _state.value as NetworkSelectedEntity
-
-        _state.value = state.copy(password = password)
+        _state.value = _state.value.copy(password = password)
     }
 
     private fun provision() {
-        val state = _state.value as NetworkSelectedEntity
-
-        _state.value = ProvisioningEntity(state.device, state.version, state.status, state.selectedWifi, state.password)
         repository.setConfig().onEach {
-            val state = _state.value as ProvisioningEntity
-
-            _state.value = state.copy(provisioningStatus = it)
+            _state.value = _state.value.copy(provisioningStatus = it)
         }.launchIn(viewModelScope)
     }
 

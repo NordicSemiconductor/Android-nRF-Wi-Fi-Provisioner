@@ -2,7 +2,7 @@ package com.nordicsemi.android.wifi.provisioning.home.view
 
 sealed interface HomeScreenViewEvent
 
-object OnSelectButtonClickEvent : HomeScreenViewEvent
+object OnSelectDeviceClickEvent : HomeScreenViewEvent
 
 object OnFinishedEvent : HomeScreenViewEvent
 

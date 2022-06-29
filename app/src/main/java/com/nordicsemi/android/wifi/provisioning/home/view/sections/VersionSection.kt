@@ -29,35 +29,36 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.android.wifi.provisioning.home
+package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
-import no.nordicsemi.android.theme.R as mainR
+import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
+import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorText
+import com.nordicsemi.wifi.provisioner.library.Error
+import com.nordicsemi.wifi.provisioner.library.Loading
+import com.nordicsemi.wifi.provisioner.library.Resource
+import com.nordicsemi.wifi.provisioner.library.Success
+import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
+import no.nordicsemi.ui.scanner.ui.exhaustive
 
 @Composable
-fun CloseIconAppBar(text: String, onClick: () -> Unit) {
-    SmallTopAppBar(
-        title = { Text(text, maxLines = 2) },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            scrolledContainerColor = MaterialTheme.colorScheme.primary,
-            containerColor = colorResource(id = mainR.color.appBarColor),
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        navigationIcon = {
-            IconButton(onClick = { onClick() }) {
-                Icon(
-                    Icons.Default.Close,
-                    contentDescription = stringResource(id = R.string.close_app),
-                )
-            }
-        }
+internal fun VersionSection(version: Resource<VersionDomain>) {
+    when (version) {
+        is Error -> ErrorText(stringResource(id = R.string.error_version))
+        is Loading -> CircularProgressIndicator()
+        is Success -> VersionSection(version = version.data)
+    }.exhaustive
+}
+
+@Composable
+private fun VersionSection(version: VersionDomain) {
+    DataItem(
+        iconRes = R.drawable.ic_version,
+        title = stringResource(id = R.string.dk_version),
+        description = version.value
     )
 }

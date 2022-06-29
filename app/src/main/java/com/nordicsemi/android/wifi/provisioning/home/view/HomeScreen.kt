@@ -31,36 +31,20 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Bluetooth
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
-import com.nordicsemi.android.wifi.provisioning.home.CloseIconAppBar
+import com.nordicsemi.android.wifi.provisioning.home.view.components.CloseIconAppBar
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.*
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
-import com.nordicsemi.android.wifi.provisioning.password.DismissEvent
-import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
-import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
-import com.nordicsemi.wifi.provisioner.library.Error
-import com.nordicsemi.wifi.provisioner.library.Loading
-import com.nordicsemi.wifi.provisioner.library.Resource
-import com.nordicsemi.wifi.provisioner.library.Success
-import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
-import no.nordicsemi.ui.scanner.ui.exhaustive
 
 @Composable
 fun HomeScreen() {
@@ -73,285 +57,35 @@ fun HomeScreen() {
             viewModel.onEvent(OnFinishedEvent)
         }
 
-        Column(modifier = Modifier.padding(16.dp)) {
-            when (state) {
-                IdleHomeViewEntity -> DeviceNotSelectedSection(onEvent)
-                is DeviceSelectedEntity -> DeviceSelectedSection(state, onEvent)
-                is VersionDownloadedEntity -> VersionDownloadedSection(state, onEvent)
-                is StatusDownloadedEntity -> StatusDownloadedSection(state, onEvent)
-                is NetworkSelectedEntity -> NetworkSelectedSection(state, onEvent)
-                is ProvisioningEntity -> ProvisioningSection(state, onEvent)
-            }.exhaustive
-        }
-    }
-}
-
-@Composable
-private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(OnSelectButtonClickEvent) }) {
-            Icon(Icons.Default.Add, contentDescription = stringResource(id = R.string.add_device))
-        }
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Text(text = stringResource(id = R.string.add_device))
-    }
-
-    Spacer(modifier = Modifier.size(16.dp))
-
-    Text(text = stringResource(id = R.string.app_info))
-}
-
-@Composable
-private fun DeviceSelectedSection(viewEntity: DeviceSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    BluetoothDevice(viewEntity.device, onEvent)
-
-    Spacer(modifier = Modifier.size(16.dp))
-
-    VersionInfo(version = viewEntity.version)
-}
-
-@Composable
-private fun VersionInfo(version: Resource<VersionDomain>) {
-    when (version) {
-        is Error -> Text(stringResource(id = R.string.error_version))
-        is Loading -> CircularProgressIndicator()
-        is Success -> VersionInfo(version = version.data)
-    }.exhaustive
-}
-
-@Composable
-private fun VersionInfo(version: VersionDomain) {
-    DataItem(
-        iconRes = R.drawable.ic_version,
-        title = stringResource(id = R.string.dk_version),
-        description = version.value
-    )
-}
-
-@Composable
-private fun VersionDownloadedSection(viewEntity: VersionDownloadedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    BluetoothDevice(viewEntity.device, onEvent)
-
-    Spacer(modifier = Modifier.size(16.dp))
-
-    VersionInfo(version = viewEntity.version)
-
-    Spacer(modifier = Modifier.size(16.dp))
-
-    StatusInfo(status = viewEntity.status)
-}
-
-@Composable
-private fun StatusInfo(status: Resource<DeviceStatusDomain>) {
-    when (status) {
-        is Error -> Text(stringResource(id = R.string.error_status))
-        is Loading -> CircularProgressIndicator()
-        is Success -> StatusInfo(status = status.data)
-    }.exhaustive
-}
-
-@Composable
-private fun StatusInfo(status: DeviceStatusDomain) {
-    DataItem(
-        iconRes = status.wifiState.toIcon(),
-        title = stringResource(id = R.string.status_info),
-        description = status.wifiState.toDisplayString()
-    )
-}
-
-@Composable
-private fun StatusDownloadedSection(viewEntity: StatusDownloadedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column {
-            BluetoothDevice(viewEntity.device, onEvent)
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            VersionInfo(version = viewEntity.version)
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            StatusInfo(viewEntity.status)
-        }
-
-        Button(
-            onClick = { onEvent(OnSelectWifiEvent) },
-            modifier = Modifier.align(Alignment.BottomCenter)
+        Column(
+            modifier = Modifier.padding(16.dp)
         ) {
-            Text(stringResource(id = R.string.wifi_select))
-        }
-    }
-}
 
-@Composable
-private fun BluetoothDevice(device: DiscoveredBluetoothDevice, onEvent: (HomeScreenViewEvent) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(OnSelectButtonClickEvent) }) {
-            Icon(Icons.Default.Bluetooth, contentDescription = stringResource(id = R.string.cd_wifi_available))
-        }
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Text(text = device.displayNameOrAddress())
-    }
-}
-
-@Composable
-private fun SelectedWifi(record: ScanRecordDomain) {
-    DataItem(
-        iconRes = record.wifiInfo.authModeDomain.toIcon(),
-        title = stringResource(id = R.string.selected_wifi),
-        description = record.wifiInfo.ssid
-    )
-}
-
-@Composable
-private fun PasswordSection() {
-    DataItem(
-        iconRes = R.drawable.ic_password ,
-        title = stringResource(id = R.string.password),
-        description = stringResource(id = R.string.password_encoded)
-    )
-}
-
-@Composable
-private fun NetworkSelectedSection(viewEntity: NetworkSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    if (viewEntity.selectedWifi.isPasswordRequired() && viewEntity.password.isNullOrEmpty()) {
-        PasswordNeededSection(viewEntity, onEvent)
-    } else {
-        PasswordNotNeededSection(viewEntity, onEvent)
-    }
-}
-
-@Composable
-private fun PasswordNeededSection(viewEntity: NetworkSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column {
-            BluetoothDevice(viewEntity.device, onEvent)
+            DeviceSection(state.device, onEvent)
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            VersionInfo(version = viewEntity.version)
+            state.version?.let { VersionSection(it) }
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            StatusInfo(viewEntity.status)
-
-            Spacer(modifier = Modifier.size(32.dp))
-
-            SelectedWifi(viewEntity.selectedWifi)
-        }
-
-        val showDialog = rememberSaveable { mutableStateOf(false) }
-
-        if (showDialog.value) {
-            PasswordDialog {
-                when (it) {
-                    DismissEvent -> showDialog.value = false
-                    is PasswordSetDialogEvent -> onEvent(OnPasswordSelectedEvent(it.password))
-                }.exhaustive
-            }
-        }
-
-        Button(
-            onClick = { showDialog.value = true },
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
-            Text(stringResource(id = R.string.password_select))
-        }
-    }
-}
-
-@Composable
-private fun PasswordNotNeededSection(viewEntity: NetworkSelectedEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column {
-            BluetoothDevice(viewEntity.device, onEvent)
+            state.status?.let { StatusSection(it) }
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            VersionInfo(version = viewEntity.version)
+            state.network?.let { WifiSection(it) }
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            StatusInfo(viewEntity.status)
-
-            Spacer(modifier = Modifier.size(32.dp))
-
-            SelectedWifi(viewEntity.selectedWifi)
-
-            viewEntity.password?.let {
-                Spacer(modifier = Modifier.size(32.dp))
-
-                PasswordSection()
-            }
-        }
-
-        Button(
-            onClick = { onEvent(OnProvisionClickEvent) },
-            modifier = Modifier.align(Alignment.BottomCenter)
-        ) {
-            Text(stringResource(id = R.string.provision))
-        }
-    }
-}
-
-@Composable
-private fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
-    when (status) {
-        is Error -> Text(stringResource(id = R.string.error_status))
-        is Loading -> CircularProgressIndicator()
-        is Success -> ProvisioningSection(status = status.data)
-    }.exhaustive
-}
-
-@Composable
-private fun ProvisioningSection(status: WifiConnectionStateDomain) {
-    DataItem(
-        iconRes = R.drawable.ic_upload_wifi ,
-        title = stringResource(id = R.string.provision_status),
-        description = status.toDisplayString()
-    )
-}
-
-@Composable
-private fun ProvisioningSection(viewEntity: ProvisioningEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column {
-            BluetoothDevice(viewEntity.device, onEvent)
+            state.password?.let { PasswordSection() }
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            VersionInfo(version = viewEntity.version)
+            state.provisioningStatus?.let { ProvisioningSection(it) }
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            StatusInfo(viewEntity.status)
-
-            Spacer(modifier = Modifier.size(32.dp))
-
-            SelectedWifi(viewEntity.selectedWifi)
-
-            viewEntity.password?.let {
-                Spacer(modifier = Modifier.size(32.dp))
-
-                PasswordSection()
-            }
-
-            Spacer(modifier = Modifier.size(32.dp))
-
-            ProvisioningSection(status = viewEntity.provisioningStatus)
-        }
-
-        if ((viewEntity.provisioningStatus as? Success<WifiConnectionStateDomain>)?.data == WifiConnectionStateDomain.CONNECTED) {
-            Button(
-                onClick = { onEvent(OnFinishedEvent) },
-                modifier = Modifier.align(Alignment.BottomCenter)
-            ) {
-                Text(stringResource(id = R.string.finish))
-            }
+            ActionButtonSection(state, onEvent)
         }
     }
 }

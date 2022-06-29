@@ -29,28 +29,20 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.android.wifi.provisioning.home.view
+package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
-import com.nordicsemi.wifi.provisioner.library.Resource
-import com.nordicsemi.wifi.provisioner.library.Success
-import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.nordicsemi.android.wifi.provisioning.R
+import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
+import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
 
-data class HomeViewEntity(
-    val device: DiscoveredBluetoothDevice? = null,
-    val version: Resource<VersionDomain>? = null,
-    val status: Resource<DeviceStatusDomain>? = null,
-    val network: ScanRecordDomain? = null,
-    val password: String? = null,
-    val provisioningStatus: Resource<WifiConnectionStateDomain>? = null
-) {
-
-    fun hasFinished(): Boolean {
-        val status = (provisioningStatus as? Success)?.data
-        return status == WifiConnectionStateDomain.CONNECTED
-                || status == WifiConnectionStateDomain.CONNECTION_FAILED
-    }
+@Composable
+internal fun WifiSection(record: ScanRecordDomain) {
+    DataItem(
+        iconRes = record.wifiInfo.authModeDomain.toIcon(),
+        title = stringResource(id = R.string.selected_wifi),
+        description = record.wifiInfo.ssid
+    )
 }

@@ -29,28 +29,16 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.nordicsemi.android.wifi.provisioning.home.view
+package com.nordicsemi.android.wifi.provisioning.home.view.components
 
-import com.nordicsemi.wifi.provisioner.library.Resource
-import com.nordicsemi.wifi.provisioner.library.Success
-import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.nordicsemi.android.wifi.provisioning.R
 
-data class HomeViewEntity(
-    val device: DiscoveredBluetoothDevice? = null,
-    val version: Resource<VersionDomain>? = null,
-    val status: Resource<DeviceStatusDomain>? = null,
-    val network: ScanRecordDomain? = null,
-    val password: String? = null,
-    val provisioningStatus: Resource<WifiConnectionStateDomain>? = null
-) {
-
-    fun hasFinished(): Boolean {
-        val status = (provisioningStatus as? Success)?.data
-        return status == WifiConnectionStateDomain.CONNECTED
-                || status == WifiConnectionStateDomain.CONNECTION_FAILED
-    }
-}
+@Composable
+fun ErrorText(text: String) = Text(
+    text = text,
+    color = MaterialTheme.colorScheme.error
+)

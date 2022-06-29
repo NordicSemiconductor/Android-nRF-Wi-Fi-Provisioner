@@ -41,6 +41,7 @@
     <string name="close_app">Button which closes application.</string>
     <string name="app_info">Application allows to provision Sheliak devices. After selecting device the app will connect to obtain status data.\n\nIf needed the device can be provision to one of the available Wifi’s which are visible from Sheliak.</string>
 
+    <string name="select_device">Select device</string>
     <string name="finish">Finish</string>
     <string name="set_password">Set password</string>
     <string name="password">Password</string>

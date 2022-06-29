@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
-import com.nordicsemi.android.wifi.provisioning.home.CloseIconAppBar
+import com.nordicsemi.android.wifi.provisioning.home.view.components.CloseIconAppBar
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.android.wifi.provisioning.wifi.viewmodel.WifiScannerViewModel
 import com.nordicsemi.wifi.provisioner.library.domain.AuthModeDomain
