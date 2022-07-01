@@ -66,8 +66,8 @@ interface ProvisionerRepository {
 
         fun newInstance(context: Context): ProvisionerRepository {
             val app = context.applicationContext
-            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
-//            val newInstance = instance ?: ProvisionerFactory.createTestRepository()
+//            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
+            val newInstance = instance ?: ProvisionerFactory.createTestRepository()
             instance = newInstance
             return newInstance
         }

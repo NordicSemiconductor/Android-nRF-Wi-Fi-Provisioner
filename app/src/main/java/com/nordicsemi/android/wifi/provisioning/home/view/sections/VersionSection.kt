@@ -31,13 +31,12 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorText
+import com.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
 import com.nordicsemi.wifi.provisioner.library.Error
 import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
@@ -49,7 +48,7 @@ import no.nordicsemi.ui.scanner.ui.exhaustive
 internal fun VersionSection(version: Resource<VersionDomain>) {
     when (version) {
         is Error -> ErrorText(stringResource(id = R.string.error_version))
-        is Loading -> CircularProgressIndicator()
+        is Loading -> LoadingItem()
         is Success -> VersionSection(version = version.data)
     }.exhaustive
 }

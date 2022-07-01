@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorText
+import com.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
 import com.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import com.nordicsemi.wifi.provisioner.library.Error
 import com.nordicsemi.wifi.provisioner.library.Loading
@@ -50,7 +51,7 @@ import no.nordicsemi.ui.scanner.ui.exhaustive
 internal fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
     when (status) {
         is Error -> ErrorText(stringResource(id = R.string.error_status))
-        is Loading -> CircularProgressIndicator()
+        is Loading -> LoadingItem()
         is Success -> ProvisioningSection(status = status.data)
     }.exhaustive
 }

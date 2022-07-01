@@ -32,6 +32,6 @@
 package com.nordicsemi.wifi.provisioner.library.domain
 
 data class ConnectionInfoDomain(
-    private val ipv4Address: String,
-    private val wifiInfo: WifiInfoDomain
+    val ipv4Address: String,
+    val wifiInfo: WifiInfoDomain
 )

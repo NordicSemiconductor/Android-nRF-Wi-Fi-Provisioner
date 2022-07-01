@@ -31,18 +31,22 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Bluetooth
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material.icons.filled.BluetoothDisabled
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
@@ -67,33 +71,76 @@ private fun BluetoothDevice(
     device: DiscoveredBluetoothDevice,
     onEvent: (HomeScreenViewEvent) -> Unit
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .clickable { onEvent(OnSelectDeviceClickEvent) }
+            .padding(8.dp)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.secondary)
+        ) {
             Icon(
-                Icons.Default.Bluetooth,
-                contentDescription = stringResource(id = R.string.cd_wifi_available)
+                imageVector = Icons.Default.Bluetooth,
+                contentDescription = stringResource(id = R.string.cd_device_selected),
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        Text(text = device.displayNameOrAddress())
+        Text(
+            text = device.displayNameOrAddress(),
+            modifier = Modifier.weight(1f)
+        )
+
+        Icon(
+            imageVector = Icons.Default.Edit,
+            contentDescription = stringResource(id = R.string.change_device),
+            tint = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
 @Composable
 private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        FloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
-            Icon(Icons.Default.Add, contentDescription = stringResource(id = R.string.add_device))
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.outline)
+                .clickable { onEvent(OnSelectDeviceClickEvent) }
+        ) {
+            Icon(
+                imageVector = Icons.Default.BluetoothDisabled,
+                contentDescription = stringResource(id = R.string.add_device),
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
         }
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        Text(text = stringResource(id = R.string.add_device))
+        Text(text = stringResource(id = R.string.no_device_selected))
     }
 
     Spacer(modifier = Modifier.size(16.dp))
 
-    Text(text = stringResource(id = R.string.app_info))
+    Text(
+        text = stringResource(id = R.string.app_info),
+        modifier = Modifier.padding(horizontal = 16.dp),
+        style = MaterialTheme.typography.bodyMedium
+    )
 }

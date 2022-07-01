@@ -34,6 +34,7 @@ package com.nordicsemi.android.wifi.provisioning.home.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
 import com.nordicsemi.android.wifi.provisioning.home.view.*
 import com.nordicsemi.wifi.provisioner.library.*
@@ -62,17 +63,24 @@ class HomeViewModel @Inject constructor(
 
     private val repository = ProvisionerRepository.newInstance(context)
 
-    private val _state = MutableStateFlow<HomeViewEntity>(HomeViewEntity())
+    private val _state = MutableStateFlow(HomeViewEntity())
     val state = _state.asStateFlow()
 
     fun onEvent(event: HomeScreenViewEvent) {
         when (event) {
-            OnFinishedEvent -> navigationManager.navigateUp()
+            OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
             OnSelectDeviceClickEvent -> requestBluetoothDevice()
             OnSelectWifiEvent -> navigationManager.navigateTo(WifiScannerId)
             OnProvisionClickEvent -> provision()
         }.exhaustive
+    }
+
+    private fun finish() {
+        viewModelScope.launch {
+            repository.release()
+            _state.value = HomeViewEntity()
+        }
     }
 
     private fun requestBluetoothDevice() {
@@ -89,7 +97,7 @@ class HomeViewModel @Inject constructor(
 
     private fun handleArgs(args: DestinationResult) {
         when (args) {
-            is CancelDestinationResult -> navigationManager.navigateUp()
+            is CancelDestinationResult -> doNothing()
             is SuccessDestinationResult -> installBluetoothDevice(args.getDevice())
         }.exhaustive
     }
@@ -106,11 +114,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun installWifi(scanRecord: ScanRecordDomain) {
-        _state.value = _state.value.copy(network = scanRecord)
+        _state.value = _state.value.copy(network = scanRecord, password = null, provisioningStatus = null)
     }
 
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
-        _state.value = _state.value.copy(device = device)
+        _state.value = HomeViewEntity(device = device)
         viewModelScope.launchWithCatch {
             repository.start(device.device)
             loadVersion()
@@ -134,7 +142,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onPasswordSelected(password: String) {
-        _state.value = _state.value.copy(password = password)
+        _state.value = _state.value.copy(password = password, provisioningStatus = null)
     }
 
     private fun provision() {

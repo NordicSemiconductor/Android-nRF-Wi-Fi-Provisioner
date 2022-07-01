@@ -64,19 +64,17 @@ class TestProvisionerRepository : ProvisionerRepository {
         return flow {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
-            emit(Resource.createSuccess(createScanRecord()))
+            emit(Resource.createSuccess(createScanRecord(-100)))
             delay(DELAY_TIME)
-            emit(Resource.createSuccess(createScanRecord()))
+            emit(Resource.createSuccess(createScanRecord(-50)))
             delay(DELAY_TIME)
-            emit(Resource.createSuccess(createScanRecord()))
+            emit(Resource.createSuccess(createScanRecord(-80)))
             delay(DELAY_TIME)
-            emit(Resource.createSuccess(createScanRecord()))
+            emit(Resource.createSuccess(createScanRecord(-100)))
             delay(DELAY_TIME)
-            emit(Resource.createSuccess(createScanRecord()))
+            emit(Resource.createSuccess(createScanRecord(-50)))
             delay(DELAY_TIME)
-            emit(Resource.createSuccess(createScanRecord()))
-            delay(DELAY_TIME)
-            emit(Resource.createSuccess(createScanRecord()))
+            emit(Resource.createSuccess(createScanRecord(-80)))
         }
     }
 
@@ -121,16 +119,26 @@ class TestProvisionerRepository : ProvisionerRepository {
     private fun createDeviceStatus(): DeviceStatusDomain {
         return DeviceStatusDomain(
             wifiState = WifiConnectionStateDomain.DISCONNECTED,
-            wifiInfo = null,
-            scanParamsDomain = null,
-            failureReason = null
+            wifiInfo = ConnectionInfoDomain(
+                ipv4Address = "11:22:33:44:55",
+                wifiInfo = createWifiInfo(-66)
+            ),
+            scanParamsDomain = ScanParamsDomain(
+                band = BandDomain.BAND_2_4_GH,
+                passive = true,
+                periodMs = 23,
+                groupChannels = 4
+            ),
+            failureReason = WifiConnectionFailureReasonDomain.AUTH_ERROR
         )
     }
 
-    private fun createScanRecord(): ScanRecordDomain {
+    private fun createScanRecord(rssi: Int): ScanRecordDomain {
         return ScanRecordDomain(
-            rssi = 12,
-            wifiInfo = WifiInfoDomain("Good Wifi", "bssid", BandDomain.BAND_2_4_GH, 1, AuthModeDomain.WEP)
+            rssi = rssi,
+            wifiInfo = createWifiInfo(rssi)
         )
     }
+
+    private fun createWifiInfo(rssi: Int) = WifiInfoDomain("Good Wifi", "bssid", BandDomain.BAND_2_4_GH, 1, AuthModeDomain.WEP)
 }

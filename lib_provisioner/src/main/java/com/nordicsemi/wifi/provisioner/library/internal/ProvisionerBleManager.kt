@@ -235,6 +235,8 @@ internal class ProvisionerBleManager(
     }
 
     private fun verifyResponseSuccess(response: ByteArray) {
+        val decodedResponse = Response.ADAPTER.decode(response).status
+        Log.d("AAATESTAAA", "Response: $decodedResponse")
         if (Response.ADAPTER.decode(response).status != Status.SUCCESS) {
             throw createResponseError()
         }

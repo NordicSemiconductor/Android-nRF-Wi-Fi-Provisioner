@@ -9,8 +9,8 @@ option java_package = "no.nordicsemi.android.wifi.provisioning";
 
 /* Information about the Wi-Fi connected state. */
 message ConnectionInfo {
-  optional WifiInfo wifi   = 1;
-  optional string ip4_addr = 2;
+  optional WifiInfo wifi  = 1;
+  optional bytes ip4_addr = 2;
 }
 
 /* Response payload for GET_STATUS request. */

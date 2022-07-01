@@ -51,7 +51,7 @@ fun PasswordDialog(onEvent: (PasswordDialogEvent) -> Unit) {
         title = { Text(stringResource(id = R.string.set_password)) },
         text = {
             OutlinedTextField(
-                value = passwordField.value ?: "",
+                value = passwordField.value,
                 label = { Text(text = stringResource(id = R.string.password)) },
                 onValueChange = {
                     passwordField.value = it

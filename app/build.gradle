@@ -74,6 +74,8 @@ dependencies {
     implementation "no.nordicsemi.android.common:uiscanner:1.0.13"
     implementation "no.nordicsemi.android.common:uilogger:1.0.13"
 
+    implementation "com.google.accompanist:accompanist-placeholder-material:0.24.13-rc"
+
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
     implementation "com.google.dagger:hilt-android:2.42"
     kapt "com.google.dagger:hilt-compiler:2.42"

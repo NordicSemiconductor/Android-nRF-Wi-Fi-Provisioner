@@ -41,7 +41,7 @@ import no.nordicsemi.android.logger.NordicLogger
 
 class ProvisionerRepositoryImpl internal constructor(
     private val context: Context
-): ProvisionerRepository {
+) : ProvisionerRepository {
 
     private var manager: ProvisionerBleManager? = null
 
@@ -97,13 +97,12 @@ class ProvisionerRepositoryImpl internal constructor(
     }
 
     private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
-        return flow {
-            emit(Resource.createLoading())
-            emit(Resource.createSuccess(block()))
-        }.catch {
-            it.printStackTrace()
-            emit(Resource.createError(it))
-        }
+        return flow { emit(Resource.createSuccess(block())) }
+            .onStart { emit(Resource.createLoading()) }
+            .catch {
+                it.printStackTrace()
+                emit(Resource.createError(it))
+            }
     }
 }
 

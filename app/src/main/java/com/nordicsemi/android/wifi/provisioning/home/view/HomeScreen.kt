@@ -31,10 +31,13 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -46,46 +49,81 @@ import com.nordicsemi.android.wifi.provisioning.home.view.components.CloseIconAp
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.*
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
     val state = viewModel.state.collectAsState().value
     val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }
 
-    Column {
-        CloseIconAppBar(stringResource(id = R.string.app_name)) {
-            viewModel.onEvent(OnFinishedEvent)
-        }
-
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-
-            DeviceSection(state.device, onEvent)
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            state.version?.let { VersionSection(it) }
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            state.status?.let { StatusSection(it) }
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            state.network?.let { WifiSection(it) }
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            state.password?.let { PasswordSection() }
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            state.provisioningStatus?.let { ProvisioningSection(it) }
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            ActionButtonSection(state, onEvent)
+    Scaffold(
+        topBar = {
+            CloseIconAppBar(stringResource(id = R.string.app_name)) {
+                viewModel.onEvent(OnFinishedEvent)
+            }
+        },
+        floatingActionButton = { ActionButtonSection(state, onEvent) }
+    ) {
+        Box(modifier = Modifier.padding(it)) {
+            Content(state, onEvent)
         }
     }
+}
+
+@Composable
+private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+
+        DeviceSection(state.device, onEvent)
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        state.version?.let {
+            SectionTitle(text = stringResource(id = R.string.section_device))
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            VersionSection(it)
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        state.status?.let { StatusSection(it) }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        state.network?.let {
+            SectionTitle(text = stringResource(id = R.string.section_provisioning))
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            WifiSection(it)
+        }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        state.password?.let { PasswordSection() }
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        state.provisioningStatus?.let {
+            SectionTitle(text = stringResource(id = R.string.section_status))
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            ProvisioningSection(it)
+        }
+    }
+}
+
+@Composable
+private fun SectionTitle(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall
+    )
 }

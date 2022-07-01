@@ -31,16 +31,22 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.*
 import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
@@ -51,30 +57,25 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
 
     val showPasswordDialog = rememberSaveable { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        if (viewEntity.device == null) {
-            ActionButton(text = stringResource(id = R.string.select_device)) {
-                onEvent(OnSelectDeviceClickEvent)
-            }
-        } else if (viewEntity.network == null) {
-            ActionButton(text = stringResource(id = R.string.wifi_select)) {
-                onEvent(OnSelectWifiEvent)
-            }
-        } else if (viewEntity.network.isPasswordRequired() && viewEntity.password == null) {
-            ActionButton(text = stringResource(id = R.string.password_select)) {
-                showPasswordDialog.value = true
-            }
-        } else if (viewEntity.hasFinished()) {
-            ActionButton(text = stringResource(id = R.string.finish)) {
-                onEvent(OnFinishedEvent)
-            }
-        } else {
-            ActionButton(text = stringResource(id = R.string.provision)) {
-                onEvent(OnProvisionClickEvent)
-            }
+    if (viewEntity.device == null) {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
+            FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
+        }
+    } else if (viewEntity.network == null) {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnSelectWifiEvent) }) {
+            FabContent(Icons.Default.Wifi, stringResource(id = R.string.wifi_select))
+        }
+    } else if (viewEntity.network.isPasswordRequired() && viewEntity.password == null) {
+        ExtendedFloatingActionButton(onClick = { showPasswordDialog.value = true }) {
+            FabContent(Icons.Default.Password, stringResource(id = R.string.password_select))
+        }
+    } else if (viewEntity.hasFinished()) {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnFinishedEvent) }) {
+            FabContent(Icons.Default.Clear, stringResource(id = R.string.finish))
+        }
+    } else {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnProvisionClickEvent) }) {
+            FabContent(Icons.Default.PlayArrow, stringResource(id = R.string.provision))
         }
     }
 
@@ -87,8 +88,12 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
 }
 
 @Composable
-private fun ActionButton(text: String, onClick: () -> Unit) {
-    Button(onClick = { onClick() }) {
+private fun FabContent(imageVector: ImageVector, text: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(imageVector = imageVector, contentDescription = text)
+
+        Spacer(modifier = Modifier.size(16.dp))
+
         Text(text = text)
     }
 }

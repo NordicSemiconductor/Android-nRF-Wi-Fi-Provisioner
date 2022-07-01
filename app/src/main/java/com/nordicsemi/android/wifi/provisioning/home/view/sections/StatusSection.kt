@@ -31,13 +31,21 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorText
+import com.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
 import com.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.wifi.provisioner.library.Error
@@ -51,7 +59,7 @@ import no.nordicsemi.ui.scanner.ui.exhaustive
 internal fun StatusSection(status: Resource<DeviceStatusDomain>) {
     when (status) {
         is Error -> ErrorText(stringResource(id = R.string.error_status))
-        is Loading -> CircularProgressIndicator()
+        is Loading -> LoadingItem()
         is Success -> StatusSection(status = status.data)
     }.exhaustive
 }
@@ -62,5 +70,72 @@ private fun StatusSection(status: DeviceStatusDomain) {
         iconRes = status.wifiState.toIcon(),
         title = stringResource(id = R.string.status_info),
         description = status.wifiState.toDisplayString()
-    )
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)) {
+
+            status.wifiInfo?.let {
+                Text(
+                    text = stringResource(id = R.string.status_title),
+                    style = MaterialTheme.typography.labelLarge
+                )
+                Text(
+                    text = stringResource(id = R.string.status_ip_4, it.ipv4Address),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = stringResource(id = R.string.status_ssid, it.wifiInfo.ssid),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = stringResource(id = R.string.status_bssid, it.wifiInfo.bssid),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = stringResource(id = R.string.status_band, it.wifiInfo.band.toDisplayString()),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = stringResource(id = R.string.status_channel, it.wifiInfo.channel.toString()),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+            }
+
+            status.scanParamsDomain?.let {
+                Text(
+                    text = stringResource(id = R.string.scan_param_title),
+                    style = MaterialTheme.typography.labelLarge
+                )
+                Text(
+                    text = stringResource(id = R.string.scan_param_band, it.band.toDisplayString()),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = stringResource(id = R.string.scan_param_passive, it.passive.toString()),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = stringResource(id = R.string.scan_param_period_ms, it.periodMs.toString()),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = stringResource(id = R.string.scan_param_group_channels, it.groupChannels.toString()),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+            }
+
+            status.failureReason?.let {
+                Text(
+                    text = stringResource(id = R.string.connection_failure_title),
+                    style = MaterialTheme.typography.labelLarge
+                )
+                Text(
+                    text = it.toDisplayString(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+    }
 }

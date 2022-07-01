@@ -36,6 +36,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.wifi.provisioner.library.domain.AuthModeDomain
+import com.nordicsemi.wifi.provisioner.library.domain.BandDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionFailureReasonDomain
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 
 @DrawableRes
@@ -72,4 +74,24 @@ internal fun AuthModeDomain.toIcon(): Int {
         AuthModeDomain.WPA_WPA2_PSK,
         AuthModeDomain.WPA2_ENTERPRISE -> R.drawable.ic_wifi_lock
     }
+}
+
+@Composable
+internal fun BandDomain.toDisplayString(): String {
+    return when (this) {
+        BandDomain.BAND_ANY -> R.string.band_any
+        BandDomain.BAND_2_4_GH -> R.string.band_2_4
+        BandDomain.BAND_5_GH -> R.string.band_5
+    }.let { stringResource(id = it) }
+}
+
+@Composable
+internal fun WifiConnectionFailureReasonDomain.toDisplayString(): String {
+    return when (this) {
+        WifiConnectionFailureReasonDomain.AUTH_ERROR -> R.string.error_auth
+        WifiConnectionFailureReasonDomain.NETWORK_NOT_FOUND -> R.string.error_network_not_found
+        WifiConnectionFailureReasonDomain.TIMEOUT -> R.string.error_timeout
+        WifiConnectionFailureReasonDomain.FAIL_IP -> R.string.error_ip_fail
+        WifiConnectionFailureReasonDomain.FAIL_CONN -> R.string.error_fail_connection
+    }.let { stringResource(id = it) }
 }

@@ -39,8 +39,7 @@ private const val TAG = "DOMAIN-MAPPER"
 internal fun DeviceStatus.toDomain(): DeviceStatusDomain {
     return DeviceStatusDomain(
         state?.toDomain() ?: WifiConnectionStateDomain.DISCONNECTED,
-//        info?.toDomain(),
-        null,
+        info?.toDomain(),
         scan_state?.toDomain(),
         reason?.toDomain()
     )
@@ -57,7 +56,7 @@ internal fun ScanParams.toDomain(): ScanParamsDomain {
 }
 
 internal fun ConnectionInfo.toDomain(): ConnectionInfoDomain {
-    return ConnectionInfoDomain(ip4_addr!!, wifi!!.toDomain())
+    return ConnectionInfoDomain(ip4_addr!!.toString(), wifi!!.toDomain())
 }
 
 internal fun ConnectionState.toDomain(): WifiConnectionStateDomain {
