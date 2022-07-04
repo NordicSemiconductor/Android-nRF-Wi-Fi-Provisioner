@@ -40,8 +40,6 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -49,20 +47,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.*
-import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
-import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
 
 @Composable
 fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    if (viewEntity.device == null) {
+    if (!viewEntity.isStatusSuccess()) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
             FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
         }
-    } else if (viewEntity.network == null) {
+    } else if (viewEntity.isStatusSuccess() && viewEntity.network == null) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnSelectWifiEvent) }) {
             FabContent(Icons.Default.Wifi, stringResource(id = R.string.wifi_select))
         }
-    } else if (viewEntity.network.isPasswordRequired() && viewEntity.password == null) {
+    } else if (viewEntity.network!!.isPasswordRequired() && viewEntity.password == null) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnShowPasswordDialog) }) {
             FabContent(Icons.Default.Password, stringResource(id = R.string.password_select))
         }

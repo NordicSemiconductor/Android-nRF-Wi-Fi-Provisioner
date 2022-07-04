@@ -35,7 +35,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,7 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
-import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorText
+import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
 import com.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
@@ -58,10 +57,19 @@ import no.nordicsemi.ui.scanner.ui.exhaustive
 @Composable
 internal fun StatusSection(status: Resource<DeviceStatusDomain>) {
     when (status) {
-        is Error -> ErrorText(stringResource(id = R.string.error_status))
+        is Error -> ErrorSection(status.error)
         is Loading -> LoadingItem()
         is Success -> StatusSection(status = status.data)
     }.exhaustive
+}
+
+@Composable
+private fun ErrorSection(error: Throwable) {
+    ErrorDataItem(
+        iconRes = R.drawable.ic_wifi_error,
+        title = stringResource(id = R.string.status_info),
+        error = error
+    )
 }
 
 @Composable

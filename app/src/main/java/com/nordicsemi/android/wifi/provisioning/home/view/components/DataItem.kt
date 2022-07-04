@@ -60,6 +60,37 @@ import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
 
 @Composable
+fun ErrorDataItem(
+    @DrawableRes
+    iconRes: Int,
+    title: String,
+    error: Throwable?
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = stringResource(id = R.string.cd_data_item_icon),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge
+            )
+
+            Text(
+                text = error?.message ?: stringResource(id = R.string.unknown_error),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+    }
+}
+
+@Composable
 fun DataItem(
     @DrawableRes
     iconRes: Int,

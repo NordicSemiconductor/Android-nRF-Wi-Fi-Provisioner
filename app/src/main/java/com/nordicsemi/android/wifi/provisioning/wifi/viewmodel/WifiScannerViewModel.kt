@@ -39,9 +39,9 @@ internal class WifiScannerViewModel @Inject constructor(
             val state = _state.value
 
             _state.value = when (it) {
-                is Error -> state.copy(isLoading = false, isError = true)
+                is Error -> state.copy(isLoading = false, error = it.error)
                 is Loading -> state.copy(isLoading = true)
-                is Success -> state.copy(isLoading = false, isError = false, items = state.items + it.data)
+                is Success -> state.copy(isLoading = false, error = null, items = state.items + it.data)
             }
         }.launchIn(viewModelScope)
     }

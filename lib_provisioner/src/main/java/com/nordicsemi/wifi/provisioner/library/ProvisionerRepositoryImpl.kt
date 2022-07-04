@@ -31,6 +31,7 @@
 
 package com.nordicsemi.wifi.provisioner.library
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import com.nordicsemi.wifi.provisioner.library.domain.*
@@ -45,9 +46,11 @@ class ProvisionerRepositoryImpl internal constructor(
 
     private var manager: ProvisionerBleManager? = null
 
+    @SuppressLint("MissingPermission")
     override suspend fun start(device: BluetoothDevice) {
         manager = ProvisionerFactory.createBleManager(context, device)
         manager?.start(device)
+        device.createBond()
     }
 
     override fun readVersion(): Flow<Resource<VersionDomain>> {

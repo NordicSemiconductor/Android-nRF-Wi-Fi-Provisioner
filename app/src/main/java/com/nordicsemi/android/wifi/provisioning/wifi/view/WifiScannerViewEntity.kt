@@ -4,6 +4,6 @@ import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 
 data class WifiScannerViewEntity(
     val isLoading: Boolean = true,
-    val isError: Boolean = false,
+    val error: Throwable? = null,
     val items: List<ScanRecordDomain> = emptyList()
 )

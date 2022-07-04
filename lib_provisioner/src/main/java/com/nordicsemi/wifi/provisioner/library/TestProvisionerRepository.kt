@@ -48,7 +48,7 @@ class TestProvisionerRepository : ProvisionerRepository {
         return flow {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
-//            throw Exception()
+//            emit(Resource.createError(Exception("Error message.")))
             emit(Resource.createSuccess(VersionDomain("1234")))
         }
     }
@@ -57,6 +57,7 @@ class TestProvisionerRepository : ProvisionerRepository {
         return flow {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
+//            emit(Resource.createError(Exception("Error message.")))
             emit(Resource.createSuccess(createDeviceStatus()))
         }
     }
@@ -65,6 +66,8 @@ class TestProvisionerRepository : ProvisionerRepository {
         return flow {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
+//            emit(Resource.createError(Exception("Error message.")))
+
             emit(Resource.createSuccess(createScanRecord(-100)))
             delay(DELAY_TIME)
             emit(Resource.createSuccess(createScanRecord(-50)))
@@ -95,13 +98,15 @@ class TestProvisionerRepository : ProvisionerRepository {
         return flow {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
-            emit(Resource.createSuccess(WifiConnectionStateDomain.ASSOCIATION))
-            delay(DELAY_TIME)
-            emit(Resource.createSuccess(WifiConnectionStateDomain.AUTHENTICATION))
-            delay(DELAY_TIME)
-            emit(Resource.createSuccess(WifiConnectionStateDomain.OBTAINING_IP))
-            delay(DELAY_TIME)
-            emit(Resource.createSuccess(WifiConnectionStateDomain.CONNECTED))
+            emit(Resource.createError(Exception("Error message.")))
+
+//            emit(Resource.createSuccess(WifiConnectionStateDomain.ASSOCIATION))
+//            delay(DELAY_TIME)
+//            emit(Resource.createSuccess(WifiConnectionStateDomain.AUTHENTICATION))
+//            delay(DELAY_TIME)
+//            emit(Resource.createSuccess(WifiConnectionStateDomain.OBTAINING_IP))
+//            delay(DELAY_TIME)
+//            emit(Resource.createSuccess(WifiConnectionStateDomain.CONNECTED))
         }
     }
 

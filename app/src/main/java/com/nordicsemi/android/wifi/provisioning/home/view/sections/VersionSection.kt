@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
+import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorText
 import com.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
 import com.nordicsemi.wifi.provisioner.library.Error
@@ -47,10 +48,19 @@ import no.nordicsemi.ui.scanner.ui.exhaustive
 @Composable
 internal fun VersionSection(version: Resource<VersionDomain>) {
     when (version) {
-        is Error -> ErrorText(stringResource(id = R.string.error_version))
+        is Error -> ErrorSection(version.error)
         is Loading -> LoadingItem()
         is Success -> VersionSection(version = version.data)
     }.exhaustive
+}
+
+@Composable
+private fun ErrorSection(error: Throwable) {
+    ErrorDataItem(
+        iconRes = R.drawable.ic_version,
+        title = stringResource(id = R.string.dk_version),
+        error = error
+    )
 }
 
 @Composable

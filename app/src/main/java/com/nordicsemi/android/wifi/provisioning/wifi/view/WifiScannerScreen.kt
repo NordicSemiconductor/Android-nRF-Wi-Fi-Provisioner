@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.BackIconAppBar
+import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.android.wifi.provisioning.wifi.viewmodel.WifiScannerViewModel
@@ -43,8 +44,8 @@ internal fun WifiScannerScreen() {
 
         if (viewEntity.isLoading) {
             LoadingItem()
-        } else if (viewEntity.isError) {
-            ErrorItem()
+        } else if (viewEntity.error != null) {
+            ErrorItem(viewEntity.error)
         } else {
             WifiList(viewEntity, onEvent)
         }
@@ -64,10 +65,16 @@ private fun LoadingItem() {
 }
 
 @Composable
-private fun ErrorItem() {
-    Text(
-        text = stringResource(id = R.string.error_scanning), modifier = Modifier.padding(16.dp)
-    )
+private fun ErrorItem(error: Throwable) {
+    Box(
+        modifier = Modifier.padding(vertical = 16.dp)
+    ) {
+        ErrorDataItem(
+            iconRes = R.drawable.ic_error,
+            title = stringResource(id = R.string.wifi_scanning),
+            error = error
+        )
+    }
 }
 
 @Composable

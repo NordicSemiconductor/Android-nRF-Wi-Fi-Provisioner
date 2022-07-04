@@ -49,6 +49,10 @@ data class HomeViewEntity(
     val provisioningStatus: Resource<WifiConnectionStateDomain>? = null
 ) {
 
+    fun isStatusSuccess(): Boolean {
+        return device != null && version is Success && status is Success
+    }
+
     fun hasFinished(): Boolean {
         val status = (provisioningStatus as? Success)?.data
         return status == WifiConnectionStateDomain.CONNECTED
