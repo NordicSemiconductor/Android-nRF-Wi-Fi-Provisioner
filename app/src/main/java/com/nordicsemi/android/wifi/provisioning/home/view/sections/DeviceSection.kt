@@ -31,14 +31,10 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bluetooth
-import androidx.compose.material.icons.filled.BluetoothDisabled
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
@@ -60,7 +57,7 @@ internal fun DeviceSection(
     onEvent: (HomeScreenViewEvent) -> Unit
 ) {
     if (device == null) {
-        DeviceNotSelectedSection(onEvent)
+        DeviceNotSelectedSection()
     } else {
         BluetoothDevice(device, onEvent)
     }
@@ -80,20 +77,17 @@ private fun BluetoothDevice(
             .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.Bluetooth,
+            painter = painterResource(id = R.drawable.ic_phone_ok),
             contentDescription = stringResource(id = R.string.cd_device_selected),
-            tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.secondary)
-                .padding(8.dp)
+            modifier = Modifier.padding(8.dp)
         )
 
         Spacer(modifier = Modifier.size(16.dp))
 
         Text(
             text = device.displayNameOrAddress(),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.bodyLarge
         )
 
         Icon(
@@ -105,7 +99,7 @@ private fun BluetoothDevice(
 }
 
 @Composable
-private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
+private fun DeviceNotSelectedSection() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -113,19 +107,17 @@ private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
             .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.BluetoothDisabled,
+            painter = painterResource(id = R.drawable.ic_no_phone),
             contentDescription = stringResource(id = R.string.add_device),
-            tint = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.outline)
-                .padding(8.dp)
-                .clickable { onEvent(OnSelectDeviceClickEvent) }
+            modifier = Modifier.padding(8.dp)
         )
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        Text(text = stringResource(id = R.string.no_device_selected))
+        Text(
+            text = stringResource(id = R.string.no_device_selected),
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 
     Spacer(modifier = Modifier.size(16.dp))

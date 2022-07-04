@@ -152,4 +152,7 @@
     <string name="scan_param_group_channels">Group channels: %s</string>
 
     <string name="connection_failure_title">Connection failure</string>
+
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
 </resources>

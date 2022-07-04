@@ -31,20 +31,41 @@
 
 package com.nordicsemi.android.wifi.provisioning.password
 
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.nordicsemi.android.wifi.provisioning.R
 
 @Composable
 fun PasswordDialog(onEvent: (PasswordDialogEvent) -> Unit) {
     val passwordField = rememberSaveable { mutableStateOf("") }
     val isError = rememberSaveable { mutableStateOf(false) }
+    val passwordVisible = rememberSaveable { mutableStateOf(false) }
+
+    val visualTransformation = if (passwordVisible.value) {
+        VisualTransformation.None
+    } else {
+        PasswordVisualTransformation()
+    }
+
+    val image = if (passwordVisible.value) {
+        Icons.Filled.Visibility
+    } else {
+        Icons.Filled.VisibilityOff
+    }
+
+    val description = if (passwordVisible.value) {
+        stringResource(id = R.string.hide_password)
+    } else {
+        stringResource(id = R.string.show_password)
+    }
 
     AlertDialog(
         onDismissRequest = { onEvent(DismissEvent) },
@@ -53,9 +74,15 @@ fun PasswordDialog(onEvent: (PasswordDialogEvent) -> Unit) {
             OutlinedTextField(
                 value = passwordField.value,
                 label = { Text(text = stringResource(id = R.string.password)) },
+                visualTransformation = visualTransformation,
                 onValueChange = {
                     passwordField.value = it
                     isError.value = false
+                },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                        Icon(imageVector = image, description)
+                    }
                 }
             )
         },
