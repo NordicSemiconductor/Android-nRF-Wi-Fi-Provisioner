@@ -34,12 +34,13 @@ package com.nordicsemi.android.wifi.provisioning.home.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
 import com.nordicsemi.android.wifi.provisioning.home.view.*
-import com.nordicsemi.wifi.provisioner.library.*
+import com.nordicsemi.wifi.provisioner.library.ProvisionerRepository
+import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.wifi.provisioner.library.internal.PROVISIONING_SERVICE_UUID
+import com.nordicsemi.wifi.provisioner.library.launchWithCatch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -73,7 +74,17 @@ class HomeViewModel @Inject constructor(
             OnSelectDeviceClickEvent -> requestBluetoothDevice()
             OnSelectWifiEvent -> navigationManager.navigateTo(WifiScannerId)
             OnProvisionClickEvent -> provision()
+            OnHidePasswordDialog -> hidePasswordDialog()
+            OnShowPasswordDialog -> showPasswordDialog()
         }.exhaustive
+    }
+
+    private fun showPasswordDialog() {
+        _state.value = _state.value.copy(showPasswordDialog = true)
+    }
+
+    private fun hidePasswordDialog() {
+        _state.value = _state.value.copy(showPasswordDialog = false)
     }
 
     private fun finish() {

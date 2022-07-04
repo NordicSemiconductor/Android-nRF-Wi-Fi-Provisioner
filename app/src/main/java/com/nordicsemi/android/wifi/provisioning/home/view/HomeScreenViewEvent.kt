@@ -8,6 +8,10 @@ object OnFinishedEvent : HomeScreenViewEvent
 
 object OnSelectWifiEvent : HomeScreenViewEvent
 
+object OnShowPasswordDialog : HomeScreenViewEvent
+
+object OnHidePasswordDialog : HomeScreenViewEvent
+
 data class OnPasswordSelectedEvent(val password: String) : HomeScreenViewEvent
 
 object OnProvisionClickEvent : HomeScreenViewEvent

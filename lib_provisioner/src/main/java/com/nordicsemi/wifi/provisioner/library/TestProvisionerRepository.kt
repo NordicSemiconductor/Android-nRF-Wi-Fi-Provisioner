@@ -48,6 +48,7 @@ class TestProvisionerRepository : ProvisionerRepository {
         return flow {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
+//            throw Exception()
             emit(Resource.createSuccess(VersionDomain("1234")))
         }
     }

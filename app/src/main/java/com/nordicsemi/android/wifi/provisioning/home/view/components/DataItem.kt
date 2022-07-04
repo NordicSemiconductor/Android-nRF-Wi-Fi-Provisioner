@@ -41,6 +41,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,6 +51,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,7 +66,40 @@ fun DataItem(
     title: String,
     description: String
 ) {
-    DataItem(iconRes = iconRes, title = title, description = description, isExpanded = null)
+    DataItem(
+        iconRes = iconRes,
+        title = title,
+        description = description,
+        isExpanded = null,
+        rightIcon = null
+    )
+}
+
+@Composable
+fun ClickableDataItem(
+    @DrawableRes
+    iconRes: Int,
+    title: String,
+    description: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .clickable { onClick() }
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        DataItem(
+            iconRes = iconRes,
+            title = title,
+            description = description,
+            isExpanded = null,
+            rightIcon = Icons.Default.Edit
+        )
+    }
 }
 
 @Composable
@@ -83,7 +118,12 @@ fun DataItem(
             .clickable { isExpanded.value = !isExpanded.value }
             .padding(vertical = 8.dp)
     ) {
-        DataItem(iconRes = iconRes, title = title, description = description, isExpanded = isExpanded.value)
+        DataItem(
+            iconRes = iconRes,
+            title = title,
+            description = description,
+            isExpanded = isExpanded.value
+        )
 
         AnimatedVisibility(
             visible = isExpanded.value,
@@ -105,7 +145,8 @@ private fun DataItem(
     iconRes: Int,
     title: String,
     description: String,
-    isExpanded: Boolean?
+    isExpanded: Boolean?,
+    rightIcon: ImageVector? = null
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
@@ -129,6 +170,14 @@ private fun DataItem(
         }
 
         isExpanded?.let { ExpandedIcon(isExpanded = it) }
+
+        rightIcon?.let {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
 

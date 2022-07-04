@@ -97,7 +97,7 @@ private fun WifiItem(scanRecord: ScanRecordDomain, onEvent: (WifiScannerViewEven
         Icon(
             painter = painterResource(id = wifi.authModeDomain.toIcon()),
             contentDescription = stringResource(id = R.string.cd_wifi_icon),
-            tint = MaterialTheme.colorScheme.onTertiary,
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colorScheme.secondary, shape = CircleShape

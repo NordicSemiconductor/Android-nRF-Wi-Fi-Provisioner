@@ -77,21 +77,17 @@ private fun BluetoothDevice(
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
             .clickable { onEvent(OnSelectDeviceClickEvent) }
-            .padding(8.dp)
+            .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
+        Icon(
+            imageVector = Icons.Default.Bluetooth,
+            contentDescription = stringResource(id = R.string.cd_device_selected),
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
-                .size(40.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.secondary)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Bluetooth,
-                contentDescription = stringResource(id = R.string.cd_device_selected),
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
+                .padding(8.dp)
+        )
 
         Spacer(modifier = Modifier.size(16.dp))
 
@@ -114,22 +110,18 @@ private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
+        Icon(
+            imageVector = Icons.Default.BluetoothDisabled,
+            contentDescription = stringResource(id = R.string.add_device),
+            tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
-                .size(40.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.outline)
+                .padding(8.dp)
                 .clickable { onEvent(OnSelectDeviceClickEvent) }
-        ) {
-            Icon(
-                imageVector = Icons.Default.BluetoothDisabled,
-                contentDescription = stringResource(id = R.string.add_device),
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
+        )
 
         Spacer(modifier = Modifier.size(16.dp))
 

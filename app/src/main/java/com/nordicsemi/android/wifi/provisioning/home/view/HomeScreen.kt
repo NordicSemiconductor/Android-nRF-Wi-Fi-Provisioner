@@ -48,6 +48,8 @@ import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.CloseIconAppBar
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.*
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
+import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
+import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,6 +68,13 @@ fun HomeScreen() {
     ) {
         Box(modifier = Modifier.padding(it)) {
             Content(state, onEvent)
+        }
+    }
+
+    if (state.showPasswordDialog == true) {
+        PasswordDialog {
+            (it as? PasswordSetDialogEvent)?.let { onEvent(OnPasswordSelectedEvent(it.password)) }
+            onEvent(OnHidePasswordDialog)
         }
     }
 }
@@ -101,12 +110,12 @@ private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Uni
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            WifiSection(it)
+            WifiSection(it, onEvent)
         }
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        state.password?.let { PasswordSection() }
+        state.password?.let { PasswordSection(onEvent) }
 
         Spacer(modifier = Modifier.size(16.dp))
 

@@ -34,15 +34,19 @@ package com.nordicsemi.android.wifi.provisioning.home.view.sections
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
-import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
+import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.components.ClickableDataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectWifiEvent
 
 @Composable
-internal fun WifiSection(record: ScanRecordDomain) {
-    DataItem(
+internal fun WifiSection(record: ScanRecordDomain, onEvent: (HomeScreenViewEvent) -> Unit) {
+    ClickableDataItem(
         iconRes = record.wifiInfo.authModeDomain.toIcon(),
         title = stringResource(id = R.string.selected_wifi),
         description = record.wifiInfo.ssid
-    )
+    ) {
+        onEvent(OnSelectWifiEvent)
+    }
 }

@@ -54,9 +54,6 @@ import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
 
 @Composable
 fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-
-    val showPasswordDialog = rememberSaveable { mutableStateOf(false) }
-
     if (viewEntity.device == null) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
             FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
@@ -66,7 +63,7 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
             FabContent(Icons.Default.Wifi, stringResource(id = R.string.wifi_select))
         }
     } else if (viewEntity.network.isPasswordRequired() && viewEntity.password == null) {
-        ExtendedFloatingActionButton(onClick = { showPasswordDialog.value = true }) {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnShowPasswordDialog) }) {
             FabContent(Icons.Default.Password, stringResource(id = R.string.password_select))
         }
     } else if (viewEntity.hasFinished()) {
@@ -76,13 +73,6 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
     } else {
         ExtendedFloatingActionButton(onClick = { onEvent(OnProvisionClickEvent) }) {
             FabContent(Icons.Default.PlayArrow, stringResource(id = R.string.provision))
-        }
-    }
-
-    if (showPasswordDialog.value) {
-        PasswordDialog {
-            (it as? PasswordSetDialogEvent)?.let { onEvent(OnPasswordSelectedEvent(it.password)) }
-            showPasswordDialog.value = false
         }
     }
 }
