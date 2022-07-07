@@ -123,16 +123,16 @@ private fun WifiItem(scanRecord: ScanRecordDomain, onEvent: (WifiScannerViewEven
                 text = stringResource(id = R.string.bssid, wifi.bssid),
                 style = MaterialTheme.typography.bodySmall
             )
-            
-            Row {
+
+            wifi.band?.toDisplayString()?.let {
                 Text(
-                    text = stringResource(id = R.string.band_and_channel, wifi.band.toDisplayString(), wifi.channel.toString()),
+                    text = stringResource(id = R.string.band_and_channel, it, wifi.channel.toString()),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
         }
 
-        RssiIcon(rssi = scanRecord.rssi)
+        scanRecord.rssi?.let { RssiIcon(rssi = it) }
     }
 }
 

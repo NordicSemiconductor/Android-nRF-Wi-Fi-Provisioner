@@ -98,10 +98,12 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     text = stringResource(id = R.string.status_bssid, it.wifiInfo.bssid),
                     style = MaterialTheme.typography.bodySmall
                 )
-                Text(
-                    text = stringResource(id = R.string.status_band, it.wifiInfo.band.toDisplayString()),
-                    style = MaterialTheme.typography.bodySmall
-                )
+                it.wifiInfo.band?.toDisplayString()?.let {
+                    Text(
+                        text = stringResource(id = R.string.status_band, it),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
                 Text(
                     text = stringResource(id = R.string.status_channel, it.wifiInfo.channel.toString()),
                     style = MaterialTheme.typography.bodySmall

@@ -65,14 +65,15 @@ internal fun WifiConnectionStateDomain.toDisplayString(): String {
 }
 
 @DrawableRes
-internal fun AuthModeDomain.toIcon(): Int {
+internal fun AuthModeDomain?.toIcon(): Int {
     return when (this) {
         AuthModeDomain.OPEN -> R.drawable.ic_wifi_open
         AuthModeDomain.WEP,
         AuthModeDomain.WPA_PSK,
         AuthModeDomain.WPA2_PSK,
         AuthModeDomain.WPA_WPA2_PSK,
-        AuthModeDomain.WPA2_ENTERPRISE -> R.drawable.ic_wifi_lock
+        AuthModeDomain.WPA2_ENTERPRISE,
+        null -> R.drawable.ic_wifi_lock
     }
 }
 

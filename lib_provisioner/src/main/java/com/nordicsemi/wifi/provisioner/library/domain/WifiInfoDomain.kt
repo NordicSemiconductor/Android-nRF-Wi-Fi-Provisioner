@@ -34,7 +34,7 @@ package com.nordicsemi.wifi.provisioner.library.domain
 data class WifiInfoDomain(
     val ssid: String,
     val bssid: String,
-    val band: BandDomain,
+    val band: BandDomain?,
     val channel: Int,
-    val authModeDomain: AuthModeDomain
+    val authModeDomain: AuthModeDomain?
 )

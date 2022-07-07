@@ -32,7 +32,7 @@
 package com.nordicsemi.wifi.provisioner.library.domain
 
 data class ScanRecordDomain(
-    val rssi: Int,
+    val rssi: Int?,
     val wifiInfo: WifiInfoDomain
 ) {
 

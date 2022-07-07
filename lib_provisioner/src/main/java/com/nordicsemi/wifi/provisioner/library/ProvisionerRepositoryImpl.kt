@@ -72,7 +72,10 @@ class ProvisionerRepositoryImpl internal constructor(
         return manager?.startScan()!!
             .map { Resource.createSuccess(it.toDomain()) }
             .onStart { emit(Resource.createLoading()) }
-            .catch { emit(Resource.createError(it)) }
+            .catch {
+                it.printStackTrace()
+                emit(Resource.createError(it))
+            }
     }
 
     override fun stopScan(): Flow<Resource<Unit>> {
@@ -87,7 +90,10 @@ class ProvisionerRepositoryImpl internal constructor(
         return manager?.provision()!!
             .map { Resource.createSuccess(it.toDomain()) }
             .onStart { emit(Resource.createLoading()) }
-            .catch { emit(Resource.createError(it)) }
+            .catch {
+                it.printStackTrace()
+                emit(Resource.createError(it))
+            }
     }
 
     override fun forgetConfig(): Flow<Resource<Unit>> {

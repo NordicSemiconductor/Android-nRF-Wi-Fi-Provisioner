@@ -37,6 +37,7 @@ import no.nordicsemi.android.wifi.provisioning.*
 private const val TAG = "DOMAIN-MAPPER"
 
 internal fun DeviceStatus.toDomain(): DeviceStatusDomain {
+    Log.d(TAG, "status: $this")
     return DeviceStatusDomain(
         state?.toDomain() ?: WifiConnectionStateDomain.DISCONNECTED,
         info?.toDomain(),
@@ -56,7 +57,7 @@ internal fun ScanParams.toDomain(): ScanParamsDomain {
 }
 
 internal fun ConnectionInfo.toDomain(): ConnectionInfoDomain {
-    return ConnectionInfoDomain(ip4_addr!!.toString(), wifi!!.toDomain())
+    return ConnectionInfoDomain(ip4_addr!!.hex(), wifi!!.toDomain())
 }
 
 internal fun ConnectionState.toDomain(): WifiConnectionStateDomain {
@@ -101,15 +102,15 @@ internal fun ConnectionFailureReason.toDomain(): WifiConnectionFailureReasonDoma
 
 internal fun WifiInfo.toDomain(): WifiInfoDomain {
     return WifiInfoDomain(
-        ssid.toString(),
-        bssid.toString(),
-        band!!.toDomain(),
+        ssid.utf8(),
+        bssid.hex(),
+        band?.toDomain(),
         channel,
-        auth!!.toDomain()
+        auth?.toDomain()
     )
 }
 
 internal fun ScanRecord.toDomain(): ScanRecordDomain {
     Log.d(TAG, "mapper: $this")
-    return ScanRecordDomain(rssi!!, wifi!!.toDomain())
+    return ScanRecordDomain(rssi, wifi!!.toDomain())
 }
