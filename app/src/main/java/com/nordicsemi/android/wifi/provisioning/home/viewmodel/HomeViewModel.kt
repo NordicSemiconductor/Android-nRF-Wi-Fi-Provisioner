@@ -39,6 +39,7 @@ import com.nordicsemi.android.wifi.provisioning.home.view.*
 import com.nordicsemi.wifi.provisioner.library.ProvisionerRepository
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
 import com.nordicsemi.wifi.provisioner.library.internal.PROVISIONING_SERVICE_UUID
 import com.nordicsemi.wifi.provisioner.library.launchWithCatch
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -157,7 +158,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun provision() {
-        repository.setConfig().onEach {
+        val state = _state.value
+        val config = WifiConfigDomain(state.network!!.wifiInfo, state.password!!)
+        repository.setConfig(config).onEach {
             _state.value = _state.value.copy(provisioningStatus = it)
         }.launchIn(viewModelScope)
     }

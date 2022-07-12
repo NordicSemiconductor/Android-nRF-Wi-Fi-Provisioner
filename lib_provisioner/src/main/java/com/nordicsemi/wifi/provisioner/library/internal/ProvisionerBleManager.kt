@@ -203,8 +203,9 @@ internal class ProvisionerBleManager(
         verifyResponseSuccess(response.value)
     }
 
-    fun provision() = callbackFlow<ConnectionState> {
-        val request = Request(op_code = OpCode.SET_CONFIG)
+    fun provision(config: WifiConfig) = callbackFlow<ConnectionState> {
+        val request = Request(op_code = OpCode.SET_CONFIG, config = config)
+        Log.d("AAATESTAAA", "config request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
             .suspendForValidResponse<ByteArrayReadResponse>()

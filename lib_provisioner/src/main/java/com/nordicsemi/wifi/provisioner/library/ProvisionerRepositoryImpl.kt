@@ -86,8 +86,8 @@ class ProvisionerRepositoryImpl internal constructor(
         manager?.stopScan()
     }
 
-    override fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
-        return manager?.provision()!!
+    override fun setConfig(config: WifiConfigDomain): Flow<Resource<WifiConnectionStateDomain>> {
+        return manager?.provision(config.toApi())!!
             .map { Resource.createSuccess(it.toDomain()) }
             .onStart { emit(Resource.createLoading()) }
             .catch {

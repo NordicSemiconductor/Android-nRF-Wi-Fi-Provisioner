@@ -94,7 +94,7 @@ class TestProvisionerRepository : ProvisionerRepository {
 
     }
 
-    override fun setConfig(): Flow<Resource<WifiConnectionStateDomain>> {
+    override fun setConfig(config: WifiConfigDomain): Flow<Resource<WifiConnectionStateDomain>> {
         return flow {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
