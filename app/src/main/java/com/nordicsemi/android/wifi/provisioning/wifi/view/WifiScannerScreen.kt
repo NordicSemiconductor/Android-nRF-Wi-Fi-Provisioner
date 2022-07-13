@@ -119,14 +119,21 @@ private fun WifiItem(scanRecord: ScanRecordDomain, onEvent: (WifiScannerViewEven
                 text = wifi.ssid, style = MaterialTheme.typography.labelLarge
             )
 
-            Text(
-                text = stringResource(id = R.string.bssid, wifi.bssid),
-                style = MaterialTheme.typography.bodySmall
-            )
-
-            wifi.band?.toDisplayString()?.let {
+            if (wifi.bssid.isNotEmpty()) {
                 Text(
-                    text = stringResource(id = R.string.band_and_channel, it, wifi.channel.toString()),
+                    text = stringResource(id = R.string.bssid, wifi.bssid),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+
+            if (wifi.band != null) {
+                Text(
+                    text = stringResource(id = R.string.band_and_channel, wifi.band!!, wifi.channel.toString()),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            } else {
+                Text(
+                    text = stringResource(id = R.string.channel, wifi.channel.toString()),
                     style = MaterialTheme.typography.bodySmall
                 )
             }

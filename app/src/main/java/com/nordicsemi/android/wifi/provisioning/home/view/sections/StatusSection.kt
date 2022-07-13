@@ -79,7 +79,7 @@ private fun StatusSection(status: DeviceStatusDomain) {
         title = stringResource(id = R.string.status_info),
         description = status.wifiState.toDisplayString()
     ) {
-        Column(modifier = Modifier.padding(horizontal = 32.dp, vertical = 16.dp)) {
+        Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp, top = 16.dp)) {
 
             status.wifiInfo?.let {
                 Text(

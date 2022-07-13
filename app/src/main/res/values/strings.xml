@@ -128,6 +128,7 @@
     <string name="cd_rssi">Image representing signal strength.</string>
 
     <string name="band_and_channel">Band: %s, Channel: %s</string>
+    <string name="channel">Channel: %s</string>
     <string name="band_2_4">2.4GHz</string>
     <string name="band_5">5GHz</string>
     <string name="band_any">Any</string>

@@ -33,6 +33,7 @@ package com.nordicsemi.wifi.provisioner.library.domain
 
 import android.util.Log
 import no.nordicsemi.android.wifi.provisioning.*
+import okio.ByteString
 
 private const val TAG = "DOMAIN-MAPPER"
 
@@ -57,7 +58,7 @@ internal fun ScanParams.toDomain(): ScanParamsDomain {
 }
 
 internal fun ConnectionInfo.toDomain(): ConnectionInfoDomain {
-    return ConnectionInfoDomain(ip4_addr!!.hex(), wifi!!.toDomain())
+    return ConnectionInfoDomain(ip4_addr!!.toIp(), wifi!!.toDomain())
 }
 
 internal fun ConnectionState.toDomain(): WifiConnectionStateDomain {
@@ -103,7 +104,7 @@ internal fun ConnectionFailureReason.toDomain(): WifiConnectionFailureReasonDoma
 internal fun WifiInfo.toDomain(): WifiInfoDomain {
     return WifiInfoDomain(
         ssid.utf8(),
-        bssid.hex(),
+        bssid.toMac(),
         band?.toDomain(),
         channel,
         auth?.toDomain()
@@ -113,4 +114,16 @@ internal fun WifiInfo.toDomain(): WifiInfoDomain {
 internal fun ScanRecord.toDomain(): ScanRecordDomain {
     Log.d(TAG, "mapper: $this")
     return ScanRecordDomain(rssi, wifi!!.toDomain())
+}
+
+internal fun ByteString.toIp(): String {
+    return toByteArray().joinToString(".") {
+        it.toUByte().toString()
+    }
+}
+
+internal fun ByteString.toMac(): String {
+    return toByteArray().joinToString(":") {
+        "%02x".format(it).uppercase()
+    }
 }

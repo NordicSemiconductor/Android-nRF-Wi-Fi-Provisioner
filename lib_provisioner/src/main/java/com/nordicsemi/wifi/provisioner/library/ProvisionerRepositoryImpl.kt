@@ -39,6 +39,7 @@ import com.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 import kotlinx.coroutines.flow.*
 import no.nordicsemi.android.logger.LoggerAppRunner
 import no.nordicsemi.android.logger.NordicLogger
+import okio.ByteString.Companion.toByteString
 
 class ProvisionerRepositoryImpl internal constructor(
     private val context: Context
@@ -54,7 +55,7 @@ class ProvisionerRepositoryImpl internal constructor(
     }
 
     override fun readVersion(): Flow<Resource<VersionDomain>> {
-        return runTask { VersionDomain(manager?.getVersion()!!) }
+        return runTask { VersionDomain(manager?.getVersion()!!.toByteString().hex()) }
     }
 
     override fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
