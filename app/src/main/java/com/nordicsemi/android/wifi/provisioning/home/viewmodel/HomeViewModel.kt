@@ -32,6 +32,7 @@
 package com.nordicsemi.android.wifi.provisioning.home.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
@@ -44,10 +45,8 @@ import com.nordicsemi.wifi.provisioner.library.internal.PROVISIONING_SERVICE_UUI
 import com.nordicsemi.wifi.provisioner.library.launchWithCatch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.navigation.*
 import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
@@ -68,7 +67,20 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(HomeViewEntity())
     val state = _state.asStateFlow()
 
+    private val pendingJobs = mutableListOf<Job>()
+
+    init {
+        navigationManager.recentResult.onEach {
+            if (it.destinationId == ScannerDestinationId) {
+                handleArgs(it)
+            } else if (it.destinationId == WifiScannerId) {
+                handleWifiArgs(it)
+            }
+        }.launchIn(viewModelScope)
+    }
+
     fun onEvent(event: HomeScreenViewEvent) {
+        cancelPendingJobs()
         when (event) {
             OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
@@ -78,6 +90,11 @@ class HomeViewModel @Inject constructor(
             OnHidePasswordDialog -> hidePasswordDialog()
             OnShowPasswordDialog -> showPasswordDialog()
         }.exhaustive
+    }
+
+    private fun cancelPendingJobs() {
+        pendingJobs.forEach { it.cancel() }
+        pendingJobs.clear()
     }
 
     private fun showPasswordDialog() {
@@ -97,14 +114,6 @@ class HomeViewModel @Inject constructor(
 
     private fun requestBluetoothDevice() {
         navigationManager.navigateTo(ScannerDestinationId, UUIDArgument(PROVISIONING_SERVICE_UUID))
-
-        navigationManager.recentResult.onEach {
-            if (it.destinationId == ScannerDestinationId) {
-                handleArgs(it)
-            } else if (it.destinationId == WifiScannerId) {
-                handleWifiArgs(it)
-            }
-        }.launchIn(viewModelScope)
     }
 
     private fun handleArgs(args: DestinationResult) {
@@ -126,7 +135,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun installWifi(scanRecord: ScanRecordDomain) {
-        _state.value = _state.value.copy(network = scanRecord, password = null, provisioningStatus = null)
+        _state.value =
+            _state.value.copy(network = scanRecord, password = null, provisioningStatus = null)
     }
 
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
@@ -138,19 +148,27 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun loadVersion() {
-        repository.readVersion().onEach {
-            _state.value = _state.value.copy(version = it)
+        Log.d("AAATESTAAA", "load version()")
+        repository.readVersion()
+            .cancellable()
+            .onEach {
+                Log.d("AAATESTAAA", "version: $it")
+                _state.value = _state.value.copy(version = it)
 
-            (_state.value.version as? Success)?.let {
-                loadStatus()
-            }
-        }.launchIn(viewModelScope)
+                (_state.value.version as? Success)?.let {
+                    loadStatus()
+                }
+            }.launchIn(viewModelScope)
+            .let { pendingJobs.add(it) }
     }
 
     private fun loadStatus() {
-        repository.getStatus().onEach {
-            _state.value = _state.value.copy(status = it)
-        }.launchIn(viewModelScope)
+        repository.getStatus()
+            .cancellable()
+            .onEach {
+                _state.value = _state.value.copy(status = it)
+            }.launchIn(viewModelScope)
+            .let { pendingJobs.add(it) }
     }
 
     private fun onPasswordSelected(password: String) {
@@ -160,9 +178,12 @@ class HomeViewModel @Inject constructor(
     private fun provision() {
         val state = _state.value
         val config = WifiConfigDomain(state.network!!.wifiInfo, state.password!!)
-        repository.setConfig(config).onEach {
-            _state.value = _state.value.copy(provisioningStatus = it)
-        }.launchIn(viewModelScope)
+        repository.setConfig(config)
+            .cancellable()
+            .onEach {
+                _state.value = _state.value.copy(provisioningStatus = it)
+            }.launchIn(viewModelScope)
+            .let { pendingJobs.add(it) }
     }
 
     override fun onCleared() {

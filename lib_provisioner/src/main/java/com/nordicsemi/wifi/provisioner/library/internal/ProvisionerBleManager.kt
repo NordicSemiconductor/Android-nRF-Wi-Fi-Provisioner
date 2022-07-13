@@ -167,13 +167,6 @@ internal class ProvisionerBleManager(
 
     fun startScan() = callbackFlow {
         val request = Request(op_code = OpCode.START_SCAN)
-        val response = waitForIndication(controlPointCharacteristic)
-            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
-            .suspendForValidResponse<ByteArrayReadResponse>()
-
-        if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
-            throw createResponseError()
-        }
 
         setNotificationCallback(dataOutCharacteristic)
             .asValidResponseFlow<ByteArrayReadResponse>()
@@ -183,28 +176,6 @@ internal class ProvisionerBleManager(
             }
             .launchIn(this)
 
-        awaitClose {
-            disableNotifications(dataOutCharacteristic)
-        }
-    }
-
-    suspend fun stopScan() {
-        Log.d("AAATESTAAA", "stop scan")
-        val request = Request(op_code = OpCode.STOP_SCAN)
-        val response = waitForIndication(controlPointCharacteristic)
-            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
-            .suspendForValidResponse<ByteArrayReadResponse>()
-
-        val decodedResponse = Response.ADAPTER.decode(response.value).status
-
-        Log.d("AAATESTAAA", "stop scan response: $decodedResponse")
-
-        verifyResponseSuccess(response.value)
-    }
-
-    fun provision(config: WifiConfig) = callbackFlow<ConnectionState> {
-        val request = Request(op_code = OpCode.SET_CONFIG, config = config)
-        Log.d("AAATESTAAA", "config request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
             .suspendForValidResponse<ByteArrayReadResponse>()
@@ -213,6 +184,25 @@ internal class ProvisionerBleManager(
             throw createResponseError()
         }
 
+        awaitClose {
+            disableNotifications(dataOutCharacteristic)
+        }
+    }
+
+    suspend fun stopScan() {
+        val request = Request(op_code = OpCode.STOP_SCAN)
+        val response = waitForIndication(controlPointCharacteristic)
+            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .suspendForValidResponse<ByteArrayReadResponse>()
+
+        val decodedResponse = Response.ADAPTER.decode(response.value).status
+
+        verifyResponseSuccess(response.value)
+    }
+
+    fun provision(config: WifiConfig) = callbackFlow {
+        val request = Request(op_code = OpCode.SET_CONFIG, config = config)
+
         setNotificationCallback(dataOutCharacteristic)
             .asValidResponseFlow<ByteArrayReadResponse>()
             .onEach {
@@ -220,6 +210,14 @@ internal class ProvisionerBleManager(
                 trySend(result.state!!)
             }
             .launchIn(this)
+
+        val response = waitForIndication(controlPointCharacteristic)
+            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .suspendForValidResponse<ByteArrayReadResponse>()
+
+        if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
+            throw createResponseError()
+        }
 
         awaitClose {
             disableNotifications(dataOutCharacteristic)
@@ -237,7 +235,7 @@ internal class ProvisionerBleManager(
 
     private fun verifyResponseSuccess(response: ByteArray) {
         val decodedResponse = Response.ADAPTER.decode(response).status
-        Log.d("AAATESTAAA", "Response: $decodedResponse")
+
         if (Response.ADAPTER.decode(response).status != Status.SUCCESS) {
             throw createResponseError()
         }
