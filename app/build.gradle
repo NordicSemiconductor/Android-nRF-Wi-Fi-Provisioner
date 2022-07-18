@@ -4,6 +4,7 @@ plugins {
     id "org.jetbrains.kotlin.kapt"
     id 'dagger.hilt.android.plugin'
 }
+apply from: rootProject.file("gradle/git-tag-version.gradle")
 
 android {
     ext.kotlin_version = '1.6.21'
@@ -16,8 +17,8 @@ android {
         applicationId "com.nordicsemi.android.wifi.provisioning"
         minSdk 24
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode getVersionCodeFromTags()
+        versionName getVersionNameFromTags()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
