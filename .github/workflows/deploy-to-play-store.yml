@@ -1,0 +1,25 @@
+name: Deploy to Play Store Internal
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+jobs:
+  restorePassword:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - shell: bash
+        env:
+          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          KEYSTORE_KEY_PSWD: ${{ secrets.KEYSTORE_KEY_PSWD }}
+          KEYSTORE_PSWD: ${{ secrets.KEYSTORE_PSWD }}
+        run: |
+          pwd
+          echo "${{ secrets.KEYSTORE_FILE }}" > keystore.asc
+          gpg -d --passphrase "${{ secrets.KEYSTORE_FILE_PSWD }}" --batch keystore.asc > keystore
+          echo "${{ secrets.API_KEY_FILE }}" > fastlane-api.json.asc
+          gpg -d --passphrase "${{ secrets.API_KEY_FILE_PSWD }}" --batch fastlane-api.json.asc > fastlane-api.json
+          fastlane deployInternal
