@@ -135,7 +135,7 @@ private fun DeviceNotSelectedSection() {
     Text(
         text = stringResource(id = R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
         modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
+        textAlign = TextAlign.End,
         style = MaterialTheme.typography.labelMedium
     )
 }
