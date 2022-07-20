@@ -45,7 +45,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.nordicsemi.android.wifi.provisioning.BuildConfig
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
 import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectDeviceClickEvent
@@ -126,5 +128,14 @@ private fun DeviceNotSelectedSection() {
         text = stringResource(id = R.string.app_info),
         modifier = Modifier.padding(horizontal = 16.dp),
         style = MaterialTheme.typography.bodyMedium
+    )
+
+    Spacer(modifier = Modifier.size(32.dp))
+
+    Text(
+        text = stringResource(id = R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.labelMedium
     )
 }
