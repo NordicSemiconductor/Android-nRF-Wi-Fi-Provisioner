@@ -15,3 +15,5 @@ object OnHidePasswordDialog : HomeScreenViewEvent
 data class OnPasswordSelectedEvent(val password: String) : HomeScreenViewEvent
 
 object OnProvisionClickEvent : HomeScreenViewEvent
+
+object OpenLoggerEvent : HomeScreenViewEvent

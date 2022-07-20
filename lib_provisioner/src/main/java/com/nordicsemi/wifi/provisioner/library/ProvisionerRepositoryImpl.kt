@@ -42,7 +42,8 @@ import no.nordicsemi.android.logger.NordicLogger
 import okio.ByteString.Companion.toByteString
 
 class ProvisionerRepositoryImpl internal constructor(
-    private val context: Context
+    private val context: Context,
+    private val appRunner: LoggerAppRunner
 ) : ProvisionerRepository {
 
     private var manager: ProvisionerBleManager? = null
@@ -106,6 +107,10 @@ class ProvisionerRepositoryImpl internal constructor(
         manager = null
     }
 
+    override fun openLogger() {
+        manager?.openLogger() ?: appRunner.runLogger()
+    }
+
     private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
         return flow { emit(Resource.createSuccess(block())) }
             .onStart { emit(Resource.createLoading()) }
@@ -121,7 +126,7 @@ internal object ProvisionerFactory {
     fun createTestRepository() = TestProvisionerRepository()
 
     fun createRepository(context: Context): ProvisionerRepositoryImpl {
-        return ProvisionerRepositoryImpl(context)
+        return ProvisionerRepositoryImpl(context, LoggerAppRunner(context))
     }
 
     fun createBleManager(context: Context, device: BluetoothDevice): ProvisionerBleManager {

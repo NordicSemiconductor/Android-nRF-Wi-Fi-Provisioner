@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.CloseIconAppBar
+import com.nordicsemi.android.wifi.provisioning.home.view.components.LoggerIconAppBar
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.*
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
 import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
@@ -60,8 +61,8 @@ fun HomeScreen() {
 
     Scaffold(
         topBar = {
-            CloseIconAppBar(stringResource(id = R.string.app_name)) {
-                viewModel.onEvent(OnFinishedEvent)
+            LoggerIconAppBar(stringResource(id = R.string.app_name)) {
+                viewModel.onEvent(OpenLoggerEvent)
             }
         },
         floatingActionButton = { ActionButtonSection(state, onEvent) }

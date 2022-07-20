@@ -122,6 +122,10 @@ class TestProvisionerRepository : ProvisionerRepository {
 
     }
 
+    override fun openLogger() {
+
+    }
+
     private fun createDeviceStatus(): DeviceStatusDomain {
         return DeviceStatusDomain(
             wifiState = WifiConnectionStateDomain.DISCONNECTED,

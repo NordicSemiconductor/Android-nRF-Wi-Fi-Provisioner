@@ -71,6 +71,10 @@ internal class ProvisionerBleManager(
         connectionObserver = dataHolder
     }
 
+    fun openLogger() {
+        logger.openLogger()
+    }
+
     override fun log(priority: Int, message: String) {
         logger.log(priority, message)
     }

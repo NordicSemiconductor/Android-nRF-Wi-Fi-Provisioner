@@ -57,6 +57,8 @@ interface ProvisionerRepository {
 
     suspend fun release()
 
+    fun openLogger()
+
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var instance: ProvisionerRepository? = null

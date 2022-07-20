@@ -80,7 +80,9 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onEvent(event: HomeScreenViewEvent) {
-        cancelPendingJobs()
+        if (event != OpenLoggerEvent) {
+            cancelPendingJobs()
+        }
         when (event) {
             OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
@@ -89,6 +91,7 @@ class HomeViewModel @Inject constructor(
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
             OnShowPasswordDialog -> showPasswordDialog()
+            OpenLoggerEvent -> repository.openLogger()
         }.exhaustive
     }
 
@@ -148,11 +151,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun loadVersion() {
-        Log.d("AAATESTAAA", "load version()")
         repository.readVersion()
             .cancellable()
             .onEach {
-                Log.d("AAATESTAAA", "version: $it")
                 _state.value = _state.value.copy(version = it)
 
                 (_state.value.version as? Success)?.let {
