@@ -30,6 +30,7 @@ import com.nordicsemi.wifi.provisioner.library.domain.AuthModeDomain
 import com.nordicsemi.wifi.provisioner.library.domain.BandDomain
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.wifi.provisioner.library.domain.WifiInfoDomain
+import no.nordicsemi.android.theme.view.RssiIcon
 
 @Composable
 internal fun WifiScannerScreen() {

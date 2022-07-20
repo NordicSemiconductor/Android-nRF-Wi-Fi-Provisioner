@@ -125,7 +125,6 @@
     <string name="bssid">Router MAC: %s</string>
 
     <string name="wifi_title">Wi-fi</string>
-    <string name="cd_rssi">Image representing signal strength.</string>
 
     <string name="band_and_channel">Band: %s, Channel: %s</string>
     <string name="channel">Channel: %s</string>
