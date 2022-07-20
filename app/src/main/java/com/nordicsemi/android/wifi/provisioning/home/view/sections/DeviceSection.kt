@@ -133,7 +133,7 @@ private fun DeviceNotSelectedSection() {
     Spacer(modifier = Modifier.size(32.dp))
 
     Text(
-        text = stringResource(id = R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+        text = stringResource(id = R.string.app_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.End,
         style = MaterialTheme.typography.labelMedium
