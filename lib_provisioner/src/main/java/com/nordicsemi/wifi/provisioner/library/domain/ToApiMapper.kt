@@ -9,7 +9,7 @@ import okio.ByteString.Companion.toByteString
 internal fun WifiConfigDomain.toApi(): WifiConfig {
     return WifiConfig(
         wifi = info.toApi(),
-        passphrase = password.toByteArray().toByteString()
+        passphrase = password?.toByteArray()?.toByteString()
     )
 }
 

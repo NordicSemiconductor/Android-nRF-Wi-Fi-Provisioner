@@ -177,7 +177,7 @@ class HomeViewModel @Inject constructor(
 
     private fun provision() {
         val state = _state.value
-        val config = WifiConfigDomain(state.network!!.wifiInfo, state.password!!)
+        val config = WifiConfigDomain(state.network!!.wifiInfo, state.password)
         repository.setConfig(config)
             .cancellable()
             .onEach {

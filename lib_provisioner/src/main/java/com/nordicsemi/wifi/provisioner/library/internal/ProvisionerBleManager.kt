@@ -104,7 +104,7 @@ internal class ProvisionerBleManager(
 
         @SuppressLint("WrongConstant")
         override fun initialize() {
-            requestMtu(46).enqueue()
+            requestMtu(512).enqueue()
             enableIndications(controlPointCharacteristic).enqueue()
             enableNotifications(dataOutCharacteristic).enqueue()
         }
@@ -189,7 +189,7 @@ internal class ProvisionerBleManager(
         }
 
         awaitClose {
-            disableNotifications(dataOutCharacteristic)
+
         }
     }
 
@@ -224,7 +224,7 @@ internal class ProvisionerBleManager(
         }
 
         awaitClose {
-            disableNotifications(dataOutCharacteristic)
+
         }
     }
 
