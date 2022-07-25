@@ -144,8 +144,10 @@ internal class ProvisionerBleManager(
         }
     }
 
-    suspend fun getVersion(): ByteArray {
-        return readCharacteristic(versionCharacteristic).suspendForValidResponse<ByteArrayReadResponse>().value
+    suspend fun getVersion(): Info {
+        val response = readCharacteristic(versionCharacteristic).suspendForValidResponse<ByteArrayReadResponse>().value
+
+        return Info.ADAPTER.decode(response)
     }
 
     suspend fun getStatus(): DeviceStatus {

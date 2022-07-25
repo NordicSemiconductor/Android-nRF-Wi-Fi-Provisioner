@@ -49,7 +49,7 @@ class TestProvisionerRepository : ProvisionerRepository {
             emit(Resource.createLoading())
             delay(DELAY_TIME)
 //            emit(Resource.createError(Exception("Error message.")))
-            emit(Resource.createSuccess(VersionDomain("1234")))
+            emit(Resource.createSuccess(VersionDomain(1234)))
         }
     }
 

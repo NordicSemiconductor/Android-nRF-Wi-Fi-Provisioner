@@ -36,7 +36,6 @@ import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
-import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorText
 import com.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
 import com.nordicsemi.wifi.provisioner.library.Error
 import com.nordicsemi.wifi.provisioner.library.Loading
@@ -68,6 +67,6 @@ private fun VersionSection(version: VersionDomain) {
     DataItem(
         iconRes = R.drawable.ic_version,
         title = stringResource(id = R.string.dk_version),
-        description = version.value
+        description = version.value.toString()
     )
 }

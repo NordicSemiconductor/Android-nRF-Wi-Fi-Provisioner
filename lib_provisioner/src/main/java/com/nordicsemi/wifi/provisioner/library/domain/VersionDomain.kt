@@ -31,4 +31,4 @@
 
 package com.nordicsemi.wifi.provisioner.library.domain
 
-data class VersionDomain(val value: String)
+data class VersionDomain(val value: Int)
