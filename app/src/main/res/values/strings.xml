@@ -107,9 +107,12 @@
     <string name="error_scanning">Error occurred during scanning.</string>
     <string name="wifi_scanning">Scanning error</string>
     <string name="wifi_select">Select Wifi</string>
+    <string name="unprovision">Unprovision</string>
     <string name="password_select">Select password</string>
     <string name="provision">Provision</string>
     <string name="provision_status">Provisioning status</string>
+    <string name="unprovision_status">Unrovisioning status</string>
+    <string name="success">Success</string>
 
     <string name="cd_data_item_icon">Icon representing data available in the section.</string>
 

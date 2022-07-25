@@ -91,7 +91,14 @@ class HomeViewModel @Inject constructor(
             OnHidePasswordDialog -> hidePasswordDialog()
             OnShowPasswordDialog -> showPasswordDialog()
             OpenLoggerEvent -> repository.openLogger()
+            OnUnprovisionEvent -> cancelConfig()
         }.exhaustive
+    }
+
+    private fun cancelConfig() {
+        repository.forgetConfig().onEach {
+            _state.value = _state.value.copy(unprovisioningStatus = it)
+        }.launchIn(viewModelScope)
     }
 
     private fun cancelPendingJobs() {

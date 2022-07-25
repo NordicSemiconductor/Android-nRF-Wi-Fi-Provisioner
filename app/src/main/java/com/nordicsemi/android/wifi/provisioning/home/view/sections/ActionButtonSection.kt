@@ -54,6 +54,14 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
         ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
             FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
         }
+    } else if (viewEntity.hasFinished()) {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnFinishedEvent) }) {
+            FabContent(Icons.Default.Clear, stringResource(id = R.string.finish))
+        }
+    } else if (viewEntity.isUnprovisioning()) {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnUnprovisionEvent) }) {
+            FabContent(Icons.Default.Wifi, stringResource(id = R.string.unprovision))
+        }
     } else if (viewEntity.isStatusSuccess() && viewEntity.network == null) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnSelectWifiEvent) }) {
             FabContent(Icons.Default.Wifi, stringResource(id = R.string.wifi_select))
@@ -61,10 +69,6 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
     } else if (viewEntity.network!!.isPasswordRequired() && viewEntity.password == null) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnShowPasswordDialog) }) {
             FabContent(Icons.Default.Password, stringResource(id = R.string.password_select))
-        }
-    } else if (viewEntity.hasFinished()) {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnFinishedEvent) }) {
-            FabContent(Icons.Default.Clear, stringResource(id = R.string.finish))
         }
     } else {
         ExtendedFloatingActionButton(onClick = { onEvent(OnProvisionClickEvent) }) {

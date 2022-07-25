@@ -17,3 +17,5 @@ data class OnPasswordSelectedEvent(val password: String) : HomeScreenViewEvent
 object OnProvisionClickEvent : HomeScreenViewEvent
 
 object OpenLoggerEvent : HomeScreenViewEvent
+
+object OnUnprovisionEvent : HomeScreenViewEvent
