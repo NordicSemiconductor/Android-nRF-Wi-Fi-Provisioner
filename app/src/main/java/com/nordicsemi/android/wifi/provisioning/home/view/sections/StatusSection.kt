@@ -74,6 +74,15 @@ private fun ErrorSection(error: Throwable) {
 
 @Composable
 private fun StatusSection(status: DeviceStatusDomain) {
+    if (status.isContentEmpty()) {
+        DataItem(
+            iconRes = status.wifiState.toIcon(),
+            title = stringResource(id = R.string.status_info),
+            description = status.wifiState.toDisplayString()
+        )
+        return
+    }
+
     DataItem(
         iconRes = status.wifiState.toIcon(),
         title = stringResource(id = R.string.status_info),

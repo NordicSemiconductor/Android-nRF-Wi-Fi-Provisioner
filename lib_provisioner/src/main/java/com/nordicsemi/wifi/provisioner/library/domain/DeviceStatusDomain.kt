@@ -36,4 +36,7 @@ data class DeviceStatusDomain(
     val wifiInfo: ConnectionInfoDomain?,
     val scanParamsDomain: ScanParamsDomain?,
     val failureReason: WifiConnectionFailureReasonDomain?
-)
+) {
+
+    fun isContentEmpty() = wifiInfo == null && scanParamsDomain == null && failureReason == null
+}
