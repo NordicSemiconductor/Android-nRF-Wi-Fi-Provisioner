@@ -31,8 +31,13 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
@@ -43,6 +48,8 @@ import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
+import no.nordicsemi.android.theme.view.ProgressItem
+import no.nordicsemi.android.theme.view.ProgressItemStatus
 import no.nordicsemi.ui.scanner.ui.exhaustive
 
 @Composable
@@ -69,6 +76,98 @@ private fun ProvisioningSection(status: WifiConnectionStateDomain) {
     DataItem(
         iconRes = R.drawable.ic_upload_wifi,
         title = stringResource(id = R.string.provision_status),
-        description = status.toDisplayString()
-    )
+        description = status.toDisplayString(),
+        isInitiallyExpanded = true
+    ) {
+        Box(modifier = Modifier.padding(start = 16.dp, top = 16.dp)) {
+            ProgressList(status)
+        }
+    }
+}
+
+@Composable
+private fun ProgressList(status: WifiConnectionStateDomain) {
+    val lastStatus = rememberSaveable { mutableStateOf(WifiConnectionStateDomain.DISCONNECTED) }
+    when (status) {
+        WifiConnectionStateDomain.DISCONNECTED -> AuthenticationState()
+        WifiConnectionStateDomain.AUTHENTICATION -> AuthenticationState()
+        WifiConnectionStateDomain.ASSOCIATION -> AssociationState()
+        WifiConnectionStateDomain.OBTAINING_IP -> ObtainingIpState()
+        WifiConnectionStateDomain.CONNECTED -> ConnectedState()
+        WifiConnectionStateDomain.CONNECTION_FAILED -> FailureState(lastStatus.value)
+    }.exhaustive
+    lastStatus.value = status
+}
+
+@Composable
+private fun AuthenticationState() = Column {
+    ProgressItem(text = stringResource(id = R.string.state_authentication), status = ProgressItemStatus.WORKING)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_association), status = ProgressItemStatus.DISABLED)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_obtaining_ip), status = ProgressItemStatus.DISABLED)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.result_state), status = ProgressItemStatus.DISABLED)
+}
+
+@Composable
+private fun AssociationState() = Column {
+    ProgressItem(text = stringResource(id = R.string.state_authentication), status = ProgressItemStatus.SUCCESS)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_association), status = ProgressItemStatus.WORKING)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_obtaining_ip), status = ProgressItemStatus.DISABLED)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.result_state), status = ProgressItemStatus.DISABLED)
+}
+
+@Composable
+private fun ObtainingIpState() = Column {
+    ProgressItem(text = stringResource(id = R.string.state_authentication), status = ProgressItemStatus.SUCCESS)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_association), status = ProgressItemStatus.SUCCESS)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_obtaining_ip), status = ProgressItemStatus.WORKING)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.result_state), status = ProgressItemStatus.DISABLED)
+}
+
+@Composable
+private fun ConnectedState() = Column {
+    ProgressItem(text = stringResource(id = R.string.state_authentication), status = ProgressItemStatus.SUCCESS)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_association), status = ProgressItemStatus.SUCCESS)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_obtaining_ip), status = ProgressItemStatus.SUCCESS)
+    Spacer(modifier = Modifier.size(8.dp))
+    ProgressItem(text = stringResource(id = R.string.state_connected), status = ProgressItemStatus.SUCCESS)
+}
+
+@Composable
+private fun FailureState(lastWorkingStatus: WifiConnectionStateDomain) = Column {
+    val authenticationResult = if (lastWorkingStatus <= WifiConnectionStateDomain.AUTHENTICATION) {
+        ProgressItemStatus.ERROR
+    } else {
+        ProgressItemStatus.SUCCESS
+    }
+    ProgressItem(text = stringResource(id = R.string.state_authentication), status = authenticationResult)
+    Spacer(modifier = Modifier.size(8.dp))
+
+    val associationResult = if (lastWorkingStatus <= WifiConnectionStateDomain.ASSOCIATION) {
+        ProgressItemStatus.ERROR
+    } else {
+        ProgressItemStatus.SUCCESS
+    }
+    ProgressItem(text = stringResource(id = R.string.state_association), status = associationResult)
+    Spacer(modifier = Modifier.size(8.dp))
+
+    val obtainingIpResult = if (lastWorkingStatus <= WifiConnectionStateDomain.OBTAINING_IP) {
+        ProgressItemStatus.ERROR
+    } else {
+        ProgressItemStatus.SUCCESS
+    }
+    ProgressItem(text = stringResource(id = R.string.state_obtaining_ip), status = obtainingIpResult)
+    Spacer(modifier = Modifier.size(8.dp))
+
+    ProgressItem(text = stringResource(id = R.string.state_connection_failed), status = ProgressItemStatus.ERROR)
 }

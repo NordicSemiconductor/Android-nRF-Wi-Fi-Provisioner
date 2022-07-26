@@ -159,4 +159,12 @@
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
     <string name="app_version">Version: %s(%d)</string>
+
+    <string name="state_disconnected">Disconnected</string>
+    <string name="state_authentication">Authentication</string>
+    <string name="state_association">Association</string>
+    <string name="state_obtaining_ip">Obtaining IP</string>
+    <string name="result_state">Result</string>
+    <string name="state_connected">Connected</string>
+    <string name="state_connection_failed">Connection Failed</string>
 </resources>

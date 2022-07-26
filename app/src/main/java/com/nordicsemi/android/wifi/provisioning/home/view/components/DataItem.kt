@@ -139,9 +139,10 @@ fun DataItem(
     iconRes: Int,
     title: String,
     description: String,
+    isInitiallyExpanded: Boolean = false,
     expandableContent: @Composable () -> Unit
 ) {
-    val isExpanded = remember { mutableStateOf(false) }
+    val isExpanded = remember { mutableStateOf(isInitiallyExpanded) }
 
     Column(
         modifier = Modifier
