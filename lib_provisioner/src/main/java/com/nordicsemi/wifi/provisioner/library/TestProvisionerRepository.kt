@@ -100,13 +100,18 @@ class TestProvisionerRepository : ProvisionerRepository {
             delay(DELAY_TIME)
 //            emit(Resource.createError(Exception("Error message.")))
 
-            emit(Resource.createSuccess(WifiConnectionStateDomain.ASSOCIATION))
-            delay(DELAY_TIME)
             emit(Resource.createSuccess(WifiConnectionStateDomain.AUTHENTICATION))
             delay(DELAY_TIME)
+
+
+            emit(Resource.createSuccess(WifiConnectionStateDomain.ASSOCIATION))
+            delay(DELAY_TIME)
+
             emit(Resource.createSuccess(WifiConnectionStateDomain.OBTAINING_IP))
             delay(DELAY_TIME)
-            emit(Resource.createSuccess(WifiConnectionStateDomain.CONNECTED))
+
+            emit(Resource.createError(Exception("Error message.")))
+//            emit(Resource.createSuccess(WifiConnectionStateDomain.CONNECTED))
         }
     }
 
