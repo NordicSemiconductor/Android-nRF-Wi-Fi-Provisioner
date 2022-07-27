@@ -99,6 +99,8 @@
     </string>
 
     <string name="error_version">Error when reading version.</string>
+    <string name="device_info">Device status</string>
+    <string name="disconnected">Disconnected</string>
     <string name="status_info">Wi-fi status</string>
     <string name="selected_wifi">Selected Wi-fi</string>
     <string name="error_status">Error when reading status.</string>

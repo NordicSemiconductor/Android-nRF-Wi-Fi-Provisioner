@@ -35,11 +35,12 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import com.nordicsemi.wifi.provisioner.library.domain.*
+import com.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.flow.Flow
 
 interface ProvisionerRepository {
 
-    suspend fun start(device: BluetoothDevice)
+    suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus>
 
     fun readVersion(): Flow<Resource<VersionDomain>>
 

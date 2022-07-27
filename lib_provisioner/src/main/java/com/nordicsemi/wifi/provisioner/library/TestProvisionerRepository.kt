@@ -33,6 +33,7 @@ package com.nordicsemi.wifi.provisioner.library
 
 import android.bluetooth.BluetoothDevice
 import com.nordicsemi.wifi.provisioner.library.domain.*
+import com.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -40,8 +41,13 @@ import kotlinx.coroutines.flow.flow
 private const val DELAY_TIME = 1000L
 
 class TestProvisionerRepository : ProvisionerRepository {
-    override suspend fun start(device: BluetoothDevice) {
 
+    override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> {
+        return flow {
+            emit(ConnectionStatus.CONNECTED)
+            delay(5000)
+            emit(ConnectionStatus.DISCONNECTED)
+        }
     }
 
     override fun readVersion(): Flow<Resource<VersionDomain>> {

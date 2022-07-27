@@ -31,7 +31,6 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view
 
-import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
@@ -48,7 +47,8 @@ data class HomeViewEntity(
     val password: String? = null,
     val showPasswordDialog: Boolean? = null,
     val provisioningStatus: Resource<WifiConnectionStateDomain>? = null,
-    val unprovisioningStatus: Resource<Unit>? = null
+    val unprovisioningStatus: Resource<Unit>? = null,
+    val isConnected: Boolean = true
 ) {
 
     fun isStatusSuccess(): Boolean {
@@ -65,7 +65,8 @@ data class HomeViewEntity(
 
     fun hasFinished(): Boolean {
         val status = (provisioningStatus as? Success)?.data
-        return status == WifiConnectionStateDomain.CONNECTED
+        return !isConnected
+                || status == WifiConnectionStateDomain.CONNECTED
                 || status == WifiConnectionStateDomain.CONNECTION_FAILED
                 || unprovisioningStatus is Success
     }

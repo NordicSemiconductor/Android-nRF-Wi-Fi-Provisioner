@@ -38,9 +38,7 @@ import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.ktx.asValidResponseFlow
 import no.nordicsemi.android.ble.ktx.suspend
@@ -84,15 +82,17 @@ internal class ProvisionerBleManager(
     }
 
     @SuppressLint("MissingPermission")
-    suspend fun start(device: BluetoothDevice) {
-        try {
+    suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> {
+        return try {
             connect(device)
                 .useAutoConnect(false)
                 .retry(3, 100)
                 .suspend()
             createBondInsecure().suspend()
+            dataHolder.status
         } catch (e: Exception) {
             e.printStackTrace()
+            flow { emit(ConnectionStatus.DISCONNECTED) }
         }
     }
 

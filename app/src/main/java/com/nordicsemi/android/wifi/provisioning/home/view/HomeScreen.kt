@@ -91,52 +91,56 @@ private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Uni
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        state.version?.let {
-            SectionTitle(text = stringResource(id = R.string.section_device))
+        if (!state.isConnected) {
+            DeviceStatus()
+        } else {
+            state.version?.let {
+                SectionTitle(text = stringResource(id = R.string.section_device))
+
+                Spacer(modifier = Modifier.size(16.dp))
+
+                VersionSection(it)
+            }
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            VersionSection(it)
-        }
+            state.status?.let { StatusSection(it) }
 
-        Spacer(modifier = Modifier.size(16.dp))
+            state.network?.let {
+                Spacer(modifier = Modifier.size(16.dp))
 
-        state.status?.let { StatusSection(it) }
+                SectionTitle(text = stringResource(id = R.string.section_provisioning))
 
-        state.network?.let {
-            Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(16.dp))
 
-            SectionTitle(text = stringResource(id = R.string.section_provisioning))
+                WifiSection(it, onEvent)
+            }
 
-            Spacer(modifier = Modifier.size(16.dp))
+            state.password?.let {
+                Spacer(modifier = Modifier.size(16.dp))
 
-            WifiSection(it, onEvent)
-        }
+                PasswordSection(onEvent)
+            }
 
-        state.password?.let {
-            Spacer(modifier = Modifier.size(16.dp))
+            state.provisioningStatus?.let {
+                Spacer(modifier = Modifier.size(16.dp))
 
-            PasswordSection(onEvent)
-        }
+                SectionTitle(text = stringResource(id = R.string.section_status))
 
-        state.provisioningStatus?.let {
-            Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(16.dp))
 
-            SectionTitle(text = stringResource(id = R.string.section_status))
+                ProvisioningSection(it)
+            }
 
-            Spacer(modifier = Modifier.size(16.dp))
+            state.unprovisioningStatus?.let {
+                Spacer(modifier = Modifier.size(16.dp))
 
-            ProvisioningSection(it)
-        }
+                SectionTitle(text = stringResource(id = R.string.section_status))
 
-        state.unprovisioningStatus?.let {
-            Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(16.dp))
 
-            SectionTitle(text = stringResource(id = R.string.section_status))
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            UnprovisioningSection(it)
+                UnprovisioningSection(it)
+            }
         }
     }
 }

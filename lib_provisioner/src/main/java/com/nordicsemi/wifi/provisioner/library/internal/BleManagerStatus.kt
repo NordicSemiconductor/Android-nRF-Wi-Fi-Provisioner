@@ -31,6 +31,15 @@
 
 package com.nordicsemi.wifi.provisioner.library.internal
 
-internal enum class ConnectionStatus {
-    IDLE, CONNECTING, CONNECTED, SUCCESS, LINK_LOSS, DISCONNECTING, DISCONNECTED, UNKNOWN_ERROR, MISSING_SERVICE, FAIL_TO_CONNECT
+enum class ConnectionStatus {
+    IDLE, CONNECTING, CONNECTED, SUCCESS, LINK_LOSS, DISCONNECTING, DISCONNECTED, UNKNOWN_ERROR, MISSING_SERVICE, FAIL_TO_CONNECT;
+
+    fun isDisconnecting(): Boolean {
+        return this == LINK_LOSS
+                || this == DISCONNECTING
+                || this == DISCONNECTED
+                || this == UNKNOWN_ERROR
+                || this == MISSING_SERVICE
+                || this == FAIL_TO_CONNECT
+    }
 }

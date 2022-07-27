@@ -40,6 +40,7 @@ import com.nordicsemi.wifi.provisioner.library.ProvisionerRepository
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
+import com.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import com.nordicsemi.wifi.provisioner.library.internal.PROVISIONING_SERVICE_UUID
 import com.nordicsemi.wifi.provisioner.library.launchWithCatch
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -151,9 +152,16 @@ class HomeViewModel @Inject constructor(
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
         _state.value = HomeViewEntity(device = device)
         viewModelScope.launchWithCatch {
+            repository.release()
             repository.start(device.device)
+                .onEach { updateConnectionStatus(it) }
+                .launchIn(viewModelScope)
             loadVersion()
         }
+    }
+
+    private fun updateConnectionStatus(connectionStatus: ConnectionStatus) {
+        _state.value = _state.value.copy(isConnected = !connectionStatus.isDisconnecting())
     }
 
     private fun loadVersion() {
@@ -191,12 +199,5 @@ class HomeViewModel @Inject constructor(
                 _state.value = _state.value.copy(provisioningStatus = it)
             }.launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.launch {
-            repository.release()
-        }
     }
 }

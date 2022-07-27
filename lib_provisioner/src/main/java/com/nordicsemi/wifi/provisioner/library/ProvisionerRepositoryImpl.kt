@@ -35,6 +35,7 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import com.nordicsemi.wifi.provisioner.library.domain.*
+import com.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import com.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 import kotlinx.coroutines.flow.*
 import no.nordicsemi.android.logger.LoggerAppRunner
@@ -48,10 +49,11 @@ class ProvisionerRepositoryImpl internal constructor(
     private var manager: ProvisionerBleManager? = null
 
     @SuppressLint("MissingPermission")
-    override suspend fun start(device: BluetoothDevice) {
+    override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> {
         manager = ProvisionerFactory.createBleManager(context, device)
-        manager?.start(device)
-        device.createBond()
+        return manager!!.start(device).also {
+            device.createBond()
+        }
     }
 
     override fun readVersion(): Flow<Resource<VersionDomain>> {
