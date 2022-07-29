@@ -117,8 +117,16 @@ class HomeViewModel @Inject constructor(
 
     private fun finish() {
         viewModelScope.launch {
-            repository.release()
+            release()
             _state.value = HomeViewEntity()
+        }
+    }
+
+    private suspend fun release() {
+        try {
+            repository.release()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -152,7 +160,7 @@ class HomeViewModel @Inject constructor(
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
         _state.value = HomeViewEntity(device = device)
         viewModelScope.launchWithCatch {
-            repository.release()
+            release()
             repository.start(device.device)
                 .onEach { updateConnectionStatus(it) }
                 .launchIn(viewModelScope)

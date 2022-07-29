@@ -53,16 +53,24 @@ internal class WifiScannerViewModel @Inject constructor(
         }.exhaustive
     }
 
+    private suspend fun stopScanning() {
+        try {
+            repository.stopScanBlocking()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun navigateUp() {
         viewModelScope.launch {
-            repository.stopScanBlocking()
+            stopScanning()
             navigationManager.navigateUp()
         }
     }
 
     private fun navigateUp(scanRecord: ScanRecordDomain) {
         viewModelScope.launch {
-            repository.stopScanBlocking()
+            stopScanning()
             navigationManager.navigateUp(
                 WifiScannerId,
                 SuccessDestinationResult(WifiScannerId, AnyArgument(scanRecord))
