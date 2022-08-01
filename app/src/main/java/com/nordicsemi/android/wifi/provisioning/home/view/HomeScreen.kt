@@ -91,7 +91,7 @@ private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Uni
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        if (!state.isConnected) {
+        if (!state.isConnected && state.device != null) {
             DeviceStatus()
         } else {
             state.version?.let {
