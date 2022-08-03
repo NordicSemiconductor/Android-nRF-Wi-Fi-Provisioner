@@ -233,9 +233,16 @@ internal class ProvisionerBleManager(
     fun provision(config: WifiConfig) = callbackFlow {
         val request = Request(op_code = OpCode.SET_CONFIG, config = config)
 
+        val timeoutJob = launch {
+            delay(TIMEOUT_MILLIS)
+            throw NotificationTimeoutException()
+        }
+
         setNotificationCallback(dataOutCharacteristic)
             .asValidResponseFlow<ByteArrayReadResponse>()
             .onEach {
+                timeoutJob.cancel()
+
                 val result = Result.ADAPTER.decode(it.value)
                 trySend(result.state!!)
             }.launchIn(this)
