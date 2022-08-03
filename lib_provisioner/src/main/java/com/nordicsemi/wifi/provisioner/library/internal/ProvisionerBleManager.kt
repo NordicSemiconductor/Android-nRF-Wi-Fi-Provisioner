@@ -38,7 +38,10 @@ import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.ktx.asValidResponseFlow
 import no.nordicsemi.android.ble.ktx.suspend
@@ -49,8 +52,11 @@ import java.util.*
 
 val PROVISIONING_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")
 private val VERSION_CHARACTERISTIC_UUID = UUID.fromString("14387801-130c-49e7-b877-2881c89cb258")
-private val CONTROL_POINT_CHARACTERISTIC_UUID = UUID.fromString("14387802-130c-49e7-b877-2881c89cb258")
+private val CONTROL_POINT_CHARACTERISTIC_UUID =
+    UUID.fromString("14387802-130c-49e7-b877-2881c89cb258")
 private val DATA_OUT_CHARACTERISTIC_UUID = UUID.fromString("14387803-130c-49e7-b877-2881c89cb258")
+
+private const val TIMEOUT_MILLIS = 10_000L
 
 internal class ProvisionerBleManager(
     context: Context,
@@ -115,7 +121,8 @@ internal class ProvisionerBleManager(
             val service: BluetoothGattService? = gatt.getService(PROVISIONING_SERVICE_UUID)
             if (service != null) {
                 versionCharacteristic = service.getCharacteristic(VERSION_CHARACTERISTIC_UUID)
-                controlPointCharacteristic = service.getCharacteristic(CONTROL_POINT_CHARACTERISTIC_UUID)
+                controlPointCharacteristic =
+                    service.getCharacteristic(CONTROL_POINT_CHARACTERISTIC_UUID)
                 dataOutCharacteristic = service.getCharacteristic(DATA_OUT_CHARACTERISTIC_UUID)
             }
             var writeRequest = false
@@ -146,46 +153,57 @@ internal class ProvisionerBleManager(
         }
     }
 
-    suspend fun getVersion(): Info {
-        val response = readCharacteristic(versionCharacteristic).suspendForValidResponse<ByteArrayReadResponse>().value
+    suspend fun getVersion(): Info = withTimeout(TIMEOUT_MILLIS) {
+        val response =
+            readCharacteristic(versionCharacteristic).suspendForValidResponse<ByteArrayReadResponse>().value
 
-        return Info.ADAPTER.decode(response)
+        Info.ADAPTER.decode(response)
     }
 
-    suspend fun getStatus(): DeviceStatus {
+    suspend fun getStatus(): DeviceStatus = withTimeout(TIMEOUT_MILLIS) {
         val request = Request(op_code = OpCode.GET_STATUS)
 
         val response = waitForIndication(controlPointCharacteristic)
-            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .trigger(
+                writeCharacteristic(
+                    controlPointCharacteristic,
+                    request.encode(),
+                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                )
+            )
             .suspendForValidResponse<ByteArrayReadResponse>()
 
         verifyResponseSuccess(response.value)
 
-        return Response.ADAPTER.decode(response.value).device_status!!
-    }
-    suspend fun scan() {
-        val request = Request(op_code = OpCode.START_SCAN)
-
-        val response = waitForIndication(controlPointCharacteristic)
-            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
-            .suspendForValidResponse<ByteArrayReadResponse>()
-
-        verifyResponseSuccess(response.value)
+        Response.ADAPTER.decode(response.value).device_status!!
     }
 
     fun startScan() = callbackFlow {
         val request = Request(op_code = OpCode.START_SCAN)
 
+        val timeoutJob = launch {
+            delay(TIMEOUT_MILLIS)
+            throw NotificationTimeoutException()
+        }
+
         setNotificationCallback(dataOutCharacteristic)
             .asValidResponseFlow<ByteArrayReadResponse>()
             .onEach {
+                timeoutJob.cancel()
+
                 val result = Result.ADAPTER.decode(it.value)
                 trySend(result.scan_record!!)
             }
             .launchIn(this)
 
         val response = waitForIndication(controlPointCharacteristic)
-            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .trigger(
+                writeCharacteristic(
+                    controlPointCharacteristic,
+                    request.encode(),
+                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                )
+            )
             .suspendForValidResponse<ByteArrayReadResponse>()
 
         if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
@@ -193,17 +211,21 @@ internal class ProvisionerBleManager(
         }
 
         awaitClose {
-
+            removeNotificationCallback(dataOutCharacteristic)
         }
     }
 
     suspend fun stopScan() {
         val request = Request(op_code = OpCode.STOP_SCAN)
         val response = waitForIndication(controlPointCharacteristic)
-            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .trigger(
+                writeCharacteristic(
+                    controlPointCharacteristic,
+                    request.encode(),
+                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                )
+            )
             .suspendForValidResponse<ByteArrayReadResponse>()
-
-        val decodedResponse = Response.ADAPTER.decode(response.value).status
 
         verifyResponseSuccess(response.value)
     }
@@ -216,11 +238,16 @@ internal class ProvisionerBleManager(
             .onEach {
                 val result = Result.ADAPTER.decode(it.value)
                 trySend(result.state!!)
-            }
-            .launchIn(this)
+            }.launchIn(this)
 
         val response = waitForIndication(controlPointCharacteristic)
-            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .trigger(
+                writeCharacteristic(
+                    controlPointCharacteristic,
+                    request.encode(),
+                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                )
+            )
             .suspendForValidResponse<ByteArrayReadResponse>()
 
         if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
@@ -228,22 +255,26 @@ internal class ProvisionerBleManager(
         }
 
         awaitClose {
-
+            removeNotificationCallback(dataOutCharacteristic)
         }
     }
 
     suspend fun forgetWifi() {
         val request = Request(op_code = OpCode.FORGET_CONFIG)
         val response = waitForIndication(controlPointCharacteristic)
-            .trigger(writeCharacteristic(controlPointCharacteristic, request.encode(), BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT))
+            .trigger(
+                writeCharacteristic(
+                    controlPointCharacteristic,
+                    request.encode(),
+                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                )
+            )
             .suspendForValidResponse<ByteArrayReadResponse>()
 
         verifyResponseSuccess(response.value)
     }
 
     private fun verifyResponseSuccess(response: ByteArray) {
-        val decodedResponse = Response.ADAPTER.decode(response).status
-
         if (Response.ADAPTER.decode(response).status != Status.SUCCESS) {
             throw createResponseError()
         }

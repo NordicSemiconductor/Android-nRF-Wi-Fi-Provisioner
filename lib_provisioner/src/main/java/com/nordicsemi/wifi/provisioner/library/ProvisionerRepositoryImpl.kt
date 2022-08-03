@@ -67,10 +67,6 @@ class ProvisionerRepositoryImpl internal constructor(
         }
     }
 
-    suspend fun scan() {
-        manager?.scan()
-    }
-
     override fun startScan(): Flow<Resource<ScanRecordDomain>> {
         return manager?.startScan()!!
             .map { Resource.createSuccess(it.toDomain()) }
