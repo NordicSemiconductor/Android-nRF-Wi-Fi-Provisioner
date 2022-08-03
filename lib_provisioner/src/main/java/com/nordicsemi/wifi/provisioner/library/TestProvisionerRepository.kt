@@ -149,8 +149,7 @@ class TestProvisionerRepository : ProvisionerRepository {
                 passive = true,
                 periodMs = 23,
                 groupChannels = 4
-            ),
-            failureReason = WifiConnectionFailureReasonDomain.AUTH_ERROR
+            )
         )
     }
 

@@ -105,6 +105,7 @@ enum AuthMode {
   WPA2_PSK                = 3;
   WPA_WPA2_PSK            = 4;
   WPA2_ENTERPRISE         = 5;
+  WPA3_PSK                = 6;
   // Note: More modes can be added in the future.
 }
 

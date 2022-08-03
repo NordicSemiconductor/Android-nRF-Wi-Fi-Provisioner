@@ -21,6 +21,8 @@ message ScanRecord {
 message Result {
   optional ScanRecord scan_record = 1;
   optional ConnectionState state  = 2;
+  // The failure reason is set when the state is CONNECTION_FAILED.
+  optional ConnectionFailureReason reason = 3;
 }
 
 /*

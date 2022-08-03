@@ -39,5 +39,6 @@ internal fun AuthModeDomain.toApi(): AuthMode {
         AuthModeDomain.WPA2_PSK -> AuthMode.WPA2_PSK
         AuthModeDomain.WPA_WPA2_PSK -> AuthMode.WPA_WPA2_PSK
         AuthModeDomain.WPA2_ENTERPRISE -> AuthMode.WPA2_ENTERPRISE
+        AuthModeDomain.WPA3_PSK -> AuthMode.WPA3_PSK
     }
 }

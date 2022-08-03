@@ -23,11 +23,9 @@ message DeviceStatus {
   // The network information if provisioned to a network.
   // This can be set even if connection failed.
   optional ConnectionInfo info            = 10;
-  // The failure reason is set when the state is CONNECTION_FAILED.
-  optional ConnectionFailureReason reason = 11;
   // Set if the device is scanning. 
   // The period_ms contains remaining scanning period.
-  optional ScanParams scan_state          = 12;
+  optional ScanParams scan_state          = 11;
 }
 
 /* A response type which is sent back from the device. */

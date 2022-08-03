@@ -37,5 +37,6 @@ enum class AuthModeDomain(val id: Int) {
     WPA_PSK(2),
     WPA2_PSK(3),
     WPA_WPA2_PSK(4),
-    WPA2_ENTERPRISE(5)
+    WPA2_ENTERPRISE(5),
+    WPA3_PSK(6)
 }

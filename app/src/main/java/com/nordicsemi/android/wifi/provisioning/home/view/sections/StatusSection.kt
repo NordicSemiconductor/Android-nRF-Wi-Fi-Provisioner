@@ -143,18 +143,6 @@ private fun StatusSection(status: DeviceStatusDomain) {
                 )
                 Spacer(modifier = Modifier.size(16.dp))
             }
-
-            status.failureReason?.let {
-                Text(
-                    text = stringResource(id = R.string.connection_failure_title),
-                    style = MaterialTheme.typography.labelLarge
-                )
-                Text(
-                    text = it.toDisplayString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
         }
     }
 }

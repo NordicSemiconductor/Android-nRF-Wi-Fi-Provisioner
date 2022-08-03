@@ -42,8 +42,7 @@ internal fun DeviceStatus.toDomain(): DeviceStatusDomain {
     return DeviceStatusDomain(
         state?.toDomain() ?: WifiConnectionStateDomain.DISCONNECTED,
         info?.toDomain(),
-        scan_state?.toDomain(),
-        reason?.toDomain()
+        scan_state?.toDomain()
     )
 }
 
@@ -80,6 +79,7 @@ internal fun AuthMode.toDomain(): AuthModeDomain {
         AuthMode.WPA2_PSK -> AuthModeDomain.WPA2_PSK
         AuthMode.WPA_WPA2_PSK -> AuthModeDomain.WPA_WPA2_PSK
         AuthMode.WPA2_ENTERPRISE -> AuthModeDomain.WPA2_ENTERPRISE
+        AuthMode.WPA3_PSK -> AuthModeDomain.WPA3_PSK
     }
 }
 

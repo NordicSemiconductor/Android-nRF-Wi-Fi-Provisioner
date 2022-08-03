@@ -73,6 +73,7 @@ internal fun AuthModeDomain?.toIcon(): Int {
         AuthModeDomain.WPA2_PSK,
         AuthModeDomain.WPA_WPA2_PSK,
         AuthModeDomain.WPA2_ENTERPRISE,
+        AuthModeDomain.WPA3_PSK,
         null -> R.drawable.ic_wifi_lock
     }
 }
