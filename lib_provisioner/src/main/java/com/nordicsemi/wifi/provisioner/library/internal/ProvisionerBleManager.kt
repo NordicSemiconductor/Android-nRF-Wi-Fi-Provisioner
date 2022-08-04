@@ -56,7 +56,7 @@ private val CONTROL_POINT_CHARACTERISTIC_UUID =
     UUID.fromString("14387802-130c-49e7-b877-2881c89cb258")
 private val DATA_OUT_CHARACTERISTIC_UUID = UUID.fromString("14387803-130c-49e7-b877-2881c89cb258")
 
-private const val TIMEOUT_MILLIS = 10_000L
+private const val TIMEOUT_MILLIS = 60_000L
 
 internal class ProvisionerBleManager(
     context: Context,
@@ -211,7 +211,7 @@ internal class ProvisionerBleManager(
         }
 
         awaitClose {
-            removeNotificationCallback(dataOutCharacteristic)
+//            removeNotificationCallback(dataOutCharacteristic)
         }
     }
 
@@ -262,7 +262,7 @@ internal class ProvisionerBleManager(
         }
 
         awaitClose {
-            removeNotificationCallback(dataOutCharacteristic)
+//            removeNotificationCallback(dataOutCharacteristic)
         }
     }
 
