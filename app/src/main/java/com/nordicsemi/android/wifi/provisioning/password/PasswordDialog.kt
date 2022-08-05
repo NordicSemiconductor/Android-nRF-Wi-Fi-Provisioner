@@ -43,6 +43,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.nordicsemi.android.wifi.provisioning.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordDialog(onEvent: (PasswordDialogEvent) -> Unit) {
     val passwordField = rememberSaveable { mutableStateOf("") }

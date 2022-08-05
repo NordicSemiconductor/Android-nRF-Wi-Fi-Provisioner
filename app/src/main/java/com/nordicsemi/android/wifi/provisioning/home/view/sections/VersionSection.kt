@@ -42,7 +42,6 @@ import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import no.nordicsemi.ui.scanner.ui.exhaustive
 
 @Composable
 internal fun VersionSection(version: Resource<VersionDomain>) {
@@ -50,7 +49,7 @@ internal fun VersionSection(version: Resource<VersionDomain>) {
         is Error -> ErrorSection(version.error)
         is Loading -> LoadingItem()
         is Success -> VersionSection(version = version.data)
-    }.exhaustive
+    }
 }
 
 @Composable

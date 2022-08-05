@@ -46,7 +46,7 @@ import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.ktx.asValidResponseFlow
 import no.nordicsemi.android.ble.ktx.suspend
 import no.nordicsemi.android.ble.ktx.suspendForValidResponse
-import no.nordicsemi.android.logger.NordicLogger
+import no.nordicsemi.android.common.logger.NordicLogger
 import no.nordicsemi.android.wifi.provisioning.*
 import java.util.*
 

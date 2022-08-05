@@ -38,14 +38,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
-import no.nordicsemi.android.theme.R as mainR
+import no.nordicsemi.android.common.theme.R as mainR
+import no.nordicsemi.android.common.ui.logger.R as loggerR
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CloseIconAppBar(text: String, onClick: () -> Unit) {
     SmallTopAppBar(
@@ -68,6 +69,7 @@ fun CloseIconAppBar(text: String, onClick: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackIconAppBar(text: String, onClick: () -> Unit) {
     SmallTopAppBar(
@@ -90,13 +92,14 @@ fun BackIconAppBar(text: String, onClick: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoggerIconAppBar(text: String, onLoggerClick: () -> Unit) {
     SmallTopAppBar(
         title = { Text(text, maxLines = 2) },
         colors = TopAppBarDefaults.smallTopAppBarColors(
             scrolledContainerColor = MaterialTheme.colorScheme.primary,
-            containerColor = colorResource(id = no.nordicsemi.android.theme.R.color.appBarColor),
+            containerColor = colorResource(id = mainR.color.appBarColor),
             titleContentColor = MaterialTheme.colorScheme.onPrimary,
             actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
             navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -104,8 +107,8 @@ fun LoggerIconAppBar(text: String, onLoggerClick: () -> Unit) {
         actions = {
             IconButton(onClick = { onLoggerClick() }) {
                 Icon(
-                    painterResource(id = no.nordicsemi.android.logger.R.drawable.ic_logger),
-                    contentDescription = stringResource(id = no.nordicsemi.android.logger.R.string.open_logger),
+                    painterResource(id = loggerR.drawable.ic_logger),
+                    contentDescription = stringResource(id = loggerR.string.open_logger),
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(24.dp)
                 )

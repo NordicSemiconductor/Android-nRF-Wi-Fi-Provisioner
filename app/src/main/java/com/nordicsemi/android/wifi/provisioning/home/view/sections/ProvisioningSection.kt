@@ -48,9 +48,8 @@ import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.android.theme.view.ProgressItem
-import no.nordicsemi.android.theme.view.ProgressItemStatus
-import no.nordicsemi.ui.scanner.ui.exhaustive
+import no.nordicsemi.android.common.theme.view.ProgressItem
+import no.nordicsemi.android.common.theme.view.ProgressItemStatus
 
 @Composable
 internal fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
@@ -60,7 +59,7 @@ internal fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
         is Error -> ProvisioningSection(WifiConnectionStateDomain.CONNECTION_FAILED, lastStatus.value, status.error.message)
         is Loading -> LoadingItem()
         is Success -> ProvisioningSection(status.data, lastStatus.value)
-    }.exhaustive
+    }
 
     val newLastStatus = when (status) {
         is Error -> WifiConnectionStateDomain.CONNECTION_FAILED
@@ -104,7 +103,7 @@ private fun ProgressList(
         WifiConnectionStateDomain.OBTAINING_IP -> ObtainingIpState()
         WifiConnectionStateDomain.CONNECTED -> ConnectedState()
         WifiConnectionStateDomain.CONNECTION_FAILED -> FailureState(lastStatus, errorMessage)
-    }.exhaustive
+    }
 }
 
 @Composable

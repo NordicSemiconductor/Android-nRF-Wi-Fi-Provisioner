@@ -48,11 +48,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import no.nordicsemi.android.navigation.*
-import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
-import no.nordicsemi.ui.scanner.ScannerDestinationId
-import no.nordicsemi.ui.scanner.ui.exhaustive
-import no.nordicsemi.ui.scanner.ui.getDevice
+import no.nordicsemi.android.common.navigation.*
+import no.nordicsemi.android.common.ui.scanner.ScannerDestinationId
+import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
+import no.nordicsemi.android.common.ui.scanner.model.getDevice
 import javax.inject.Inject
 
 @HiltViewModel
@@ -93,7 +92,7 @@ class HomeViewModel @Inject constructor(
             OnShowPasswordDialog -> showPasswordDialog()
             OpenLoggerEvent -> repository.openLogger()
             OnUnprovisionEvent -> cancelConfig()
-        }.exhaustive
+        }
     }
 
     private fun cancelConfig() {
@@ -138,14 +137,14 @@ class HomeViewModel @Inject constructor(
         when (args) {
             is CancelDestinationResult -> doNothing()
             is SuccessDestinationResult -> installBluetoothDevice(args.getDevice())
-        }.exhaustive
+        }
     }
 
     private fun handleWifiArgs(args: DestinationResult) {
         when (args) {
             is CancelDestinationResult -> navigationManager.navigateUp()
             is SuccessDestinationResult -> installWifi(args.getScanRecord())
-        }.exhaustive
+        }
     }
 
     private fun SuccessDestinationResult.getScanRecord(): ScanRecordDomain {

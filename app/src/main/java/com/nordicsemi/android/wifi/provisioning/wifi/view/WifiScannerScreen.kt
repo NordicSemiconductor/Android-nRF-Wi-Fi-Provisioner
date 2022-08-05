@@ -23,14 +23,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.BackIconAppBar
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
-import com.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.android.wifi.provisioning.wifi.viewmodel.WifiScannerViewModel
 import com.nordicsemi.wifi.provisioner.library.domain.AuthModeDomain
 import com.nordicsemi.wifi.provisioner.library.domain.BandDomain
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.wifi.provisioner.library.domain.WifiInfoDomain
-import no.nordicsemi.android.theme.view.RssiIcon
+import no.nordicsemi.android.common.theme.view.RssiIcon
 
 @Composable
 internal fun WifiScannerScreen() {

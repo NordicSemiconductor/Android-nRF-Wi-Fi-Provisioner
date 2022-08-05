@@ -12,7 +12,6 @@ import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.ui.scanner.ui.exhaustive
 
 @Composable
 internal fun UnprovisioningSection(status: Resource<Unit>) {
@@ -20,7 +19,7 @@ internal fun UnprovisioningSection(status: Resource<Unit>) {
         is Error -> ErrorItem(status.error)
         is Loading -> LoadingItem()
         is Success -> ProvisioningSection()
-    }.exhaustive
+    }
 }
 
 

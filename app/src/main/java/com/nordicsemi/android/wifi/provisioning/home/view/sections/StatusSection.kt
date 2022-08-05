@@ -52,7 +52,6 @@ import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import no.nordicsemi.ui.scanner.ui.exhaustive
 
 @Composable
 internal fun StatusSection(status: Resource<DeviceStatusDomain>) {
@@ -60,7 +59,7 @@ internal fun StatusSection(status: Resource<DeviceStatusDomain>) {
         is Error -> ErrorSection(status.error)
         is Loading -> LoadingItem()
         is Success -> StatusSection(status = status.data)
-    }.exhaustive
+    }
 }
 
 @Composable

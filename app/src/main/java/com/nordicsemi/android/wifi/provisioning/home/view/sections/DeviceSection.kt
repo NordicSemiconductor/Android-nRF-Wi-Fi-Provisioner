@@ -51,7 +51,7 @@ import com.nordicsemi.android.wifi.provisioning.BuildConfig
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
 import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectDeviceClickEvent
-import no.nordicsemi.ui.scanner.DiscoveredBluetoothDevice
+import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 
 @Composable
 internal fun DeviceSection(
@@ -87,7 +87,7 @@ private fun BluetoothDevice(
         Spacer(modifier = Modifier.size(16.dp))
 
         Text(
-            text = device.displayNameOrAddress(),
+            text = device.displayNameOrAddress,
             modifier = Modifier.weight(1f),
             style = MaterialTheme.typography.bodyLarge
         )

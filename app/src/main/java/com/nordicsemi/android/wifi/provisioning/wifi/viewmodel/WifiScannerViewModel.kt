@@ -18,10 +18,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import no.nordicsemi.android.navigation.AnyArgument
-import no.nordicsemi.android.navigation.NavigationManager
-import no.nordicsemi.android.navigation.SuccessDestinationResult
-import no.nordicsemi.ui.scanner.ui.exhaustive
+import no.nordicsemi.android.common.navigation.AnyArgument
+import no.nordicsemi.android.common.navigation.NavigationManager
+import no.nordicsemi.android.common.navigation.SuccessDestinationResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,7 +49,7 @@ internal class WifiScannerViewModel @Inject constructor(
         when (event) {
             NavigateUpEvent -> navigateUp()
             is WifiSelectedEvent -> navigateUp(event.scanRecord)
-        }.exhaustive
+        }
     }
 
     private suspend fun stopScanning() {

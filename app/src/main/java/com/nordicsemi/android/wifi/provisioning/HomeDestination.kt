@@ -33,9 +33,9 @@ package com.nordicsemi.android.wifi.provisioning
 
 import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreen
 import com.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerScreen
-import no.nordicsemi.android.navigation.ComposeDestination
-import no.nordicsemi.android.navigation.ComposeDestinations
-import no.nordicsemi.android.navigation.DestinationId
+import no.nordicsemi.android.common.navigation.ComposeDestination
+import no.nordicsemi.android.common.navigation.ComposeDestinations
+import no.nordicsemi.android.common.navigation.DestinationId
 
 val HomeDestinationId = DestinationId("home-destination")
 val WifiScannerId = DestinationId("wifi-scanner-destination")

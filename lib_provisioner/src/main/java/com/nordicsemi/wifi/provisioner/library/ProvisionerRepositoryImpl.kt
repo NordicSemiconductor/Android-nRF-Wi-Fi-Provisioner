@@ -38,8 +38,8 @@ import com.nordicsemi.wifi.provisioner.library.domain.*
 import com.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import com.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 import kotlinx.coroutines.flow.*
-import no.nordicsemi.android.logger.LoggerAppRunner
-import no.nordicsemi.android.logger.NordicLogger
+import no.nordicsemi.android.common.logger.LoggerAppRunner
+import no.nordicsemi.android.common.logger.NordicLogger
 
 class ProvisionerRepositoryImpl internal constructor(
     private val context: Context,
