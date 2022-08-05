@@ -83,8 +83,8 @@ fun HomeScreen() {
 private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
     Column(
         modifier = Modifier
-            .padding(16.dp)
             .verticalScroll(rememberScrollState())
+            .padding(16.dp)
     ) {
 
         DeviceSection(state.device, onEvent)

@@ -36,6 +36,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
 import com.nordicsemi.android.wifi.provisioning.home.view.*
+import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
 import com.nordicsemi.wifi.provisioner.library.ProvisionerRepository
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
@@ -70,7 +71,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         navigationManager.recentResult.onEach {
-            if (it.destinationId == ScannerDestinationId) {
+            if (it.destinationId == ProvisionerScannerDestinationId) {
                 handleArgs(it)
             } else if (it.destinationId == WifiScannerId) {
                 handleWifiArgs(it)
@@ -130,7 +131,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun requestBluetoothDevice() {
-        navigationManager.navigateTo(ScannerDestinationId, UUIDArgument(PROVISIONING_SERVICE_UUID))
+        navigationManager.navigateTo(ProvisionerScannerDestinationId, UUIDArgument(PROVISIONING_SERVICE_UUID))
     }
 
     private fun handleArgs(args: DestinationResult) {

@@ -170,4 +170,6 @@
     <string name="result_state">Result</string>
     <string name="state_connected">Connected</string>
     <string name="state_connection_failed">Connection Failed</string>
+
+    <string name="version">ProvVer: %d</string>
 </resources>
