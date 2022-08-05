@@ -50,15 +50,15 @@ import com.nordicsemi.android.wifi.provisioning.home.view.*
 
 @Composable
 fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
-    if (!viewEntity.isStatusSuccess()) {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
-            FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
-        }
-    } else if (viewEntity.hasFinished()) {
+    if (viewEntity.hasFinished()) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnFinishedEvent) }) {
             FabContent(Icons.Default.Clear, stringResource(id = R.string.finish))
         }
-    } else if (viewEntity.isUnprovisioning()) {
+    } else if (!viewEntity.isStatusSuccess()) {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
+            FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
+        }
+    }  else if (viewEntity.isUnprovisioning()) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnUnprovisionEvent) }) {
             FabContent(Icons.Default.Wifi, stringResource(id = R.string.unprovision))
         }
