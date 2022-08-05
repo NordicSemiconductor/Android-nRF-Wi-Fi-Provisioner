@@ -13,7 +13,7 @@ enum OpCode {
   RESERVED      = 0;
 
   // Returns the device status.
-  //
+  // 
   // Request parameters:
   //  - none
   // Response parameters:
@@ -55,7 +55,7 @@ enum OpCode {
 
 /* Response status code. */
 enum Status {
-  // Returned when the request was successfully processed.
+  // Returned when the request was successfully processed.	
   SUCCESS                 = 0;
   // Returned when the request cannot be processed due to invalid arguments.
   // For example, if the required argument is missing.
@@ -94,7 +94,7 @@ enum ConnectionFailureReason {
 enum Band {
   BAND_ANY    = 0;
   BAND_2_4_GH = 1;
-  BAND_5_GH   = 2;
+  BAND_5_GH   = 2;  
 }
 
 /* Wi-Fi Authentication Mode. */

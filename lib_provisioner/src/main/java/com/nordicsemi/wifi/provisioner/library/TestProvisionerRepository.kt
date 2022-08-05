@@ -140,11 +140,9 @@ class TestProvisionerRepository : ProvisionerRepository {
     private fun createDeviceStatus(): DeviceStatusDomain {
         return DeviceStatusDomain(
             wifiState = WifiConnectionStateDomain.DISCONNECTED,
-            wifiInfo = ConnectionInfoDomain(
-                ipv4Address = "11:22:33:44:55",
-                wifiInfo = createWifiInfo(-66)
-            ),
-            scanParamsDomain = ScanParamsDomain(
+            wifiInfo = createWifiInfo(-66),
+            connectionInfo = ConnectionInfoDomain(ipv4Address = "11:22:33:44:55"),
+            scanParams = ScanParamsDomain(
                 band = BandDomain.BAND_2_4_GH,
                 passive = true,
                 periodMs = 23,

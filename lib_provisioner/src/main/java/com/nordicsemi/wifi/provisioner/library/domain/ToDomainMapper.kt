@@ -41,8 +41,9 @@ internal fun DeviceStatus.toDomain(): DeviceStatusDomain {
     Log.d(TAG, "status: $this")
     return DeviceStatusDomain(
         state?.toDomain() ?: WifiConnectionStateDomain.DISCONNECTED,
-        info?.toDomain(),
-        scan_state?.toDomain()
+        provisioning_info?.toDomain(),
+        connection_info?.toDomain(),
+        scan_info?.toDomain()
     )
 }
 
@@ -57,7 +58,7 @@ internal fun ScanParams.toDomain(): ScanParamsDomain {
 }
 
 internal fun ConnectionInfo.toDomain(): ConnectionInfoDomain {
-    return ConnectionInfoDomain(ip4_addr!!.toIp(), wifi!!.toDomain())
+    return ConnectionInfoDomain(ip4_addr!!.toIp())
 }
 
 internal fun ConnectionState.toDomain(): WifiConnectionStateDomain {

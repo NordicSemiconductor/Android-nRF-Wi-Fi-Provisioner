@@ -143,6 +143,7 @@
     <string name="error_ip_fail">Could not obtain IP from provided provisioning information.</string>
     <string name="error_fail_connection">Could not connect to provisioned network.</string>
 
+    <string name="connection_info">Connection info</string>
     <string name="status_title">Wi-Fi info</string>
     <string name="status_ip_4">IpV4: %s</string>
     <string name="status_ssid">SSID: %s</string>

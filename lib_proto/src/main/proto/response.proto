@@ -9,8 +9,7 @@ option java_package = "no.nordicsemi.android.wifi.provisioning";
 
 /* Information about the Wi-Fi connected state. */
 message ConnectionInfo {
-  optional WifiInfo wifi  = 1;
-  optional bytes ip4_addr = 2;
+  optional bytes ip4_addr = 1;
 }
 
 /* Response payload for GET_STATUS request. */
@@ -22,10 +21,13 @@ message DeviceStatus {
 
   // The network information if provisioned to a network.
   // This can be set even if connection failed.
-  optional ConnectionInfo info            = 10;
+  optional WifiInfo provisioning_info     = 10;
+  // The connection info is set when the device is connected
+  // to the network and received the IP.
+  optional ConnectionInfo connection_info = 11;
   // Set if the device is scanning. 
   // The period_ms contains remaining scanning period.
-  optional ScanParams scan_state          = 11;
+  optional ScanParams scan_info           = 12;
 }
 
 /* A response type which is sent back from the device. */

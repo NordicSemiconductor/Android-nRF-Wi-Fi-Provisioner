@@ -95,31 +95,39 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     style = MaterialTheme.typography.labelLarge
                 )
                 Text(
-                    text = stringResource(id = R.string.status_ip_4, it.ipv4Address),
+                    text = stringResource(id = R.string.status_ssid, it.ssid),
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = stringResource(id = R.string.status_ssid, it.wifiInfo.ssid),
+                    text = stringResource(id = R.string.status_bssid, it.bssid),
                     style = MaterialTheme.typography.bodySmall
                 )
-                Text(
-                    text = stringResource(id = R.string.status_bssid, it.wifiInfo.bssid),
-                    style = MaterialTheme.typography.bodySmall
-                )
-                it.wifiInfo.band?.toDisplayString()?.let {
+                it.band?.toDisplayString()?.let {
                     Text(
                         text = stringResource(id = R.string.status_band, it),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
                 Text(
-                    text = stringResource(id = R.string.status_channel, it.wifiInfo.channel.toString()),
+                    text = stringResource(id = R.string.status_channel, it.channel.toString()),
                     style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(modifier = Modifier.size(16.dp))
             }
 
-            status.scanParamsDomain?.let {
+            status.connectionInfo?.let {
+                Text(
+                    text = stringResource(id = R.string.connection_info),
+                    style = MaterialTheme.typography.labelLarge
+                )
+                Text(
+                    text = stringResource(id = R.string.status_ip_4, it.ipv4Address),
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+            }
+
+            status.scanParams?.let {
                 Text(
                     text = stringResource(id = R.string.scan_param_title),
                     style = MaterialTheme.typography.labelLarge
