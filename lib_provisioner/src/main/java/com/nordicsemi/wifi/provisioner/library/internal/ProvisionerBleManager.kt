@@ -206,12 +206,10 @@ internal class ProvisionerBleManager(
             )
             .suspendForValidResponse<ByteArrayReadResponse>()
 
-        if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
-            throw createResponseError()
-        }
+        verifyResponseSuccess(response.value)
 
         awaitClose {
-//            removeNotificationCallback(dataOutCharacteristic)
+            removeNotificationCallback(dataOutCharacteristic)
         }
     }
 
@@ -257,12 +255,10 @@ internal class ProvisionerBleManager(
             )
             .suspendForValidResponse<ByteArrayReadResponse>()
 
-        if (Response.ADAPTER.decode(response.value).status != Status.SUCCESS) {
-            throw createResponseError()
-        }
+        verifyResponseSuccess(response.value)
 
         awaitClose {
-//            removeNotificationCallback(dataOutCharacteristic)
+            removeNotificationCallback(dataOutCharacteristic)
         }
     }
 
@@ -282,7 +278,8 @@ internal class ProvisionerBleManager(
     }
 
     private fun verifyResponseSuccess(response: ByteArray) {
-        if (Response.ADAPTER.decode(response).status != Status.SUCCESS) {
+        val status = Response.ADAPTER.decode(response).status
+        if (status != Status.SUCCESS) {
             throw createResponseError()
         }
     }
