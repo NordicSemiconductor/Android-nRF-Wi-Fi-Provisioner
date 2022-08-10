@@ -32,11 +32,15 @@
 package com.nordicsemi.android.wifi.provisioning.home.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
 import com.nordicsemi.android.wifi.provisioning.home.view.*
+import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerArgument
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
+import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
+import com.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
 import com.nordicsemi.wifi.provisioner.library.ProvisionerRepository
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
@@ -49,10 +53,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import no.nordicsemi.android.common.navigation.*
-import no.nordicsemi.android.common.ui.scanner.ScannerDestinationId
+import no.nordicsemi.android.common.navigation.NavigationManager
+import no.nordicsemi.android.common.navigation.NavigationResult
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
-import no.nordicsemi.android.common.ui.scanner.model.getDevice
 import javax.inject.Inject
 
 @HiltViewModel
@@ -69,14 +72,12 @@ class HomeViewModel @Inject constructor(
 
     private val pendingJobs = mutableListOf<Job>()
 
-    init {
-        navigationManager.recentResult.onEach {
-            if (it.destinationId == ProvisionerScannerDestinationId) {
-                handleArgs(it)
-            } else if (it.destinationId == WifiScannerId) {
-                handleWifiArgs(it)
-            }
-        }.launchIn(viewModelScope)
+    fun handleNavigationResult(result: NavigationResult) {
+        if (result is ProvisionerScannerResult) {
+            installBluetoothDevice(result.device)
+        } else if (result is ScanRecordResult) {
+            installWifi(result.scanRecord)
+        }
     }
 
     fun onEvent(event: HomeScreenViewEvent) {
@@ -131,25 +132,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun requestBluetoothDevice() {
-        navigationManager.navigateTo(ProvisionerScannerDestinationId, UUIDArgument(PROVISIONING_SERVICE_UUID))
-    }
-
-    private fun handleArgs(args: DestinationResult) {
-        when (args) {
-            is CancelDestinationResult -> doNothing()
-            is SuccessDestinationResult -> installBluetoothDevice(args.getDevice())
-        }
-    }
-
-    private fun handleWifiArgs(args: DestinationResult) {
-        when (args) {
-            is CancelDestinationResult -> navigationManager.navigateUp()
-            is SuccessDestinationResult -> installWifi(args.getScanRecord())
-        }
-    }
-
-    private fun SuccessDestinationResult.getScanRecord(): ScanRecordDomain {
-        return (argument as AnyArgument).value as ScanRecordDomain
+        navigationManager.navigateTo(ProvisionerScannerDestinationId, ProvisionerScannerArgument(ProvisionerScannerDestinationId, PROVISIONING_SERVICE_UUID))
     }
 
     private fun installWifi(scanRecord: ScanRecordDomain) {

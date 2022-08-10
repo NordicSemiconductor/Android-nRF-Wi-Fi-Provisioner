@@ -18,9 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import no.nordicsemi.android.common.navigation.AnyArgument
 import no.nordicsemi.android.common.navigation.NavigationManager
-import no.nordicsemi.android.common.navigation.SuccessDestinationResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,10 +68,7 @@ internal class WifiScannerViewModel @Inject constructor(
     private fun navigateUp(scanRecord: ScanRecordDomain) {
         viewModelScope.launch {
             stopScanning()
-            navigationManager.navigateUp(
-                WifiScannerId,
-                SuccessDestinationResult(WifiScannerId, AnyArgument(scanRecord))
-            )
+            navigationManager.navigateUp(ScanRecordResult(WifiScannerId, scanRecord))
         }
     }
 }

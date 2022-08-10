@@ -39,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -50,11 +51,21 @@ import com.nordicsemi.android.wifi.provisioning.home.view.sections.*
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
 import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
 import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
+import no.nordicsemi.android.common.navigation.NavigationResult
+import no.nordicsemi.android.common.permission.manager.BluetoothPermissionResult
+import no.nordicsemi.android.common.permission.view.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(result: NavigationResult?) {
+    val permissionViewModel = hiltViewModel<PermissionViewModel>()
+    val permissionState = permissionViewModel.bluetoothPermission.collectAsState().value
     val viewModel = hiltViewModel<HomeViewModel>()
+
+    LaunchedEffect(result) {
+        result?.let { viewModel.handleNavigationResult(it) }
+    }
+
     val state = viewModel.state.collectAsState().value
     val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }
 
@@ -64,10 +75,24 @@ fun HomeScreen() {
                 viewModel.onEvent(OpenLoggerEvent)
             }
         },
-        floatingActionButton = { ActionButtonSection(state, onEvent) }
+        floatingActionButton = {
+            if (permissionState == BluetoothPermissionResult.ALL_GOOD) {
+                ActionButtonSection(state, onEvent)
+            }
+        }
     ) {
         Box(modifier = Modifier.padding(it)) {
-            Content(state, onEvent)
+            when (permissionState) {
+                BluetoothPermissionResult.LOCATION_PERMISSION_REQUIRED -> LocationPermissionRequiredView {
+                    permissionViewModel.checkBluetooth()
+                }
+                BluetoothPermissionResult.BLUETOOTH_PERMISSION_REQUIRED -> BluetoothPermissionRequiredView {
+                    permissionViewModel.checkBluetooth()
+                }
+                BluetoothPermissionResult.BLUETOOTH_NOT_AVAILABLE -> BluetoothNotAvailableView()
+                BluetoothPermissionResult.BLUETOOTH_DISABLED -> BluetoothDisabledView()
+                BluetoothPermissionResult.ALL_GOOD -> Content(state) { viewModel.onEvent(it) }
+            }
         }
     }
 
