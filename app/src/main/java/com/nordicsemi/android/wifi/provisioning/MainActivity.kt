@@ -31,16 +31,22 @@
 
 package com.nordicsemi.android.wifi.provisioning
 
+import android.bluetooth.BluetoothAdapter
+import android.content.IntentFilter
+import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinations
 import dagger.hilt.android.AndroidEntryPoint
 import no.nordicsemi.android.common.navigation.NavigationView
+import no.nordicsemi.android.common.permission.view.PermissionViewModel
 import no.nordicsemi.android.common.theme.NordicActivity
 import no.nordicsemi.android.common.theme.NordicTheme
+import no.nordicsemi.android.common.theme.registerReceiverCompose
 
 @AndroidEntryPoint
 class MainActivity : NordicActivity() {
@@ -53,6 +59,16 @@ class MainActivity : NordicActivity() {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     NavigationView(HomeDestinations + ProvisionerScannerDestinations)
                 }
+            }
+
+            val permissionViewModel = hiltViewModel<PermissionViewModel>()
+
+            registerReceiverCompose(intentFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                permissionViewModel.checkBluetooth()
+            }
+
+            registerReceiverCompose(intentFilter = IntentFilter(LocationManager.MODE_CHANGED_ACTION)) {
+                permissionViewModel.refreshLocationState()
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.nordicsemi.android.wifi.provisioning.scanner
 
 import android.os.ParcelUuid
+import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import no.nordicsemi.android.common.navigation.*
 import no.nordicsemi.android.common.permission.view.PermissionViewModel
@@ -17,15 +18,18 @@ private val ProvisionerScannerDestination =
     ComposeDestination(ProvisionerScannerDestinationId) { navigationManager ->
         val argument = navigationManager.getArgument(ProvisionerScannerDestinationId) as ProvisionerScannerArgument
         val viewModel = hiltViewModel<PermissionViewModel>()
+        val isLocationPermissionRequired = viewModel.isLocationPermissionRequired.collectAsState().value
+
         ScannerScreen(
             uuid = argument.uuid,
-            isLocationPermissionRequired = viewModel.isLocationPermissionRequired,
+            isLocationPermissionRequired = isLocationPermissionRequired,
             onResult = {
                 when (it) {
                     ScannerResultCancel -> navigationManager.navigateUp()
                     is ScannerResultSuccess -> navigationManager.navigateUp(ProvisionerScannerResult(ProvisionerScannerDestinationId, it.device))
                 }
-            }
+            },
+            onDevicesDiscovered = { viewModel.onDevicesDiscovered() }
         ) {
             DeviceListItem(it) {
                 it.provisioningData()?.let { ProvisioningSection(data = it) }

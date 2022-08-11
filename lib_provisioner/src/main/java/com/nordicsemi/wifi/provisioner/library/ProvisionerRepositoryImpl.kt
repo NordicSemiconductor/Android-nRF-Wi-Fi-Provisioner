@@ -131,6 +131,6 @@ internal object ProvisionerFactory {
     }
 
     private fun createNordicLogger(context: Context, address: String): NordicLogger {
-        return NordicLogger(context, LoggerAppRunner(context), "Wi-Fi", "Provisioner", address)
+        return NordicLogger(context, LoggerAppRunner(context), "Wi-Fi", null, address)
     }
 }
