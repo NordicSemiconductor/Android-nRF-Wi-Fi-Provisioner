@@ -52,14 +52,10 @@ import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
 import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
 import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
 import no.nordicsemi.android.common.navigation.NavigationResult
-import no.nordicsemi.android.common.permission.manager.BluetoothPermissionResult
-import no.nordicsemi.android.common.permission.view.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(result: NavigationResult?) {
-    val permissionViewModel = hiltViewModel<PermissionViewModel>()
-    val permissionState = permissionViewModel.bluetoothPermission.collectAsState().value
     val viewModel = hiltViewModel<HomeViewModel>()
 
     LaunchedEffect(result) {
@@ -75,24 +71,10 @@ fun HomeScreen(result: NavigationResult?) {
                 viewModel.onEvent(OpenLoggerEvent)
             }
         },
-        floatingActionButton = {
-            if (permissionState == BluetoothPermissionResult.ALL_GOOD) {
-                ActionButtonSection(state, onEvent)
-            }
-        }
+        floatingActionButton = { ActionButtonSection(state, onEvent) }
     ) {
         Box(modifier = Modifier.padding(it)) {
-            when (permissionState) {
-                BluetoothPermissionResult.LOCATION_PERMISSION_REQUIRED -> LocationPermissionRequiredView {
-                    permissionViewModel.checkBluetooth()
-                }
-                BluetoothPermissionResult.BLUETOOTH_PERMISSION_REQUIRED -> BluetoothPermissionRequiredView {
-                    permissionViewModel.checkBluetooth()
-                }
-                BluetoothPermissionResult.BLUETOOTH_NOT_AVAILABLE -> BluetoothNotAvailableView()
-                BluetoothPermissionResult.BLUETOOTH_DISABLED -> BluetoothDisabledView()
-                BluetoothPermissionResult.ALL_GOOD -> Content(state) { viewModel.onEvent(it) }
-            }
+            Content(state) { viewModel.onEvent(it) }
         }
     }
 
