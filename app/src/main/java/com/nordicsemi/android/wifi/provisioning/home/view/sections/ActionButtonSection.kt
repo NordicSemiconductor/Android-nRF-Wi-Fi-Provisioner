@@ -50,6 +50,9 @@ import com.nordicsemi.android.wifi.provisioning.home.view.*
 
 @Composable
 fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+    if (viewEntity.isRunning()) {
+        return
+    }
     if (viewEntity.hasFinished()) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnFinishedEvent) }) {
             FabContent(Icons.Default.Clear, stringResource(id = R.string.finish))

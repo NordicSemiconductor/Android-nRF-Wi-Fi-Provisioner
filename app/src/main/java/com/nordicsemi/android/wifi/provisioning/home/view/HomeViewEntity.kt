@@ -31,6 +31,7 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view
 
+import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.*
@@ -58,6 +59,10 @@ data class HomeViewEntity(
                 && status is Success
                 && status.data.wifiState == WifiConnectionStateDomain.CONNECTED
                 && unprovisioningStatus !is Success
+    }
+
+    fun isRunning(): Boolean {
+        return version is Loading || status is Loading || provisioningStatus is Loading || unprovisioningStatus is Loading
     }
 
     fun hasFinished(): Boolean {

@@ -32,7 +32,6 @@
 package com.nordicsemi.android.wifi.provisioning
 
 import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreen
-import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
 import com.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerScreen
 import no.nordicsemi.android.common.navigation.ComposeDestination
 import no.nordicsemi.android.common.navigation.ComposeDestinations
@@ -42,8 +41,6 @@ val HomeDestinationId = DestinationId("home-destination")
 val WifiScannerId = DestinationId("wifi-scanner-destination")
 
 val HomeDestinations = ComposeDestinations(listOf(
-    ComposeDestination(HomeDestinationId) {
-        HomeScreen(it.getResult(ProvisionerScannerDestinationId) ?: it.getResult(WifiScannerId))
-    },
+    ComposeDestination(HomeDestinationId) { HomeScreen() },
     ComposeDestination(WifiScannerId) { WifiScannerScreen() }
 ))

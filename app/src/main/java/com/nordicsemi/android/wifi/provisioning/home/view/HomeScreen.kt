@@ -39,7 +39,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -51,16 +50,11 @@ import com.nordicsemi.android.wifi.provisioning.home.view.sections.*
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
 import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
 import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
-import no.nordicsemi.android.common.navigation.NavigationResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(result: NavigationResult?) {
+fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
-
-    LaunchedEffect(result) {
-        result?.let { viewModel.handleNavigationResult(it) }
-    }
 
     val state = viewModel.state.collectAsState().value
     val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }

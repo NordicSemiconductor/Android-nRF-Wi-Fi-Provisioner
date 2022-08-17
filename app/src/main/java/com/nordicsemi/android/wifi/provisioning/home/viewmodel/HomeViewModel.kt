@@ -32,7 +32,6 @@
 package com.nordicsemi.android.wifi.provisioning.home.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
@@ -72,7 +71,13 @@ class HomeViewModel @Inject constructor(
 
     private val pendingJobs = mutableListOf<Job>()
 
-    fun handleNavigationResult(result: NavigationResult) {
+    init {
+        navigationManager.recentResult.onEach {
+            handleNavigationResult(it)
+        }.launchIn(viewModelScope)
+    }
+
+    private fun handleNavigationResult(result: NavigationResult) {
         if (result is ProvisionerScannerResult) {
             installBluetoothDevice(result.device)
         } else if (result is ScanRecordResult) {
