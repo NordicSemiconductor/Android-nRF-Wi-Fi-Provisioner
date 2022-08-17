@@ -37,7 +37,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="add_device">Add device</string>
-    <string name="change_device">Change device</string>
+    <string name="change_device">Change</string>
     <string name="no_device_selected">No device selected</string>
     <string name="previous">Previous</string>
     <string name="close_app">Button which closes application.</string>
