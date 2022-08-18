@@ -88,7 +88,7 @@ private fun BluetoothDevice(
             style = MaterialTheme.typography.bodyLarge
         )
 
-        OutlinedButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
+        TextButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
             Text(text = stringResource(id = R.string.change_device))
         }
     }

@@ -45,6 +45,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,6 +59,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
+import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectDeviceClickEvent
 
 @Composable
 fun ErrorDataItem(
@@ -101,8 +103,7 @@ fun DataItem(
         iconRes = iconRes,
         title = title,
         description = description,
-        isExpanded = null,
-        rightIcon = null
+        isExpanded = null
     )
 }
 
@@ -118,18 +119,22 @@ fun ClickableDataItem(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
-            .clickable { onClick() }
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        DataItem(
-            iconRes = iconRes,
-            title = title,
-            description = description,
-            isExpanded = null,
-            rightIcon = Icons.Default.Edit
-        )
+        Box(modifier = Modifier.weight(1f)) {
+            DataItem(
+                iconRes = iconRes,
+                title = title,
+                description = description,
+                isExpanded = null
+            )
+        }
+
+        TextButton(onClick = { onClick() }) {
+            Text(text = stringResource(id = R.string.change_device))
+        }
     }
 }
 
@@ -177,8 +182,7 @@ private fun DataItem(
     iconRes: Int,
     title: String,
     description: String,
-    isExpanded: Boolean?,
-    rightIcon: ImageVector? = null
+    isExpanded: Boolean?
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
@@ -202,14 +206,6 @@ private fun DataItem(
         }
 
         isExpanded?.let { ExpandedIcon(isExpanded = it) }
-
-        rightIcon?.let {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "",
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-        }
     }
 }
 
