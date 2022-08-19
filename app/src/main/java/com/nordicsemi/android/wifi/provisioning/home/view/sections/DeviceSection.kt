@@ -31,11 +31,13 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +50,7 @@ import com.nordicsemi.android.wifi.provisioning.BuildConfig
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
 import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectDeviceClickEvent
+import no.nordicsemi.android.common.theme.view.NordicText
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 
 @Composable
@@ -96,40 +99,30 @@ private fun BluetoothDevice(
 
 @Composable
 private fun DeviceNotSelectedSection() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_no_phone),
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_nrf70),
             contentDescription = stringResource(id = R.string.add_device),
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .width(200.dp)
+                .padding(8.dp)
         )
 
         Spacer(modifier = Modifier.size(16.dp))
 
+        NordicText(
+            text = stringResource(id = R.string.app_info),
+            modifier = Modifier.padding(horizontal = 16.dp),
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Spacer(modifier = Modifier.size(32.dp))
+
         Text(
-            text = stringResource(id = R.string.no_device_selected),
-            style = MaterialTheme.typography.bodyLarge
+            text = stringResource(id = R.string.app_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.End,
+            style = MaterialTheme.typography.labelMedium
         )
     }
-
-    Spacer(modifier = Modifier.size(16.dp))
-
-    Text(
-        text = stringResource(id = R.string.app_info),
-        modifier = Modifier.padding(horizontal = 16.dp),
-        style = MaterialTheme.typography.bodyMedium
-    )
-
-    Spacer(modifier = Modifier.size(32.dp))
-
-    Text(
-        text = stringResource(id = R.string.app_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.End,
-        style = MaterialTheme.typography.labelMedium
-    )
 }

@@ -41,7 +41,17 @@
     <string name="no_device_selected">No device selected</string>
     <string name="previous">Previous</string>
     <string name="close_app">Button which closes application.</string>
-    <string name="app_info">Application allows to provision Sheliak devices. After selecting device the app will connect to obtain status data.\n\nIf needed the device can be provisioned to one of the available Wifi’s which are visible from Sheliak.</string>
+    <string name="app_info">Application allows provisioning of a new nRF700x device to Wi-Fi networks over Bluetooth LE.\n\n
+        ### Key features:\n
+        * Provision a new device to the desired network.\n
+        * Get connection status of the provisioned device.\n
+        * Re-provision already provisioned devices to an alternate network.\n\n
+
+        ### Requirements:\n
+        * [nRF700x DK](https://www.nordicsemi.com/News/2022/08/Nordic-Semiconductor-announces-its-first-WiFi-chip?lang=ko-KR)\n
+        * Provisioning sample app flashed \n\n
+
+        Make sure the deviec is powered ON and in range of the phone.</string>
 
     <string name="section_device">Device status</string>
     <string name="section_provisioning">Provisioning data</string>
@@ -161,7 +171,7 @@
 
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
-    <string name="app_version">Version: %s(%d)</string>
+    <string name="app_version">Version: %s (%d)</string>
 
     <string name="state_disconnected">Disconnected</string>
     <string name="state_authentication">Authentication</string>
