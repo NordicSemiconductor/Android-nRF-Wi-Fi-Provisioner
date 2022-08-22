@@ -32,6 +32,7 @@
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -39,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -103,6 +105,7 @@ private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
             modifier = Modifier
                 .widthIn(max = 200.dp)
                 .padding(8.dp)
+                .background(Color.White)
         )
 
         Spacer(modifier = Modifier.size(16.dp))
