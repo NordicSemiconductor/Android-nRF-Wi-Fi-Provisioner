@@ -41,10 +41,15 @@ import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectWifiEvent
 
 @Composable
-internal fun WifiSection(record: ScanRecordDomain, onEvent: (HomeScreenViewEvent) -> Unit) {
+internal fun WifiSection(
+    record: ScanRecordDomain,
+    isEditable: Boolean = false,
+    onEvent: (HomeScreenViewEvent) -> Unit
+) {
     ClickableDataItem(
         iconRes = record.wifiInfo.authModeDomain.toIcon(),
         title = stringResource(id = R.string.selected_wifi),
+        isEditable = isEditable,
         description = record.wifiInfo.ssid
     ) {
         onEvent(OnSelectWifiEvent)

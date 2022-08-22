@@ -48,7 +48,6 @@ data class HomeViewEntity(
     val unprovisioningStatus: Resource<Unit>? = null,
     val isConnected: Boolean = true
 ) {
-
     fun isStatusSuccess(): Boolean {
         return device != null && version is Success && status is Success
     }
@@ -62,7 +61,7 @@ data class HomeViewEntity(
     }
 
     fun isRunning(): Boolean {
-        return version is Loading || status is Loading || provisioningStatus is Loading || unprovisioningStatus is Loading
+        return version == null || version is Loading || status is Loading || provisioningStatus is Loading || unprovisioningStatus is Loading
     }
 
     fun hasFinished(): Boolean {

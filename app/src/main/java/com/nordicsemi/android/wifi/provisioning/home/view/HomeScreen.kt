@@ -88,7 +88,7 @@ private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Uni
             .padding(16.dp)
     ) {
 
-        DeviceSection(state.device, onEvent)
+        DeviceSection(state.device, !state.isRunning(), onEvent)
 
         Spacer(modifier = Modifier.size(16.dp))
 
@@ -114,7 +114,7 @@ private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Uni
 
                 Spacer(modifier = Modifier.size(16.dp))
 
-                WifiSection(it, onEvent)
+                WifiSection(it, !state.isRunning(), onEvent)
             }
 
             state.password?.let {

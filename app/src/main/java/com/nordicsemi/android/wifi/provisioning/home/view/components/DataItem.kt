@@ -113,6 +113,7 @@ fun ClickableDataItem(
     iconRes: Int,
     title: String,
     description: String,
+    isEditable: Boolean = false,
     onClick: () -> Unit
 ) {
     Row(
@@ -132,8 +133,10 @@ fun ClickableDataItem(
             )
         }
 
-        TextButton(onClick = { onClick() }) {
-            Text(text = stringResource(id = R.string.change_device))
+        if (isEditable) {
+            TextButton(onClick = { onClick() }) {
+                Text(text = stringResource(id = R.string.change_device))
+            }
         }
     }
 }

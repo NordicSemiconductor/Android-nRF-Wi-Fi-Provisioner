@@ -55,18 +55,20 @@ import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 @Composable
 internal fun DeviceSection(
     device: DiscoveredBluetoothDevice?,
+    isEditable: Boolean = false,
     onEvent: (HomeScreenViewEvent) -> Unit
 ) {
     if (device == null) {
         DeviceNotSelectedSection(onEvent)
     } else {
-        BluetoothDevice(device, onEvent)
+        BluetoothDevice(device, isEditable, onEvent)
     }
 }
 
 @Composable
 private fun BluetoothDevice(
     device: DiscoveredBluetoothDevice,
+    isEditable: Boolean = false,
     onEvent: (HomeScreenViewEvent) -> Unit
 ) {
     Row(
@@ -90,8 +92,10 @@ private fun BluetoothDevice(
             style = MaterialTheme.typography.bodyLarge
         )
 
-        TextButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
-            Text(text = stringResource(id = R.string.change_device))
+        if (isEditable) {
+            TextButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
+                Text(text = stringResource(id = R.string.change_device))
+            }
         }
     }
 }
