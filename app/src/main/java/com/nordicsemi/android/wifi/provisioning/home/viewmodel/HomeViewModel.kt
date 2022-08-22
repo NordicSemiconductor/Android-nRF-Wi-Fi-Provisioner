@@ -139,7 +139,12 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun installWifi(scanRecord: ScanRecordDomain) {
-        _state.value = _state.value.copy(network = scanRecord, password = null, provisioningStatus = null)
+        _state.value = _state.value.copy(
+            network = scanRecord,
+            password = null,
+            provisioningStatus = null,
+            showPasswordDialog = scanRecord.isPasswordRequired()
+        )
     }
 
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
