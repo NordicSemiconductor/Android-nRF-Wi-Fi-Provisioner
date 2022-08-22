@@ -92,10 +92,11 @@ private fun BluetoothDevice(
             style = MaterialTheme.typography.bodyLarge
         )
 
-        if (isEditable) {
-            TextButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
-                Text(text = stringResource(id = R.string.change_device))
-            }
+        TextButton(
+            onClick = { onEvent(OnSelectDeviceClickEvent) },
+            enabled = isEditable
+        ) {
+            Text(text = stringResource(id = R.string.change_device))
         }
     }
 }
@@ -122,7 +123,11 @@ private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
         Spacer(modifier = Modifier.size(32.dp))
 
         Text(
-            text = stringResource(id = R.string.app_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+            text = stringResource(
+                id = R.string.app_version,
+                BuildConfig.VERSION_NAME,
+                BuildConfig.VERSION_CODE
+            ),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.labelMedium

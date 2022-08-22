@@ -133,10 +133,11 @@ fun ClickableDataItem(
             )
         }
 
-        if (isEditable) {
-            TextButton(onClick = { onClick() }) {
-                Text(text = stringResource(id = R.string.change_device))
-            }
+        TextButton(
+            onClick = { onClick() },
+            enabled = isEditable
+        ) {
+            Text(text = stringResource(id = R.string.change_device))
         }
     }
 }

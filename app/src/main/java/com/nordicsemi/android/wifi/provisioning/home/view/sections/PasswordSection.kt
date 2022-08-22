@@ -39,10 +39,11 @@ import com.nordicsemi.android.wifi.provisioning.home.view.OnShowPasswordDialog
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ClickableDataItem
 
 @Composable
-internal fun PasswordSection(onEvent: (HomeScreenViewEvent) -> Unit) {
+internal fun PasswordSection(isEditable: Boolean = false, onEvent: (HomeScreenViewEvent) -> Unit) {
     ClickableDataItem(
         iconRes = R.drawable.ic_password,
         title = stringResource(id = R.string.password),
+        isEditable = isEditable,
         description = stringResource(id = R.string.password_encoded)
     ) {
         onEvent(OnShowPasswordDialog)

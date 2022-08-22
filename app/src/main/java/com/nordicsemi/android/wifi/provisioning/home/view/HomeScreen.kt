@@ -120,7 +120,7 @@ private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Uni
             state.password?.let {
                 Spacer(modifier = Modifier.size(16.dp))
 
-                PasswordSection(onEvent)
+                PasswordSection(!state.isRunning(), onEvent)
             }
 
             state.provisioningStatus?.let {
