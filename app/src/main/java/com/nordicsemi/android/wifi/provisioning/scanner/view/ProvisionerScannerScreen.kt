@@ -31,25 +31,20 @@
 
 package com.nordicsemi.android.wifi.provisioning.scanner.view
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Filter
-import androidx.compose.material3.ElevatedFilterChip
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisioningSection
 import com.nordicsemi.android.wifi.provisioning.scanner.provisioningData
 import com.nordicsemi.android.wifi.provisioning.scanner.viewmodel.ProvisionerViewModel
@@ -57,11 +52,10 @@ import no.nordicsemi.android.common.ui.scanner.ScannerResultCancel
 import no.nordicsemi.android.common.ui.scanner.ScannerResultSuccess
 import no.nordicsemi.android.common.ui.scanner.ScannerScreenResult
 import no.nordicsemi.android.common.ui.scanner.main.DeviceListItem
-import no.nordicsemi.android.common.ui.scanner.main.DevicesListView
+import no.nordicsemi.android.common.ui.scanner.main.DevicesListItems
 import no.nordicsemi.android.common.ui.scanner.main.ScannerAppBar
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 import no.nordicsemi.android.common.ui.scanner.repository.ScanningState
-import no.nordicsemi.android.common.theme.R as themeR
 import no.nordicsemi.android.common.ui.scanner.R as scannerR
 
 @Composable
@@ -92,37 +86,35 @@ fun ProvisionerScannerScreen(
         FilterView(allDevices) {
             viewModel.switchFilter()
         }
-        DevicesListView(isLocationPermissionRequired, result, { ProvisionerExtrasSection(it) }) {
-            onResult(ScannerResultSuccess(it))
+
+        LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
+            item { Spacer(modifier = Modifier.size(8.dp)) }
+
+            when (result) {
+                is ScanningState.Loading -> item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
+                is ScanningState.DevicesDiscovered -> {
+                    if (result.isEmpty()) {
+                        item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
+                    } else {
+                        DevicesListItems(result, { onResult(ScannerResultSuccess(it)) }) {
+                            ProvisionerExtrasSection(it)
+                        }
+                    }
+                }
+                is ScanningState.Error -> item { ErrorSection() }
+            }
+
+            item { Spacer(modifier = Modifier.size(16.dp)) }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun FilterView(allDevices: Boolean, onChange: () -> Unit) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(colorResource(id = themeR.color.appBarColor))
-            .padding(start = 56.dp)
-    ) {
-        ElevatedFilterChip(
-            selected = !allDevices,
-            onClick = { onChange() },
-            label = { Text(text = stringResource(id = R.string.unprovisioned),) },
-            modifier = Modifier.padding(end = 8.dp),
-            leadingIcon = {
-                if (!allDevices) {
-                    Icon(Icons.Default.Done, contentDescription = "")
-                } else {
-                    Icon(Icons.Default.Filter, contentDescription = "")
-                }
-            },
-        )
-    }
+private fun ErrorSection() {
+    Text(
+        text = stringResource(id = no.nordicsemi.android.common.ui.scanner.R.string.scan_failed),
+        color = MaterialTheme.colorScheme.error
+    )
 }
 
 @Composable
