@@ -58,9 +58,9 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
             FabContent(Icons.Default.Clear, stringResource(id = R.string.finish))
         }
     } else if (!viewEntity.isStatusSuccess()) {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
-            FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
-        }
+//        ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
+//            FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
+//        }
     }  else if (viewEntity.isUnprovisioning()) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnUnprovisionEvent) }) {
             FabContent(Icons.Default.Wifi, stringResource(id = R.string.unprovision))

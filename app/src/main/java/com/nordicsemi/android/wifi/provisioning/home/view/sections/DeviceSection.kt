@@ -34,10 +34,7 @@ package com.nordicsemi.android.wifi.provisioning.home.view.sections
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +56,7 @@ internal fun DeviceSection(
     onEvent: (HomeScreenViewEvent) -> Unit
 ) {
     if (device == null) {
-        DeviceNotSelectedSection()
+        DeviceNotSelectedSection(onEvent)
     } else {
         BluetoothDevice(device, onEvent)
     }
@@ -98,13 +95,13 @@ private fun BluetoothDevice(
 }
 
 @Composable
-private fun DeviceNotSelectedSection() {
+private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(id = R.drawable.ic_nrf70),
             contentDescription = stringResource(id = R.string.add_device),
             modifier = Modifier
-                .width(200.dp)
+                .widthIn(max = 200.dp)
                 .padding(8.dp)
         )
 
@@ -112,7 +109,6 @@ private fun DeviceNotSelectedSection() {
 
         NordicText(
             text = stringResource(id = R.string.app_info),
-            modifier = Modifier.padding(horizontal = 16.dp),
             style = MaterialTheme.typography.bodyMedium
         )
 
@@ -124,5 +120,14 @@ private fun DeviceNotSelectedSection() {
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.labelMedium
         )
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Button(
+            modifier = Modifier.defaultMinSize(minWidth = 100.dp),
+            onClick = { onEvent(OnSelectDeviceClickEvent) }
+        ) {
+            Text(text = stringResource(id = R.string.start))
+        }
     }
 }

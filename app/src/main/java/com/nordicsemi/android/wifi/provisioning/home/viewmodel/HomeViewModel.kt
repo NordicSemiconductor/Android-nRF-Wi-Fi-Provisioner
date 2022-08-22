@@ -36,7 +36,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
 import com.nordicsemi.android.wifi.provisioning.home.view.*
-import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerArgument
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
 import com.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
@@ -45,7 +44,6 @@ import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import com.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
 import com.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
-import com.nordicsemi.wifi.provisioner.library.internal.PROVISIONING_SERVICE_UUID
 import com.nordicsemi.wifi.provisioner.library.launchWithCatch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -137,12 +135,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun requestBluetoothDevice() {
-        navigationManager.navigateTo(ProvisionerScannerDestinationId, ProvisionerScannerArgument(ProvisionerScannerDestinationId, PROVISIONING_SERVICE_UUID))
+        navigationManager.navigateTo(ProvisionerScannerDestinationId)
     }
 
     private fun installWifi(scanRecord: ScanRecordDomain) {
-        _state.value =
-            _state.value.copy(network = scanRecord, password = null, provisioningStatus = null)
+        _state.value = _state.value.copy(network = scanRecord, password = null, provisioningStatus = null)
     }
 
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
