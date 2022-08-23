@@ -64,6 +64,7 @@
     <string name="unprovisioned">Unprovisioned</string>
     <string name="start">Start</string>
     <string name="select_device">Select device</string>
+    <string name="next_device">Next device</string>
     <string name="finish">Finish</string>
     <string name="set_password">Set password</string>
     <string name="password">Password</string>

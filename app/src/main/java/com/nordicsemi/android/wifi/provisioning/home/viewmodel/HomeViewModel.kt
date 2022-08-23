@@ -64,6 +64,8 @@ class HomeViewModel @Inject constructor(
 
     private val repository = ProvisionerRepository.newInstance(context)
 
+    private var connectionObserverJob: Job? = null
+
     private val _state = MutableStateFlow(HomeViewEntity())
     val state = _state.asStateFlow()
 
@@ -97,6 +99,17 @@ class HomeViewModel @Inject constructor(
             OnShowPasswordDialog -> showPasswordDialog()
             OpenLoggerEvent -> repository.openLogger()
             OnUnprovisionEvent -> cancelConfig()
+            OnProvisionNextDeviceEvent -> provisionNextDevice()
+        }
+    }
+
+    private fun provisionNextDevice() {
+        viewModelScope.launch {
+            cancelPendingJobs()
+            connectionObserverJob?.cancel()
+            release()
+            requestBluetoothDevice()
+            _state.value = HomeViewEntity()
         }
     }
 
@@ -154,6 +167,7 @@ class HomeViewModel @Inject constructor(
             repository.start(device.device)
                 .onEach { updateConnectionStatus(it) }
                 .launchIn(viewModelScope)
+                .let { connectionObserverJob = it }
             loadVersion()
         }
     }

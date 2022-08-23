@@ -71,4 +71,12 @@ data class HomeViewEntity(
                 || status == WifiConnectionStateDomain.CONNECTION_FAILED
                 || unprovisioningStatus is Success
     }
+
+    fun hasFinishedWithSuccess(): Boolean {
+        val status = (provisioningStatus as? Success)?.data
+        return isConnected
+                && (status == WifiConnectionStateDomain.CONNECTED
+                || status == WifiConnectionStateDomain.CONNECTION_FAILED
+                || unprovisioningStatus is Success)
+    }
 }

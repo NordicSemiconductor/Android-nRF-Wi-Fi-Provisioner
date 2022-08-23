@@ -53,7 +53,11 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
     if (viewEntity.isRunning()) {
         return
     }
-    if (viewEntity.hasFinished()) {
+    if (viewEntity.hasFinishedWithSuccess()) {
+        ExtendedFloatingActionButton(onClick = { onEvent(OnProvisionNextDeviceEvent) }) {
+            FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.next_device))
+        }
+    } else if (viewEntity.hasFinished()) {
         ExtendedFloatingActionButton(onClick = { onEvent(OnFinishedEvent) }) {
             FabContent(Icons.Default.Clear, stringResource(id = R.string.finish))
         }

@@ -6,6 +6,8 @@ object OnSelectDeviceClickEvent : HomeScreenViewEvent
 
 object OnFinishedEvent : HomeScreenViewEvent
 
+object OnProvisionNextDeviceEvent : HomeScreenViewEvent
+
 object OnSelectWifiEvent : HomeScreenViewEvent
 
 object OnShowPasswordDialog : HomeScreenViewEvent
