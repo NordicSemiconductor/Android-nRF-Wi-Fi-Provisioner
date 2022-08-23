@@ -76,12 +76,12 @@ private fun BluetoothDevice(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
-            .padding(start = 8.dp, top = 8.dp, bottom = 8.dp)
+            .padding(vertical = 8.dp)
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_phone_ok),
             contentDescription = stringResource(id = R.string.cd_device_selected),
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         Spacer(modifier = Modifier.size(16.dp))
