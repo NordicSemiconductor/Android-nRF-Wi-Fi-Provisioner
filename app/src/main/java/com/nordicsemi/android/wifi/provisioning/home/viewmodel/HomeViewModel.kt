@@ -48,6 +48,7 @@ import com.nordicsemi.wifi.provisioner.library.launchWithCatch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.NavigationManager
@@ -107,8 +108,9 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             cancelPendingJobs()
             connectionObserverJob?.cancel()
-            release()
+            launch { release() }
             requestBluetoothDevice()
+            delay(500) //nasty delay to prevent screen change before navigation
             _state.value = HomeViewEntity()
         }
     }
