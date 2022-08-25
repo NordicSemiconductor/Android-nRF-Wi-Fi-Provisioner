@@ -53,7 +53,6 @@ import no.nordicsemi.android.common.ui.scanner.ScannerResultSuccess
 import no.nordicsemi.android.common.ui.scanner.ScannerScreenResult
 import no.nordicsemi.android.common.ui.scanner.main.DeviceListItem
 import no.nordicsemi.android.common.ui.scanner.main.DevicesListItems
-import no.nordicsemi.android.common.ui.scanner.main.ScannerAppBar
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 import no.nordicsemi.android.common.ui.scanner.repository.ScanningState
 import no.nordicsemi.android.common.ui.scanner.R as scannerR
@@ -78,20 +77,23 @@ fun ProvisionerScannerScreen(
     }
 
     Column {
-        ScannerAppBar(stringResource(id = scannerR.string.scanner_screen), result.isRunning()) {
-            onResult(
-                ScannerResultCancel
-            )
-        }
-        FilterView(allDevices) {
-            viewModel.switchFilter()
+        ProvisionerScannerAppBar(
+            stringResource(id = scannerR.string.scanner_screen),
+            result.isRunning(),
+            allDevices,
+            { viewModel.switchFilter() }) {
+            onResult(ScannerResultCancel)
         }
 
         LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
             item { Spacer(modifier = Modifier.size(8.dp)) }
 
             when (result) {
-                is ScanningState.Loading -> item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
+                is ScanningState.Loading -> item {
+                    ProvisionerScanEmptyView(
+                        isLocationPermissionRequired
+                    )
+                }
                 is ScanningState.DevicesDiscovered -> {
                     if (result.isEmpty()) {
                         item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
