@@ -73,9 +73,9 @@ class HomeViewModel @Inject constructor(
     private val pendingJobs = mutableListOf<Job>()
 
     init {
-        navigationManager.recentResult.onEach {
-            handleNavigationResult(it)
-        }.launchIn(viewModelScope)
+        navigationManager.gerResultForIds(ProvisionerScannerDestinationId, WifiScannerId)
+            .onEach { handleNavigationResult(it) }
+            .launchIn(viewModelScope)
     }
 
     private fun handleNavigationResult(result: NavigationResult) {
