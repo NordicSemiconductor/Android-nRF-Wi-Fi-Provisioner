@@ -35,7 +35,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -46,7 +50,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
-import com.nordicsemi.android.wifi.provisioning.home.view.*
+import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.HomeViewEntity
+import com.nordicsemi.android.wifi.provisioning.home.view.OnFinishedEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.OnProvisionClickEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.OnProvisionNextDeviceEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectWifiEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.OnShowPasswordDialog
+import com.nordicsemi.android.wifi.provisioning.home.view.OnUnprovisionEvent
 
 @Composable
 fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {

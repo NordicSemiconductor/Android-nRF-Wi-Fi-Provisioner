@@ -34,7 +34,11 @@ package com.nordicsemi.wifi.provisioner.library
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import com.nordicsemi.wifi.provisioner.library.domain.*
+import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
+import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 import com.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.flow.Flow
 

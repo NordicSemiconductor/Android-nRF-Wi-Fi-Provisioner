@@ -6,12 +6,10 @@ import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
-import com.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import com.nordicsemi.wifi.provisioner.library.Error
 import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
-import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 
 @Composable
 internal fun UnprovisioningSection(status: Resource<Unit>) {

@@ -32,7 +32,16 @@
 package com.nordicsemi.wifi.provisioner.library
 
 import android.bluetooth.BluetoothDevice
-import com.nordicsemi.wifi.provisioner.library.domain.*
+import com.nordicsemi.wifi.provisioner.library.domain.AuthModeDomain
+import com.nordicsemi.wifi.provisioner.library.domain.BandDomain
+import com.nordicsemi.wifi.provisioner.library.domain.ConnectionInfoDomain
+import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
+import com.nordicsemi.wifi.provisioner.library.domain.ScanParamsDomain
+import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiInfoDomain
 import com.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

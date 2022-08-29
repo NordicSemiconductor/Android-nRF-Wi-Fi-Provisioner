@@ -31,7 +31,11 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,7 +50,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.LoggerIconAppBar
-import com.nordicsemi.android.wifi.provisioning.home.view.sections.*
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.ActionButtonSection
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.DeviceSection
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.DisconnectedDeviceStatus
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.PasswordSection
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.ProvisioningSection
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.StatusSection
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.UnprovisioningSection
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.VersionSection
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.WifiSection
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
 import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
 import com.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent

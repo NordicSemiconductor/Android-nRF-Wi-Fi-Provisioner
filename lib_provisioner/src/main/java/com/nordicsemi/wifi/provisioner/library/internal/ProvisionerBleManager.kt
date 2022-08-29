@@ -39,7 +39,11 @@ import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import no.nordicsemi.android.ble.BleManager
@@ -47,7 +51,14 @@ import no.nordicsemi.android.ble.ktx.asValidResponseFlow
 import no.nordicsemi.android.ble.ktx.suspend
 import no.nordicsemi.android.ble.ktx.suspendForValidResponse
 import no.nordicsemi.android.common.logger.NordicLogger
-import no.nordicsemi.android.wifi.provisioning.*
+import no.nordicsemi.android.wifi.provisioning.DeviceStatus
+import no.nordicsemi.android.wifi.provisioning.Info
+import no.nordicsemi.android.wifi.provisioning.OpCode
+import no.nordicsemi.android.wifi.provisioning.Request
+import no.nordicsemi.android.wifi.provisioning.Response
+import no.nordicsemi.android.wifi.provisioning.Result
+import no.nordicsemi.android.wifi.provisioning.Status
+import no.nordicsemi.android.wifi.provisioning.WifiConfig
 import java.util.*
 
 val PROVISIONING_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")

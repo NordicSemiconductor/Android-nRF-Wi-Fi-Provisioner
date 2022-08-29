@@ -34,7 +34,10 @@ package com.nordicsemi.android.wifi.provisioning.home.view
 import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.Resource
 import com.nordicsemi.wifi.provisioner.library.Success
-import com.nordicsemi.wifi.provisioner.library.domain.*
+import com.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
+import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import com.nordicsemi.wifi.provisioner.library.domain.VersionDomain
+import com.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 
 data class HomeViewEntity(

@@ -34,8 +34,6 @@ package com.nordicsemi.android.wifi.provisioning.home.view.components
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import com.nordicsemi.android.wifi.provisioning.R
 
 @Composable
 fun ErrorText(text: String) = Text(

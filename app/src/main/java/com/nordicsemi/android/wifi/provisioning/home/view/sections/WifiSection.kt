@@ -35,10 +35,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectWifiEvent
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ClickableDataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectWifiEvent
 
 @Composable
 internal fun WifiSection(
