@@ -22,8 +22,6 @@ import com.nordicsemi.android.wifi.provisioning.home.view.components.applyPlaceh
 @Composable
 fun WifiLoadingItem() {
     Row(
-        modifier = Modifier
-            .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(

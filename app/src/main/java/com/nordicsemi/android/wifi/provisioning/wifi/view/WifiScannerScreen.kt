@@ -64,7 +64,7 @@ internal fun WifiScannerScreen() {
 private fun LoadingItem() {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(8.dp)
+        contentPadding = PaddingValues(16.dp)
     ) {
         repeat(6) {
             item { WifiLoadingItem() }
