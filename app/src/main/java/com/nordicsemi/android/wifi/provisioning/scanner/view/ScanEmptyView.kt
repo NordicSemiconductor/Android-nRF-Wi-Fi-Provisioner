@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -35,7 +36,8 @@ internal fun ProvisionerScanEmptyView(requireLocation: Boolean) {
         Image(
             imageVector = Icons.Default.BluetoothDisabled,
             contentDescription = "",
-            modifier = Modifier.padding(16.dp).size(48.dp)
+            modifier = Modifier.padding(16.dp).size(48.dp),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
         )
 
         Text(
