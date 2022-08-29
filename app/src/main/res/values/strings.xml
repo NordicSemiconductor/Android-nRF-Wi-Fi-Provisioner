@@ -116,8 +116,8 @@
     <string name="error_version">Error when reading version.</string>
     <string name="device_info">Device status</string>
     <string name="disconnected">Disconnected</string>
-    <string name="status_info">Wi-fi status</string>
-    <string name="selected_wifi">Selected Wi-fi</string>
+    <string name="status_info">Wi-Fi status</string>
+    <string name="selected_wifi">Selected Wi-Fi</string>
     <string name="error_status">Error when reading status.</string>
     <string name="dk_version">Version</string>
     <string name="wifi_state">Wifi state</string>
@@ -144,7 +144,7 @@
 
     <string name="bssid">Router MAC: %s</string>
 
-    <string name="wifi_title">Wi-fi</string>
+    <string name="wifi_title">Wi-Fi</string>
 
     <string name="band_and_channel">Band: %s, Channel: %s</string>
     <string name="channel">Channel: %s</string>
