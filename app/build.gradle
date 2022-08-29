@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.nordicsemi.android.wifi.provisioning"
-        minSdk 24
+        minSdk 23
         targetSdk 32
         versionCode getVersionCodeFromTags()
         versionName getVersionNameFromTags()
