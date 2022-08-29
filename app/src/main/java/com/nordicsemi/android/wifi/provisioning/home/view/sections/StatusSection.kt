@@ -112,10 +112,13 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     text = stringResource(id = R.string.status_channel, it.channel.toString()),
                     style = MaterialTheme.typography.bodySmall
                 )
-                Spacer(modifier = Modifier.size(16.dp))
             }
 
             status.connectionInfo?.let {
+                if (status.wifiInfo != null) {
+                    Spacer(modifier = Modifier.size(16.dp))
+                }
+
                 Text(
                     text = stringResource(id = R.string.connection_info),
                     style = MaterialTheme.typography.labelLarge
@@ -124,10 +127,13 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     text = stringResource(id = R.string.status_ip_4, it.ipv4Address),
                     style = MaterialTheme.typography.bodySmall
                 )
-                Spacer(modifier = Modifier.size(16.dp))
             }
 
             status.scanParams?.let {
+                if (status.wifiInfo != null || status.connectionInfo != null) {
+                    Spacer(modifier = Modifier.size(16.dp))
+                }
+
                 Text(
                     text = stringResource(id = R.string.scan_param_title),
                     style = MaterialTheme.typography.labelLarge
@@ -148,7 +154,6 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     text = stringResource(id = R.string.scan_param_group_channels, it.groupChannels.toString()),
                     style = MaterialTheme.typography.bodySmall
                 )
-                Spacer(modifier = Modifier.size(16.dp))
             }
         }
     }
