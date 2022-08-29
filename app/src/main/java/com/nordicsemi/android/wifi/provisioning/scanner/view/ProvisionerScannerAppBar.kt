@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.ui.scanner.R
 import no.nordicsemi.android.common.theme.R as themeR
@@ -23,7 +24,7 @@ fun ProvisionerScannerAppBar(
     onNavigationButtonClick: () -> Unit
 ) {
     SmallTopAppBar(
-        title = { Text(text) },
+        title = { Text(text, overflow = TextOverflow.Ellipsis, maxLines = 1) },
         colors = TopAppBarDefaults.smallTopAppBarColors(
             scrolledContainerColor = MaterialTheme.colorScheme.primary,
             containerColor = colorResource(id = themeR.color.appBarColor),
