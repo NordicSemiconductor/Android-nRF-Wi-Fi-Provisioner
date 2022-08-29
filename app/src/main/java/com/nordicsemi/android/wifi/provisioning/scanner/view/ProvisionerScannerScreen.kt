@@ -86,7 +86,7 @@ fun ProvisionerScannerScreen(
         }
 
         LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
-            item { Spacer(modifier = Modifier.size(8.dp)) }
+            item { Spacer(modifier = Modifier.size(16.dp)) }
 
             when (result) {
                 is ScanningState.Loading -> item {

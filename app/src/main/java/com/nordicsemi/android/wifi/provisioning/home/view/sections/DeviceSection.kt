@@ -73,10 +73,7 @@ private fun BluetoothDevice(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .padding(vertical = 8.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_phone_ok),

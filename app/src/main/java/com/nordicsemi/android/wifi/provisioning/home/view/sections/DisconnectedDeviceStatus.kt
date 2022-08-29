@@ -6,7 +6,7 @@ import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
 
 @Composable
-fun DeviceStatus() {
+fun DisconnectedDeviceStatus() {
     DataItem(
         iconRes = R.drawable.ic_disconnected,
         title = stringResource(id = R.string.device_info),

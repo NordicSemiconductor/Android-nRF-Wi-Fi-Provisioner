@@ -36,9 +36,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nordicsemi.android.wifi.provisioning.WifiScannerId
 import com.nordicsemi.android.wifi.provisioning.home.view.*
+import com.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
 import com.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
+import com.nordicsemi.wifi.provisioner.library.Loading
 import com.nordicsemi.wifi.provisioner.library.ProvisionerRepository
 import com.nordicsemi.wifi.provisioner.library.Success
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
@@ -163,7 +165,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun installBluetoothDevice(device: DiscoveredBluetoothDevice) {
-        _state.value = HomeViewEntity(device = device)
+        _state.value = HomeViewEntity(device = device, version = Loading())
         viewModelScope.launchWithCatch {
             release()
             repository.start(device.device)
