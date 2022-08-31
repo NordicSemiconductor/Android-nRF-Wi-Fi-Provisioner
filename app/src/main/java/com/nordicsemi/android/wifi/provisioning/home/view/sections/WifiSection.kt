@@ -50,8 +50,15 @@ internal fun WifiSection(
         iconRes = record.wifiInfo.authModeDomain.toIcon(),
         title = stringResource(id = R.string.selected_wifi),
         isEditable = isEditable,
-        description = record.wifiInfo.ssid
+        description = getDescription(record)
     ) {
         onEvent(OnSelectWifiEvent)
     }
 }
+
+@Composable
+private fun getDescription(record: ScanRecordDomain) = StringBuilder()
+    .append(record.wifiInfo.ssid)
+    .appendLine()
+    .append(stringResource(id = R.string.channel, record.wifiInfo.channel.toString()))
+    .toString()

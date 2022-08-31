@@ -23,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class WifiScannerViewModel @Inject constructor(
-    private val navigationManager: NavigationManager
+    private val navigationManager: NavigationManager,
+    private val wifiAggregator: WifiAggregator
 ) : ViewModel() {
 
     private val repository = ProvisionerRepository.instance()
@@ -38,7 +39,7 @@ internal class WifiScannerViewModel @Inject constructor(
             _state.value = when (it) {
                 is Error -> state.copy(isLoading = false, error = it.error)
                 is Loading -> state.copy(isLoading = true)
-                is Success -> state.copy(isLoading = false, error = null, items = state.items + it.data)
+                is Success -> state.copy(isLoading = false, error = null, items = wifiAggregator.addWifi(it.data))
             }
         }.launchIn(viewModelScope)
     }

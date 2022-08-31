@@ -146,6 +146,8 @@
 
     <string name="wifi_title">Wi-Fi</string>
 
+    <string name="edit">Edit</string>
+    <string name="band">Band: %s</string>
     <string name="band_and_channel">Band: %s, Channel: %s</string>
     <string name="channel">Channel: %s</string>
     <string name="band_2_4">2.4GHz</string>
@@ -187,4 +189,5 @@
     <string name="state_connection_failed">Connection Failed</string>
 
     <string name="version">ProvVer: %d</string>
+    <string name="select_wifi">Select Wi-Fi</string>
 </resources>

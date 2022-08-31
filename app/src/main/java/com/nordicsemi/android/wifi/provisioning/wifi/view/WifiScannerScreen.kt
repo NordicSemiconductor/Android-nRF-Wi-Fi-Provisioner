@@ -1,6 +1,7 @@
 package com.nordicsemi.android.wifi.provisioning.wifi.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,30 +15,31 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.BackIconAppBar
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
+import com.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import com.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import com.nordicsemi.android.wifi.provisioning.wifi.viewmodel.WifiScannerViewModel
-import com.nordicsemi.wifi.provisioner.library.domain.AuthModeDomain
-import com.nordicsemi.wifi.provisioner.library.domain.BandDomain
 import com.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import com.nordicsemi.wifi.provisioner.library.domain.WifiInfoDomain
-import no.nordicsemi.android.common.theme.view.RssiIcon
+import no.nordicsemi.android.common.theme.view.getWiFiRes
 
 @Composable
 internal fun WifiScannerScreen() {
@@ -92,14 +94,28 @@ private fun WifiList(viewEntity: WifiScannerViewEntity, onEvent: (WifiScannerVie
         contentPadding = PaddingValues(8.dp)
     ) {
         viewEntity.items.forEach {
-            item { WifiItem(scanRecord = it, onEvent = onEvent) }
+            item { WifiItem(records = it, onEvent = onEvent) }
         }
     }
 }
 
 @Composable
-private fun WifiItem(scanRecord: ScanRecordDomain, onEvent: (WifiScannerViewEvent) -> Unit) {
+private fun WifiItem(records: ScanRecordsSameSsid, onEvent: (WifiScannerViewEvent) -> Unit) {
+    val selectedScanRecord = remember { mutableStateOf<ScanRecordDomain?>(null) }
+    val scanRecord = selectedScanRecord.value ?: records.items.first()
     val wifi = scanRecord.wifiInfo
+
+    val showSelectChannelDialog = rememberSaveable { mutableStateOf(false) }
+
+    if (showSelectChannelDialog.value) {
+        SelectChannelDialog(
+            records = records,
+            onDismiss = { showSelectChannelDialog.value = false }
+        ) {
+            selectedScanRecord.value = it
+            showSelectChannelDialog.value = false
+        }
+    }
 
     Row(
         modifier = Modifier
@@ -136,7 +152,11 @@ private fun WifiItem(scanRecord: ScanRecordDomain, onEvent: (WifiScannerViewEven
 
             if (wifi.band != null) {
                 Text(
-                    text = stringResource(id = R.string.band_and_channel, wifi.band!!, wifi.channel.toString()),
+                    text = stringResource(
+                        id = R.string.band_and_channel,
+                        wifi.band!!.toDisplayString(),
+                        wifi.channel.toString()
+                    ),
                     style = MaterialTheme.typography.bodySmall
                 )
             } else {
@@ -147,29 +167,30 @@ private fun WifiItem(scanRecord: ScanRecordDomain, onEvent: (WifiScannerViewEven
             }
         }
 
-        scanRecord.rssi?.let { RssiIcon(rssi = it) }
-    }
-}
+        scanRecord.rssi?.let {
+            if (records.items.size <= 1) {
+                Icon(
+                    getWiFiRes(it),
+                    contentDescription = "",
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+            } else {
+                Row(modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable { showSelectChannelDialog.value = true }
+                    .border(
+                        1.dp,
+                        MaterialTheme.colorScheme.onSurface,
+                        RoundedCornerShape(10.dp)
+                    )
+                    .padding(9.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(getWiFiRes(it), contentDescription = "")
 
-@Preview
-@Composable
-private fun WifiItemPreview() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-    ) {
-        WifiItem(
-            ScanRecordDomain(
-                23,
-                WifiInfoDomain(
-                    "Dobre wifi",
-                    "00:00:5e:00:53:af",
-                    BandDomain.BAND_2_4_GH,
-                    2,
-                    AuthModeDomain.OPEN
-                ),
-            )
-        ) { }
+                    Icon(Icons.Default.ArrowDropDown, contentDescription = "")
+                }
+            }
+        }
     }
 }
