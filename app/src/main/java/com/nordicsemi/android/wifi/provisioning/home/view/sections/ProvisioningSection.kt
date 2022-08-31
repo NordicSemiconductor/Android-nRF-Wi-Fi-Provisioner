@@ -60,7 +60,7 @@ internal fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
 
     when (status) {
         is Error -> ProvisioningSection(WifiConnectionStateDomain.CONNECTION_FAILED, lastStatus.value, status.error.message)
-        is Loading -> LoadingItem()
+        is Loading -> LoadingItem(modifier = Modifier.padding(vertical = 8.dp))
         is Success -> ProvisioningSection(status.data, lastStatus.value)
     }
 

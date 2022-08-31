@@ -46,6 +46,7 @@ data class HomeViewEntity(
     val status: Resource<DeviceStatusDomain>? = null,
     val network: ScanRecordDomain? = null,
     val password: String? = null,
+    val persistentMemory: Boolean = true,
     val showPasswordDialog: Boolean? = null,
     val provisioningStatus: Resource<WifiConnectionStateDomain>? = null,
     val unprovisioningStatus: Resource<Unit>? = null,

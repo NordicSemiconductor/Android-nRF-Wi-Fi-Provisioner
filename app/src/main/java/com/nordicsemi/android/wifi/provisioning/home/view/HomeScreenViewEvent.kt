@@ -21,3 +21,5 @@ object OnProvisionClickEvent : HomeScreenViewEvent
 object OpenLoggerEvent : HomeScreenViewEvent
 
 object OnUnprovisionEvent : HomeScreenViewEvent
+
+object OnVolatileMemoryChangedEvent : HomeScreenViewEvent

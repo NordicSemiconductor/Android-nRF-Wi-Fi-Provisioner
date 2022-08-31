@@ -58,6 +58,7 @@ import com.nordicsemi.android.wifi.provisioning.home.view.sections.ProvisioningS
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.StatusSection
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.UnprovisioningSection
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.VersionSection
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.VolatileMemorySwitch
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.WifiSection
 import com.nordicsemi.android.wifi.provisioning.home.viewmodel.HomeViewModel
 import com.nordicsemi.android.wifi.provisioning.password.PasswordDialog
@@ -131,27 +132,31 @@ private fun Content(state: HomeViewEntity, onEvent: (HomeScreenViewEvent) -> Uni
             }
 
             state.password?.let {
-                Spacer(modifier = Modifier.size(12.dp))
+                Spacer(modifier = Modifier.size(10.dp))
 
                 PasswordSection(!state.isRunning(), onEvent)
             }
 
-            state.provisioningStatus?.let {
-                Spacer(modifier = Modifier.size(12.dp))
+            state.network?.let {
+                VolatileMemorySwitch(
+                    volatileMemory = state.persistentMemory,
+                    enabled = !state.isRunning(),
+                    onEvent = onEvent
+                )
+            }
 
+            state.provisioningStatus?.let {
                 SectionTitle(text = stringResource(id = R.string.section_status))
 
-                Spacer(modifier = Modifier.size(12.dp))
+                Spacer(modifier = Modifier.size(8.dp))
 
                 ProvisioningSection(it)
             }
 
             state.unprovisioningStatus?.let {
-                Spacer(modifier = Modifier.size(12.dp))
-
                 SectionTitle(text = stringResource(id = R.string.section_status))
 
-                Spacer(modifier = Modifier.size(12.dp))
+                Spacer(modifier = Modifier.size(8.dp))
 
                 UnprovisioningSection(it)
             }

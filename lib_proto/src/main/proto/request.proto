@@ -10,7 +10,9 @@ option java_package = "no.nordicsemi.android.wifi.provisioning";
 /* Wi-Fi provisioning configuration for SET_CONFIG request. */
 message WifiConfig {
   optional WifiInfo wifi          = 1;
-  optional bytes passphrase       = 2;
+  optional bytes passphrase       = 2; // Default: empty string
+  // Should the Wi-Fi config be kept only in RAM and be removed after device reboot.
+  optional bool volatile          = 3; // Default: false
 }
 
 /* The request type, sent to the device. */

@@ -18,8 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoadingItem() {
-    Row(modifier = Modifier
+fun LoadingItem(modifier: Modifier = Modifier) {
+    Row(modifier = modifier
         .padding(horizontal = 8.dp)
     ) {
         Box(

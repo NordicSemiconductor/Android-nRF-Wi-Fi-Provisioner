@@ -1,7 +1,10 @@
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
 import com.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
@@ -15,7 +18,7 @@ import com.nordicsemi.wifi.provisioner.library.Success
 internal fun UnprovisioningSection(status: Resource<Unit>) {
     when (status) {
         is Error -> ErrorItem(status.error)
-        is Loading -> LoadingItem()
+        is Loading -> LoadingItem(modifier = Modifier.padding(vertical = 8.dp))
         is Success -> ProvisioningSection()
     }
 }

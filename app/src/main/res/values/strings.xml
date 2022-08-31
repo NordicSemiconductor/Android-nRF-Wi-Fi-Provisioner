@@ -190,4 +190,6 @@
 
     <string name="version">ProvVer: %d</string>
     <string name="select_wifi">Select Wi-Fi</string>
+
+    <string name="persistent_storage">Persistent storage</string>
 </resources>

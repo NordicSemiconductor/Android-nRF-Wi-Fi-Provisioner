@@ -46,6 +46,7 @@ import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectDeviceClickEve
 import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectWifiEvent
 import com.nordicsemi.android.wifi.provisioning.home.view.OnShowPasswordDialog
 import com.nordicsemi.android.wifi.provisioning.home.view.OnUnprovisionEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.OnVolatileMemoryChangedEvent
 import com.nordicsemi.android.wifi.provisioning.home.view.OpenLoggerEvent
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
@@ -117,7 +118,12 @@ class HomeViewModel @Inject constructor(
             OpenLoggerEvent -> repository.openLogger()
             OnUnprovisionEvent -> cancelConfig()
             OnProvisionNextDeviceEvent -> provisionNextDevice()
+            OnVolatileMemoryChangedEvent -> onVolatileMemoryChangeEvent()
         }
+    }
+
+    private fun onVolatileMemoryChangeEvent() {
+        _state.value = _state.value.copy(persistentMemory = _state.value.persistentMemory.not())
     }
 
     private fun provisionNextDevice() {
@@ -222,7 +228,7 @@ class HomeViewModel @Inject constructor(
 
     private fun provision() {
         val state = _state.value
-        val config = WifiConfigDomain(state.network!!.wifiInfo, state.password)
+        val config = WifiConfigDomain(state.network!!.wifiInfo, state.password, !state.persistentMemory)
         repository.setConfig(config)
             .cancellable()
             .onEach {
