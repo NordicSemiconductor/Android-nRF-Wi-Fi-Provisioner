@@ -78,6 +78,7 @@ fun HomeScreen() {
                 viewModel.onEvent(OpenLoggerEvent)
             }
         },
+        containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { ActionButtonSection(state, onEvent) }
     ) {
         Box(modifier = Modifier.padding(it)) {
