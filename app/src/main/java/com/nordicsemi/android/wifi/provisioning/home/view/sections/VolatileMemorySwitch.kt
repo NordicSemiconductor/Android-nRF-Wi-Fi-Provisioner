@@ -33,7 +33,6 @@ fun VolatileMemorySwitch(
         Icon(
             painter = painterResource(id = R.drawable.ic_storage),
             contentDescription = stringResource(id = R.string.cd_data_item_icon),
-            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         Spacer(modifier = Modifier.size(16.dp))

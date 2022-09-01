@@ -76,7 +76,6 @@ fun ErrorDataItem(
         Icon(
             painter = painterResource(id = iconRes),
             contentDescription = stringResource(id = R.string.cd_data_item_icon),
-            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         Spacer(modifier = Modifier.size(16.dp))
@@ -194,8 +193,7 @@ private fun DataItem(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = iconRes),
-            contentDescription = stringResource(id = R.string.cd_data_item_icon),
-            modifier = Modifier.padding(horizontal = 16.dp)
+            contentDescription = stringResource(id = R.string.cd_data_item_icon)
         )
 
         Spacer(modifier = Modifier.size(16.dp))

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Filter
+import androidx.compose.material.icons.filled.SignalWifiOff
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,7 +26,7 @@ internal fun FilterView(allDevices: Boolean, onChange: () -> Unit) {
             if (!allDevices) {
                 Icon(Icons.Default.Done, contentDescription = "")
             } else {
-                Icon(Icons.Default.Filter, contentDescription = "")
+                Icon(Icons.Default.SignalWifiOff, contentDescription = "")
             }
         },
     )
