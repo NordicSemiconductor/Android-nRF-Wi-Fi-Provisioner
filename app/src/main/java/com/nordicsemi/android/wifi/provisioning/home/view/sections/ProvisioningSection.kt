@@ -87,7 +87,7 @@ private fun ProvisioningSection(
         description = status.toDisplayString(),
         isInitiallyExpanded = true
     ) {
-        Box(modifier = Modifier.padding(start = 16.dp, top = 16.dp)) {
+        Box(modifier = Modifier.padding(top = 16.dp)) {
             ProgressList(status, lastStatus, errorMessage)
         }
     }

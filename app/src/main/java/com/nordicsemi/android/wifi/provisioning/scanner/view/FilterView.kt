@@ -3,7 +3,6 @@ package com.nordicsemi.android.wifi.provisioning.scanner.view
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Filter
 import androidx.compose.material.icons.filled.SignalWifiOff
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
