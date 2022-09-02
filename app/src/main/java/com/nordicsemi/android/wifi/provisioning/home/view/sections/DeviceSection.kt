@@ -36,12 +36,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -137,14 +135,5 @@ private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.labelMedium
         )
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Button(
-            modifier = Modifier.defaultMinSize(minWidth = 100.dp),
-            onClick = { onEvent(OnSelectDeviceClickEvent) }
-        ) {
-            Text(text = stringResource(id = R.string.start))
-        }
     }
 }

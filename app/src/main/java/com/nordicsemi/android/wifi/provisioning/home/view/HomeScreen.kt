@@ -34,6 +34,7 @@ package com.nordicsemi.android.wifi.provisioning.home.view
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -44,12 +45,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.components.LoggerIconAppBar
+import com.nordicsemi.android.wifi.provisioning.home.view.sections.ACTION_BUTTON_PADDING
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.ActionButtonSection
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.DeviceSection
 import com.nordicsemi.android.wifi.provisioning.home.view.sections.DisconnectedDeviceStatus
@@ -79,9 +82,9 @@ fun HomeScreen() {
             }
         },
         containerColor = MaterialTheme.colorScheme.surface,
-        floatingActionButton = { ActionButtonSection(state, onEvent) }
+        bottomBar = { ActionButtonSection(state, onEvent) }
     ) {
-        Box(modifier = Modifier.padding(it)) {
+        Column(modifier = Modifier.padding(it)) {
             Content(state) { viewModel.onEvent(it) }
         }
     }

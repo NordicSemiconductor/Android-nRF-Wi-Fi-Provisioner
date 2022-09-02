@@ -65,7 +65,7 @@ data class HomeViewEntity(
     }
 
     fun isRunning(): Boolean {
-        return version == null || version is Loading || status is Loading || provisioningStatus is Loading || unprovisioningStatus is Loading
+        return device != null && version == null || version is Loading || status is Loading || provisioningStatus is Loading || unprovisioningStatus is Loading
     }
 
     fun hasFinished(): Boolean {

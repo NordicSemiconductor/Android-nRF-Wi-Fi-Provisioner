@@ -31,17 +31,20 @@
 
 package com.nordicsemi.android.wifi.provisioning.home.view.sections
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Start
 import androidx.compose.material.icons.filled.Wifi
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -64,44 +67,56 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
     if (viewEntity.isRunning()) {
         return
     }
-    if (viewEntity.hasFinishedWithSuccess()) {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnProvisionNextDeviceEvent) }) {
-            FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.next_device))
+    if (viewEntity.device == null) {
+        ActionButton(Icons.Default.Start, stringResource(id = R.string.start)) {
+            onEvent(OnProvisionNextDeviceEvent)
+        }
+    } else if (viewEntity.hasFinishedWithSuccess()) {
+        ActionButton(Icons.Default.Bluetooth, stringResource(id = R.string.next_device)) {
+            onEvent(OnProvisionNextDeviceEvent)
         }
     } else if (viewEntity.hasFinished()) {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnFinishedEvent) }) {
-            FabContent(Icons.Default.Clear, stringResource(id = R.string.finish))
+        ActionButton(Icons.Default.Clear, stringResource(id = R.string.finish)) {
+            onEvent(OnFinishedEvent)
         }
     } else if (!viewEntity.isStatusSuccess()) {
-//        ExtendedFloatingActionButton(onClick = { onEvent(OnSelectDeviceClickEvent) }) {
-//            FabContent(Icons.Default.Bluetooth, stringResource(id = R.string.select_device))
-//        }
-    }  else if (viewEntity.isUnprovisioning()) {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnUnprovisionEvent) }) {
-            FabContent(Icons.Default.Wifi, stringResource(id = R.string.unprovision))
+        //I think it's here to prevent entering somewhere else.
+    } else if (viewEntity.isUnprovisioning()) {
+        ActionButton(Icons.Default.Wifi, stringResource(id = R.string.unprovision)) {
+            onEvent(OnUnprovisionEvent)
         }
     } else if (viewEntity.isStatusSuccess() && viewEntity.network == null) {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnSelectWifiEvent) }) {
-            FabContent(Icons.Default.Wifi, stringResource(id = R.string.wifi_select))
+        ActionButton(Icons.Default.Wifi, stringResource(id = R.string.wifi_select)) {
+            onEvent(OnSelectWifiEvent)
         }
     } else if (viewEntity.network!!.isPasswordRequired() && viewEntity.password == null) {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnShowPasswordDialog) }) {
-            FabContent(Icons.Default.Password, stringResource(id = R.string.password_select))
+        ActionButton(Icons.Default.Password, stringResource(id = R.string.password_select)) {
+            onEvent(OnShowPasswordDialog)
         }
     } else {
-        ExtendedFloatingActionButton(onClick = { onEvent(OnProvisionClickEvent) }) {
-            FabContent(Icons.Default.PlayArrow, stringResource(id = R.string.provision))
+        ActionButton(Icons.Default.PlayArrow, stringResource(id = R.string.provision)) {
+            onEvent(OnProvisionClickEvent)
         }
     }
 }
 
 @Composable
-private fun FabContent(imageVector: ImageVector, text: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(imageVector = imageVector, contentDescription = text)
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Text(text = text)
+private fun ActionButton(imageVector: ImageVector, text: String, onClick: () -> Unit) {
+    BottomAppBar(modifier = Modifier.heightIn(max = 56.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 4.dp)
+        ) {
+            Button(
+                onClick = onClick,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .widthIn(min = 100.dp)
+            ) {
+                Text(text = text)
+            }
+        }
     }
 }
