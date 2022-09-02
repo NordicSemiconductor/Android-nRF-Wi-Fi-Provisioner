@@ -123,7 +123,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onVolatileMemoryChangeEvent() {
-        _state.value = _state.value.copy(persistentMemory = _state.value.persistentMemory.not())
+        _state.value = _state.value.copy(
+            persistentMemory = _state.value.persistentMemory.not(),
+            provisioningStatus = null
+        )
     }
 
     private fun provisionNextDevice() {
