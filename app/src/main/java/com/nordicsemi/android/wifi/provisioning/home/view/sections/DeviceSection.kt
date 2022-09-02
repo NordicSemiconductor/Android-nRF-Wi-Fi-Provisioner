@@ -34,16 +34,13 @@ package com.nordicsemi.android.wifi.provisioning.home.view.sections
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +52,8 @@ import androidx.compose.ui.unit.dp
 import com.nordicsemi.android.wifi.provisioning.BuildConfig
 import com.nordicsemi.android.wifi.provisioning.R
 import com.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
-import com.nordicsemi.android.wifi.provisioning.home.view.OnSelectDeviceClickEvent
+import com.nordicsemi.android.wifi.provisioning.home.view.OnShowPasswordDialog
+import com.nordicsemi.android.wifi.provisioning.home.view.components.ClickableDataItem
 import no.nordicsemi.android.common.theme.view.NordicText
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 
@@ -66,7 +64,7 @@ internal fun DeviceSection(
     onEvent: (HomeScreenViewEvent) -> Unit
 ) {
     if (device == null) {
-        DeviceNotSelectedSection(onEvent)
+        DeviceNotSelectedSection()
     } else {
         BluetoothDevice(device, isEditable, onEvent)
     }
@@ -78,34 +76,18 @@ private fun BluetoothDevice(
     isEditable: Boolean = false,
     onEvent: (HomeScreenViewEvent) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+    ClickableDataItem(
+        iconRes = R.drawable.ic_phone_ok,
+        title = device.displayNameOrAddress,
+        isEditable = isEditable,
+        description = device.address
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_phone_ok),
-            contentDescription = stringResource(id = R.string.cd_device_selected),
-        )
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Text(
-            text = device.displayNameOrAddress,
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodyLarge
-        )
-
-        TextButton(
-            onClick = { onEvent(OnSelectDeviceClickEvent) },
-            enabled = isEditable
-        ) {
-            Text(text = stringResource(id = R.string.change_device))
-        }
+        onEvent(OnShowPasswordDialog)
     }
 }
 
 @Composable
-private fun DeviceNotSelectedSection(onEvent: (HomeScreenViewEvent) -> Unit) {
+private fun DeviceNotSelectedSection() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(id = R.drawable.ic_nrf70),
