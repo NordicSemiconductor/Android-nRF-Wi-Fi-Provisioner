@@ -49,8 +49,8 @@ fun ProvisionerScannerAppBar(
             }
         },
         actions = {
-            FilterView(allDevices = allDevicesFilter, onChange = onFilterChange)
             if (showProgress) {
+                FilterView(allDevices = allDevicesFilter, onChange = onFilterChange)
                 CircularProgressIndicator(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)

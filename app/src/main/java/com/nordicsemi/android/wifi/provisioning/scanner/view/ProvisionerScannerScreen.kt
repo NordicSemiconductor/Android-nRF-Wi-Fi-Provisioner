@@ -31,9 +31,11 @@
 
 package com.nordicsemi.android.wifi.provisioning.scanner.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +43,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -48,65 +52,74 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nordicsemi.android.wifi.provisioning.scanner.ProvisioningSection
 import com.nordicsemi.android.wifi.provisioning.scanner.provisioningData
 import com.nordicsemi.android.wifi.provisioning.scanner.viewmodel.ProvisionerViewModel
-import no.nordicsemi.android.common.ui.scanner.ScannerResultCancel
-import no.nordicsemi.android.common.ui.scanner.ScannerResultSuccess
+import no.nordicsemi.android.common.permission.RequireBluetooth
+import no.nordicsemi.android.common.permission.RequireInternet
+import no.nordicsemi.android.common.ui.scanner.DeviceSelected
 import no.nordicsemi.android.common.ui.scanner.ScannerScreenResult
+import no.nordicsemi.android.common.ui.scanner.ScanningCancelled
 import no.nordicsemi.android.common.ui.scanner.main.DeviceListItem
-import no.nordicsemi.android.common.ui.scanner.main.DevicesListItems
+import no.nordicsemi.android.common.ui.scanner.main.DeviceListItems
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 import no.nordicsemi.android.common.ui.scanner.repository.ScanningState
 import no.nordicsemi.android.common.ui.scanner.R as scannerR
 
 @Composable
 fun ProvisionerScannerScreen(
-    isLocationPermissionRequired: Boolean,
-    onResult: (ScannerScreenResult) -> Unit,
-    onDevicesDiscovered: () -> Unit
+    onResult: (ScannerScreenResult) -> Unit
 ) {
-    val viewModel = hiltViewModel<ProvisionerViewModel>()
-
-    val result = viewModel.devices.collectAsState().value
-    val allDevices = viewModel.allDevices.collectAsState().value
-
-    LaunchedEffect(result) {
-        (result as? ScanningState.DevicesDiscovered)?.let {
-            if (!it.isEmpty()) {
-                onDevicesDiscovered()
-            }
-        }
-    }
+    val isLoading = rememberSaveable { mutableStateOf(false) }
+    val allDevices = rememberSaveable { mutableStateOf(false) }
 
     Column {
         ProvisionerScannerAppBar(
             stringResource(id = scannerR.string.scanner_screen),
-            result.isRunning(),
-            allDevices,
-            { viewModel.switchFilter() }) {
-            onResult(ScannerResultCancel)
+            isLoading.value,
+            allDevices.value,
+            { allDevices.value = !allDevices.value }) {
+            onResult(ScanningCancelled)
         }
 
-        LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
-            item { Spacer(modifier = Modifier.size(16.dp)) }
+        RequireBluetooth { isLocationPermissionRequired ->
+            RequireInternet {
+                Box(modifier = Modifier.fillMaxSize()) {
 
-            when (result) {
-                is ScanningState.Loading -> item {
-                    ProvisionerScanEmptyView(
-                        isLocationPermissionRequired
-                    )
-                }
-                is ScanningState.DevicesDiscovered -> {
-                    if (result.isEmpty()) {
-                        item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
-                    } else {
-                        DevicesListItems(result, { onResult(ScannerResultSuccess(it)) }) {
-                            ProvisionerExtrasSection(it)
+                    val viewModel = hiltViewModel<ProvisionerViewModel>()
+
+                    val result = viewModel.devices.collectAsState().value
+
+                    LaunchedEffect(result.isRunning()) {
+                        isLoading.value = result.isRunning()
+                    }
+
+                    LaunchedEffect(allDevices.value) {
+                        viewModel.switchFilter()
+                    }
+
+                    LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
+                        item { Spacer(modifier = Modifier.size(16.dp)) }
+
+                        when (result) {
+                            is ScanningState.Loading -> item {
+                                ProvisionerScanEmptyView(
+                                    isLocationPermissionRequired
+                                )
+                            }
+                            is ScanningState.DevicesDiscovered -> {
+                                if (result.isEmpty()) {
+                                    item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
+                                } else {
+                                    DeviceListItems(result, { onResult(DeviceSelected(it)) }) {
+                                        ProvisionerExtrasSection(it)
+                                    }
+                                }
+                            }
+                            is ScanningState.Error -> item { ErrorSection() }
                         }
+
+                        item { Spacer(modifier = Modifier.size(16.dp)) }
                     }
                 }
-                is ScanningState.Error -> item { ErrorSection() }
             }
-
-            item { Spacer(modifier = Modifier.size(16.dp)) }
         }
     }
 }
