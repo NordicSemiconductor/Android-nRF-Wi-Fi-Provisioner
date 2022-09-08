@@ -9,7 +9,7 @@ wire {
 }
 
 android {
-    namespace 'com.nordicsemi.wifi.provisioner.proto'
+    namespace 'no.nordicsemi.wifi.provisioner.proto'
     compileSdk 33
 
     defaultConfig {

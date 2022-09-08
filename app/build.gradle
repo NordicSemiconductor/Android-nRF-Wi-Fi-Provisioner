@@ -9,11 +9,11 @@ apply from: rootProject.file("gradle/git-tag-version.gradle")
 android {
     ext.compose_version = '1.3.0-rc01'
 
-    namespace 'com.nordicsemi.android.wifi.provisioning'
+    namespace 'no.nordicsemi.android.wifi.provisioning'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.nordicsemi.android.wifi.provisioning"
+        applicationId "no.nordicsemi.android.wifi.provisioning"
         minSdk 23
         targetSdk 33
         versionCode getVersionCodeFromTags()

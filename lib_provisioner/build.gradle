@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.nordicsemi.wifi.provisioner.library'
+    namespace 'no.nordicsemi.wifi.provisioner.library'
     compileSdk 33
 
     defaultConfig {
