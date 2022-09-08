@@ -295,7 +295,7 @@ internal class ProvisionerBleManager(
         }
     }
 
-    private fun createResponseError() = IllegalArgumentException("Response should be success")
+    private fun createResponseError() = IllegalArgumentException("Received error response")
 
     override fun getGattCallback(): BleManagerGattCallback {
         return ProvisioningManagerGattCallback()

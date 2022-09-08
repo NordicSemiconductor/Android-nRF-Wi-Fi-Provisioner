@@ -49,13 +49,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.common.theme.view.NordicText
+import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 import no.nordicsemi.android.wifi.provisioning.BuildConfig
 import no.nordicsemi.android.wifi.provisioning.R
 import no.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OnShowPasswordDialog
+import no.nordicsemi.android.wifi.provisioning.home.view.OnSelectDeviceClickEvent
 import no.nordicsemi.android.wifi.provisioning.home.view.components.ClickableDataItem
-import no.nordicsemi.android.common.theme.view.NordicText
-import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 
 @Composable
 internal fun DeviceSection(
@@ -82,7 +82,7 @@ private fun BluetoothDevice(
         isEditable = isEditable,
         description = device.address
     ) {
-        onEvent(OnShowPasswordDialog)
+        onEvent(OnSelectDeviceClickEvent)
     }
 }
 
