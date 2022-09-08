@@ -86,7 +86,7 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
             onEvent(OnUnprovisionEvent)
         }
     } else if (viewEntity.isStatusSuccess() && viewEntity.network == null) {
-        ActionButton(Icons.Default.Wifi, stringResource(id = R.string.wifi_select)) {
+        ActionButton(Icons.Default.Wifi, stringResource(id = R.string.start_provisioning)) {
             onEvent(OnSelectWifiEvent)
         }
     } else if (viewEntity.network!!.isPasswordRequired() && viewEntity.password == null) {

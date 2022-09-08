@@ -50,7 +50,7 @@ internal fun WifiSection(
     Column {
         ClickableDataItem(
             iconRes = record.wifiInfo.authModeDomain.toIcon(),
-            title = stringResource(id = R.string.start_provisioning),
+            title = stringResource(id = R.string.selected_wifi),
             isEditable = isEditable,
             description = getDescription(record)
         ) {
