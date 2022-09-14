@@ -80,44 +80,42 @@ fun ProvisionerScannerScreen(
         }
 
         RequireBluetooth { isLocationPermissionRequired ->
-            RequireInternet {
-                Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxSize()) {
 
-                    val viewModel = hiltViewModel<ProvisionerViewModel>()
+                val viewModel = hiltViewModel<ProvisionerViewModel>()
 
-                    val result = viewModel.devices.collectAsState().value
+                val result = viewModel.devices.collectAsState().value
 
-                    LaunchedEffect(result.isRunning()) {
-                        isLoading.value = result.isRunning()
-                    }
+                LaunchedEffect(result.isRunning()) {
+                    isLoading.value = result.isRunning()
+                }
 
-                    LaunchedEffect(allDevices.value) {
-                        viewModel.switchFilter()
-                    }
+                LaunchedEffect(allDevices.value) {
+                    viewModel.switchFilter()
+                }
 
-                    LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
-                        item { Spacer(modifier = Modifier.size(16.dp)) }
+                LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
+                    item { Spacer(modifier = Modifier.size(16.dp)) }
 
-                        when (result) {
-                            is ScanningState.Loading -> item {
-                                ProvisionerScanEmptyView(
-                                    isLocationPermissionRequired
-                                )
-                            }
-                            is ScanningState.DevicesDiscovered -> {
-                                if (result.isEmpty()) {
-                                    item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
-                                } else {
-                                    DeviceListItems(result, { onResult(DeviceSelected(it)) }) {
-                                        ProvisionerExtrasSection(it)
-                                    }
+                    when (result) {
+                        is ScanningState.Loading -> item {
+                            ProvisionerScanEmptyView(
+                                isLocationPermissionRequired
+                            )
+                        }
+                        is ScanningState.DevicesDiscovered -> {
+                            if (result.isEmpty()) {
+                                item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
+                            } else {
+                                DeviceListItems(result, { onResult(DeviceSelected(it)) }) {
+                                    ProvisionerExtrasSection(it)
                                 }
                             }
-                            is ScanningState.Error -> item { ErrorSection() }
                         }
-
-                        item { Spacer(modifier = Modifier.size(16.dp)) }
+                        is ScanningState.Error -> item { ErrorSection() }
                     }
+
+                    item { Spacer(modifier = Modifier.size(16.dp)) }
                 }
             }
         }
