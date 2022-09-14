@@ -87,7 +87,7 @@ private fun StatusSection(status: DeviceStatusDomain) {
         title = stringResource(id = R.string.status_info),
         description = status.wifiState.toDisplayString()
     ) {
-        Column(modifier = Modifier.padding(start = 32.dp, end = 32.dp, top = 16.dp)) {
+        Column(modifier = Modifier.padding(start = 32.dp + 8.dp, end = 16.dp, top = 16.dp)) {
 
             status.wifiInfo?.let {
                 Text(
@@ -99,7 +99,7 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = stringResource(id = R.string.status_bssid, it.bssid),
+                    text = stringResource(id = R.string.status_bssid, it.macAddress),
                     style = MaterialTheme.typography.bodySmall
                 )
                 it.band?.toDisplayString()?.let {
@@ -147,11 +147,17 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = stringResource(id = R.string.scan_param_period_ms, it.periodMs.toString()),
+                    text = stringResource(
+                        id = R.string.scan_param_period_ms,
+                        it.periodMs.toString()
+                    ),
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = stringResource(id = R.string.scan_param_group_channels, it.groupChannels.toString()),
+                    text = stringResource(
+                        id = R.string.scan_param_group_channels,
+                        it.groupChannels.toString()
+                    ),
                     style = MaterialTheme.typography.bodySmall
                 )
             }

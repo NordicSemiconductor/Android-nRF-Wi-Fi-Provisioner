@@ -143,9 +143,9 @@ private fun WifiItem(records: ScanRecordsSameSsid, onEvent: (WifiScannerViewEven
                 text = wifi.ssid, style = MaterialTheme.typography.labelLarge
             )
 
-            if (wifi.bssid.isNotEmpty()) {
+            if (wifi.macAddress.isNotEmpty()) {
                 Text(
-                    text = stringResource(id = R.string.bssid, wifi.bssid),
+                    text = stringResource(id = R.string.bssid, wifi.macAddress),
                     style = MaterialTheme.typography.bodySmall
                 )
             }

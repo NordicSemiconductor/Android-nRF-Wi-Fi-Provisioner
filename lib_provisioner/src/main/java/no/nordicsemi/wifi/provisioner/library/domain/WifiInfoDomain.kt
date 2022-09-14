@@ -31,10 +31,20 @@
 
 package no.nordicsemi.wifi.provisioner.library.domain
 
+import okio.ByteString
+
 data class WifiInfoDomain(
     val ssid: String,
-    val bssid: String,
+    internal val bssid: ByteString,
     val band: BandDomain?,
     val channel: Int,
     val authModeDomain: AuthModeDomain?
-)
+) {
+
+    val macAddress: String
+        get() {
+            return bssid.toByteArray().joinToString(":") {
+                "%02x".format(it).uppercase()
+            }
+        }
+}

@@ -66,9 +66,9 @@ private fun ChannelListItem(record: ScanRecordDomain, onRecordSelected: (ScanRec
                 style = MaterialTheme.typography.labelLarge
             )
 
-            if (wifi.bssid.isNotEmpty()) {
+            if (wifi.macAddress.isNotEmpty()) {
                 Text(
-                    text = stringResource(id = R.string.bssid, wifi.bssid),
+                    text = stringResource(id = R.string.bssid, wifi.macAddress),
                     style = MaterialTheme.typography.bodySmall
                 )
             }

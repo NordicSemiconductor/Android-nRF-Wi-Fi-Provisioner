@@ -46,6 +46,7 @@ import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okio.ByteString.Companion.toByteString
 
 private const val DELAY_TIME = 1000L
 
@@ -167,5 +168,11 @@ class TestProvisionerRepository : ProvisionerRepository {
         )
     }
 
-    private fun createWifiInfo(rssi: Int) = WifiInfoDomain("Good Wifi", "bssid", BandDomain.BAND_2_4_GH, 1, AuthModeDomain.WEP)
+    private fun createWifiInfo(rssi: Int) = WifiInfoDomain(
+        "Good Wifi",
+        byteArrayOf(1, 2, 3, 4, 5, 6).toByteString(),
+        BandDomain.BAND_2_4_GH,
+        1,
+        AuthModeDomain.WEP
+    )
 }

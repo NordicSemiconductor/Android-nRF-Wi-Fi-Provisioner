@@ -113,7 +113,7 @@ internal fun ConnectionFailureReason.toDomain(): WifiConnectionFailureReasonDoma
 internal fun WifiInfo.toDomain(): WifiInfoDomain {
     return WifiInfoDomain(
         ssid.utf8(),
-        bssid.toMac(),
+        bssid,
         band?.toDomain(),
         channel,
         auth?.toDomain()
@@ -128,11 +128,5 @@ internal fun ScanRecord.toDomain(): ScanRecordDomain {
 internal fun ByteString.toIp(): String {
     return toByteArray().joinToString(".") {
         it.toUByte().toString()
-    }
-}
-
-internal fun ByteString.toMac(): String {
-    return toByteArray().joinToString(":") {
-        "%02x".format(it).uppercase()
     }
 }
