@@ -89,12 +89,18 @@ private fun ErrorItem(error: Throwable) {
 
 @Composable
 private fun WifiList(viewEntity: WifiScannerViewEntity, onEvent: (WifiScannerViewEvent) -> Unit) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(8.dp)
-    ) {
-        viewEntity.items.forEach {
-            item { WifiItem(records = it, onEvent = onEvent) }
+    Column {
+        WifiSortView(viewEntity.sortOption) {
+            onEvent(OnSortOptionSelected(it))
+        }
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(8.dp)
+        ) {
+            viewEntity.sortedItems.forEach {
+                item { WifiItem(records = it, onEvent = onEvent) }
+            }
         }
     }
 }

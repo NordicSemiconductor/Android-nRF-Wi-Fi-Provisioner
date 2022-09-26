@@ -163,7 +163,7 @@
 
     <string name="connection_info">Connection info</string>
     <string name="status_title">Wi-Fi info</string>
-    <string name="status_ip_4">IpV4: %s</string>
+    <string name="status_ip_4">IPV4: %s</string>
     <string name="status_ssid">SSID: %s</string>
     <string name="status_bssid">BSSID: %s</string>
     <string name="status_band">Band: %s</string>
@@ -193,4 +193,8 @@
     <string name="select_wifi">Select Wi-Fi</string>
 
     <string name="persistent_storage">Persistent storage</string>
+
+    <string name="sorting_hint">Sort by:</string>
+    <string name="sorting_name">Name</string>
+    <string name="sorting_rssi">RSSI</string>
 </resources>
