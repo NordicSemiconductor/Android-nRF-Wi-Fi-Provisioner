@@ -71,7 +71,7 @@ private const val TIMEOUT_MILLIS = 60_000L
 
 internal class ProvisionerBleManager(
     context: Context,
-    private val logger: NordicLogger
+    val logger: NordicLogger
 ) : BleManager(context) {
 
     private var versionCharacteristic: BluetoothGattCharacteristic? = null
@@ -87,7 +87,7 @@ internal class ProvisionerBleManager(
     }
 
     fun openLogger() {
-        logger.openLogger()
+        NordicLogger.launch(context, logger)
     }
 
     override fun log(priority: Int, message: String) {

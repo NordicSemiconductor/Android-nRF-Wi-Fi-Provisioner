@@ -28,10 +28,10 @@ dependencies {
 
     implementation 'no.nordicsemi.android:ble-common:2.5.1'
     implementation 'no.nordicsemi.android:ble-ktx:2.5.1'
-    implementation 'no.nordicsemi.android.common:uilogger:1.0.13'
+    implementation 'no.nordicsemi.android.common:uilogger:1.0.24'
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

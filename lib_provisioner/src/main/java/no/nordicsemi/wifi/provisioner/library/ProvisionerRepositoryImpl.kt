@@ -48,12 +48,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import no.nordicsemi.android.common.logger.LoggerAppRunner
 import no.nordicsemi.android.common.logger.NordicLogger
 
 class ProvisionerRepositoryImpl internal constructor(
-    private val context: Context,
-    private val appRunner: LoggerAppRunner
+    private val context: Context
 ) : ProvisionerRepository {
 
     private var manager: ProvisionerBleManager? = null
@@ -115,7 +113,7 @@ class ProvisionerRepositoryImpl internal constructor(
     }
 
     override fun openLogger() {
-        manager?.openLogger() ?: appRunner.runLogger()
+        NordicLogger.launch(context, manager?.logger)
     }
 
     private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
@@ -133,7 +131,7 @@ internal object ProvisionerFactory {
     fun createTestRepository() = TestProvisionerRepository()
 
     fun createRepository(context: Context): ProvisionerRepositoryImpl {
-        return ProvisionerRepositoryImpl(context, LoggerAppRunner(context))
+        return ProvisionerRepositoryImpl(context)
     }
 
     fun createBleManager(context: Context, device: BluetoothDevice): ProvisionerBleManager {
@@ -141,6 +139,6 @@ internal object ProvisionerFactory {
     }
 
     private fun createNordicLogger(context: Context, address: String): NordicLogger {
-        return NordicLogger(context, LoggerAppRunner(context), "Wi-Fi", null, address)
+        return NordicLogger(context, "Wi-Fi", address, null)
     }
 }
