@@ -139,6 +139,7 @@
     <string name="wifi_status_association">Association</string>
     <string name="wifi_status_obtaining_ip">Obtaining IP</string>
     <string name="wifi_status_connected">Connected</string>
+    <string name="wifi_status_disconnected">Disconnected</string>
     <string name="wifi_status_unprovisioned">Unprovisioned</string>
     <string name="wifi_status_error">Error occured during provisioning.</string>
     <string name="cd_wifi_icon">Icon indicating wifi and it\'s authentication method.</string>

@@ -60,7 +60,7 @@ data class HomeViewEntity(
         return device != null
                 && version is Success
                 && status is Success
-                && status.data.wifiState == WifiConnectionStateDomain.CONNECTED
+                && status.data.isProvisioned
                 && unprovisioningStatus !is Success
     }
 

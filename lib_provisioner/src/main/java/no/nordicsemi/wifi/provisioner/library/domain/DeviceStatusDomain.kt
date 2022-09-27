@@ -39,4 +39,10 @@ data class DeviceStatusDomain(
 ) {
 
     fun isContentEmpty() = wifiInfo == null && scanParams == null
+
+    val isProvisioned: Boolean
+
+    init {
+        isProvisioned = wifiInfo != null
+    }
 }
