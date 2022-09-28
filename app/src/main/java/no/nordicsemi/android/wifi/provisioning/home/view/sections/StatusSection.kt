@@ -75,17 +75,17 @@ private fun ErrorSection(error: Throwable) {
 private fun StatusSection(status: DeviceStatusDomain) {
     if (status.isContentEmpty()) {
         DataItem(
-            iconRes = status.wifiState.toIcon(status.isProvisioned),
+            iconRes = status.wifiState.toIcon(),
             title = stringResource(id = R.string.status_info),
-            description = status.wifiState.toDisplayString(status.isProvisioned)
+            description = status.wifiState.toDisplayString()
         )
         return
     }
 
     DataItem(
-        iconRes = status.wifiState.toIcon(status.isProvisioned),
+        iconRes = status.wifiState.toIcon(),
         title = stringResource(id = R.string.status_info),
-        description = status.wifiState.toDisplayString(status.isProvisioned)
+        description = status.wifiState.toDisplayString()
     ) {
         Column(modifier = Modifier.padding(start = 32.dp + 8.dp, end = 16.dp, top = 16.dp)) {
 

@@ -60,7 +60,7 @@ data class HomeViewEntity(
         return device != null
                 && version is Success
                 && status is Success
-                && status.data.isProvisioned
+                && status.data.wifiInfo != null
                 && unprovisioningStatus !is Success
     }
 

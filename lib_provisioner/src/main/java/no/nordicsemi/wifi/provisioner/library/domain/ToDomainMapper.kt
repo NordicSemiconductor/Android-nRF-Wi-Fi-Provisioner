@@ -48,7 +48,7 @@ private const val TAG = "DOMAIN-MAPPER"
 internal fun DeviceStatus.toDomain(): DeviceStatusDomain {
     Log.d(TAG, "status: $this")
     return DeviceStatusDomain(
-        state?.toDomain() ?: WifiConnectionStateDomain.DISCONNECTED,
+        state?.toDomain(),
         provisioning_info?.toDomain(),
         connection_info?.toDomain(),
         scan_info?.toDomain()

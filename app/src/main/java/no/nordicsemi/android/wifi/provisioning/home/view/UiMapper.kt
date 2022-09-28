@@ -41,39 +41,20 @@ import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionFailureReason
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 
 @DrawableRes
-internal fun WifiConnectionStateDomain.toIcon(isProvisioned: Boolean): Int {
+internal fun WifiConnectionStateDomain?.toIcon(): Int {
     return when (this) {
-        WifiConnectionStateDomain.DISCONNECTED -> if (isProvisioned) {
-            R.drawable.ic_wifi_error
-        } else {
-            R.drawable.ic_no_wifi
-        }
+        WifiConnectionStateDomain.DISCONNECTED -> R.drawable.ic_wifi_error
         WifiConnectionStateDomain.AUTHENTICATION,
         WifiConnectionStateDomain.ASSOCIATION,
         WifiConnectionStateDomain.OBTAINING_IP -> R.drawable.ic_wifi_loading
         WifiConnectionStateDomain.CONNECTED -> R.drawable.ic_wifi_ok
         WifiConnectionStateDomain.CONNECTION_FAILED -> R.drawable.ic_wifi_error
+        null -> R.drawable.ic_no_wifi
     }
 }
 
 @Composable
-internal fun WifiConnectionStateDomain.toDisplayString(isProvisioned: Boolean): String {
-    return when (this) {
-        WifiConnectionStateDomain.DISCONNECTED -> if (isProvisioned) {
-            R.string.wifi_status_disconnected
-        } else {
-            R.string.wifi_status_unprovisioned
-        }
-        WifiConnectionStateDomain.AUTHENTICATION -> R.string.wifi_status_authentication
-        WifiConnectionStateDomain.ASSOCIATION -> R.string.wifi_status_association
-        WifiConnectionStateDomain.OBTAINING_IP -> R.string.wifi_status_obtaining_ip
-        WifiConnectionStateDomain.CONNECTED -> R.string.wifi_status_connected
-        WifiConnectionStateDomain.CONNECTION_FAILED -> R.string.wifi_status_error
-    }.let { stringResource(id = it) }
-}
-
-@Composable
-internal fun WifiConnectionStateDomain.toDisplayString(): String {
+internal fun WifiConnectionStateDomain?.toDisplayString(): String {
     return when (this) {
         WifiConnectionStateDomain.DISCONNECTED -> R.string.wifi_status_disconnected
         WifiConnectionStateDomain.AUTHENTICATION -> R.string.wifi_status_authentication
@@ -81,6 +62,7 @@ internal fun WifiConnectionStateDomain.toDisplayString(): String {
         WifiConnectionStateDomain.OBTAINING_IP -> R.string.wifi_status_obtaining_ip
         WifiConnectionStateDomain.CONNECTED -> R.string.wifi_status_connected
         WifiConnectionStateDomain.CONNECTION_FAILED -> R.string.wifi_status_error
+        null -> R.string.wifi_status_unprovisioned
     }.let { stringResource(id = it) }
 }
 

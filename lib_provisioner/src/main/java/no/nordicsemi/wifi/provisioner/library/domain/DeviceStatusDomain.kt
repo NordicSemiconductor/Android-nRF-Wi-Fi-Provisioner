@@ -32,17 +32,11 @@
 package no.nordicsemi.wifi.provisioner.library.domain
 
 data class DeviceStatusDomain(
-    val wifiState: WifiConnectionStateDomain,
+    val wifiState: WifiConnectionStateDomain?,
     val wifiInfo: WifiInfoDomain?,
     val connectionInfo: ConnectionInfoDomain?,
     val scanParams: ScanParamsDomain?
 ) {
 
     fun isContentEmpty() = wifiInfo == null && scanParams == null
-
-    val isProvisioned: Boolean
-
-    init {
-        isProvisioned = wifiInfo != null
-    }
 }
