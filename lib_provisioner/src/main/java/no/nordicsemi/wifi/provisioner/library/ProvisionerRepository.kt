@@ -42,32 +42,103 @@ import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Class responsible for establishing connection and maintaining communication with a nRF 7 device.
+ *
+ * It has several methods which allows for sending Wi-Fi credentials to an IoT device.
+ * The typical flow contains:
+ * 1. [start] - Connecting to the device.
+ * 2. [readVersion] & [getStatus] - Obtaining the device's version and status.
+ * 3. [startScan] - Send START_SCAN command to the device and obtain Wi-Fi list.
+ * 4. [stopScan] - After getting desired result the scanning should be stopped.
+ * 4. [setConfig] - After selecting Wi-Fi and providing password, a provisioning data should be send to the DK.
+ * 5. Observe connection status and eventually repeat step 4 if the password was wrong.
+ *
+ * The device can be unprovisioned if Status returns Wi-Fi info by calling [forgetConfig].
+ *
+ * The connection should be closed after the job is done by calling [release].
+ *
+ * @constructor [ProvisionerRepository.newInstance]
+ */
 interface ProvisionerRepository {
 
+    /**
+     * Connects to selected device.
+     *
+     * @param device[BluetoothDevice] to which the app should connect
+     * @return [Flow] which emits connectivity status changes
+     */
     suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus>
 
+    /**
+     * Read the current version.
+     *
+     * @return [Flow] of type [Resource] which emit 2 states: [Loading] and [Success]/[Error]
+     */
     fun readVersion(): Flow<Resource<VersionDomain>>
 
+    /**
+     * Read device status info from the DK.
+     * It can contain information about provisioning data, connection status and Wi-Fi scanning status and params.
+     *
+     * @return [Flow] of type [Resource] which emit 2 states: [Loading] and [Success]/[Error]
+     */
     fun getStatus(): Flow<Resource<DeviceStatusDomain>>
 
+    /**
+     * Start scanning and obtains available Wi-Fi list.
+     *
+     * @return [Flow] of type [Resource]. Starts with [Loading] and can emit multiple [Success]/[Error]
+     */
     fun startScan(): Flow<Resource<ScanRecordDomain>>
 
+    /**
+     * Stop scanning for available Wi-Fi's. Should be called after [startScan].
+     *
+     * @return [Flow] of type [Resource] which emit 2 states: [Loading] and [Success]/[Error]
+     */
     fun stopScan(): Flow<Resource<Unit>>
 
+    /**
+     * Stop scanning for available Wi-Fi's. Should be called after [startScan].
+     *
+     * Like [stopScan], but it suspends and wait for the result.
+     */
     suspend fun stopScanBlocking()
 
+    /**
+     * Provision the connected DK with data obtained from [startScan] + password.
+     *
+     * @return [Flow] of type [Resource]. Starts with [Loading] and emits multiple [Success] with Connection status updates.
+     */
     fun setConfig(config: WifiConfigDomain): Flow<Resource<WifiConnectionStateDomain>>
 
+    /**
+     * Unprovision the DK - forget slected SSID, password, etc.
+     *
+     * @return [Flow] of type [Resource] which emit 2 states: [Loading] and [Success]/[Error]
+     */
     fun forgetConfig(): Flow<Resource<Unit>>
 
+    /**
+     * Closes connection with the DK.
+     */
     suspend fun release()
 
+    /**
+     * Opens nRF Logger app.
+     */
     fun openLogger()
 
     companion object {
         @SuppressLint("StaticFieldLeak")
         private var instance: ProvisionerRepository? = null
 
+        /**
+         * Creates new instance of [ProvisionerRepository]
+         *
+         * @param context - the application context
+         */
         fun newInstance(context: Context): ProvisionerRepository {
             val app = context.applicationContext
             val newInstance = instance ?: ProvisionerFactory.createRepository(app)
