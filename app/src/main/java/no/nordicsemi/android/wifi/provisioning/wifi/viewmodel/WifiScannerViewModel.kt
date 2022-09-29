@@ -19,16 +19,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.NavigationManager
+import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
 import no.nordicsemi.android.wifi.provisioning.wifi.view.OnSortOptionSelected
 import javax.inject.Inject
 
 @HiltViewModel
 internal class WifiScannerViewModel @Inject constructor(
     private val navigationManager: NavigationManager,
-    private val wifiAggregator: WifiAggregator
+    private val wifiAggregator: WifiAggregator,
+    private val repository: ProvisionerResourceRepository
 ) : ViewModel() {
-
-    private val repository = ProvisionerRepository.instance()
 
     private val _state = MutableStateFlow(WifiScannerViewEntity())
     val state = _state.asStateFlow()

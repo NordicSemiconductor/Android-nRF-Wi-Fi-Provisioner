@@ -59,52 +59,34 @@ class ProvisionerRepositoryImpl internal constructor(
     @SuppressLint("MissingPermission")
     override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> {
         manager = ProvisionerFactory.createBleManager(context, device)
-        return manager!!.start(device).also {
-            device.createBond()
-        }
+        return manager!!.start(device)
     }
 
-    override fun readVersion(): Flow<Resource<VersionDomain>> {
-        return runTask { VersionDomain(manager?.getVersion()?.version!!) }
+    override suspend fun readVersion(): VersionDomain {
+        return VersionDomain(manager?.getVersion()?.version!!)
     }
 
-    override fun getStatus(): Flow<Resource<DeviceStatusDomain>> {
-        return runTask {
-            val status = manager?.getStatus()
-            status?.toDomain()!!
-        }
+    override suspend fun getStatus(): DeviceStatusDomain {
+        val status = manager?.getStatus()
+        return status?.toDomain()!!
     }
 
-    override fun startScan(): Flow<Resource<ScanRecordDomain>> {
+    override fun startScan(): Flow<ScanRecordDomain> {
         return manager?.startScan()!!
-            .map { Resource.createSuccess(it.toDomain()) }
-            .onStart { emit(Resource.createLoading()) }
-            .catch {
-                it.printStackTrace()
-                emit(Resource.createError(it))
-            }
+            .map { it.toDomain() }
     }
 
-    override fun stopScan(): Flow<Resource<Unit>> {
-        return runTask { manager?.stopScan() }
-    }
-
-    override suspend fun stopScanBlocking() {
+    override suspend fun stopScan() {
         manager?.stopScan()
     }
 
-    override fun setConfig(config: WifiConfigDomain): Flow<Resource<WifiConnectionStateDomain>> {
+    override fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain> {
         return manager?.provision(config.toApi())!!
-            .map { Resource.createSuccess(it.toDomain()) }
-            .onStart { emit(Resource.createLoading()) }
-            .catch {
-                it.printStackTrace()
-                emit(Resource.createError(it))
-            }
+            .map { it.toDomain() }
     }
 
-    override fun forgetConfig(): Flow<Resource<Unit>> {
-        return runTask { manager?.forgetWifi() }
+    override suspend fun forgetConfig() {
+        manager?.forgetWifi()
     }
 
     override suspend fun release() {
@@ -127,8 +109,6 @@ class ProvisionerRepositoryImpl internal constructor(
 }
 
 internal object ProvisionerFactory {
-
-    fun createTestRepository() = TestProvisionerRepository()
 
     fun createRepository(context: Context): ProvisionerRepositoryImpl {
         return ProvisionerRepositoryImpl(context)

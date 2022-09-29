@@ -291,11 +291,20 @@ internal class ProvisionerBleManager(
     private fun verifyResponseSuccess(response: ByteArray) {
         val status = Response.ADAPTER.decode(response).status
         if (status != Status.SUCCESS) {
-            throw createResponseError()
+            throw createResponseError(status)
         }
     }
 
-    private fun createResponseError() = IllegalArgumentException("Received error response")
+    private fun createResponseError(status: Status?): Exception {
+        val errorCode = when (status) {
+            Status.INVALID_ARGUMENT -> ResponseError.INVALID_ARGUMENT
+            Status.INVALID_PROTO -> ResponseError.INVALID_PROTO
+            Status.INTERNAL_ERROR -> ResponseError.INTERNAL_ERROR
+            Status.SUCCESS,
+            null -> throw IllegalArgumentException("Error code should be not null and not success.")
+        }
+        return ResponseErrorException(errorCode)
+    }
 
     override fun getGattCallback(): BleManagerGattCallback {
         return ProvisioningManagerGattCallback()

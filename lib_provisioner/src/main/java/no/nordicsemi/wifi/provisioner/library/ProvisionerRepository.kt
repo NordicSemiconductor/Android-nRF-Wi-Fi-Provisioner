@@ -41,9 +41,10 @@ import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.flow.Flow
+import no.nordicsemi.wifi.provisioner.library.internal.ResponseErrorException
 
 /**
- * Class responsible for establishing connection and maintaining communication with a nRF 7 device.
+ * A class responsible for establishing connection and maintaining communication with a nRF 7 device.
  *
  * It has several methods which allows for sending Wi-Fi credentials to an IoT device.
  * The typical flow contains:
@@ -54,7 +55,7 @@ import kotlinx.coroutines.flow.Flow
  * 4. [setConfig] - After selecting Wi-Fi and providing password, a provisioning data should be send to the DK.
  * 5. Observe connection status and eventually repeat step 4 if the password was wrong.
  *
- * The device can be unprovisioned if Status returns Wi-Fi info by calling [forgetConfig].
+ * The device can be unprovisioned, if Status returns Wi-Fi info, by calling [forgetConfig].
  *
  * The connection should be closed after the job is done by calling [release].
  *
@@ -63,7 +64,7 @@ import kotlinx.coroutines.flow.Flow
 interface ProvisionerRepository {
 
     /**
-     * Connects to selected device.
+     * Connects and initialise bonding with a selected device.
      *
      * @param device[BluetoothDevice] to which the app should connect
      * @return [Flow] which emits connectivity status changes
@@ -73,52 +74,51 @@ interface ProvisionerRepository {
     /**
      * Read the current version.
      *
-     * @return [Flow] of type [Resource] which emit 2 states: [Loading] and [Success]/[Error]
+     * @return [VersionDomain] version data read from the IoT device.
+     * @throws [ResponseErrorException] when the IoT reports result different that success
      */
-    fun readVersion(): Flow<Resource<VersionDomain>>
+    suspend fun readVersion(): VersionDomain
 
     /**
-     * Read device status info from the DK.
+     * Read device status.
+     *
      * It can contain information about provisioning data, connection status and Wi-Fi scanning status and params.
      *
-     * @return [Flow] of type [Resource] which emit 2 states: [Loading] and [Success]/[Error]
+     * @return [DeviceStatusDomain] status data read from the IoT device.
+     * @throws [ResponseErrorException] when the IoT reports result different that success
      */
-    fun getStatus(): Flow<Resource<DeviceStatusDomain>>
+    suspend fun getStatus(): DeviceStatusDomain
 
     /**
      * Start scanning and obtains available Wi-Fi list.
      *
-     * @return [Flow] of type [Resource]. Starts with [Loading] and can emit multiple [Success]/[Error]
+     * @return [Flow] which emits multiple objects containing Wi-Fi info.
+     * @throws [ResponseErrorException] when the IoT reports result different that success
+     * @throws [NotificationTimeoutException] when the first result is not received before timeout time
      */
-    fun startScan(): Flow<Resource<ScanRecordDomain>>
+    fun startScan(): Flow<ScanRecordDomain>
 
     /**
      * Stop scanning for available Wi-Fi's. Should be called after [startScan].
-     *
-     * @return [Flow] of type [Resource] which emit 2 states: [Loading] and [Success]/[Error]
+     * @throws [ResponseErrorException] - when the IoT reports result different that success
      */
-    fun stopScan(): Flow<Resource<Unit>>
-
-    /**
-     * Stop scanning for available Wi-Fi's. Should be called after [startScan].
-     *
-     * Like [stopScan], but it suspends and wait for the result.
-     */
-    suspend fun stopScanBlocking()
+    suspend fun stopScan()
 
     /**
      * Provision the connected DK with data obtained from [startScan] + password.
      *
      * @return [Flow] of type [Resource]. Starts with [Loading] and emits multiple [Success] with Connection status updates.
+     * @throws [ResponseErrorException] when the IoT reports result different that success
+     * @throws [NotificationTimeoutException] when the first result is not received before timeout time
      */
-    fun setConfig(config: WifiConfigDomain): Flow<Resource<WifiConnectionStateDomain>>
+    fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain>
 
     /**
      * Unprovision the DK - forget slected SSID, password, etc.
      *
-     * @return [Flow] of type [Resource] which emit 2 states: [Loading] and [Success]/[Error]
+     * @throws [ResponseErrorException] - when the IoT reports result different that success
      */
-    fun forgetConfig(): Flow<Resource<Unit>>
+    suspend fun forgetConfig()
 
     /**
      * Closes connection with the DK.
@@ -137,16 +137,13 @@ interface ProvisionerRepository {
         /**
          * Creates new instance of [ProvisionerRepository]
          *
-         * @param context - the application context
+         * @param context the application context
          */
         fun newInstance(context: Context): ProvisionerRepository {
             val app = context.applicationContext
             val newInstance = instance ?: ProvisionerFactory.createRepository(app)
-//            val newInstance = instance ?: ProvisionerFactory.createTestRepository()
             instance = newInstance
             return newInstance
         }
-
-        fun instance(): ProvisionerRepository = instance!! //TODO
     }
 }

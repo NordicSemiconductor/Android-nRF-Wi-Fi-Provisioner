@@ -32,6 +32,7 @@
 package no.nordicsemi.android.wifi.provisioning.home.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import no.nordicsemi.android.wifi.provisioning.WifiScannerId
@@ -71,16 +72,17 @@ import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.NavigationManager
 import no.nordicsemi.android.common.navigation.NavigationResult
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
+import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
+import no.nordicsemi.wifi.provisioner.library.Resource
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    private val navigationManager: NavigationManager
+    private val navigationManager: NavigationManager,
+    private val repository: ProvisionerResourceRepository
 ) : ViewModel() {
-
-    private val repository = ProvisionerRepository.newInstance(context)
 
     private var connectionObserverJob: Job? = null
 
