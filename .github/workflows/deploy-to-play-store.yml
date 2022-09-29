@@ -16,6 +16,10 @@ jobs:
           KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
           KEYSTORE_KEY_PSWD: ${{ secrets.KEYSTORE_KEY_PSWD }}
           KEYSTORE_PSWD: ${{ secrets.KEYSTORE_PSWD }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+          OSSR_USERNAME: ${{ secrets.OSSR_USERNAME }}
+          OSSR_PASSWORD: ${{ secrets.OSSR_PASSWORD }}
         run: |
           pwd
           echo "${{ secrets.KEYSTORE_FILE }}" > keystore.asc
