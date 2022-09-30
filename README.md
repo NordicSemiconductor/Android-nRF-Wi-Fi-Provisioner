@@ -10,6 +10,8 @@ An Android library and app for provisioning [nRF 7 devices](https://www.nordicse
 The application allows to communicate with a nRF 7 series device.
 The main job of the phone is to get status from the device and initiate provisioning or unprovisioning process.
 
+See this [User Guide](doc/UserGuide.pdf) with the nice presentation about how to use the application.
+
 #### Obtaining status
 
 1. The phone connects to the selected IoT device and initialise pairing.
@@ -29,7 +31,7 @@ The main job of the phone is to get status from the device and initiate provisio
 1. The phone sends FORGET_CONFIG command and receive success/error result.
 
 ### Bluetooth LE Service
-Application depends on one service which should be implemented by an IoT device.
+Application depends on one service which should be implemented by an IoT device:
 ```14387800-130c-49e7-b877-2881c89cb258```
 
 #### Characteristics
