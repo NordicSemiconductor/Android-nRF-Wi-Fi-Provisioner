@@ -51,7 +51,7 @@
         * [nRF700x DK](https://www.nordicsemi.com/News/2022/08/Nordic-Semiconductor-announces-its-first-WiFi-chip?lang=ko-KR)\n
         * Provisioning sample app flashed \n\n
 
-        Make sure the deviec is powered ON and in range of the phone.</string>
+        Make sure the device is powered ON and in range of the phone.</string>
 
     <string name="section_device">Device status</string>
     <string name="section_provisioning">Provisioning data</string>
