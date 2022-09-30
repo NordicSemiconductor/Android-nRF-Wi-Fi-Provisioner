@@ -31,34 +31,10 @@
 
 package no.nordicsemi.android.wifi.provisioning.home.viewmodel
 
+import android.app.Application
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import no.nordicsemi.android.wifi.provisioning.WifiScannerId
-import no.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.HomeViewEntity
-import no.nordicsemi.android.wifi.provisioning.home.view.OnFinishedEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OnHidePasswordDialog
-import no.nordicsemi.android.wifi.provisioning.home.view.OnPasswordSelectedEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OnProvisionClickEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OnProvisionNextDeviceEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OnSelectDeviceClickEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OnSelectWifiEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OnShowPasswordDialog
-import no.nordicsemi.android.wifi.provisioning.home.view.OnUnprovisionEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OnVolatileMemoryChangedEvent
-import no.nordicsemi.android.wifi.provisioning.home.view.OpenLoggerEvent
-import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
-import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
-import no.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
-import no.nordicsemi.wifi.provisioner.library.Loading
-import no.nordicsemi.wifi.provisioner.library.ProvisionerRepository
-import no.nordicsemi.wifi.provisioner.library.Success
-import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
-import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
-import no.nordicsemi.wifi.provisioner.library.launchWithCatch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
@@ -72,17 +48,26 @@ import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.NavigationManager
 import no.nordicsemi.android.common.navigation.NavigationResult
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
+import no.nordicsemi.android.wifi.provisioning.WifiScannerId
+import no.nordicsemi.android.wifi.provisioning.home.view.*
 import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
-import no.nordicsemi.wifi.provisioner.library.Resource
+import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
+import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
+import no.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
+import no.nordicsemi.android.wifi.provisioning.util.Loading
+import no.nordicsemi.android.wifi.provisioning.util.Success
+import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
+import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
+import no.nordicsemi.wifi.provisioner.library.ConnectionStatus
+import no.nordicsemi.android.wifi.provisioning.util.launchWithCatch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    @ApplicationContext
-    private val context: Context,
+    @ApplicationContext context: Context,
     private val navigationManager: NavigationManager,
     private val repository: ProvisionerResourceRepository
-) : ViewModel() {
+) : AndroidViewModel(context as Application) {
 
     private var connectionObserverJob: Job? = null
 

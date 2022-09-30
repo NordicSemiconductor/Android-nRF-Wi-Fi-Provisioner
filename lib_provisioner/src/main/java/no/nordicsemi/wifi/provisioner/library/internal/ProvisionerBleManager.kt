@@ -34,31 +34,26 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
-import android.bluetooth.BluetoothGattService
 import android.content.Context
 import android.util.Log
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import no.nordicsemi.android.ble.BleManager
-import no.nordicsemi.android.ble.ktx.asValidResponseFlow
-import no.nordicsemi.android.ble.ktx.suspend
-import no.nordicsemi.android.ble.ktx.suspendForValidResponse
+import no.nordicsemi.android.ble.ktx.*
+import no.nordicsemi.android.ble.ktx.state.ConnectionState
 import no.nordicsemi.android.common.logger.NordicLogger
-import no.nordicsemi.android.wifi.provisioning.DeviceStatus
-import no.nordicsemi.android.wifi.provisioning.Info
-import no.nordicsemi.android.wifi.provisioning.OpCode
-import no.nordicsemi.android.wifi.provisioning.Request
-import no.nordicsemi.android.wifi.provisioning.Response
-import no.nordicsemi.android.wifi.provisioning.Result
-import no.nordicsemi.android.wifi.provisioning.Status
-import no.nordicsemi.android.wifi.provisioning.WifiConfig
+import no.nordicsemi.android.wifi.provisioning.*
+import no.nordicsemi.wifi.provisioner.library.ConnectionStatus
+import no.nordicsemi.wifi.provisioner.library.internal.exception.NotificationTimeoutException
+import no.nordicsemi.wifi.provisioner.library.internal.exception.ResponseError
+import no.nordicsemi.wifi.provisioner.library.internal.exception.ResponseErrorException
+import no.nordicsemi.wifi.provisioner.library.internal.response.InfoPacket
+import no.nordicsemi.wifi.provisioner.library.internal.response.ResponsePacket
+import no.nordicsemi.wifi.provisioner.library.internal.response.ResultPacket
 import java.util.*
 
 val PROVISIONING_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")
@@ -77,14 +72,6 @@ internal class ProvisionerBleManager(
     private var versionCharacteristic: BluetoothGattCharacteristic? = null
     private var controlPointCharacteristic: BluetoothGattCharacteristic? = null
     private var dataOutCharacteristic: BluetoothGattCharacteristic? = null
-
-    private var useLongWrite = true
-
-    val dataHolder = ConnectionObserverAdapter()
-
-    init {
-        connectionObserver = dataHolder
-    }
 
     fun openLogger() {
         NordicLogger.launch(context, logger)
@@ -105,8 +92,26 @@ internal class ProvisionerBleManager(
                 .useAutoConnect(false)
                 .retry(3, 100)
                 .suspend()
-            createBondInsecure().suspend()
-            dataHolder.status
+            createBondInsecure()
+                .suspend()
+            stateAsFlow().map {
+                when (it) {
+                    ConnectionState.Connecting -> ConnectionStatus.CONNECTING
+                    ConnectionState.Initializing -> ConnectionStatus.CONNECTED
+                    ConnectionState.Ready -> ConnectionStatus.SUCCESS
+                    ConnectionState.Disconnecting -> ConnectionStatus.DISCONNECTING
+                    is ConnectionState.Disconnected -> {
+                        when (it.reason) {
+                            ConnectionState.Disconnected.Reason.SUCCESS -> ConnectionStatus.DISCONNECTED
+                            ConnectionState.Disconnected.Reason.LINK_LOSS -> ConnectionStatus.LINK_LOSS
+                            ConnectionState.Disconnected.Reason.NOT_SUPPORTED -> ConnectionStatus.MISSING_SERVICE
+                            else -> ConnectionStatus.UNKNOWN_ERROR
+                        }
+                        ConnectionStatus.DISCONNECTED
+                    }
+
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             flow { emit(ConnectionStatus.DISCONNECTED) }
@@ -129,46 +134,31 @@ internal class ProvisionerBleManager(
         }
 
         override fun isRequiredServiceSupported(gatt: BluetoothGatt): Boolean {
-            val service: BluetoothGattService? = gatt.getService(PROVISIONING_SERVICE_UUID)
-            if (service != null) {
-                versionCharacteristic = service.getCharacteristic(VERSION_CHARACTERISTIC_UUID)
-                controlPointCharacteristic =
-                    service.getCharacteristic(CONTROL_POINT_CHARACTERISTIC_UUID)
-                dataOutCharacteristic = service.getCharacteristic(DATA_OUT_CHARACTERISTIC_UUID)
+            gatt.getService(PROVISIONING_SERVICE_UUID)?.apply {
+                versionCharacteristic = getCharacteristic(VERSION_CHARACTERISTIC_UUID,
+                    BluetoothGattCharacteristic.PROPERTY_READ)
+                controlPointCharacteristic = getCharacteristic(CONTROL_POINT_CHARACTERISTIC_UUID,
+                    BluetoothGattCharacteristic.PROPERTY_WRITE or BluetoothGattCharacteristic.PROPERTY_INDICATE)
+                dataOutCharacteristic = getCharacteristic(DATA_OUT_CHARACTERISTIC_UUID,
+                    BluetoothGattCharacteristic.PROPERTY_NOTIFY)
             }
-            var writeRequest = false
-            var writeCommand = false
 
-            controlPointCharacteristic?.let {
-                val rxProperties: Int = it.properties
-                writeRequest = rxProperties and BluetoothGattCharacteristic.PROPERTY_WRITE > 0
-                writeCommand =
-                    rxProperties and BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE > 0
-
-                // Set the WRITE REQUEST type when the characteristic supports it.
-                // This will allow to send long write (also if the characteristic support it).
-                // In case there is no WRITE REQUEST property, this manager will divide texts
-                // longer then MTU-3 bytes into up to MTU-3 bytes chunks.
-                if (!writeRequest) {
-                    useLongWrite = false
-                }
-            }
-            return versionCharacteristic != null && controlPointCharacteristic != null && dataOutCharacteristic != null
+            return versionCharacteristic != null &&
+                   controlPointCharacteristic != null &&
+                   dataOutCharacteristic != null
         }
 
         override fun onServicesInvalidated() {
             versionCharacteristic = null
             controlPointCharacteristic = null
             dataOutCharacteristic = null
-            useLongWrite = true
         }
     }
 
     suspend fun getVersion(): Info = withTimeout(TIMEOUT_MILLIS) {
-        val response =
-            readCharacteristic(versionCharacteristic).suspendForValidResponse<ByteArrayReadResponse>().value
-
-        Info.ADAPTER.decode(response)
+        readCharacteristic(versionCharacteristic)
+            .suspendForValidResponse<InfoPacket>()
+            .value
     }
 
     suspend fun getStatus(): DeviceStatus = withTimeout(TIMEOUT_MILLIS) {
@@ -182,13 +172,14 @@ internal class ProvisionerBleManager(
                     BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
                 )
             )
-            .suspendForValidResponse<ByteArrayReadResponse>()
+            .suspendForValidResponse<ResponsePacket>()
 
-        verifyResponseSuccess(response.value)
+        verifyResponseSuccess(response)
 
-        Response.ADAPTER.decode(response.value).device_status!!
+        response.value.device_status ?: throw IllegalStateException("Device status is null")
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun startScan() = callbackFlow {
         val request = Request(op_code = OpCode.START_SCAN)
 
@@ -198,12 +189,10 @@ internal class ProvisionerBleManager(
         }
 
         setNotificationCallback(dataOutCharacteristic)
-            .asValidResponseFlow<ByteArrayReadResponse>()
+            .asValidResponseFlow<ResultPacket>()
             .onEach {
                 timeoutJob.cancel()
-
-                val result = Result.ADAPTER.decode(it.value)
-                trySend(result.scan_record!!)
+                trySend(it.value.scan_record!!)
             }
             .launchIn(this)
 
@@ -215,9 +204,9 @@ internal class ProvisionerBleManager(
                     BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
                 )
             )
-            .suspendForValidResponse<ByteArrayReadResponse>()
+            .suspendForValidResponse<ResponsePacket>()
 
-        verifyResponseSuccess(response.value)
+        verifyResponseSuccess(response)
 
         awaitClose {
             removeNotificationCallback(dataOutCharacteristic)
@@ -234,11 +223,12 @@ internal class ProvisionerBleManager(
                     BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
                 )
             )
-            .suspendForValidResponse<ByteArrayReadResponse>()
+            .suspendForValidResponse<ResponsePacket>()
 
-        verifyResponseSuccess(response.value)
+        verifyResponseSuccess(response)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun provision(config: WifiConfig) = callbackFlow {
         val request = Request(op_code = OpCode.SET_CONFIG, config = config)
 
@@ -248,12 +238,10 @@ internal class ProvisionerBleManager(
         }
 
         setNotificationCallback(dataOutCharacteristic)
-            .asValidResponseFlow<ByteArrayReadResponse>()
+            .asValidResponseFlow<ResultPacket>()
             .onEach {
                 timeoutJob.cancel()
-
-                val result = Result.ADAPTER.decode(it.value)
-                trySend(result.state!!)
+                trySend(it.value.state!!)
             }.launchIn(this)
 
         val response = waitForIndication(controlPointCharacteristic)
@@ -264,9 +252,9 @@ internal class ProvisionerBleManager(
                     BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
                 )
             )
-            .suspendForValidResponse<ByteArrayReadResponse>()
+            .suspendForValidResponse<ResponsePacket>()
 
-        verifyResponseSuccess(response.value)
+        verifyResponseSuccess(response)
 
         awaitClose {
             removeNotificationCallback(dataOutCharacteristic)
@@ -283,25 +271,23 @@ internal class ProvisionerBleManager(
                     BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
                 )
             )
-            .suspendForValidResponse<ByteArrayReadResponse>()
+            .suspendForValidResponse<ResponsePacket>()
 
-        verifyResponseSuccess(response.value)
+        verifyResponseSuccess(response)
     }
 
-    private fun verifyResponseSuccess(response: ByteArray) {
-        val status = Response.ADAPTER.decode(response).status
-        if (status != Status.SUCCESS) {
-            throw createResponseError(status)
-        }
+    private fun verifyResponseSuccess(response: ResponsePacket) {
+        response.value.status
+            .takeUnless { it == Status.SUCCESS }
+            ?.let { throw createResponseError(it) }
     }
 
-    private fun createResponseError(status: Status?): Exception {
+    private fun createResponseError(status: Status): Exception {
         val errorCode = when (status) {
             Status.INVALID_ARGUMENT -> ResponseError.INVALID_ARGUMENT
             Status.INVALID_PROTO -> ResponseError.INVALID_PROTO
             Status.INTERNAL_ERROR -> ResponseError.INTERNAL_ERROR
-            Status.SUCCESS,
-            null -> throw IllegalArgumentException("Error code should be not null and not success.")
+            Status.SUCCESS -> throw IllegalArgumentException("Error code should not be success.")
         }
         return ResponseErrorException(errorCode)
     }

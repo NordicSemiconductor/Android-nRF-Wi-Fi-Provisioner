@@ -29,43 +29,23 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioning.home.view.sections
+package no.nordicsemi.wifi.provisioner.library.internal.response
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioning.R
-import no.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
-import no.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
-import no.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
-import no.nordicsemi.android.wifi.provisioning.util.Error
-import no.nordicsemi.android.wifi.provisioning.util.Loading
-import no.nordicsemi.android.wifi.provisioning.util.Resource
-import no.nordicsemi.android.wifi.provisioning.util.Success
-import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
+import android.bluetooth.BluetoothDevice
+import no.nordicsemi.android.ble.callback.profile.ProfileReadResponse
+import no.nordicsemi.android.ble.data.Data
+import no.nordicsemi.android.wifi.provisioning.Result
 
-@Composable
-internal fun VersionSection(version: Resource<VersionDomain>) {
-    when (version) {
-        is Error -> ErrorSection(version.error)
-        is Loading -> LoadingItem()
-        is Success -> VersionSection(version = version.data)
+internal class ResultPacket : ProfileReadResponse() {
+    lateinit var value: Result
+
+    override fun onDataReceived(device: BluetoothDevice, data: Data) {
+        super.onDataReceived(device, data)
+
+        try {
+            value = Result.ADAPTER.decode(data.value ?: byteArrayOf())
+        } catch (e: Exception) {
+            onInvalidDataReceived(device, data)
+        }
     }
-}
-
-@Composable
-private fun ErrorSection(error: Throwable) {
-    ErrorDataItem(
-        iconRes = R.drawable.ic_version,
-        title = stringResource(id = R.string.dk_version),
-        error = error
-    )
-}
-
-@Composable
-private fun VersionSection(version: VersionDomain) {
-    DataItem(
-        iconRes = R.drawable.ic_version,
-        title = stringResource(id = R.string.dk_version),
-        description = version.value.toString()
-    )
 }

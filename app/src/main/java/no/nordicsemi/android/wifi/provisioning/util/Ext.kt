@@ -29,43 +29,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioning.home.view.sections
+package no.nordicsemi.android.wifi.provisioning.util
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioning.R
-import no.nordicsemi.android.wifi.provisioning.home.view.components.DataItem
-import no.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
-import no.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
-import no.nordicsemi.android.wifi.provisioning.util.Error
-import no.nordicsemi.android.wifi.provisioning.util.Loading
-import no.nordicsemi.android.wifi.provisioning.util.Resource
-import no.nordicsemi.android.wifi.provisioning.util.Success
-import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
+import android.util.Log
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-@Composable
-internal fun VersionSection(version: Resource<VersionDomain>) {
-    when (version) {
-        is Error -> ErrorSection(version.error)
-        is Loading -> LoadingItem()
-        is Success -> VersionSection(version = version.data)
+private val exceptionHandler = CoroutineExceptionHandler { _, t ->
+    Log.e("COROUTINE-EXCEPTION", "Uncaught exception", t)
+}
+
+fun CoroutineScope.launchWithCatch(block: suspend CoroutineScope.() -> Unit) =
+    launch(Job() + exceptionHandler) {
+        block()
     }
-}
-
-@Composable
-private fun ErrorSection(error: Throwable) {
-    ErrorDataItem(
-        iconRes = R.drawable.ic_version,
-        title = stringResource(id = R.string.dk_version),
-        error = error
-    )
-}
-
-@Composable
-private fun VersionSection(version: VersionDomain) {
-    DataItem(
-        iconRes = R.drawable.ic_version,
-        title = stringResource(id = R.string.dk_version),
-        description = version.value.toString()
-    )
-}

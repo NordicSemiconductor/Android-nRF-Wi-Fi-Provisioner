@@ -7,10 +7,9 @@ import no.nordicsemi.android.wifi.provisioning.wifi.view.NavigateUpEvent
 import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEntity
 import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEvent
 import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiSelectedEvent
-import no.nordicsemi.wifi.provisioner.library.Error
-import no.nordicsemi.wifi.provisioner.library.Loading
-import no.nordicsemi.wifi.provisioner.library.ProvisionerRepository
-import no.nordicsemi.wifi.provisioner.library.Success
+import no.nordicsemi.android.wifi.provisioning.util.Error
+import no.nordicsemi.android.wifi.provisioning.util.Loading
+import no.nordicsemi.android.wifi.provisioning.util.Success
 import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

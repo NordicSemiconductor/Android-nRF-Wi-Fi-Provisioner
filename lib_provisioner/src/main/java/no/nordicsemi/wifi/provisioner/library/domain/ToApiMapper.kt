@@ -1,6 +1,5 @@
 package no.nordicsemi.wifi.provisioner.library.domain
 
-import android.util.Log
 import no.nordicsemi.android.wifi.provisioning.AuthMode
 import no.nordicsemi.android.wifi.provisioning.Band
 import no.nordicsemi.android.wifi.provisioning.WifiConfig

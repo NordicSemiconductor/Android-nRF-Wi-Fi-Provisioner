@@ -34,23 +34,13 @@ package no.nordicsemi.wifi.provisioner.library
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import no.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
-import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.wifi.provisioner.library.domain.toApi
-import no.nordicsemi.wifi.provisioner.library.domain.toDomain
-import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
-import no.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import no.nordicsemi.android.common.logger.NordicLogger
+import no.nordicsemi.wifi.provisioner.library.domain.*
+import no.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 
-class ProvisionerRepositoryImpl internal constructor(
+internal class ProvisionerRepositoryImpl internal constructor(
     private val context: Context
 ) : ProvisionerRepository {
 
@@ -58,35 +48,33 @@ class ProvisionerRepositoryImpl internal constructor(
 
     @SuppressLint("MissingPermission")
     override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> {
-        manager = ProvisionerFactory.createBleManager(context, device)
-        return manager!!.start(device)
+        return ProvisionerFactory.createBleManager(context, device)
+            .apply { manager = this }
+            .start(device)
     }
 
     override suspend fun readVersion(): VersionDomain {
-        return VersionDomain(manager?.getVersion()?.version!!)
+        return VersionDomain(manager!!.getVersion().version)
     }
 
     override suspend fun getStatus(): DeviceStatusDomain {
-        val status = manager?.getStatus()
-        return status?.toDomain()!!
+        return manager!!.getStatus().toDomain()
     }
 
     override fun startScan(): Flow<ScanRecordDomain> {
-        return manager?.startScan()!!
-            .map { it.toDomain() }
+        return manager!!.startScan().map { it.toDomain() }
     }
 
     override suspend fun stopScan() {
-        manager?.stopScan()
+        manager!!.stopScan()
     }
 
     override fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain> {
-        return manager?.provision(config.toApi())!!
-            .map { it.toDomain() }
+        return manager!!.provision(config.toApi()).map { it.toDomain() }
     }
 
     override suspend fun forgetConfig() {
-        manager?.forgetWifi()
+        manager!!.forgetWifi()
     }
 
     override suspend fun release() {
@@ -98,14 +86,14 @@ class ProvisionerRepositoryImpl internal constructor(
         NordicLogger.launch(context, manager?.logger)
     }
 
-    private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
-        return flow { emit(Resource.createSuccess(block())) }
-            .onStart { emit(Resource.createLoading()) }
-            .catch {
-                it.printStackTrace()
-                emit(Resource.createError(it))
-            }
-    }
+//    private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
+//        return flow { emit(Resource.createSuccess(block())) }
+//            .onStart { emit(Resource.createLoading()) }
+//            .catch {
+//                it.printStackTrace()
+//                emit(Resource.createError(it))
+//            }
+//    }
 }
 
 internal object ProvisionerFactory {

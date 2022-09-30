@@ -29,17 +29,23 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.wifi.provisioner.library.internal
+package no.nordicsemi.wifi.provisioner.library.internal.response
 
-enum class ConnectionStatus {
-    IDLE, CONNECTING, CONNECTED, SUCCESS, LINK_LOSS, DISCONNECTING, DISCONNECTED, UNKNOWN_ERROR, MISSING_SERVICE, FAIL_TO_CONNECT;
+import android.bluetooth.BluetoothDevice
+import no.nordicsemi.android.ble.callback.profile.ProfileReadResponse
+import no.nordicsemi.android.ble.data.Data
+import no.nordicsemi.android.wifi.provisioning.Response
 
-    fun isDisconnecting(): Boolean {
-        return this == LINK_LOSS
-                || this == DISCONNECTING
-                || this == DISCONNECTED
-                || this == UNKNOWN_ERROR
-                || this == MISSING_SERVICE
-                || this == FAIL_TO_CONNECT
+internal class ResponsePacket : ProfileReadResponse() {
+    lateinit var value: Response
+
+    override fun onDataReceived(device: BluetoothDevice, data: Data) {
+        super.onDataReceived(device, data)
+
+        try {
+            value = Response.ADAPTER.decode(data.value ?: byteArrayOf())
+        } catch (e: Exception) {
+            onInvalidDataReceived(device, data)
+        }
     }
 }

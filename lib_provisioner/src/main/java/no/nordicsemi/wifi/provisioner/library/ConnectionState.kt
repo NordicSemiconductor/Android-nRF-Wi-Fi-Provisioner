@@ -29,6 +29,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.wifi.provisioner.library.internal
+package no.nordicsemi.wifi.provisioner.library
 
-class NotificationTimeoutException : Exception("Timeout exception.")
+enum class ConnectionStatus {
+    IDLE, CONNECTING, CONNECTED, SUCCESS, LINK_LOSS, DISCONNECTING, DISCONNECTED, UNKNOWN_ERROR, MISSING_SERVICE, FAIL_TO_CONNECT;
+
+    fun isDisconnecting(): Boolean {
+        return this == LINK_LOSS
+                || this == DISCONNECTING
+                || this == DISCONNECTED
+                || this == UNKNOWN_ERROR
+                || this == MISSING_SERVICE
+                || this == FAIL_TO_CONNECT
+    }
+}

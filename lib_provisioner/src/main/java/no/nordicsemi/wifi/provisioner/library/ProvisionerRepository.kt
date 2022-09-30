@@ -39,9 +39,9 @@ import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.flow.Flow
-import no.nordicsemi.wifi.provisioner.library.internal.ResponseErrorException
+import no.nordicsemi.wifi.provisioner.library.internal.exception.ResponseErrorException
+import no.nordicsemi.wifi.provisioner.library.internal.exception.NotificationTimeoutException
 
 /**
  * A class responsible for establishing connection and maintaining communication with a nRF 7 device.
@@ -107,7 +107,7 @@ interface ProvisionerRepository {
     /**
      * Provision the connected DK with data obtained from [startScan] + password.
      *
-     * @return [Flow] of type [Resource]. Starts with [Loading] and emits multiple [Success] with Connection status updates.
+     * @return [Flow] of type [WifiConnectionStateDomain].
      * @throws [ResponseErrorException] when the IoT reports result different that success
      * @throws [NotificationTimeoutException] when the first result is not received before timeout time
      */

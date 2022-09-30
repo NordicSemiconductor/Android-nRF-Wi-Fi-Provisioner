@@ -29,17 +29,23 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.wifi.provisioner.library
+package no.nordicsemi.wifi.provisioner.library.internal.response
 
-sealed interface Resource<T> {
+import android.bluetooth.BluetoothDevice
+import no.nordicsemi.android.ble.callback.profile.ProfileReadResponse
+import no.nordicsemi.android.ble.data.Data
+import no.nordicsemi.android.wifi.provisioning.Info
 
-    companion object {
-        fun <T> createLoading(): Resource<T> = Loading()
-        fun <T> createSuccess(data: T): Resource<T> = Success(data)
-        fun <T> createError(error: Throwable): Resource<T> = Error(error)
+internal class InfoPacket : ProfileReadResponse() {
+    lateinit var value: Info
+
+    override fun onDataReceived(device: BluetoothDevice, data: Data) {
+        super.onDataReceived(device, data)
+
+        try {
+            value = Info.ADAPTER.decode(data.value ?: byteArrayOf())
+        } catch (e: Exception) {
+            onInvalidDataReceived(device, data)
+        }
     }
 }
-
-class Loading<T> : Resource<T>
-data class Success<T>(val data: T): Resource<T>
-data class Error<T>(val error: Throwable): Resource<T>
