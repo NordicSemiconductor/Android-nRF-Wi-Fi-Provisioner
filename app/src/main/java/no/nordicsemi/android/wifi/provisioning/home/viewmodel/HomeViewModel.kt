@@ -31,19 +31,12 @@
 
 package no.nordicsemi.android.wifi.provisioning.home.viewmodel
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.NavigationManager
 import no.nordicsemi.android.common.navigation.NavigationResult
@@ -53,21 +46,20 @@ import no.nordicsemi.android.wifi.provisioning.home.view.*
 import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
 import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
 import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
-import no.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
 import no.nordicsemi.android.wifi.provisioning.util.Loading
 import no.nordicsemi.android.wifi.provisioning.util.Success
+import no.nordicsemi.android.wifi.provisioning.util.launchWithCatch
+import no.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
+import no.nordicsemi.wifi.provisioner.library.ConnectionStatus
 import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
-import no.nordicsemi.wifi.provisioner.library.ConnectionStatus
-import no.nordicsemi.android.wifi.provisioning.util.launchWithCatch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    @ApplicationContext context: Context,
     private val navigationManager: NavigationManager,
     private val repository: ProvisionerResourceRepository
-) : AndroidViewModel(context as Application) {
+) : ViewModel() {
 
     private var connectionObserverJob: Job? = null
 
@@ -128,9 +120,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun cancelConfig() {
-        repository.forgetConfig().onEach {
-            _state.value = _state.value.copy(unprovisioningStatus = it)
-        }.launchIn(viewModelScope)
+        repository.forgetConfig()
+            .onEach {
+                _state.value = _state.value.copy(unprovisioningStatus = it)
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun cancelPendingJobs() {
@@ -199,7 +193,8 @@ class HomeViewModel @Inject constructor(
                 (_state.value.version as? Success)?.let {
                     loadStatus()
                 }
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
     }
 
@@ -208,7 +203,8 @@ class HomeViewModel @Inject constructor(
             .cancellable()
             .onEach {
                 _state.value = _state.value.copy(status = it)
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
     }
 
@@ -223,7 +219,8 @@ class HomeViewModel @Inject constructor(
             .cancellable()
             .onEach {
                 _state.value = _state.value.copy(provisioningStatus = it)
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
     }
 }
