@@ -40,6 +40,8 @@ import no.nordicsemi.android.common.logger.NordicLogger
 import no.nordicsemi.wifi.provisioner.library.domain.*
 import no.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 
+private const val MANAGER_NOT_INITIALIZED = "Manager not initialized. Call start(BluetoothDevice) first."
+
 internal class ProvisionerRepositoryImpl internal constructor(
     private val context: Context
 ) : ProvisionerRepository {
@@ -47,35 +49,30 @@ internal class ProvisionerRepositoryImpl internal constructor(
     private var manager: ProvisionerBleManager? = null
 
     @SuppressLint("MissingPermission")
-    override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> {
-        return ProvisionerFactory.createBleManager(context, device)
+    override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> =
+        ProvisionerFactory.createBleManager(context, device)
             .apply { manager = this }
             .start(device)
-    }
 
-    override suspend fun readVersion(): VersionDomain {
-        return VersionDomain(manager!!.getVersion().version)
-    }
+    override suspend fun readVersion(): VersionDomain = manager?.getVersion()?.toDomain()
+        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
 
-    override suspend fun getStatus(): DeviceStatusDomain {
-        return manager!!.getStatus().toDomain()
-    }
+    override suspend fun getStatus(): DeviceStatusDomain = manager?.getStatus()?.toDomain()
+        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
 
-    override fun startScan(): Flow<ScanRecordDomain> {
-        return manager!!.startScan().map { it.toDomain() }
-    }
+    override fun startScan(): Flow<ScanRecordDomain> = manager?.startScan()?.map { it.toDomain() }
+        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
 
-    override suspend fun stopScan() {
-        manager!!.stopScan()
-    }
+    override suspend fun stopScan(): Unit = manager?.stopScan()
+        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
 
-    override fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain> {
-        return manager!!.provision(config.toApi()).map { it.toDomain() }
-    }
+    override fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain> =
+        manager?.provision(config.toApi())
+            ?.map { it.toDomain() }
+            ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
 
-    override suspend fun forgetConfig() {
-        manager!!.forgetWifi()
-    }
+    override suspend fun forgetConfig(): Unit = manager?.forgetWifi()
+        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
 
     override suspend fun release() {
         manager?.release()
