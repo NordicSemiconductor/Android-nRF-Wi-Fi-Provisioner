@@ -1,4 +1,4 @@
-package no.nordicsemi.wifi.provisioner.library.internal.exception
+package no.nordicsemi.wifi.provisioner.library.exception
 
 data class ResponseErrorException(val code: ResponseError) : Exception("Received error response.")
 

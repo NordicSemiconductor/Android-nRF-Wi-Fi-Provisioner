@@ -40,8 +40,8 @@ import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
 import kotlinx.coroutines.flow.Flow
-import no.nordicsemi.wifi.provisioner.library.internal.exception.ResponseErrorException
-import no.nordicsemi.wifi.provisioner.library.internal.exception.NotificationTimeoutException
+import no.nordicsemi.wifi.provisioner.library.exception.ResponseErrorException
+import no.nordicsemi.wifi.provisioner.library.exception.NotificationTimeoutException
 
 /**
  * A class responsible for establishing connection and maintaining communication with a nRF 7 device.

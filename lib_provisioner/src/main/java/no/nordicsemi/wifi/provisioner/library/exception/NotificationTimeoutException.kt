@@ -29,6 +29,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.wifi.provisioner.library.internal.exception
+package no.nordicsemi.wifi.provisioner.library.exception
 
 class NotificationTimeoutException : Exception("Timeout exception.")

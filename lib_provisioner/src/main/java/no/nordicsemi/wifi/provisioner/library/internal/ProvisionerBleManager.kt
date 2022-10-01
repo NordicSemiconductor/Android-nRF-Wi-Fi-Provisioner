@@ -48,9 +48,9 @@ import no.nordicsemi.android.ble.ktx.state.ConnectionState
 import no.nordicsemi.android.common.logger.NordicLogger
 import no.nordicsemi.android.wifi.provisioning.*
 import no.nordicsemi.wifi.provisioner.library.ConnectionStatus
-import no.nordicsemi.wifi.provisioner.library.internal.exception.NotificationTimeoutException
-import no.nordicsemi.wifi.provisioner.library.internal.exception.ResponseError
-import no.nordicsemi.wifi.provisioner.library.internal.exception.ResponseErrorException
+import no.nordicsemi.wifi.provisioner.library.exception.NotificationTimeoutException
+import no.nordicsemi.wifi.provisioner.library.exception.ResponseError
+import no.nordicsemi.wifi.provisioner.library.exception.ResponseErrorException
 import no.nordicsemi.wifi.provisioner.library.internal.response.InfoPacket
 import no.nordicsemi.wifi.provisioner.library.internal.response.ResponsePacket
 import no.nordicsemi.wifi.provisioner.library.internal.response.ResultPacket
