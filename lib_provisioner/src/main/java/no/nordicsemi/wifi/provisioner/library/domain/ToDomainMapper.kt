@@ -31,83 +31,58 @@
 
 package no.nordicsemi.wifi.provisioner.library.domain
 
-import android.util.Log
-import no.nordicsemi.android.wifi.provisioning.AuthMode
-import no.nordicsemi.android.wifi.provisioning.Band
-import no.nordicsemi.android.wifi.provisioning.ConnectionFailureReason
-import no.nordicsemi.android.wifi.provisioning.ConnectionInfo
-import no.nordicsemi.android.wifi.provisioning.ConnectionState
-import no.nordicsemi.android.wifi.provisioning.DeviceStatus
-import no.nordicsemi.android.wifi.provisioning.ScanParams
-import no.nordicsemi.android.wifi.provisioning.ScanRecord
-import no.nordicsemi.android.wifi.provisioning.WifiInfo
+import no.nordicsemi.android.wifi.provisioning.*
 import okio.ByteString
 
-private const val TAG = "DOMAIN-MAPPER"
+internal fun Info.toDomain(): VersionDomain = VersionDomain(version)
 
-internal fun DeviceStatus.toDomain(): DeviceStatusDomain {
-    Log.d(TAG, "status: $this")
-    return DeviceStatusDomain(
-        state?.toDomain(),
-        provisioning_info?.toDomain(),
-        connection_info?.toDomain(),
-        scan_info?.toDomain()
-    )
+internal fun DeviceStatus.toDomain() = DeviceStatusDomain(
+    state?.toDomain(),
+    provisioning_info?.toDomain(),
+    connection_info?.toDomain(),
+    scan_info?.toDomain()
+)
+
+internal fun ScanParams.toDomain() = ScanParamsDomain(
+    band!!.toDomain(),
+    passive ?: false,
+    period_ms ?: 0,
+    group_channels ?: 0
+)
+
+internal fun ConnectionInfo.toDomain() = ConnectionInfoDomain(ip4_addr!!.toIp())
+
+internal fun ConnectionState.toDomain() = when (this) {
+    ConnectionState.DISCONNECTED -> WifiConnectionStateDomain.DISCONNECTED
+    ConnectionState.AUTHENTICATION -> WifiConnectionStateDomain.AUTHENTICATION
+    ConnectionState.ASSOCIATION -> WifiConnectionStateDomain.ASSOCIATION
+    ConnectionState.OBTAINING_IP -> WifiConnectionStateDomain.OBTAINING_IP
+    ConnectionState.CONNECTED -> WifiConnectionStateDomain.CONNECTED
+    ConnectionState.CONNECTION_FAILED -> WifiConnectionStateDomain.CONNECTION_FAILED
 }
 
-internal fun ScanParams.toDomain(): ScanParamsDomain {
-    Log.d(TAG, "mapper: $this")
-    return ScanParamsDomain(
-        band!!.toDomain(),
-        passive!!,
-        period_ms!!,
-        group_channels!!
-    )
+internal fun AuthMode.toDomain() = when (this) {
+    AuthMode.OPEN -> AuthModeDomain.OPEN
+    AuthMode.WEP -> AuthModeDomain.WEP
+    AuthMode.WPA_PSK -> AuthModeDomain.WPA_PSK
+    AuthMode.WPA2_PSK -> AuthModeDomain.WPA2_PSK
+    AuthMode.WPA_WPA2_PSK -> AuthModeDomain.WPA_WPA2_PSK
+    AuthMode.WPA2_ENTERPRISE -> AuthModeDomain.WPA2_ENTERPRISE
+    AuthMode.WPA3_PSK -> AuthModeDomain.WPA3_PSK
 }
 
-internal fun ConnectionInfo.toDomain(): ConnectionInfoDomain {
-    return ConnectionInfoDomain(ip4_addr!!.toIp())
+internal fun Band.toDomain() = when (this) {
+    Band.BAND_ANY -> BandDomain.BAND_ANY
+    Band.BAND_2_4_GH -> BandDomain.BAND_2_4_GH
+    Band.BAND_5_GH -> BandDomain.BAND_5_GH
 }
 
-internal fun ConnectionState.toDomain(): WifiConnectionStateDomain {
-    return when (this) {
-        ConnectionState.DISCONNECTED -> WifiConnectionStateDomain.DISCONNECTED
-        ConnectionState.AUTHENTICATION -> WifiConnectionStateDomain.AUTHENTICATION
-        ConnectionState.ASSOCIATION -> WifiConnectionStateDomain.ASSOCIATION
-        ConnectionState.OBTAINING_IP -> WifiConnectionStateDomain.OBTAINING_IP
-        ConnectionState.CONNECTED -> WifiConnectionStateDomain.CONNECTED
-        ConnectionState.CONNECTION_FAILED -> WifiConnectionStateDomain.CONNECTION_FAILED
-    }
-}
-
-internal fun AuthMode.toDomain(): AuthModeDomain {
-    return when (this) {
-        AuthMode.OPEN -> AuthModeDomain.OPEN
-        AuthMode.WEP -> AuthModeDomain.WEP
-        AuthMode.WPA_PSK -> AuthModeDomain.WPA_PSK
-        AuthMode.WPA2_PSK -> AuthModeDomain.WPA2_PSK
-        AuthMode.WPA_WPA2_PSK -> AuthModeDomain.WPA_WPA2_PSK
-        AuthMode.WPA2_ENTERPRISE -> AuthModeDomain.WPA2_ENTERPRISE
-        AuthMode.WPA3_PSK -> AuthModeDomain.WPA3_PSK
-    }
-}
-
-internal fun Band.toDomain(): BandDomain {
-    return when (this) {
-        Band.BAND_ANY -> BandDomain.BAND_ANY
-        Band.BAND_2_4_GH -> BandDomain.BAND_2_4_GH
-        Band.BAND_5_GH -> BandDomain.BAND_5_GH
-    }
-}
-
-internal fun ConnectionFailureReason.toDomain(): WifiConnectionFailureReasonDomain {
-    return when (this) {
-        ConnectionFailureReason.AUTH_ERROR -> WifiConnectionFailureReasonDomain.AUTH_ERROR
-        ConnectionFailureReason.NETWORK_NOT_FOUND -> WifiConnectionFailureReasonDomain.NETWORK_NOT_FOUND
-        ConnectionFailureReason.TIMEOUT -> WifiConnectionFailureReasonDomain.TIMEOUT
-        ConnectionFailureReason.FAIL_IP -> WifiConnectionFailureReasonDomain.FAIL_IP
-        ConnectionFailureReason.FAIL_CONN -> WifiConnectionFailureReasonDomain.FAIL_CONN
-    }
+internal fun ConnectionFailureReason.toDomain() = when (this) {
+    ConnectionFailureReason.AUTH_ERROR -> WifiConnectionFailureReasonDomain.AUTH_ERROR
+    ConnectionFailureReason.NETWORK_NOT_FOUND -> WifiConnectionFailureReasonDomain.NETWORK_NOT_FOUND
+    ConnectionFailureReason.TIMEOUT -> WifiConnectionFailureReasonDomain.TIMEOUT
+    ConnectionFailureReason.FAIL_IP -> WifiConnectionFailureReasonDomain.FAIL_IP
+    ConnectionFailureReason.FAIL_CONN -> WifiConnectionFailureReasonDomain.FAIL_CONN
 }
 
 internal fun WifiInfo.toDomain(): WifiInfoDomain {
@@ -120,13 +95,7 @@ internal fun WifiInfo.toDomain(): WifiInfoDomain {
     )
 }
 
-internal fun ScanRecord.toDomain(): ScanRecordDomain {
-    Log.d(TAG, "mapper: $this")
-    return ScanRecordDomain(rssi, wifi!!.toDomain())
-}
+internal fun ScanRecord.toDomain() = ScanRecordDomain(rssi, wifi!!.toDomain())
 
-internal fun ByteString.toIp(): String {
-    return toByteArray().joinToString(".") {
-        it.toUByte().toString()
-    }
-}
+internal fun ByteString.toIp() = toByteArray()
+    .joinToString(".") { it.toUByte().toString() }
