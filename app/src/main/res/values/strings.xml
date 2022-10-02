@@ -31,19 +31,9 @@
 
 <resources>
     <string name="app_name">nRF Wi-Fi Provisioner</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="add_device">Add device</string>
-    <string name="change_device">Change</string>
-    <string name="no_device_selected">No device selected</string>
-    <string name="previous">Previous</string>
-    <string name="close_app">Button which closes application.</string>
-    <string name="app_info">The nRF Wi-Fi Provisioner app allows provisioning nRF 700x devices to
-        Wi-Fi networks over Bluetooth LE.\n\n
 
+    <string name="change_device">Change</string>
+    <string name="app_info">Application allows provisioning of a new nRF700x device to Wi-Fi networks over Bluetooth LE.\n\n
         ### Key features:\n
         * Provisioning nRF 700x devices to Wi-Fi networks.\n
         * Displaying connection status of provisioned devices.\n
@@ -73,60 +63,14 @@
     <string name="password_encoded">**** ****</string>
     <string name="dismiss">Dismiss</string>
     <string name="accept">Accept</string>
-    <string name="error_password_empty">Password cannot be empty.</string>
 
-    <string name="cd_wifi_available">Wifi is available.</string>
-    <string name="cd_device_selected">Bluetooth device is selected.</string>
-
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
-
-    <string name="error_version">Error when reading version.</string>
     <string name="device_info">Device status</string>
     <string name="disconnected">Disconnected</string>
     <string name="status_info">Wi-Fi status</string>
     <string name="selected_wifi">Selected Wi-Fi</string>
     <string name="start_provisioning">Start provisioning</string>
-    <string name="error_status">Error when reading status.</string>
     <string name="dk_version">Version</string>
-    <string name="wifi_state">Wifi state</string>
-    <string name="error_scanning">Error occurred during scanning.</string>
     <string name="wifi_scanning">Scanning error</string>
-    <string name="wifi_select">Select Wifi</string>
     <string name="unprovision">Unprovision</string>
     <string name="password_select">Select password</string>
     <string name="provision">Provision</string>
@@ -143,19 +87,17 @@
     <string name="wifi_status_connected">Connected</string>
     <string name="wifi_status_disconnected">Disconnected</string>
     <string name="wifi_status_unprovisioned">Unprovisioned</string>
-    <string name="wifi_status_error">Error occured during provisioning.</string>
+    <string name="wifi_status_error">Error occurred during provisioning.</string>
     <string name="cd_wifi_icon">Icon indicating wifi and it\'s authentication method.</string>
-
-    <string name="bssid">Router MAC: %s</string>
 
     <string name="wifi_title">Wi-Fi</string>
 
-    <string name="edit">Edit</string>
+    <string name="bssid">BSSID: %s</string>
     <string name="band">Band: %s</string>
     <string name="band_and_channel">Band: %s, Channel: %s</string>
     <string name="channel">Channel: %s</string>
-    <string name="band_2_4">2.4GHz</string>
-    <string name="band_5">5GHz</string>
+    <string name="band_2_4">2.4 GHz</string>
+    <string name="band_5">5 GHz</string>
     <string name="band_any">Any</string>
 
     <string name="error_auth">Authentication error.</string>
@@ -166,19 +108,17 @@
 
     <string name="connection_info">Connection info</string>
     <string name="status_title">Wi-Fi info</string>
-    <string name="status_ip_4">IPV4: %s</string>
+    <string name="status_ip_4">IPv4: %s</string>
     <string name="status_ssid">SSID: %s</string>
-    <string name="status_bssid">BSSID: %s</string>
-    <string name="status_band">Band: %s</string>
-    <string name="status_channel">Channel: %s</string>
+    <string name="status_bssid">@string/bssid</string>
+    <string name="status_band">@string/band</string>
+    <string name="status_channel">@string/channel</string>
 
     <string name="scan_param_title">Scan params</string>
-    <string name="scan_param_band">Band: %s</string>
+    <string name="scan_param_band">@string/band</string>
     <string name="scan_param_passive">Passive: %s</string>
     <string name="scan_param_period_ms">Period: %s [ms]</string>
     <string name="scan_param_group_channels">Group channels: %s</string>
-
-    <string name="connection_failure_title">Connection failure</string>
 
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
@@ -190,9 +130,9 @@
     <string name="state_obtaining_ip">Obtaining IP</string>
     <string name="result_state">Result</string>
     <string name="state_connected">Connected</string>
-    <string name="state_connection_failed">Connection Failed</string>
+    <string name="state_connection_failed">Connection failed</string>
 
-    <string name="version">ProvVer: %d</string>
+    <string name="version">Version: %d</string>
     <string name="select_wifi">Select Wi-Fi</string>
 
     <string name="persistent_storage">Persistent storage</string>

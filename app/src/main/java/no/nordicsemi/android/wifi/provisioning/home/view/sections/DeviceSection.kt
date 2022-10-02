@@ -91,7 +91,7 @@ private fun DeviceNotSelectedSection() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(id = R.drawable.ic_nrf70),
-            contentDescription = stringResource(id = R.string.add_device),
+            contentDescription = null,
             modifier = Modifier
                 .widthIn(max = 200.dp)
                 .padding(8.dp)
