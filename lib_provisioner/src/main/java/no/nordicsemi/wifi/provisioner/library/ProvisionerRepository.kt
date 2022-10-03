@@ -108,7 +108,7 @@ interface ProvisionerRepository {
     suspend fun stopScan()
 
     /**
-     * Provisions the connected device with data given Wi-Fi configuration.
+     * Provisions the connected device using the given Wi-Fi configuration.
      *
      * @return [Flow] of type [WifiConnectionStateDomain].
      * @throws [ResponseErrorException] when the device reports result different that success.
