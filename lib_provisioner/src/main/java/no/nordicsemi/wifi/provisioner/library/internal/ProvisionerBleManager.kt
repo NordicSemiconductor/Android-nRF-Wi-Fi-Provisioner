@@ -109,7 +109,6 @@ internal class ProvisionerBleManager(
                         }
                         ConnectionStatus.DISCONNECTED
                     }
-
                 }
             }
         } catch (e: Exception) {
@@ -156,27 +155,39 @@ internal class ProvisionerBleManager(
     }
 
     suspend fun getVersion(): Info = withTimeout(TIMEOUT_MILLIS) {
-        readCharacteristic(versionCharacteristic)
-            .suspendForValidResponse<InfoPacket>()
-            .value
+        try {
+            readCharacteristic(versionCharacteristic)
+                .suspendForValidResponse<InfoPacket>()
+                .value
+        } catch (e: Exception) {
+            // Translate an exception from the BLE library to
+            // one exported from this library.
+            throw ResponseErrorException(ResponseError.INTERNAL_ERROR)
+        }
     }
 
     suspend fun getStatus(): DeviceStatus = withTimeout(TIMEOUT_MILLIS) {
         val request = Request(op_code = OpCode.GET_STATUS)
 
-        val response = waitForIndication(controlPointCharacteristic)
-            .trigger(
-                writeCharacteristic(
-                    controlPointCharacteristic,
-                    request.encode(),
-                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+        val response = try {
+            waitForIndication(controlPointCharacteristic)
+                .trigger(
+                    writeCharacteristic(
+                        controlPointCharacteristic,
+                        request.encode(),
+                        BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                    )
                 )
-            )
-            .suspendForValidResponse<ResponsePacket>()
+                .suspendForValidResponse<ResponsePacket>()
+        } catch (e: Exception) {
+            // Translate an exception from the BLE library to
+            // one exported from this library.
+            throw ResponseErrorException(ResponseError.INTERNAL_ERROR)
+        }
 
         verifyResponseSuccess(response)
 
-        response.value.device_status ?: throw IllegalStateException("Device status is null")
+        response.value.device_status ?: throw ResponseErrorException(ResponseError.INTERNAL_ERROR)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -192,19 +203,27 @@ internal class ProvisionerBleManager(
             .asValidResponseFlow<ResultPacket>()
             .onEach {
                 timeoutJob.cancel()
-                trySend(it.value.scan_record!!)
+                it.value.scan_record?.let { record ->
+                    trySend(record)
+                }
             }
             .launchIn(this)
 
-        val response = waitForIndication(controlPointCharacteristic)
-            .trigger(
-                writeCharacteristic(
-                    controlPointCharacteristic,
-                    request.encode(),
-                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+        val response = try {
+            waitForIndication(controlPointCharacteristic)
+                .trigger(
+                    writeCharacteristic(
+                        controlPointCharacteristic,
+                        request.encode(),
+                        BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                    )
                 )
-            )
-            .suspendForValidResponse<ResponsePacket>()
+                .suspendForValidResponse<ResponsePacket>()
+        } catch (e: Exception) {
+            // Translate an exception from the BLE library to
+            // one exported from this library.
+            throw ResponseErrorException(ResponseError.INTERNAL_ERROR)
+        }
 
         verifyResponseSuccess(response)
 
@@ -215,7 +234,7 @@ internal class ProvisionerBleManager(
 
     suspend fun stopScan() {
         val request = Request(op_code = OpCode.STOP_SCAN)
-        val response = waitForIndication(controlPointCharacteristic)
+        val response = try { waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
                     controlPointCharacteristic,
@@ -224,6 +243,11 @@ internal class ProvisionerBleManager(
                 )
             )
             .suspendForValidResponse<ResponsePacket>()
+        } catch (e: Exception) {
+            // Translate an exception from the BLE library to
+            // one exported from this library.
+            throw ResponseErrorException(ResponseError.INTERNAL_ERROR)
+        }
 
         verifyResponseSuccess(response)
     }
@@ -241,19 +265,27 @@ internal class ProvisionerBleManager(
             .asValidResponseFlow<ResultPacket>()
             .onEach {
                 timeoutJob.cancel()
-                trySend(it.value.state!!)
+                it.value.state?.let { state ->
+                    trySend(state)
+                }
             }
             .launchIn(this)
 
-        val response = waitForIndication(controlPointCharacteristic)
-            .trigger(
-                writeCharacteristic(
-                    controlPointCharacteristic,
-                    request.encode(),
-                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+        val response = try {
+            waitForIndication(controlPointCharacteristic)
+                .trigger(
+                    writeCharacteristic(
+                        controlPointCharacteristic,
+                        request.encode(),
+                        BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                    )
                 )
-            )
-            .suspendForValidResponse<ResponsePacket>()
+                .suspendForValidResponse<ResponsePacket>()
+        } catch (e: Exception) {
+            // Translate an exception from the BLE library to
+            // one exported from this library.
+            throw ResponseErrorException(ResponseError.INTERNAL_ERROR)
+        }
 
         verifyResponseSuccess(response)
 
@@ -264,15 +296,21 @@ internal class ProvisionerBleManager(
 
     suspend fun forgetWifi() {
         val request = Request(op_code = OpCode.FORGET_CONFIG)
-        val response = waitForIndication(controlPointCharacteristic)
-            .trigger(
-                writeCharacteristic(
-                    controlPointCharacteristic,
-                    request.encode(),
-                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+        val response = try {
+            waitForIndication(controlPointCharacteristic)
+                .trigger(
+                    writeCharacteristic(
+                        controlPointCharacteristic,
+                        request.encode(),
+                        BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                    )
                 )
-            )
-            .suspendForValidResponse<ResponsePacket>()
+                .suspendForValidResponse<ResponsePacket>()
+        } catch (e: Exception) {
+            // Translate an exception from the BLE library to
+            // one exported from this library.
+            throw ResponseErrorException(ResponseError.INTERNAL_ERROR)
+        }
 
         verifyResponseSuccess(response)
     }
