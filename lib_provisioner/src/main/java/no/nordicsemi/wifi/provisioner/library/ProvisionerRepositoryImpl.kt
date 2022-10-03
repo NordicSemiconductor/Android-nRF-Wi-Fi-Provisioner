@@ -82,15 +82,6 @@ internal class ProvisionerRepositoryImpl internal constructor(
     override fun openLogger() {
         NordicLogger.launch(context, manager?.logger)
     }
-
-//    private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
-//        return flow { emit(Resource.createSuccess(block())) }
-//            .onStart { emit(Resource.createLoading()) }
-//            .catch {
-//                it.printStackTrace()
-//                emit(Resource.createError(it))
-//            }
-//    }
 }
 
 internal object ProvisionerFactory {
