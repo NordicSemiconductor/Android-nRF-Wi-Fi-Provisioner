@@ -133,7 +133,7 @@
     <string name="state_connected">Connected</string>
     <string name="state_connection_failed">Connection failed</string>
 
-    <string name="version">Version: %d</string>
+    <string name="version">V %d</string>
     <string name="select_wifi">Select Wi-Fi</string>
 
     <string name="persistent_storage">Persistent storage</string>
