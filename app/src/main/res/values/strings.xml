@@ -41,17 +41,19 @@
     <string name="no_device_selected">No device selected</string>
     <string name="previous">Previous</string>
     <string name="close_app">Button which closes application.</string>
-    <string name="app_info">Application allows provisioning of a new nRF700x device to Wi-Fi networks over Bluetooth LE.\n\n
+    <string name="app_info">The nRF Wi-Fi Provisioner app allows provisioning nRF 700x devices to
+        Wi-Fi networks over Bluetooth LE.\n\n
+
         ### Key features:\n
-        * Provision a new device to the desired network.\n
-        * Get connection status of the provisioned device.\n
-        * Re-provision already provisioned devices to an alternate network.\n\n
+        * Provisioning nRF 700x devices to Wi-Fi networks.\n
+        * Displaying connection status of provisioned devices.\n
+        * Re-provisioning already provisioned devices to alternate networks.\n\n
 
         ### Requirements:\n
-        * [nRF700x DK](https://www.nordicsemi.com/News/2022/08/Nordic-Semiconductor-announces-its-first-WiFi-chip?lang=ko-KR)\n
-        * Provisioning sample app flashed \n\n
+        * [nRF700x DK](https://www.nordicsemi.com/News/2022/08/Nordic-Semiconductor-announces-its-first-WiFi-chip).\n
+        * Wi-Fi Provisioning Service sample programmed.\n\n
 
-        Make sure the device is powered ON and in range of the phone.</string>
+        Make sure the device is powered ON and in range.</string>
 
     <string name="section_device">Device status</string>
     <string name="section_provisioning">Provisioning data</string>
