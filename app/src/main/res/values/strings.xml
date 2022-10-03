@@ -93,6 +93,8 @@
 
     <string name="wifi_title">Wi-Fi</string>
 
+    <string name="ip_4">IPv4: %s</string>
+    <string name="ssid">SSID: %s</string>
     <string name="bssid">BSSID: %s</string>
     <string name="band">Band: %s</string>
     <string name="band_and_channel">Band: %s, Channel: %s</string>
@@ -109,14 +111,8 @@
 
     <string name="connection_info">Connection info</string>
     <string name="status_title">Wi-Fi info</string>
-    <string name="status_ip_4">IPv4: %s</string>
-    <string name="status_ssid">SSID: %s</string>
-    <string name="status_bssid">@string/bssid</string>
-    <string name="status_band">@string/band</string>
-    <string name="status_channel">@string/channel</string>
 
     <string name="scan_param_title">Scan params</string>
-    <string name="scan_param_band">@string/band</string>
     <string name="scan_param_passive">Passive: %s</string>
     <string name="scan_param_period_ms">Period: %s [ms]</string>
     <string name="scan_param_group_channels">Group channels: %s</string>

@@ -95,21 +95,21 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     style = MaterialTheme.typography.labelLarge
                 )
                 Text(
-                    text = stringResource(id = R.string.status_ssid, it.ssid),
+                    text = stringResource(id = R.string.ssid, it.ssid),
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = stringResource(id = R.string.status_bssid, it.macAddress),
+                    text = stringResource(id = R.string.bssid, it.macAddress),
                     style = MaterialTheme.typography.bodySmall
                 )
                 it.band?.toDisplayString()?.let {
                     Text(
-                        text = stringResource(id = R.string.status_band, it),
+                        text = stringResource(id = R.string.band, it),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
                 Text(
-                    text = stringResource(id = R.string.status_channel, it.channel.toString()),
+                    text = stringResource(id = R.string.channel, it.channel.toString()),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -124,7 +124,7 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     style = MaterialTheme.typography.labelLarge
                 )
                 Text(
-                    text = stringResource(id = R.string.status_ip_4, it.ipv4Address),
+                    text = stringResource(id = R.string.ip_4, it.ipv4Address),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -139,7 +139,7 @@ private fun StatusSection(status: DeviceStatusDomain) {
                     style = MaterialTheme.typography.labelLarge
                 )
                 Text(
-                    text = stringResource(id = R.string.scan_param_band, it.band.toDisplayString()),
+                    text = stringResource(id = R.string.band, it.band.toDisplayString()),
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
