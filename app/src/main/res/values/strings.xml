@@ -33,6 +33,7 @@
     <string name="app_name">nRF Wi-Fi Provisioner</string>
 
     <string name="change_device">Change</string>
+    <string name="ic_nrf70">An icon of nRF70 Series</string>
     <string name="app_info">Application allows provisioning of a new nRF700x device to Wi-Fi networks over Bluetooth LE.\n\n
         ### Key features:\n
         * Provisioning nRF 700x devices to Wi-Fi networks.\n
