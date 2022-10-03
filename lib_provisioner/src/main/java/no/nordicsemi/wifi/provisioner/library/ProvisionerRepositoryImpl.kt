@@ -45,42 +45,37 @@ private const val MANAGER_NOT_INITIALIZED = "Manager not initialized. Call start
 internal class ProvisionerRepositoryImpl internal constructor(
     private val context: Context
 ) : ProvisionerRepository {
+    private var _manager: ProvisionerBleManager? = null
 
-    private var manager: ProvisionerBleManager? = null
+    private val manager: ProvisionerBleManager
+        get() = _manager ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
 
     @SuppressLint("MissingPermission")
     override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> =
         ProvisionerFactory.createBleManager(context, device)
-            .apply { manager = this }
+            .apply { _manager = this }
             .start(device)
 
-    override suspend fun readVersion(): VersionDomain = manager?.getVersion()?.toDomain()
-        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
+    override suspend fun readVersion(): VersionDomain = manager.getVersion().toDomain()
 
-    override suspend fun getStatus(): DeviceStatusDomain = manager?.getStatus()?.toDomain()
-        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
+    override suspend fun getStatus(): DeviceStatusDomain = manager.getStatus().toDomain()
 
-    override fun startScan(): Flow<ScanRecordDomain> = manager?.startScan()?.map { it.toDomain() }
-        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
+    override fun startScan(): Flow<ScanRecordDomain> = manager.startScan().map { it.toDomain() }
 
-    override suspend fun stopScan(): Unit = manager?.stopScan()
-        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
+    override suspend fun stopScan(): Unit = manager.stopScan()
 
     override fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain> =
-        manager?.provision(config.toApi())
-            ?.map { it.toDomain() }
-            ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
+        manager.provision(config.toApi()).map { it.toDomain() }
 
-    override suspend fun forgetConfig(): Unit = manager?.forgetWifi()
-        ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
+    override suspend fun forgetConfig(): Unit = manager.forgetWifi()
 
     override suspend fun release() {
-        manager?.release()
-        manager = null
+        _manager?.release()
+        _manager = null
     }
 
     override fun openLogger() {
-        NordicLogger.launch(context, manager?.logger)
+        NordicLogger.launch(context, _manager?.logger)
     }
 }
 
