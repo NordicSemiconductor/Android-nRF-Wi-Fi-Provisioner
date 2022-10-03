@@ -67,8 +67,8 @@ interface ProvisionerRepository {
     /**
      * Connects and initialise bonding with a selected device.
      *
-     * @param device[BluetoothDevice] to which the app should connect
-     * @return [Flow] which emits connectivity status changes
+     * @param device[BluetoothDevice] to which the app should connect.
+     * @return [Flow] which emits connectivity status changes.
      */
     suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus>
 
@@ -76,7 +76,7 @@ interface ProvisionerRepository {
      * Reads the current version.
      *
      * @return [VersionDomain] version data read from the IoT device.
-     * @throws [ResponseErrorException] when the device reports result different that success
+     * @throws [ResponseErrorException] when the device reports result different than success.
      */
     suspend fun readVersion(): VersionDomain
 
@@ -87,7 +87,7 @@ interface ProvisionerRepository {
      * scanning status and params.
      *
      * @return [DeviceStatusDomain] status data read from the IoT device.
-     * @throws [ResponseErrorException] when the device reports result different that success.
+     * @throws [ResponseErrorException] when the device reports result different than success.
      */
     suspend fun getStatus(): DeviceStatusDomain
 
@@ -95,7 +95,7 @@ interface ProvisionerRepository {
      * Starts scanning and obtains available Wi-Fi list.
      *
      * @return [Flow] which emits multiple objects containing Wi-Fi info.
-     * @throws [ResponseErrorException] when the device reports result different that success.
+     * @throws [ResponseErrorException] when the device reports result different than success.
      * @throws [NotificationTimeoutException] when the first result is not received before timeout time.
      */
     fun startScan(): Flow<ScanRecordDomain>
@@ -103,7 +103,7 @@ interface ProvisionerRepository {
     /**
      * Stops scanning for available Wi-Fi networks. Should be called after [startScan].
      *
-     * @throws [ResponseErrorException] - when the device reports result different that success.
+     * @throws [ResponseErrorException] - when the device reports result different than success.
      */
     suspend fun stopScan()
 
@@ -111,7 +111,7 @@ interface ProvisionerRepository {
      * Provisions the connected device using the given Wi-Fi configuration.
      *
      * @return [Flow] of type [WifiConnectionStateDomain].
-     * @throws [ResponseErrorException] when the device reports result different that success.
+     * @throws [ResponseErrorException] when the device reports result different than success.
      * @throws [NotificationTimeoutException] when the first result is not received before timeout time.
      */
     fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain>
@@ -119,7 +119,7 @@ interface ProvisionerRepository {
     /**
      * Unprovisions the device - forgets selected SSID, password, etc.
      *
-     * @throws [ResponseErrorException] - when the device reports result different that success.
+     * @throws [ResponseErrorException] - when the device reports result different than success.
      */
     suspend fun forgetConfig()
 
