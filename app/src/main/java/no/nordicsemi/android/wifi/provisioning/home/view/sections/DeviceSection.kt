@@ -48,7 +48,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.common.theme.view.NordicText
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 import no.nordicsemi.android.wifi.provisioning.BuildConfig
@@ -91,7 +93,7 @@ private fun DeviceNotSelectedSection() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(id = R.drawable.ic_nrf70),
-            contentDescription = stringResource(id = R.string.add_device),
+            contentDescription = stringResource(id = R.string.ic_nrf70),
             modifier = Modifier
                 .widthIn(max = 200.dp)
                 .padding(8.dp)
@@ -117,5 +119,13 @@ private fun DeviceNotSelectedSection() {
             textAlign = TextAlign.End,
             style = MaterialTheme.typography.labelMedium
         )
+    }
+}
+
+@Preview
+@Composable
+private fun DeviceNotSelectedSectionPreview() {
+    NordicTheme {
+        DeviceNotSelectedSection()
     }
 }
