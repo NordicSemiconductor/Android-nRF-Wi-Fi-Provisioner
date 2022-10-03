@@ -31,9 +31,9 @@
 
 package no.nordicsemi.android.wifi.provisioning.home.view
 
-import no.nordicsemi.wifi.provisioner.library.Loading
-import no.nordicsemi.wifi.provisioner.library.Resource
-import no.nordicsemi.wifi.provisioner.library.Success
+import no.nordicsemi.android.wifi.provisioning.util.Loading
+import no.nordicsemi.android.wifi.provisioning.util.Resource
+import no.nordicsemi.android.wifi.provisioning.util.Success
 import no.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
 import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
@@ -65,7 +65,11 @@ data class HomeViewEntity(
     }
 
     fun isRunning(): Boolean {
-        return device != null && version == null || version is Loading || status is Loading || provisioningStatus is Loading || unprovisioningStatus is Loading
+        return device != null && version == null
+                || version is Loading
+                || status is Loading
+                || provisioningStatus is Loading
+                || unprovisioningStatus is Loading
     }
 
     fun hasFinished(): Boolean {

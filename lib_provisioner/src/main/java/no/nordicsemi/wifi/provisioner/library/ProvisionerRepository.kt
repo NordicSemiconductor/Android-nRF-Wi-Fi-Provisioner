@@ -39,12 +39,12 @@ import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import kotlinx.coroutines.flow.Flow
-import no.nordicsemi.wifi.provisioner.library.internal.ResponseErrorException
+import no.nordicsemi.wifi.provisioner.library.exception.ResponseErrorException
+import no.nordicsemi.wifi.provisioner.library.exception.NotificationTimeoutException
 
 /**
- * A class responsible for establishing connection and maintaining communication with a nRF 7 device.
+ * A class responsible for establishing connection and maintaining communication with a nRF 700x device.
  *
  * It has several methods which allows for sending Wi-Fi credentials to an IoT device.
  * The typical flow contains:
@@ -52,7 +52,8 @@ import no.nordicsemi.wifi.provisioner.library.internal.ResponseErrorException
  * 2. [readVersion] & [getStatus] - Obtaining the device's version and status.
  * 3. [startScan] - Send START_SCAN command to the device and obtain Wi-Fi list.
  * 4. [stopScan] - After getting desired result the scanning should be stopped.
- * 4. [setConfig] - After selecting Wi-Fi and providing password, a provisioning data should be send to the DK.
+ * 4. [setConfig] - After selecting Wi-Fi and providing password, a provisioning data should be
+ *                  send to the DK.
  * 5. Observe connection status and eventually repeat step 4 if the password was wrong.
  *
  * The device can be unprovisioned, if Status returns Wi-Fi info, by calling [forgetConfig].
@@ -66,62 +67,64 @@ interface ProvisionerRepository {
     /**
      * Connects and initialise bonding with a selected device.
      *
-     * @param device[BluetoothDevice] to which the app should connect
-     * @return [Flow] which emits connectivity status changes
+     * @param device[BluetoothDevice] to which the app should connect.
+     * @return [Flow] which emits connectivity status changes.
      */
     suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus>
 
     /**
-     * Read the current version.
+     * Reads the current version.
      *
      * @return [VersionDomain] version data read from the IoT device.
-     * @throws [ResponseErrorException] when the IoT reports result different that success
+     * @throws [ResponseErrorException] when the device reports result different than success.
      */
     suspend fun readVersion(): VersionDomain
 
     /**
-     * Read device status.
+     * Reads the device status.
      *
-     * It can contain information about provisioning data, connection status and Wi-Fi scanning status and params.
+     * The status contains information about provisioning data, connection status and Wi-Fi
+     * scanning status and params.
      *
      * @return [DeviceStatusDomain] status data read from the IoT device.
-     * @throws [ResponseErrorException] when the IoT reports result different that success
+     * @throws [ResponseErrorException] when the device reports result different than success.
      */
     suspend fun getStatus(): DeviceStatusDomain
 
     /**
-     * Start scanning and obtains available Wi-Fi list.
+     * Starts scanning and obtains available Wi-Fi list.
      *
      * @return [Flow] which emits multiple objects containing Wi-Fi info.
-     * @throws [ResponseErrorException] when the IoT reports result different that success
-     * @throws [NotificationTimeoutException] when the first result is not received before timeout time
+     * @throws [ResponseErrorException] when the device reports result different than success.
+     * @throws [NotificationTimeoutException] when the first result is not received before timeout time.
      */
     fun startScan(): Flow<ScanRecordDomain>
 
     /**
-     * Stop scanning for available Wi-Fi's. Should be called after [startScan].
-     * @throws [ResponseErrorException] - when the IoT reports result different that success
+     * Stops scanning for available Wi-Fi networks. Should be called after [startScan].
+     *
+     * @throws [ResponseErrorException] - when the device reports result different than success.
      */
     suspend fun stopScan()
 
     /**
-     * Provision the connected DK with data obtained from [startScan] + password.
+     * Provisions the connected device using the given Wi-Fi configuration.
      *
-     * @return [Flow] of type [Resource]. Starts with [Loading] and emits multiple [Success] with Connection status updates.
-     * @throws [ResponseErrorException] when the IoT reports result different that success
-     * @throws [NotificationTimeoutException] when the first result is not received before timeout time
+     * @return [Flow] of type [WifiConnectionStateDomain].
+     * @throws [ResponseErrorException] when the device reports result different than success.
+     * @throws [NotificationTimeoutException] when the first result is not received before timeout time.
      */
     fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain>
 
     /**
-     * Unprovision the DK - forget slected SSID, password, etc.
+     * Unprovisions the device - forgets selected SSID, password, etc.
      *
-     * @throws [ResponseErrorException] - when the IoT reports result different that success
+     * @throws [ResponseErrorException] - when the device reports result different than success.
      */
     suspend fun forgetConfig()
 
     /**
-     * Closes connection with the DK.
+     * Closes connection with the device.
      */
     suspend fun release()
 

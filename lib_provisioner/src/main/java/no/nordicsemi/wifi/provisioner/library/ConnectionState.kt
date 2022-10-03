@@ -31,17 +31,15 @@
 
 package no.nordicsemi.wifi.provisioner.library
 
-import android.util.Log
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+enum class ConnectionStatus {
+    IDLE, CONNECTING, CONNECTED, SUCCESS, LINK_LOSS, DISCONNECTING, DISCONNECTED, UNKNOWN_ERROR, MISSING_SERVICE, FAIL_TO_CONNECT;
 
-private val exceptionHandler = CoroutineExceptionHandler { _, t ->
-    Log.e("COROUTINE-EXCEPTION", "Uncaught exception", t)
-}
-
-fun CoroutineScope.launchWithCatch(block: suspend CoroutineScope.() -> Unit) =
-    launch(Job() + exceptionHandler) {
-        block()
+    fun isDisconnecting(): Boolean {
+        return this == LINK_LOSS
+                || this == DISCONNECTING
+                || this == DISCONNECTED
+                || this == UNKNOWN_ERROR
+                || this == MISSING_SERVICE
+                || this == FAIL_TO_CONNECT
     }
+}

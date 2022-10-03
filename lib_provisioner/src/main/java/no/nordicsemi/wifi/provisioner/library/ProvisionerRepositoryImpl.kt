@@ -34,77 +34,48 @@ package no.nordicsemi.wifi.provisioner.library
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import no.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
-import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
-import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.wifi.provisioner.library.domain.toApi
-import no.nordicsemi.wifi.provisioner.library.domain.toDomain
-import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
-import no.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import no.nordicsemi.android.common.logger.NordicLogger
+import no.nordicsemi.wifi.provisioner.library.domain.*
+import no.nordicsemi.wifi.provisioner.library.internal.ProvisionerBleManager
 
-class ProvisionerRepositoryImpl internal constructor(
+private const val MANAGER_NOT_INITIALIZED = "Manager not initialized. Call start(BluetoothDevice) first."
+
+internal class ProvisionerRepositoryImpl internal constructor(
     private val context: Context
 ) : ProvisionerRepository {
+    private var _manager: ProvisionerBleManager? = null
 
-    private var manager: ProvisionerBleManager? = null
+    private val manager: ProvisionerBleManager
+        get() = _manager ?: throw IllegalStateException(MANAGER_NOT_INITIALIZED)
 
     @SuppressLint("MissingPermission")
-    override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> {
-        manager = ProvisionerFactory.createBleManager(context, device)
-        return manager!!.start(device)
-    }
+    override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> =
+        ProvisionerFactory.createBleManager(context, device)
+            .apply { _manager = this }
+            .start(device)
 
-    override suspend fun readVersion(): VersionDomain {
-        return VersionDomain(manager?.getVersion()?.version!!)
-    }
+    override suspend fun readVersion(): VersionDomain = manager.getVersion().toDomain()
 
-    override suspend fun getStatus(): DeviceStatusDomain {
-        val status = manager?.getStatus()
-        return status?.toDomain()!!
-    }
+    override suspend fun getStatus(): DeviceStatusDomain = manager.getStatus().toDomain()
 
-    override fun startScan(): Flow<ScanRecordDomain> {
-        return manager?.startScan()!!
-            .map { it.toDomain() }
-    }
+    override fun startScan(): Flow<ScanRecordDomain> = manager.startScan().map { it.toDomain() }
 
-    override suspend fun stopScan() {
-        manager?.stopScan()
-    }
+    override suspend fun stopScan(): Unit = manager.stopScan()
 
-    override fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain> {
-        return manager?.provision(config.toApi())!!
-            .map { it.toDomain() }
-    }
+    override fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain> =
+        manager.provision(config.toApi()).map { it.toDomain() }
 
-    override suspend fun forgetConfig() {
-        manager?.forgetWifi()
-    }
+    override suspend fun forgetConfig(): Unit = manager.forgetWifi()
 
     override suspend fun release() {
-        manager?.release()
-        manager = null
+        _manager?.release()
+        _manager = null
     }
 
     override fun openLogger() {
-        NordicLogger.launch(context, manager?.logger)
-    }
-
-    private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
-        return flow { emit(Resource.createSuccess(block())) }
-            .onStart { emit(Resource.createLoading()) }
-            .catch {
-                it.printStackTrace()
-                emit(Resource.createError(it))
-            }
+        NordicLogger.launch(context, _manager?.logger)
     }
 }
 

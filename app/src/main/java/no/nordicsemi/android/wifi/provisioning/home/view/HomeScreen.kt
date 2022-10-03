@@ -73,9 +73,10 @@ fun HomeScreen() {
 
     Scaffold(
         topBar = {
-            LoggerIconAppBar(stringResource(id = R.string.app_name)) {
-                viewModel.onEvent(OpenLoggerEvent)
-            }
+            LoggerIconAppBar(
+                text = stringResource(id = R.string.app_name),
+                onLoggerClick = { viewModel.onEvent(OpenLoggerEvent) }
+            )
         },
         containerColor = MaterialTheme.colorScheme.surface,
         bottomBar = { ActionButtonSection(state, onEvent) }

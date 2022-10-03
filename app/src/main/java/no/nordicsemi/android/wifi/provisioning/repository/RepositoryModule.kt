@@ -14,8 +14,7 @@ object RepositoryModule {
 
     @Provides
     fun providesRepository(
-        @ApplicationContext
-        context: Context
+        @ApplicationContext context: Context
     ): ProvisionerRepository {
         return ProvisionerRepository.newInstance(context)
     }

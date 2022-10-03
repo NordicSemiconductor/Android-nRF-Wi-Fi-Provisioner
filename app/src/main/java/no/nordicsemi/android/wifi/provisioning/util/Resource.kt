@@ -29,19 +29,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.wifi.provisioner.library.internal
+package no.nordicsemi.android.wifi.provisioning.util
 
-import android.bluetooth.BluetoothDevice
-import no.nordicsemi.android.ble.callback.profile.ProfileReadResponse
-import no.nordicsemi.android.ble.data.Data
+sealed interface Resource<T> {
 
-internal class ByteArrayReadResponse : ProfileReadResponse() {
-
-    lateinit var value: ByteArray
-
-    override fun onDataReceived(device: BluetoothDevice, data: Data) {
-        super.onDataReceived(device, data)
-
-        value = data.value ?: throw IllegalArgumentException("Read value cannot be null.")
+    companion object {
+        fun <T> createLoading(): Resource<T> = Loading()
+        fun <T> createSuccess(data: T): Resource<T> = Success(data)
+        fun <T> createError(error: Throwable): Resource<T> = Error(error)
     }
 }
+
+class Loading<T> : Resource<T>
+data class Success<T>(val data: T): Resource<T>
+data class Error<T>(val error: Throwable): Resource<T>

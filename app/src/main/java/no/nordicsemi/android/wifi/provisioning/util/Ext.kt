@@ -29,26 +29,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioning.home.view.components
+package no.nordicsemi.android.wifi.provisioning.util
 
-import androidx.compose.runtime.Composable
-import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
-import no.nordicsemi.android.common.theme.view.NordicAppBar
+import android.util.Log
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-@Composable
-fun BackIconAppBar(text: String, onClick: () -> Unit) {
-    NordicAppBar(
-        text = text,
-        onNavigationButtonClick = onClick
-    )
+private val exceptionHandler = CoroutineExceptionHandler { _, t ->
+    Log.e("COROUTINE-EXCEPTION", "Uncaught exception", t)
 }
 
-@Composable
-fun LoggerIconAppBar(text: String, onLoggerClick: () -> Unit) {
-    NordicAppBar(
-        text = text,
-        actions = {
-            LoggerAppBarIcon(onClick = { onLoggerClick() })
-        }
-    )
-}
+fun CoroutineScope.launchWithCatch(block: suspend CoroutineScope.() -> Unit) =
+    launch(Job() + exceptionHandler) {
+        block()
+    }

@@ -29,6 +29,23 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.wifi.provisioner.library.internal
+package no.nordicsemi.wifi.provisioner.library.internal.response
 
-class NotificationTimeoutException : Exception("Timeout exception.")
+import android.bluetooth.BluetoothDevice
+import no.nordicsemi.android.ble.callback.profile.ProfileReadResponse
+import no.nordicsemi.android.ble.data.Data
+import no.nordicsemi.android.wifi.provisioning.Response
+
+internal class ResponsePacket : ProfileReadResponse() {
+    lateinit var value: Response
+
+    override fun onDataReceived(device: BluetoothDevice, data: Data) {
+        super.onDataReceived(device, data)
+
+        try {
+            value = Response.ADAPTER.decode(data.value ?: byteArrayOf())
+        } catch (e: Exception) {
+            onInvalidDataReceived(device, data)
+        }
+    }
+}

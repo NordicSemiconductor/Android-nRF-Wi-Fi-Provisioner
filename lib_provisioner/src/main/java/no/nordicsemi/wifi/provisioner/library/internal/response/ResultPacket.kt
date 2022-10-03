@@ -29,26 +29,23 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioning.home.view.components
+package no.nordicsemi.wifi.provisioner.library.internal.response
 
-import androidx.compose.runtime.Composable
-import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
-import no.nordicsemi.android.common.theme.view.NordicAppBar
+import android.bluetooth.BluetoothDevice
+import no.nordicsemi.android.ble.callback.profile.ProfileReadResponse
+import no.nordicsemi.android.ble.data.Data
+import no.nordicsemi.android.wifi.provisioning.Result
 
-@Composable
-fun BackIconAppBar(text: String, onClick: () -> Unit) {
-    NordicAppBar(
-        text = text,
-        onNavigationButtonClick = onClick
-    )
-}
+internal class ResultPacket : ProfileReadResponse() {
+    lateinit var value: Result
 
-@Composable
-fun LoggerIconAppBar(text: String, onLoggerClick: () -> Unit) {
-    NordicAppBar(
-        text = text,
-        actions = {
-            LoggerAppBarIcon(onClick = { onLoggerClick() })
+    override fun onDataReceived(device: BluetoothDevice, data: Data) {
+        super.onDataReceived(device, data)
+
+        try {
+            value = Result.ADAPTER.decode(data.value ?: byteArrayOf())
+        } catch (e: Exception) {
+            onInvalidDataReceived(device, data)
         }
-    )
+    }
 }

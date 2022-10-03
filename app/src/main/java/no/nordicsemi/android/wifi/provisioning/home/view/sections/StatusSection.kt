@@ -47,10 +47,10 @@ import no.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataIte
 import no.nordicsemi.android.wifi.provisioning.home.view.components.LoadingItem
 import no.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioning.home.view.toIcon
-import no.nordicsemi.wifi.provisioner.library.Error
-import no.nordicsemi.wifi.provisioner.library.Loading
-import no.nordicsemi.wifi.provisioner.library.Resource
-import no.nordicsemi.wifi.provisioner.library.Success
+import no.nordicsemi.android.wifi.provisioning.util.Error
+import no.nordicsemi.android.wifi.provisioning.util.Loading
+import no.nordicsemi.android.wifi.provisioning.util.Resource
+import no.nordicsemi.android.wifi.provisioning.util.Success
 import no.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
 
 @Composable

@@ -7,14 +7,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import no.nordicsemi.wifi.provisioner.library.ProvisionerRepository
-import no.nordicsemi.wifi.provisioner.library.Resource
+import no.nordicsemi.android.wifi.provisioning.util.Resource
 import no.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
 import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
-import javax.inject.Inject
+import no.nordicsemi.wifi.provisioner.library.ConnectionStatus
 
 class ProvisionerResourceRepository(
     val repository: ProvisionerRepository
