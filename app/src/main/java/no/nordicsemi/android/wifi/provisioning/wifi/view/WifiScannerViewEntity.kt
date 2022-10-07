@@ -8,27 +8,38 @@ data class WifiScannerViewEntity(
     val isLoading: Boolean = true,
     val error: Throwable? = null,
     val sortOption: WifiSortOption = WifiSortOption.RSSI,
-    private val items: List<ScanRecordsSameSsid> = emptyList()
+    private val items: List<ScanRecordsForSsid> = emptyList()
 ) {
-    val sortedItems: List<ScanRecordsSameSsid>
+    val sortedItems: List<ScanRecordsForSsid>
 
     init {
         sortedItems = when (sortOption) {
-            WifiSortOption.NAME -> items.sortedBy { it.ssid }
+            WifiSortOption.NAME -> items.sortedBy { it.wifiData.ssid }
             WifiSortOption.RSSI -> items.sortedByDescending { it.biggestRssi }
         }
     }
 }
 
-data class ScanRecordsSameSsid(
-    val ssid: String,
-    val authMode: AuthModeDomain,
-    val items: List<ScanRecordDomain> = emptyList()
+data class ScanRecordsForSsid(
+    val wifiData: WifiData,
+    val items: List<ScanRecordDomain> = emptyList(),
 ) {
 
     val biggestRssi: Int
 
     init {
         biggestRssi = items.maxOf { it.rssi ?: 0 }
+    }
+}
+
+data class WifiData(
+    val ssid: String,
+    val authMode: AuthModeDomain,
+    val channelFallback: ScanRecordDomain, //Needed for proto v1
+    val selectedChannel: ScanRecordDomain? = null
+) {
+
+    fun isPasswordRequired(): Boolean {
+        return authMode != AuthModeDomain.OPEN
     }
 }

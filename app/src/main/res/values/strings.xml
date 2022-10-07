@@ -66,6 +66,7 @@
     <string name="password_encoded">**** ****</string>
     <string name="dismiss">Dismiss</string>
     <string name="accept">Accept</string>
+    <string name="clear">Clear</string>
 
     <string name="device_info">Device status</string>
     <string name="disconnected">Disconnected</string>
@@ -103,7 +104,7 @@
     <string name="channel">Channel: %s</string>
     <string name="band_2_4">2.4 GHz</string>
     <string name="band_5">5 GHz</string>
-    <string name="band_any">Any</string>
+    <string name="any">Any</string>
 
     <string name="error_auth">Authentication error.</string>
     <string name="error_network_not_found">The specified network could not be find.</string>

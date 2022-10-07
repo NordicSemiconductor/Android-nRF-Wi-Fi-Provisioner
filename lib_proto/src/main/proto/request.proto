@@ -13,6 +13,9 @@ message WifiConfig {
   optional bytes passphrase       = 2; // Default: empty string
   // Should the Wi-Fi config be kept only in RAM and be removed after device reboot.
   optional bool volatileMemory    = 3; // Default: false
+  // When this flag is set to true, the WifiInfo parameters other than SSID should be
+  // ignored.
+  optional bool anyChannel        = 4;
 }
 
 /* The request type, sent to the device. */

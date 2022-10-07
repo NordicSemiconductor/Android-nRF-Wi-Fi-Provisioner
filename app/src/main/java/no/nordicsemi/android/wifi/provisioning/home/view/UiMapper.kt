@@ -83,7 +83,7 @@ internal fun AuthModeDomain?.toIcon(): Int {
 @Composable
 internal fun BandDomain.toDisplayString(): String {
     return when (this) {
-        BandDomain.BAND_ANY -> R.string.band_any
+        BandDomain.BAND_ANY -> R.string.any
         BandDomain.BAND_2_4_GH -> R.string.band_2_4
         BandDomain.BAND_5_GH -> R.string.band_5
     }.let { stringResource(id = it) }

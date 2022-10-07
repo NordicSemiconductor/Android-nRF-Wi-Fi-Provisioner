@@ -42,9 +42,10 @@ data class WifiInfoDomain(
 ) {
 
     val macAddress: String
-        get() {
-            return bssid.toByteArray().joinToString(":") {
-                "%02x".format(it).uppercase()
-            }
+
+    init {
+        macAddress = bssid.toByteArray().joinToString(":") {
+            "%02x".format(it).uppercase()
         }
+    }
 }

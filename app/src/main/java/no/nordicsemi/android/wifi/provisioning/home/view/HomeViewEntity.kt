@@ -31,20 +31,20 @@
 
 package no.nordicsemi.android.wifi.provisioning.home.view
 
+import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
+import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiData
 import no.nordicsemi.wifi.provisioner.library.Loading
 import no.nordicsemi.wifi.provisioner.library.Resource
 import no.nordicsemi.wifi.provisioner.library.Success
 import no.nordicsemi.wifi.provisioner.library.domain.DeviceStatusDomain
-import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import no.nordicsemi.wifi.provisioner.library.domain.VersionDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConnectionStateDomain
-import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 
 data class HomeViewEntity(
     val device: DiscoveredBluetoothDevice? = null,
     val version: Resource<VersionDomain>? = null,
     val status: Resource<DeviceStatusDomain>? = null,
-    val network: ScanRecordDomain? = null,
+    val network: WifiData? = null,
     val password: String? = null,
     val persistentMemory: Boolean = true,
     val showPasswordDialog: Boolean? = null,

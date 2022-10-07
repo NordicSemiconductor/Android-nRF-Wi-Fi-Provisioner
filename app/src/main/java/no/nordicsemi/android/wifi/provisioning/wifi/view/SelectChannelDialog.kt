@@ -15,16 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.common.theme.view.RssiIcon
 import no.nordicsemi.android.wifi.provisioning.R
 import no.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import no.nordicsemi.android.common.theme.view.RssiIcon
 
 @Composable
 internal fun SelectChannelDialog(
-    records: ScanRecordsSameSsid,
+    records: ScanRecordsForSsid,
     onDismiss: () -> Unit,
-    onRecordSelected: (ScanRecordDomain) -> Unit
+    onRecordSelected: (ScanRecordDomain?) -> Unit
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -38,20 +38,28 @@ internal fun SelectChannelDialog(
                 }
             }
         },
+        dismissButton = {
+            TextButton(
+                onClick = { onRecordSelected(null) }
+            ) {
+                Text(stringResource(id = R.string.clear))
+            }
+        },
         confirmButton = {
             TextButton(
-                onClick = {
-                    onDismiss()
-                }
+                onClick = { onDismiss() }
             ) {
-                Text("Dismiss")
+                Text(stringResource(id = R.string.dismiss))
             }
         }
     )
 }
 
 @Composable
-private fun ChannelListItem(record: ScanRecordDomain, onRecordSelected: (ScanRecordDomain) -> Unit) {
+private fun ChannelListItem(
+    record: ScanRecordDomain,
+    onRecordSelected: (ScanRecordDomain) -> Unit
+) {
     val wifi = record.wifiInfo
 
     Row(

@@ -32,9 +32,21 @@
 package no.nordicsemi.android.wifi.provisioning.home.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import no.nordicsemi.android.common.navigation.NavigationManager
+import no.nordicsemi.android.common.navigation.NavigationResult
+import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 import no.nordicsemi.android.wifi.provisioning.WifiScannerId
 import no.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
 import no.nordicsemi.android.wifi.provisioning.home.view.HomeViewEntity
@@ -49,31 +61,16 @@ import no.nordicsemi.android.wifi.provisioning.home.view.OnShowPasswordDialog
 import no.nordicsemi.android.wifi.provisioning.home.view.OnUnprovisionEvent
 import no.nordicsemi.android.wifi.provisioning.home.view.OnVolatileMemoryChangedEvent
 import no.nordicsemi.android.wifi.provisioning.home.view.OpenLoggerEvent
+import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
 import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
 import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
+import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiData
 import no.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
 import no.nordicsemi.wifi.provisioner.library.Loading
-import no.nordicsemi.wifi.provisioner.library.ProvisionerRepository
 import no.nordicsemi.wifi.provisioner.library.Success
-import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
 import no.nordicsemi.wifi.provisioner.library.internal.ConnectionStatus
 import no.nordicsemi.wifi.provisioner.library.launchWithCatch
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.cancellable
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import no.nordicsemi.android.common.navigation.NavigationManager
-import no.nordicsemi.android.common.navigation.NavigationResult
-import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
-import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
-import no.nordicsemi.wifi.provisioner.library.Resource
 import javax.inject.Inject
 
 @HiltViewModel
@@ -101,7 +98,7 @@ class HomeViewModel @Inject constructor(
         if (result is ProvisionerScannerResult) {
             installBluetoothDevice(result.device)
         } else if (result is ScanRecordResult) {
-            installWifi(result.scanRecord)
+            installWifi(result.wifiData)
         }
     }
 
@@ -180,12 +177,12 @@ class HomeViewModel @Inject constructor(
         navigationManager.navigateTo(ProvisionerScannerDestinationId)
     }
 
-    private fun installWifi(scanRecord: ScanRecordDomain) {
+    private fun installWifi(wifiData: WifiData) {
         _state.value = _state.value.copy(
-            network = scanRecord,
+            network = wifiData,
             password = null,
             provisioningStatus = null,
-            showPasswordDialog = scanRecord.isPasswordRequired()
+            showPasswordDialog = wifiData.isPasswordRequired()
         )
     }
 
@@ -233,12 +230,18 @@ class HomeViewModel @Inject constructor(
 
     private fun provision() {
         val state = _state.value
-        val config = WifiConfigDomain(state.network!!.wifiInfo, state.password, !state.persistentMemory)
-        repository.setConfig(config)
+        repository.setConfig(state.network!!.toConfig())
             .cancellable()
             .onEach {
                 _state.value = _state.value.copy(provisioningStatus = it)
             }.launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
+    }
+
+    private fun WifiData.toConfig(): WifiConfigDomain {
+        val state = _state.value
+        val wifiInfo = selectedChannel?.wifiInfo ?: channelFallback.wifiInfo
+        val anyChannel = selectedChannel?.wifiInfo?.let { false } ?: true
+        return WifiConfigDomain(wifiInfo, state.password, !state.persistentMemory, anyChannel)
     }
 }

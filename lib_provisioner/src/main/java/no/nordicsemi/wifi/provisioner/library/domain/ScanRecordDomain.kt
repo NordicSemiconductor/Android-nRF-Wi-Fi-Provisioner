@@ -34,9 +34,4 @@ package no.nordicsemi.wifi.provisioner.library.domain
 data class ScanRecordDomain(
     val rssi: Int?,
     val wifiInfo: WifiInfoDomain
-) {
-
-    fun isPasswordRequired(): Boolean {
-        return wifiInfo.authModeDomain != AuthModeDomain.OPEN
-    }
-}
+)

@@ -1,6 +1,5 @@
 package no.nordicsemi.wifi.provisioner.library.domain
 
-import android.util.Log
 import no.nordicsemi.android.wifi.provisioning.AuthMode
 import no.nordicsemi.android.wifi.provisioning.Band
 import no.nordicsemi.android.wifi.provisioning.WifiConfig
@@ -11,7 +10,8 @@ internal fun WifiConfigDomain.toApi(): WifiConfig {
     return WifiConfig(
         wifi = info.toApi(),
         passphrase = password?.toByteArray()?.toByteString(),
-        volatileMemory = volatileMemory
+        volatileMemory = volatileMemory,
+        anyChannel = anyChannel
     )
 }
 

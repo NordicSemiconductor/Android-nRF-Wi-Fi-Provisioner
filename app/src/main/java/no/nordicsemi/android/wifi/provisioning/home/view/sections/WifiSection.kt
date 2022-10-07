@@ -39,20 +39,21 @@ import no.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
 import no.nordicsemi.android.wifi.provisioning.home.view.OnSelectWifiEvent
 import no.nordicsemi.android.wifi.provisioning.home.view.components.ClickableDataItem
 import no.nordicsemi.android.wifi.provisioning.home.view.toIcon
+import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiData
 import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 
 @Composable
 internal fun WifiSection(
-    record: ScanRecordDomain,
+    record: WifiData,
     isEditable: Boolean = false,
     onEvent: (HomeScreenViewEvent) -> Unit
 ) {
     Column {
         ClickableDataItem(
-            iconRes = record.wifiInfo.authModeDomain.toIcon(),
+            iconRes = record.authMode.toIcon(),
             title = stringResource(id = R.string.selected_wifi),
             isEditable = isEditable,
-            description = getDescription(record)
+            description = record.selectedChannel?.let { getDescription(record = it) } ?: record.ssid
         ) {
             onEvent(OnSelectWifiEvent)
         }
@@ -60,8 +61,10 @@ internal fun WifiSection(
 }
 
 @Composable
-private fun getDescription(record: ScanRecordDomain) = StringBuilder()
-    .append(record.wifiInfo.ssid)
-    .appendLine()
-    .append(stringResource(id = R.string.channel, record.wifiInfo.channel.toString()))
-    .toString()
+private fun getDescription(record: ScanRecordDomain): String {
+    return StringBuilder()
+        .append(record.wifiInfo.ssid)
+        .appendLine()
+        .append(stringResource(id = R.string.channel, record.wifiInfo.channel.toString()))
+        .toString()
+}

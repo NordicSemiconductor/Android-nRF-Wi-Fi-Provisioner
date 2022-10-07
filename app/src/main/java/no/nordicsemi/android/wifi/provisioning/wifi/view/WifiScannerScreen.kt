@@ -106,10 +106,11 @@ private fun WifiList(viewEntity: WifiScannerViewEntity, onEvent: (WifiScannerVie
 }
 
 @Composable
-private fun WifiItem(records: ScanRecordsSameSsid, onEvent: (WifiScannerViewEvent) -> Unit) {
+private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent) -> Unit) {
+    val wifiData = records.wifiData
     val selectedScanRecord = remember { mutableStateOf<ScanRecordDomain?>(null) }
-    val scanRecord = selectedScanRecord.value ?: records.items.first()
-    val wifi = scanRecord.wifiInfo
+    val scanRecord = selectedScanRecord.value
+    val wifi = scanRecord?.wifiInfo
 
     val showSelectChannelDialog = rememberSaveable { mutableStateOf(false) }
 
@@ -127,12 +128,12 @@ private fun WifiItem(records: ScanRecordsSameSsid, onEvent: (WifiScannerViewEven
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
-            .clickable { onEvent(WifiSelectedEvent(scanRecord)) }
+            .clickable { onEvent(WifiSelectedEvent(wifiData.copy(selectedChannel = scanRecord))) }
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = wifi.authModeDomain.toIcon()),
+            painter = painterResource(id = wifiData.authMode.toIcon()),
             contentDescription = stringResource(id = R.string.cd_wifi_icon),
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
@@ -146,57 +147,56 @@ private fun WifiItem(records: ScanRecordsSameSsid, onEvent: (WifiScannerViewEven
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = wifi.ssid, style = MaterialTheme.typography.labelLarge
+                text = wifiData.ssid, style = MaterialTheme.typography.labelLarge
             )
 
-            if (wifi.macAddress.isNotEmpty()) {
-                Text(
-                    text = stringResource(id = R.string.bssid, wifi.macAddress),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
+            if (wifi != null) {
+                if (wifi.macAddress.isNotEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.bssid, wifi.macAddress),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
 
-            if (wifi.band != null) {
-                Text(
-                    text = stringResource(
-                        id = R.string.band_and_channel,
-                        wifi.band!!.toDisplayString(),
-                        wifi.channel.toString()
-                    ),
-                    style = MaterialTheme.typography.bodySmall
-                )
+                if (wifi.band != null) {
+                    Text(
+                        text = stringResource(
+                            id = R.string.band_and_channel,
+                            wifi.band!!.toDisplayString(),
+                            wifi.channel.toString()
+                        ),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                } else {
+                    Text(
+                        text = stringResource(id = R.string.channel, wifi.channel.toString()),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
             } else {
                 Text(
-                    text = stringResource(id = R.string.channel, wifi.channel.toString()),
+                    text = stringResource(id = R.string.channel, stringResource(id = R.string.any)),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
         }
 
-        scanRecord.rssi?.let {
-            if (records.items.size <= 1) {
-                Icon(
-                    getWiFiRes(it),
-                    contentDescription = "",
-                    modifier = Modifier.padding(horizontal = 24.dp)
-                )
-            } else {
-                Row(modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
-                    .clickable { showSelectChannelDialog.value = true }
-                    .border(
-                        1.dp,
-                        MaterialTheme.colorScheme.onSurface,
-                        RoundedCornerShape(10.dp)
-                    )
-                    .padding(9.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(getWiFiRes(it), contentDescription = "")
+        val displayRssi = scanRecord?.rssi ?: records.biggestRssi
 
-                    Icon(Icons.Default.ArrowDropDown, contentDescription = "")
-                }
-            }
+        Row(modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .clickable { showSelectChannelDialog.value = true }
+            .border(
+                1.dp,
+                MaterialTheme.colorScheme.onSurface,
+                RoundedCornerShape(10.dp)
+            )
+            .padding(9.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(getWiFiRes(displayRssi), contentDescription = "")
+
+            Icon(Icons.Default.ArrowDropDown, contentDescription = "")
         }
     }
 }

@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.NavigationManager
 import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
 import no.nordicsemi.android.wifi.provisioning.wifi.view.OnSortOptionSelected
+import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiData
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,7 +49,7 @@ internal class WifiScannerViewModel @Inject constructor(
     fun onEvent(event: WifiScannerViewEvent) {
         when (event) {
             NavigateUpEvent -> navigateUp()
-            is WifiSelectedEvent -> navigateUp(event.scanRecord)
+            is WifiSelectedEvent -> navigateUp(event.wifiData)
             is OnSortOptionSelected -> onSortOptionSelected(event.sortOption)
         }
     }
@@ -72,10 +73,10 @@ internal class WifiScannerViewModel @Inject constructor(
         }
     }
 
-    private fun navigateUp(scanRecord: ScanRecordDomain) {
+    private fun navigateUp(wifiData: WifiData) {
         viewModelScope.launch {
             stopScanning()
-            navigationManager.navigateUp(ScanRecordResult(WifiScannerId, scanRecord))
+            navigationManager.navigateUp(ScanRecordResult(WifiScannerId, wifiData))
         }
     }
 }
