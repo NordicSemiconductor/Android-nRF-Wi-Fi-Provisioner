@@ -32,6 +32,7 @@
 package no.nordicsemi.android.wifi.provisioning.home.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,10 +43,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import no.nordicsemi.android.common.navigation.NavigationManager
 import no.nordicsemi.android.common.navigation.NavigationResult
+import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 import no.nordicsemi.android.wifi.provisioning.WifiScannerId
 import no.nordicsemi.android.wifi.provisioning.home.view.HomeScreenViewEvent
@@ -63,9 +65,7 @@ import no.nordicsemi.android.wifi.provisioning.home.view.OnVolatileMemoryChanged
 import no.nordicsemi.android.wifi.provisioning.home.view.OpenLoggerEvent
 import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
 import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinationId
-import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerResult
 import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiData
-import no.nordicsemi.android.wifi.provisioning.wifi.viewmodel.ScanRecordResult
 import no.nordicsemi.wifi.provisioner.library.Loading
 import no.nordicsemi.wifi.provisioner.library.Success
 import no.nordicsemi.wifi.provisioner.library.domain.WifiConfigDomain
@@ -75,9 +75,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    @ApplicationContext
-    private val context: Context,
-    private val navigationManager: NavigationManager,
+    private val navigationManager: Navigator,
     private val repository: ProvisionerResourceRepository
 ) : ViewModel() {
 
@@ -89,17 +87,15 @@ class HomeViewModel @Inject constructor(
     private val pendingJobs = mutableListOf<Job>()
 
     init {
-        navigationManager.getResultForIds(ProvisionerScannerDestinationId, WifiScannerId)
-            .onEach { handleNavigationResult(it) }
+        navigationManager.resultFrom(ProvisionerScannerDestinationId)
+            .mapNotNull { it as? NavigationResult.Success }
+            .onEach { installBluetoothDevice(it.value) }
             .launchIn(viewModelScope)
-    }
 
-    private fun handleNavigationResult(result: NavigationResult) {
-        if (result is ProvisionerScannerResult) {
-            installBluetoothDevice(result.device)
-        } else if (result is ScanRecordResult) {
-            installWifi(result.wifiData)
-        }
+        navigationManager.resultFrom(WifiScannerId)
+            .mapNotNull { it as? NavigationResult.Success }
+            .onEach {  installWifi(it.value) }
+            .launchIn(viewModelScope)
     }
 
     fun onEvent(event: HomeScreenViewEvent) {

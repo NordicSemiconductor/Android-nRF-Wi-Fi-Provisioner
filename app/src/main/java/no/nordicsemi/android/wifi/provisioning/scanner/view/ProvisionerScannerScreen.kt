@@ -49,11 +49,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import no.nordicsemi.android.wifi.provisioning.scanner.ProvisioningSection
-import no.nordicsemi.android.wifi.provisioning.scanner.provisioningData
-import no.nordicsemi.android.wifi.provisioning.scanner.viewmodel.ProvisionerViewModel
 import no.nordicsemi.android.common.permission.RequireBluetooth
-import no.nordicsemi.android.common.permission.RequireInternet
+import no.nordicsemi.android.common.permission.RequireLocation
 import no.nordicsemi.android.common.ui.scanner.DeviceSelected
 import no.nordicsemi.android.common.ui.scanner.ScannerScreenResult
 import no.nordicsemi.android.common.ui.scanner.ScanningCancelled
@@ -61,6 +58,9 @@ import no.nordicsemi.android.common.ui.scanner.main.DeviceListItem
 import no.nordicsemi.android.common.ui.scanner.main.DeviceListItems
 import no.nordicsemi.android.common.ui.scanner.model.DiscoveredBluetoothDevice
 import no.nordicsemi.android.common.ui.scanner.repository.ScanningState
+import no.nordicsemi.android.wifi.provisioning.scanner.ProvisioningSection
+import no.nordicsemi.android.wifi.provisioning.scanner.provisioningData
+import no.nordicsemi.android.wifi.provisioning.scanner.viewmodel.ProvisionerViewModel
 import no.nordicsemi.android.common.ui.scanner.R as scannerR
 
 @Composable
@@ -79,43 +79,45 @@ fun ProvisionerScannerScreen(
             onResult(ScanningCancelled)
         }
 
-        RequireBluetooth { isLocationPermissionRequired ->
-            Box(modifier = Modifier.fillMaxSize()) {
+        RequireBluetooth {
+            RequireLocation { isLocationPermissionRequired ->
+                Box(modifier = Modifier.fillMaxSize()) {
 
-                val viewModel = hiltViewModel<ProvisionerViewModel>()
+                    val viewModel = hiltViewModel<ProvisionerViewModel>()
 
-                val result = viewModel.devices.collectAsState().value
+                    val result = viewModel.devices.collectAsState().value
 
-                LaunchedEffect(result.isRunning()) {
-                    isLoading.value = result.isRunning()
-                }
-
-                LaunchedEffect(allDevices.value) {
-                    viewModel.switchFilter()
-                }
-
-                LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
-                    item { Spacer(modifier = Modifier.size(16.dp)) }
-
-                    when (result) {
-                        is ScanningState.Loading -> item {
-                            ProvisionerScanEmptyView(
-                                isLocationPermissionRequired
-                            )
-                        }
-                        is ScanningState.DevicesDiscovered -> {
-                            if (result.isEmpty()) {
-                                item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
-                            } else {
-                                DeviceListItems(result, { onResult(DeviceSelected(it)) }) {
-                                    ProvisionerExtrasSection(it)
-                                }
-                            }
-                        }
-                        is ScanningState.Error -> item { ErrorSection() }
+                    LaunchedEffect(result.isRunning()) {
+                        isLoading.value = result.isRunning()
                     }
 
-                    item { Spacer(modifier = Modifier.size(16.dp)) }
+                    LaunchedEffect(allDevices.value) {
+                        viewModel.switchFilter()
+                    }
+
+                    LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
+                        item { Spacer(modifier = Modifier.size(16.dp)) }
+
+                        when (result) {
+                            is ScanningState.Loading -> item {
+                                ProvisionerScanEmptyView(
+                                    isLocationPermissionRequired
+                                )
+                            }
+                            is ScanningState.DevicesDiscovered -> {
+                                if (result.isEmpty()) {
+                                    item { ProvisionerScanEmptyView(isLocationPermissionRequired) }
+                                } else {
+                                    DeviceListItems(result, { onResult(DeviceSelected(it)) }) {
+                                        ProvisionerExtrasSection(it)
+                                    }
+                                }
+                            }
+                            is ScanningState.Error -> item { ErrorSection() }
+                        }
+
+                        item { Spacer(modifier = Modifier.size(16.dp)) }
+                    }
                 }
             }
         }
@@ -132,7 +134,7 @@ private fun ErrorSection() {
 
 @Composable
 private fun ProvisionerExtrasSection(device: DiscoveredBluetoothDevice) {
-    DeviceListItem(device) {
-        it.provisioningData()?.let { ProvisioningSection(data = it) }
+    DeviceListItem(name = device.name, address = device.address) {
+        device.provisioningData()?.let { ProvisioningSection(data = it) }
     }
 }

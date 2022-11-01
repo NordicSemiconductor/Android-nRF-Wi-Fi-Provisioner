@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,8 +33,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioning.R
-import no.nordicsemi.android.wifi.provisioning.home.view.components.BackIconAppBar
 import no.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioning.home.view.toIcon
@@ -41,6 +42,7 @@ import no.nordicsemi.android.wifi.provisioning.wifi.viewmodel.WifiScannerViewMod
 import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import no.nordicsemi.android.common.theme.view.getWiFiRes
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WifiScannerScreen() {
     val viewModel = hiltViewModel<WifiScannerViewModel>()
@@ -48,9 +50,12 @@ internal fun WifiScannerScreen() {
     val onEvent: (WifiScannerViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        BackIconAppBar(stringResource(id = R.string.wifi_title)) {
-            viewModel.onEvent(NavigateUpEvent)
-        }
+        NordicAppBar(
+            stringResource(id = R.string.wifi_title),
+            onNavigationButtonClick = {
+                viewModel.onEvent(NavigateUpEvent)
+            }
+        )
 
         if (viewEntity.isLoading) {
             LoadingItem()
