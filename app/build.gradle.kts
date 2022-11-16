@@ -11,16 +11,12 @@ android {
 dependencies {
     implementation(project(":lib_provisioner"))
 
-    implementation("androidx.compose.ui:ui:1.2.1")
-    // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:1.2.1")
-    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation("androidx.compose.foundation:foundation:1.2.1")
-    // Material Design
-    implementation("androidx.compose.material3:material3:1.0.0-beta03")
-    // Material design icons
-    implementation("androidx.compose.material:material-icons-core:1.2.1")
-    implementation("androidx.compose.material:material-icons-extended:1.2.1")
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.iconsExtended)
+    implementation(libs)
     // Integration with activities
     implementation("androidx.activity:activity-compose:1.6.0")
     // Integration with ViewModels
