@@ -31,6 +31,7 @@
 
 package no.nordicsemi.android.wifi.provisioning.home.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -78,10 +79,12 @@ fun HomeScreen() {
             }
         },
         containerColor = MaterialTheme.colorScheme.surface,
-        bottomBar = { ActionButtonSection(state, onEvent) }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            Content(state) { viewModel.onEvent(it) }
+            Box(modifier = Modifier.weight(1f)) {
+                Content(state) { viewModel.onEvent(it) }
+            }
+            ActionButtonSection(state, onEvent)
         }
     }
 

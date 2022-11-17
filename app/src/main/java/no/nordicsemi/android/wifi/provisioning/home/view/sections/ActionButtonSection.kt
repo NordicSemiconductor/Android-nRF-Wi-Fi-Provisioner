@@ -31,25 +31,16 @@
 
 package no.nordicsemi.android.wifi.provisioning.home.view.sections
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bluetooth
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Password
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Start
-import androidx.compose.material.icons.filled.Wifi
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioning.R
@@ -68,55 +59,52 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
         return
     }
     if (viewEntity.device == null) {
-        ActionButton(Icons.Default.Start, stringResource(id = R.string.start)) {
+        ActionButton(stringResource(id = R.string.start)) {
             onEvent(OnProvisionNextDeviceEvent)
         }
     } else if (viewEntity.hasFinishedWithSuccess()) {
-        ActionButton(Icons.Default.Bluetooth, stringResource(id = R.string.next_device)) {
+        ActionButton(stringResource(id = R.string.next_device)) {
             onEvent(OnProvisionNextDeviceEvent)
         }
     } else if (viewEntity.hasFinished()) {
-        ActionButton(Icons.Default.Clear, stringResource(id = R.string.finish)) {
+        ActionButton(stringResource(id = R.string.finish)) {
             onEvent(OnFinishedEvent)
         }
     } else if (!viewEntity.isStatusSuccess()) {
         //I think it's here to prevent entering somewhere else.
     } else if (viewEntity.isUnprovisioning()) {
-        ActionButton(Icons.Default.Wifi, stringResource(id = R.string.unprovision)) {
+        ActionButton(stringResource(id = R.string.unprovision)) {
             onEvent(OnUnprovisionEvent)
         }
     } else if (viewEntity.isStatusSuccess() && viewEntity.network == null) {
-        ActionButton(Icons.Default.Wifi, stringResource(id = R.string.start_provisioning)) {
+        ActionButton(stringResource(id = R.string.start_provisioning)) {
             onEvent(OnSelectWifiEvent)
         }
     } else if (viewEntity.network!!.isPasswordRequired() && viewEntity.password == null) {
-        ActionButton(Icons.Default.Password, stringResource(id = R.string.password_select)) {
+        ActionButton( stringResource(id = R.string.password_select)) {
             onEvent(OnShowPasswordDialog)
         }
     } else {
-        ActionButton(Icons.Default.PlayArrow, stringResource(id = R.string.provision)) {
+        ActionButton(stringResource(id = R.string.provision)) {
             onEvent(OnProvisionClickEvent)
         }
     }
 }
 
 @Composable
-private fun ActionButton(imageVector: ImageVector, text: String, onClick: () -> Unit) {
-    BottomAppBar(modifier = Modifier.heightIn(max = 56.dp)) {
-        Box(
+private fun ActionButton(text: String, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
+    ) {
+        Button(
+            onClick = onClick,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 4.dp)
+                .align(Alignment.Center)
+                .widthIn(min = 100.dp)
         ) {
-            Button(
-                onClick = onClick,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .widthIn(min = 100.dp)
-            ) {
-                Text(text = text)
-            }
+            Text(text = text)
         }
     }
 }
