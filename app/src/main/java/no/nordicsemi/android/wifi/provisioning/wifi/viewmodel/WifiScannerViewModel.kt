@@ -2,31 +2,29 @@ package no.nordicsemi.android.wifi.provisioning.wifi.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import no.nordicsemi.android.wifi.provisioning.WifiScannerId
-import no.nordicsemi.android.wifi.provisioning.wifi.view.NavigateUpEvent
-import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEntity
-import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEvent
-import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiSelectedEvent
-import no.nordicsemi.wifi.provisioner.library.Error
-import no.nordicsemi.wifi.provisioner.library.Loading
-import no.nordicsemi.wifi.provisioner.library.ProvisionerRepository
-import no.nordicsemi.wifi.provisioner.library.Success
-import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import no.nordicsemi.android.common.navigation.NavigationManager
+import no.nordicsemi.android.common.navigation.Navigator
+import no.nordicsemi.android.wifi.provisioning.WifiScannerId
 import no.nordicsemi.android.wifi.provisioning.repository.ProvisionerResourceRepository
+import no.nordicsemi.android.wifi.provisioning.wifi.view.NavigateUpEvent
 import no.nordicsemi.android.wifi.provisioning.wifi.view.OnSortOptionSelected
 import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiData
+import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEntity
+import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiScannerViewEvent
+import no.nordicsemi.android.wifi.provisioning.wifi.view.WifiSelectedEvent
+import no.nordicsemi.wifi.provisioner.library.Error
+import no.nordicsemi.wifi.provisioner.library.Loading
+import no.nordicsemi.wifi.provisioner.library.Success
 import javax.inject.Inject
 
 @HiltViewModel
 internal class WifiScannerViewModel @Inject constructor(
-    private val navigationManager: NavigationManager,
+    private val navigationManager: Navigator,
     private val wifiAggregator: WifiAggregator,
     private val repository: ProvisionerResourceRepository
 ) : ViewModel() {
@@ -76,7 +74,7 @@ internal class WifiScannerViewModel @Inject constructor(
     private fun navigateUp(wifiData: WifiData) {
         viewModelScope.launch {
             stopScanning()
-            navigationManager.navigateUp(ScanRecordResult(WifiScannerId, wifiData))
+            navigationManager.navigateUpWithResult(WifiScannerId, wifiData)
         }
     }
 }

@@ -36,11 +36,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestinations
 import dagger.hilt.android.AndroidEntryPoint
 import no.nordicsemi.android.common.navigation.NavigationView
 import no.nordicsemi.android.common.theme.NordicActivity
 import no.nordicsemi.android.common.theme.NordicTheme
+import no.nordicsemi.android.wifi.provisioning.scanner.ProvisionerScannerDestination
 
 @AndroidEntryPoint
 class MainActivity : NordicActivity() {
@@ -51,7 +51,7 @@ class MainActivity : NordicActivity() {
         setContent {
             NordicTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    NavigationView(HomeDestinations + ProvisionerScannerDestinations)
+                    NavigationView(HomeDestinations + ProvisionerScannerDestination)
                 }
             }
         }

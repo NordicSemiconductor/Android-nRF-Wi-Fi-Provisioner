@@ -16,18 +16,19 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.iconsExtended)
-    implementation(libs)
+
+    implementation(libs.nordic.scanner)
     // Integration with activities
     implementation("androidx.activity:activity-compose:1.6.0")
     // Integration with ViewModels
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-alpha02")
 
-    implementation("no.nordicsemi.android.common:core:1.0.24")
-    implementation("no.nordicsemi.android.common:theme:1.0.24")
-    implementation("no.nordicsemi.android.common:navigation:1.0.24")
-    implementation("no.nordicsemi.android.common:uiscanner:1.0.24")
-    implementation("no.nordicsemi.android.common:uilogger:1.0.24")
-    implementation("no.nordicsemi.android.common:permission:1.0.24")
+    implementation("no.nordicsemi.android.common:core:1.3.2")
+    implementation("no.nordicsemi.android.common:theme:1.3.2")
+    implementation("no.nordicsemi.android.common:navigation:1.3.2")
+    implementation("no.nordicsemi.android.common:uiscanner:1.3.2")
+    implementation("no.nordicsemi.android.common:uilogger:1.3.2")
+    implementation("no.nordicsemi.android.common:permission:1.3.2")
 
     implementation("com.google.accompanist:accompanist-placeholder-material:0.24.13-rc")
 
