@@ -9,11 +9,9 @@ android {
 dependencies {
     implementation(project(":lib_proto"))
 
-    implementation("no.nordicsemi.android:ble-common:2.5.1")
-    implementation("no.nordicsemi.android:ble-ktx:2.5.1")
-    implementation("no.nordicsemi.android.common:uilogger:1.0.24")
-
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation("com.google.android.material:material:1.6.1")
+    implementation(libs.nordic.ble.common)
+    implementation(libs.nordic.ble.ktx)
+    implementation(libs.nordic.uilogger)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
 }
