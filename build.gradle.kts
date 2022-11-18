@@ -12,5 +12,4 @@ plugins {
     alias(libs.plugins.nordic.library.compose) apply false
     alias(libs.plugins.nordic.hilt) apply false
     alias(libs.plugins.nordic.feature) apply false
-    alias(libs.plugins.wire) version "4.4.3" apply false
 }
