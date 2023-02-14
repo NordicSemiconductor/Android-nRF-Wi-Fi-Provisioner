@@ -108,7 +108,7 @@ private fun LoadingItem() {
 @Composable
 private fun ErrorItem(error: Throwable) {
     Box(
-        modifier = Modifier.padding(vertical = 16.dp)
+        modifier = Modifier.padding(16.dp)
     ) {
         ErrorDataItem(
             iconRes = R.drawable.ic_error,
