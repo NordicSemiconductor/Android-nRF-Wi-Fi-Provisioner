@@ -31,6 +31,7 @@
 
 plugins {
     alias(libs.plugins.nordic.library)
+    alias(libs.plugins.nordic.kotlin)
 }
 
 android {

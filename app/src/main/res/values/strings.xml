@@ -122,7 +122,7 @@
 
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
-    <string name="app_version">Version: %s (%d)</string>
+    <string name="app_version">Version: %s (%s)</string>
 
     <string name="state_disconnected">Disconnected</string>
     <string name="state_authentication">Authentication</string>
