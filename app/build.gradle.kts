@@ -41,6 +41,8 @@ android {
 dependencies {
     implementation(project(":lib_provisioner"))
 
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.foundation)

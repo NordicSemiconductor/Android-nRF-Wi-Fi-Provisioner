@@ -52,7 +52,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -63,6 +62,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import no.nordicsemi.android.common.theme.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioning.R
 import no.nordicsemi.android.wifi.provisioning.home.view.components.BackIconAppBar
 import no.nordicsemi.android.wifi.provisioning.home.view.components.ErrorDataItem
@@ -70,12 +71,11 @@ import no.nordicsemi.android.wifi.provisioning.home.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioning.home.view.toIcon
 import no.nordicsemi.android.wifi.provisioning.wifi.viewmodel.WifiScannerViewModel
 import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
-import no.nordicsemi.android.common.theme.view.getWiFiRes
 
 @Composable
 internal fun WifiScannerScreen() {
     val viewModel = hiltViewModel<WifiScannerViewModel>()
-    val viewEntity = viewModel.state.collectAsState().value
+    val viewEntity = viewModel.state.collectAsStateWithLifecycle().value
     val onEvent: (WifiScannerViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {

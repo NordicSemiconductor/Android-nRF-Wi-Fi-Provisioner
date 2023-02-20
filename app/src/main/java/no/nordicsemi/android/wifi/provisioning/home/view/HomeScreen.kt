@@ -43,11 +43,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.wifi.provisioning.R
 import no.nordicsemi.android.wifi.provisioning.home.view.components.LoggerIconAppBar
 import no.nordicsemi.android.wifi.provisioning.home.view.sections.ActionButtonSection
@@ -69,7 +69,7 @@ import no.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
 
-    val state = viewModel.state.collectAsState().value
+    val state = viewModel.state.collectAsStateWithLifecycle().value
     val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Scaffold(

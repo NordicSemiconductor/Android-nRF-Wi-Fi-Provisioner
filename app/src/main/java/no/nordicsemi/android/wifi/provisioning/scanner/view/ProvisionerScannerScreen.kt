@@ -42,13 +42,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.permission.RequireBluetooth
 import no.nordicsemi.android.common.permission.RequireLocation
 import no.nordicsemi.android.common.ui.scanner.DeviceSelected
@@ -85,7 +85,7 @@ fun ProvisionerScannerScreen(
 
                     val viewModel = hiltViewModel<ProvisionerViewModel>()
 
-                    val result = viewModel.devices.collectAsState().value
+                    val result = viewModel.devices.collectAsStateWithLifecycle().value
 
                     LaunchedEffect(result.isRunning()) {
                         isLoading.value = result.isRunning()
