@@ -43,6 +43,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -69,7 +70,7 @@ import no.nordicsemi.android.wifi.provisioning.password.PasswordSetDialogEvent
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
 
-    val state = viewModel.state.collectAsStateWithLifecycle().value
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Scaffold(

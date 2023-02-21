@@ -42,6 +42,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -85,10 +86,10 @@ fun ProvisionerScannerScreen(
 
                     val viewModel = hiltViewModel<ProvisionerViewModel>()
 
-                    val result = viewModel.devices.collectAsStateWithLifecycle().value
+                    val scanningState by viewModel.devices.collectAsStateWithLifecycle()
 
-                    LaunchedEffect(result.isRunning()) {
-                        isLoading.value = result.isRunning()
+                    LaunchedEffect(scanningState.isRunning()) {
+                        isLoading.value = scanningState.isRunning()
                     }
 
                     LaunchedEffect(allDevices.value) {
@@ -98,7 +99,7 @@ fun ProvisionerScannerScreen(
                     LazyColumn(contentPadding = PaddingValues(horizontal = 8.dp)) {
                         item { Spacer(modifier = Modifier.size(16.dp)) }
 
-                        when (result) {
+                        when (val result = scanningState) {
                             is ScanningState.Loading -> item {
                                 ProvisionerScanEmptyView(
                                     isLocationPermissionRequired

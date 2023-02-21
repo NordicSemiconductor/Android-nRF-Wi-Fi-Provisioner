@@ -52,6 +52,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -75,7 +76,7 @@ import no.nordicsemi.wifi.provisioner.library.domain.ScanRecordDomain
 @Composable
 internal fun WifiScannerScreen() {
     val viewModel = hiltViewModel<WifiScannerViewModel>()
-    val viewEntity = viewModel.state.collectAsStateWithLifecycle().value
+    val viewEntity by viewModel.state.collectAsStateWithLifecycle()
     val onEvent: (WifiScannerViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -86,7 +87,7 @@ internal fun WifiScannerScreen() {
         if (viewEntity.isLoading) {
             LoadingItem()
         } else if (viewEntity.error != null) {
-            ErrorItem(viewEntity.error)
+            ErrorItem(viewEntity.error!!)
         } else {
             WifiList(viewEntity, onEvent)
         }
