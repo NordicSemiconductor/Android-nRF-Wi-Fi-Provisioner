@@ -31,10 +31,10 @@
 
 package no.nordicsemi.wifi.provisioner.library.domain
 
-import no.nordicsemi.android.wifi.provisioning.AuthMode
-import no.nordicsemi.android.wifi.provisioning.Band
-import no.nordicsemi.android.wifi.provisioning.WifiConfig
-import no.nordicsemi.android.wifi.provisioning.WifiInfo
+import no.nordicsemi.android.wifi.provisioning.ble.proto.AuthMode
+import no.nordicsemi.android.wifi.provisioning.ble.proto.Band
+import no.nordicsemi.android.wifi.provisioning.ble.proto.WifiConfig
+import no.nordicsemi.android.wifi.provisioning.ble.proto.WifiInfo
 import okio.ByteString.Companion.toByteString
 
 internal fun WifiConfigDomain.toApi(): WifiConfig {

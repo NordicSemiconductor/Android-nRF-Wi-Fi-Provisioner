@@ -32,15 +32,15 @@
 package no.nordicsemi.wifi.provisioner.library.domain
 
 import android.util.Log
-import no.nordicsemi.android.wifi.provisioning.AuthMode
-import no.nordicsemi.android.wifi.provisioning.Band
-import no.nordicsemi.android.wifi.provisioning.ConnectionFailureReason
-import no.nordicsemi.android.wifi.provisioning.ConnectionInfo
-import no.nordicsemi.android.wifi.provisioning.ConnectionState
-import no.nordicsemi.android.wifi.provisioning.DeviceStatus
-import no.nordicsemi.android.wifi.provisioning.ScanParams
-import no.nordicsemi.android.wifi.provisioning.ScanRecord
-import no.nordicsemi.android.wifi.provisioning.WifiInfo
+import no.nordicsemi.android.wifi.provisioning.ble.proto.AuthMode
+import no.nordicsemi.android.wifi.provisioning.ble.proto.Band
+import no.nordicsemi.android.wifi.provisioning.ble.proto.ConnectionFailureReason
+import no.nordicsemi.android.wifi.provisioning.ble.proto.ConnectionInfo
+import no.nordicsemi.android.wifi.provisioning.ble.proto.ConnectionState
+import no.nordicsemi.android.wifi.provisioning.ble.proto.DeviceStatus
+import no.nordicsemi.android.wifi.provisioning.ble.proto.ScanParams
+import no.nordicsemi.android.wifi.provisioning.ble.proto.ScanRecord
+import no.nordicsemi.android.wifi.provisioning.ble.proto.WifiInfo
 import okio.ByteString
 
 private const val TAG = "DOMAIN-MAPPER"

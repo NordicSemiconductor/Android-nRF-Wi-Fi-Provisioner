@@ -3,7 +3,7 @@ syntax = "proto2";
 import "common.proto";
 
 option java_multiple_files = true;
-option java_package = "no.nordicsemi.android.wifi.provisioning";
+option java_package = "no.nordicsemi.android.wifi.provisioning.ble.proto";
 
 // Responses
 

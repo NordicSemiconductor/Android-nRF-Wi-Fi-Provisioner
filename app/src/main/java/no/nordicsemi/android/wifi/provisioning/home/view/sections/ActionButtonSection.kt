@@ -34,6 +34,7 @@ package no.nordicsemi.android.wifi.provisioning.home.view.sections
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -93,11 +94,7 @@ fun ActionButtonSection(viewEntity: HomeViewEntity, onEvent: (HomeScreenViewEven
 
 @Composable
 private fun ActionButton(text: String, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
-    ) {
+    Box(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
         Button(
             onClick = onClick,
             modifier = Modifier

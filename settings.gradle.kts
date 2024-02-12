@@ -55,6 +55,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "Android-nRF-Wifi-Provisioner"
 include(":app")
+include(":feature:ble")
+include(":feature:softap")
 include(":lib:ble:provisioner")
 include(":lib:ble:proto")
 
