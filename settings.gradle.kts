@@ -55,8 +55,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "Android-nRF-Wifi-Provisioner"
 include(":app")
-include(":lib_provisioner")
-include(":lib_proto")
+include(":lib:ble:provisioner")
+include(":lib:ble:proto")
 
 //if (file('../Android-Common-Libraries').exists()) {
 //    includeBuild('../Android-Common-Libraries')

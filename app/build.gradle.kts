@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":lib_provisioner"))
+    implementation(project(":lib:ble:provisioner"))
 
     implementation(libs.androidx.lifecycle.runtime.compose)
 

@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":lib_proto"))
+    implementation(project(":lib:ble:proto"))
 
     implementation(libs.nordic.ble.common)
     implementation(libs.nordic.ble.ktx)
