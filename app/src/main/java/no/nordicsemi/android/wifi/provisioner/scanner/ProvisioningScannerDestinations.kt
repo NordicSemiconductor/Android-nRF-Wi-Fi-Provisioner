@@ -48,7 +48,7 @@ val ProvisionerScannerDestination = defineDestination(ProvisionerScannerDestinat
     val viewModel = hiltViewModel<SimpleNavigationViewModel>()
 
     ScannerScreen(
-        uuid = null,
+        uuid = ProvisioningData.parcelUuid,
         onResult = { result ->
             when (result) {
                 is DeviceSelected -> viewModel.navigateUpWithResult(
@@ -62,7 +62,7 @@ val ProvisionerScannerDestination = defineDestination(ProvisionerScannerDestinat
             DeviceListItem(
                 name = it.advertisedName,
                 address = it.device.address,
-                extras = { it.provisioningData()?.let { ProvisioningSection(data = it) } }
+                extras = { it.provisioningData()?.let { ProvisioningSection(data = it) }}
             )
         }
     )

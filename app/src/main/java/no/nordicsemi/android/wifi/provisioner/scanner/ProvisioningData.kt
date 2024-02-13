@@ -52,7 +52,7 @@ internal data class ProvisioningData(
     )
 
     companion object {
-        private val parcelUuid = ParcelUuid(UUID.fromString("14387800-130c-49e7-b877-2881c89cb258"))
+        val parcelUuid = ParcelUuid(UUID.fromString("14387800-130c-49e7-b877-2881c89cb258"))
 
         fun create(scanResult: BleScanResultData) = scanResult.scanRecord?.serviceData
             ?.get(parcelUuid)
