@@ -42,6 +42,6 @@ private val exceptionHandler = CoroutineExceptionHandler { _, t ->
 }
 
 fun CoroutineScope.launchWithCatch(block: suspend CoroutineScope.() -> Unit) =
-    launch(Job() + no.nordicsemi.android.wifi.provisioner.ble.exceptionHandler) {
+    launch(Job() + exceptionHandler) {
         block()
     }

@@ -35,8 +35,7 @@ import android.os.ParcelUuid
 import no.nordicsemi.android.common.core.DataByteArray
 import no.nordicsemi.android.kotlin.ble.core.scanner.BleScanResultData
 import no.nordicsemi.android.kotlin.ble.core.scanner.BleScanResults
-import no.nordicsemi.android.support.v18.scanner.ScanResult
-import java.util.*
+import java.util.UUID
 
 internal data class ProvisioningData(
     val version: Int,
