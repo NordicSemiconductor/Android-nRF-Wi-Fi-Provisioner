@@ -34,7 +34,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name="no.nordicsemi.android.wifi.provisioning.WifiProvisionerApplication"
+        android:name="no.nordicsemi.android.wifi.provisioner.WifiProvisionerApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -43,7 +43,7 @@
         android:theme="@style/NordicTheme"
         tools:targetApi="31">
         <activity
-            android:name="no.nordicsemi.android.wifi.provisioning.MainActivity"
+            android:name="no.nordicsemi.android.wifi.provisioner.MainActivity"
             android:exported="true"
             android:theme="@style/NordicTheme.SplashScreen">
             <intent-filter>

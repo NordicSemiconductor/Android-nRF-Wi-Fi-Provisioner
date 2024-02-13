@@ -48,7 +48,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            from("no.nordicsemi.android.gradle:version-catalog:1.4.6")
+            from("no.nordicsemi.android.gradle:version-catalog:1.11.4")
         }
     }
 }
@@ -59,6 +59,7 @@ include(":feature:ble")
 include(":feature:softap")
 include(":lib:ble:provisioner")
 include(":lib:ble:proto")
+include(":lib:softap")
 
 //if (file('../Android-Common-Libraries').exists()) {
 //    includeBuild('../Android-Common-Libraries')

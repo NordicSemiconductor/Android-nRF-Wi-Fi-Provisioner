@@ -35,7 +35,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.nordic.kotlin) apply false
     alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.protobuf) apply false
+    alias(libs.plugins.wire) apply false
     alias(libs.plugins.nordic.application) apply false
     alias(libs.plugins.nordic.application.compose) apply false
     alias(libs.plugins.nordic.library) apply false

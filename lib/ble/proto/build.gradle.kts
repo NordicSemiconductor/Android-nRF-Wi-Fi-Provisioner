@@ -40,5 +40,5 @@ wire {
 }
 
 android {
-    namespace = "no.nordicsemi.wifi.provisioner.proto"
+    namespace = "no.nordicsemi.android.wifi.provisioner.ble.proto"
 }

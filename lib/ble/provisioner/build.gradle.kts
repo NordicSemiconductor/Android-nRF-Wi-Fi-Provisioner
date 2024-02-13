@@ -35,15 +35,10 @@ plugins {
 }
 
 android {
-    namespace = "no.nordicsemi.wifi.provisioner.library"
+    namespace = "no.nordicsemi.android.wifi.provisioner.ble"
 }
 
 dependencies {
     implementation(project(":lib:ble:proto"))
-
-    implementation(libs.nordic.ble.common)
     implementation(libs.nordic.ble.ktx)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
 }

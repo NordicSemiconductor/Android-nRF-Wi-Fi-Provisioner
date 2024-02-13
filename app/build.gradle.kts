@@ -35,11 +35,16 @@ plugins {
 }
 
 android {
-    namespace = "no.nordicsemi.android.wifi.provisioning"
+    namespace = "no.nordicsemi.android.wifi.provisioner.app"
+    defaultConfig {
+        applicationId = "no.nordicsemi.android.wifi.provisioning"
+    }
 }
 
 dependencies {
     implementation(project(":lib:ble:provisioner"))
+    implementation(project(":feature:ble"))
+    implementation(project(":feature:softap"))
 
     implementation(libs.androidx.lifecycle.runtime.compose)
 
@@ -58,9 +63,9 @@ dependencies {
     implementation(libs.nordic.core)
     implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
-    implementation(libs.nordic.uiscanner)
     implementation(libs.nordic.uilogger)
-    implementation(libs.nordic.permission)
+    implementation(libs.nordic.blek.uiscanner)
+    implementation(libs.nordic.permissions.ble)
 
     implementation(libs.accompanist.placeholder)
 
