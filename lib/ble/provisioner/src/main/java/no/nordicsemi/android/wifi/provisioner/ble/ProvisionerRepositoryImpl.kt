@@ -34,6 +34,8 @@ package no.nordicsemi.android.wifi.provisioner.ble
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import no.nordicsemi.android.wifi.provisioner.ble.domain.DeviceStatusDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
@@ -43,11 +45,6 @@ import no.nordicsemi.android.wifi.provisioner.ble.domain.toApi
 import no.nordicsemi.android.wifi.provisioner.ble.domain.toDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ProvisionerBleManager
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 
 class ProvisionerRepositoryImpl internal constructor(
     private val context: Context
@@ -93,14 +90,6 @@ class ProvisionerRepositoryImpl internal constructor(
         manager = null
     }
 
-    private fun <T> runTask(block: suspend () -> T): Flow<Resource<T>> {
-        return flow { emit(Resource.createSuccess(block())) }
-            .onStart { emit(Resource.createLoading()) }
-            .catch {
-                it.printStackTrace()
-                emit(Resource.createError(it))
-            }
-    }
 }
 
 internal object ProvisionerFactory {

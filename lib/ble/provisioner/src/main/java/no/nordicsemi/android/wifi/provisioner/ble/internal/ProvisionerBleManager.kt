@@ -128,14 +128,11 @@ internal class ProvisionerBleManager(
                 service.getCharacteristic(CONTROL_POINT_CHARACTERISTIC_UUID)
             dataOutCharacteristic = service.getCharacteristic(DATA_OUT_CHARACTERISTIC_UUID)
         }
-        var writeRequest = false
-        var writeCommand = false
+        var writeRequest: Boolean
 
         controlPointCharacteristic?.let {
             val rxProperties: Int = it.properties
             writeRequest = rxProperties and BluetoothGattCharacteristic.PROPERTY_WRITE > 0
-            writeCommand =
-                rxProperties and BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE > 0
 
             // Set the WRITE REQUEST type when the characteristic supports it.
             // This will allow to send long write (also if the characteristic support it).
