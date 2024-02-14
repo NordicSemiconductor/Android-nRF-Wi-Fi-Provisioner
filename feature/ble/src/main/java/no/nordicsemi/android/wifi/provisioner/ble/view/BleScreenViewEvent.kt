@@ -31,26 +31,26 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.view
 
-sealed interface HomeScreenViewEvent
+sealed interface BleProvisioningViewEvent
 
-data object OnSelectDeviceClickEvent : HomeScreenViewEvent
+data object OnSelectDeviceClickEvent : BleProvisioningViewEvent
 
-data object OnFinishedEvent : HomeScreenViewEvent
+data object OnFinishedEvent : BleProvisioningViewEvent
 
-data object OnProvisionNextDeviceEvent : HomeScreenViewEvent
+data object OnProvisionNextDeviceEvent : BleProvisioningViewEvent
 
-data object OnSelectWifiEvent : HomeScreenViewEvent
+data object OnSelectWifiEvent : BleProvisioningViewEvent
 
-data object OnShowPasswordDialog : HomeScreenViewEvent
+data object OnShowPasswordDialog : BleProvisioningViewEvent
 
-data object OnHidePasswordDialog : HomeScreenViewEvent
+data object OnHidePasswordDialog : BleProvisioningViewEvent
 
-data class OnPasswordSelectedEvent(val password: String) : HomeScreenViewEvent
+data class OnPasswordSelectedEvent(val password: String) : BleProvisioningViewEvent
 
-data object OnProvisionClickEvent : HomeScreenViewEvent
+data object OnProvisionClickEvent : BleProvisioningViewEvent
 
-data object OpenLoggerEvent : HomeScreenViewEvent
+data object OpenLoggerEvent : BleProvisioningViewEvent
 
-data object OnUnprovisionEvent : HomeScreenViewEvent
+data object OnUnprovisionEvent : BleProvisioningViewEvent
 
-data object OnVolatileMemoryChangedEvent : HomeScreenViewEvent
+data object OnVolatileMemoryChangedEvent : BleProvisioningViewEvent

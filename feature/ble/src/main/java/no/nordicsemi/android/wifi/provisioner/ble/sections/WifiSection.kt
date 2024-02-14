@@ -34,7 +34,7 @@ package no.nordicsemi.android.wifi.provisioner.ble.sections
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.ble.view.HomeScreenViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectWifiEvent
 import no.nordicsemi.android.wifi.provisioner.home.view.components.ClickableDataItem
 import no.nordicsemi.android.wifi.provisioner.ble.view.toIcon
@@ -46,7 +46,7 @@ import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 internal fun WifiSection(
     record: WifiData,
     isEditable: Boolean = false,
-    onEvent: (HomeScreenViewEvent) -> Unit
+    onEvent: (BleProvisioningViewEvent) -> Unit
 ) {
     Column {
         ClickableDataItem(

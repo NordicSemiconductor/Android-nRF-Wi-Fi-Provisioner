@@ -46,7 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.wifi.provisioner.ble.view.HomeScreenViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnVolatileMemoryChangedEvent
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
@@ -54,7 +54,7 @@ import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 fun VolatileMemorySwitch(
     volatileMemory: Boolean,
     enabled: Boolean,
-    onEvent: (HomeScreenViewEvent) -> Unit
+    onEvent: (BleProvisioningViewEvent) -> Unit
 ) {
     Row(
         modifier = Modifier

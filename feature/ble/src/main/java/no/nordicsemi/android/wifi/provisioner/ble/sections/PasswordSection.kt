@@ -33,13 +33,13 @@ package no.nordicsemi.android.wifi.provisioner.ble.sections
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.ble.view.HomeScreenViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnShowPasswordDialog
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.home.view.components.ClickableDataItem
 
 @Composable
-internal fun PasswordSection(isEditable: Boolean = false, onEvent: (HomeScreenViewEvent) -> Unit) {
+internal fun PasswordSection(isEditable: Boolean = false, onEvent: (BleProvisioningViewEvent) -> Unit) {
     ClickableDataItem(
         iconRes = R.drawable.ic_password,
         title = stringResource(id = R.string.password),

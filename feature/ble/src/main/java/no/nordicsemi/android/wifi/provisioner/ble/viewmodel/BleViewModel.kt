@@ -54,7 +54,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.launchWithCatch
 import no.nordicsemi.android.wifi.provisioner.ble.scanner.BleScannerDestinationId
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
-import no.nordicsemi.android.wifi.provisioner.ble.view.HomeScreenViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnFinishedEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnHidePasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnPasswordSelectedEvent
@@ -97,7 +97,7 @@ class BleViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun onEvent(event: HomeScreenViewEvent) {
+    fun onEvent(event: BleProvisioningViewEvent) {
         if (event != OpenLoggerEvent) {
             cancelPendingJobs()
         }

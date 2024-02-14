@@ -72,7 +72,7 @@ fun BleProvisioningScreen() {
     val viewModel = hiltViewModel<BleViewModel>()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val onEvent: (HomeScreenViewEvent) -> Unit = { viewModel.onEvent(it) }
+    val onEvent: (BleProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Scaffold(
         topBar = {
@@ -106,7 +106,7 @@ fun BleProvisioningScreen() {
 }
 
 @Composable
-private fun Content(state: BleViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+private fun Content(state: BleViewEntity, onEvent: (BleProvisioningViewEvent) -> Unit) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())

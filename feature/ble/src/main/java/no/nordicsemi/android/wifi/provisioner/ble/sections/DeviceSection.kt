@@ -31,40 +31,21 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.sections
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.NordicTheme
-import no.nordicsemi.android.common.theme.view.NordicText
 import no.nordicsemi.android.kotlin.ble.core.ServerDevice
-import no.nordicsemi.android.wifi.provisioner.feature.ble.BuildConfig
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ble.view.HomeScreenViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnProvisionNextDeviceEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectDeviceClickEvent
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.home.view.components.ClickableDataItem
 
 @Composable
 internal fun DeviceSection(
     device: ServerDevice?,
     isEditable: Boolean = false,
-    onEvent: (HomeScreenViewEvent) -> Unit
+    onEvent: (BleProvisioningViewEvent) -> Unit
 ) {
     if (device == null) {
         DeviceNotSelectedSection(onEvent)
@@ -77,7 +58,7 @@ internal fun DeviceSection(
 private fun BluetoothDevice(
     device: ServerDevice,
     isEditable: Boolean = false,
-    onEvent: (HomeScreenViewEvent) -> Unit
+    onEvent: (BleProvisioningViewEvent) -> Unit
 ) {
     ClickableDataItem(
         iconRes = R.drawable.ic_phone_ok,
@@ -90,7 +71,7 @@ private fun BluetoothDevice(
 }
 @Composable
 private fun DeviceNotSelectedSection(
-    onEvent: (HomeScreenViewEvent) -> Unit
+    onEvent: (BleProvisioningViewEvent) -> Unit
 ) {
     ClickableDataItem(
         iconRes = R.drawable.ic_phone_ok,
@@ -99,40 +80,6 @@ private fun DeviceNotSelectedSection(
         description = "Please select a device to provision"
     ) {
         onEvent(OnProvisionNextDeviceEvent)
-    }
-}
-
-@Composable
-private fun DeviceNotSelectedSection2() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_nrf70),
-            contentDescription = stringResource(id = R.string.ic_nrf70),
-            modifier = Modifier
-                .widthIn(max = 200.dp)
-                .padding(8.dp)
-                .background(Color.White)
-        )
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        NordicText(
-            text = stringResource(id = R.string.app_info),
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        Spacer(modifier = Modifier.size(32.dp))
-
-        Text(
-            text = stringResource(
-                id = R.string.app_version,
-                BuildConfig.VERSION_NAME,
-                BuildConfig.VERSION_CODE
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.End,
-            style = MaterialTheme.typography.labelMedium
-        )
     }
 }
 

@@ -43,7 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ble.view.HomeScreenViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnFinishedEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnProvisionClickEvent
@@ -53,7 +53,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.OnShowPasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnUnprovisionEvent
 
 @Composable
-fun ActionButtonSection(viewEntity: BleViewEntity, onEvent: (HomeScreenViewEvent) -> Unit) {
+fun ActionButtonSection(viewEntity: BleViewEntity, onEvent: (BleProvisioningViewEvent) -> Unit) {
     if (viewEntity.isRunning()) {
         return
     }
