@@ -1,0 +1,143 @@
+<!--
+  ~ Copyright (c) 2022, Nordic Semiconductor
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without modification, are
+  ~ permitted provided that the following conditions are met:
+  ~
+  ~ 1. Redistributions of source code must retain the above copyright notice, this list of
+  ~ conditions and the following disclaimer.
+  ~
+  ~ 2. Redistributions in binary form must reproduce the above copyright notice, this list
+  ~ of conditions and the following disclaimer in the documentation and/or other materials
+  ~ provided with the distribution.
+  ~
+  ~ 3. Neither the name of the copyright holder nor the names of its contributors may be
+  ~ used to endorse or promote products derived from this software without specific prior
+  ~ written permission.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  ~ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+  ~ TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+  ~ PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  ~ HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  ~ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  ~ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+  ~ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+  ~ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  ~ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+  ~ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<resources>
+    <string name="app_name">nRF Wi-Fi Provisioner</string>
+
+    <string name="change_device">Change</string>
+    <string name="ic_nrf70">An icon of nRF70 Series</string>
+    <string name="app_info">The nRF Wi-Fi Provisioner app allows provisioning nRF 700x devices to
+        Wi-Fi networks over Bluetooth LE.\n\n
+
+        ### Key features:\n
+        * Provisioning nRF 700x devices to Wi-Fi networks.\n
+        * Displaying connection status of provisioned devices.\n
+        * Re-provisioning already provisioned devices to alternate networks.\n\n
+
+        ### Requirements:\n
+        * [nRF700x DK](https://www.nordicsemi.com/News/2022/08/Nordic-Semiconductor-announces-its-first-WiFi-chip).\n
+        * Wi-Fi Provisioning Service sample programmed.\n\n
+
+        Make sure the device is powered ON and in range.</string>
+
+    <string name="section_device">Device status</string>
+    <string name="section_provisioning">Provisioning data</string>
+    <string name="section_status">Upload status</string>
+
+    <string name="unknown_error">Unknown error</string>
+
+    <string name="no_device_info">1. Make sure the device is <b>turned on</b> and is connected to a power source.</string>
+
+    <string name="unprovisioned">Unprovisioned</string>
+    <string name="start">Start</string>
+    <string name="select_device">Select device</string>
+    <string name="next_device">Next device</string>
+    <string name="finish">Finish</string>
+    <string name="set_password">Set password</string>
+    <string name="password">Password</string>
+    <string name="password_encoded">**** ****</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="accept">Accept</string>
+    <string name="clear">Clear</string>
+
+    <string name="device_info">Device status</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="status_info">Wi-Fi status</string>
+    <string name="selected_wifi">Selected Wi-Fi</string>
+    <string name="start_provisioning">Start provisioning</string>
+    <string name="dk_version">Version</string>
+    <string name="wifi_scanning">Scanning error</string>
+    <string name="unprovision">Unprovision</string>
+    <string name="password_select">Select password</string>
+    <string name="provision">Provision</string>
+    <string name="provision_status">Provisioning status</string>
+    <string name="unprovision_status">Unrovisioning status</string>
+    <string name="success">Success</string>
+
+    <string name="cd_data_item_icon">Icon representing data available in the section.</string>
+
+    <string name="wifi_status_connecting">Connecting</string>
+    <string name="wifi_status_authentication">Authentication</string>
+    <string name="wifi_status_association">Association</string>
+    <string name="wifi_status_obtaining_ip">Obtaining IP</string>
+    <string name="wifi_status_connected">Connected</string>
+    <string name="wifi_status_disconnected">Disconnected</string>
+    <string name="wifi_status_unprovisioned">Unprovisioned</string>
+    <string name="wifi_status_error">Error occurred during provisioning.</string>
+    <string name="cd_wifi_icon">Icon indicating wifi and it\'s authentication method.</string>
+
+    <string name="wifi_title">Wi-Fi</string>
+
+    <string name="ip_4">IPv4: %s</string>
+    <string name="ssid">SSID: %s</string>
+    <string name="bssid">BSSID: %s</string>
+    <string name="band">Band: %s</string>
+    <string name="band_and_channel">Band: %s, Channel: %s</string>
+    <string name="channel">Channel: %s</string>
+    <string name="band_2_4">2.4 GHz</string>
+    <string name="band_5">5 GHz</string>
+    <string name="any">Any</string>
+
+    <string name="error_auth">Authentication error.</string>
+    <string name="error_network_not_found">The specified network could not be find.</string>
+    <string name="error_timeout">Timeout occurred.</string>
+    <string name="error_ip_fail">Could not obtain IP from provided provisioning information.</string>
+    <string name="error_fail_connection">Could not connect to provisioned network.</string>
+
+    <string name="connection_info">Connection info</string>
+    <string name="status_title">Wi-Fi info</string>
+
+    <string name="scan_param_title">Scan params</string>
+    <string name="scan_param_passive">Passive: %s</string>
+    <string name="scan_param_period_ms">Period: %s [ms]</string>
+    <string name="scan_param_group_channels">Group channels: %s</string>
+
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="app_version">Version: %s (%s)</string>
+
+    <string name="state_disconnected">Disconnected</string>
+    <string name="state_authentication">Authentication</string>
+    <string name="state_association">Association</string>
+    <string name="state_obtaining_ip">Obtaining IP</string>
+    <string name="result_state">Result</string>
+    <string name="state_connected">Connected</string>
+    <string name="state_connection_failed">Connection failed</string>
+
+    <string name="version">V %d</string>
+    <string name="select_wifi">Select Wi-Fi</string>
+
+    <string name="persistent_storage">Persistent storage</string>
+
+    <string name="sorting_hint">Sort by:</string>
+    <string name="sorting_name">Name</string>
+    <string name="sorting_rssi">RSSI</string>
+</resources>

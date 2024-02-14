@@ -29,42 +29,46 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.feature)
-    alias(libs.plugins.nordic.hilt)
+package no.nordicsemi.android.wifi.provisioner.home.view.sections
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.home.view.components.DataItem
+import no.nordicsemi.android.wifi.provisioner.home.view.components.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.home.view.components.LoadingItem
+import no.nordicsemi.android.wifi.provisioner.ble.Error
+import no.nordicsemi.android.wifi.provisioner.ble.Loading
+import no.nordicsemi.android.wifi.provisioner.ble.Resource
+import no.nordicsemi.android.wifi.provisioner.ble.Success
+
+@Composable
+internal fun UnprovisioningSection(status: Resource<Unit>) {
+    when (status) {
+        is Error -> ErrorItem(status.error)
+        is Loading -> LoadingItem(modifier = Modifier.padding(vertical = 8.dp))
+        is Success -> ProvisioningSection()
+    }
 }
 
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.feature.ble"
+
+@Composable
+private fun ErrorItem(error: Throwable) {
+    ErrorDataItem(
+        iconRes = R.drawable.ic_upload_wifi,
+        title = stringResource(id = R.string.unprovision_status),
+        error = error
+    )
 }
 
-dependencies {
-    implementation(project(":lib:ble:provisioner"))
-
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.nordic.scanner)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewModel.compose)
-
-    implementation(libs.nordic.core)
-    implementation(libs.nordic.theme)
-    implementation(libs.nordic.navigation)
-    implementation(libs.nordic.logger)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.nordic.blek.uiscanner)
-    implementation(libs.nordic.permissions.ble)
-
-    implementation(libs.accompanist.placeholder)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+@Composable
+private fun ProvisioningSection() {
+    DataItem(
+        iconRes = R.drawable.ic_upload_wifi,
+        title = stringResource(id = R.string.unprovision_status),
+        description = stringResource(id = R.string.success)
+    )
 }

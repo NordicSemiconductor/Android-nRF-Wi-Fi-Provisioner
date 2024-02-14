@@ -31,17 +31,12 @@
 
 package no.nordicsemi.android.wifi.provisioner
 
-import no.nordicsemi.android.common.navigation.createDestination
 import no.nordicsemi.android.common.navigation.createSimpleDestination
 import no.nordicsemi.android.common.navigation.defineDestination
-import no.nordicsemi.android.wifi.provisioner.home.view.HomeScreen
-import no.nordicsemi.android.wifi.provisioner.wifi.view.WifiData
-import no.nordicsemi.android.wifi.provisioner.wifi.view.WifiScannerScreen
+
 
 val HomeDestinationId = createSimpleDestination("home-destination")
-val WifiScannerId = createDestination<Unit, WifiData>("wifi-scanner-destination")
 
-val HomeDestinations = listOf(
+val HomeDestination = listOf(
     defineDestination(HomeDestinationId) { HomeScreen() },
-    defineDestination(WifiScannerId) { WifiScannerScreen() }
 )

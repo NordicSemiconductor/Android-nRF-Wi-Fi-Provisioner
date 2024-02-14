@@ -29,42 +29,42 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.feature)
-    alias(libs.plugins.nordic.hilt)
+package no.nordicsemi.android.wifi.provisioner.ble.sections
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import no.nordicsemi.android.wifi.provisioner.ble.view.HomeScreenViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectWifiEvent
+import no.nordicsemi.android.wifi.provisioner.home.view.components.ClickableDataItem
+import no.nordicsemi.android.wifi.provisioner.ble.view.toIcon
+import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
+import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+
+@Composable
+internal fun WifiSection(
+    record: WifiData,
+    isEditable: Boolean = false,
+    onEvent: (HomeScreenViewEvent) -> Unit
+) {
+    Column {
+        ClickableDataItem(
+            iconRes = record.authMode.toIcon(),
+            title = stringResource(id = R.string.selected_wifi),
+            isEditable = isEditable,
+            description = record.selectedChannel?.let { getDescription(record = it) } ?: record.ssid
+        ) {
+            onEvent(OnSelectWifiEvent)
+        }
+    }
 }
 
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.feature.ble"
-}
-
-dependencies {
-    implementation(project(":lib:ble:provisioner"))
-
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.nordic.scanner)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewModel.compose)
-
-    implementation(libs.nordic.core)
-    implementation(libs.nordic.theme)
-    implementation(libs.nordic.navigation)
-    implementation(libs.nordic.logger)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.nordic.blek.uiscanner)
-    implementation(libs.nordic.permissions.ble)
-
-    implementation(libs.accompanist.placeholder)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+@Composable
+private fun getDescription(record: ScanRecordDomain): String {
+    return StringBuilder()
+        .append(record.wifiInfo.ssid)
+        .appendLine()
+        .append(stringResource(id = R.string.channel, record.wifiInfo.channel.toString()))
+        .toString()
 }

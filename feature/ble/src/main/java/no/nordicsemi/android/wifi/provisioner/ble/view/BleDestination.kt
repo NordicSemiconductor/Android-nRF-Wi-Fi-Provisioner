@@ -29,42 +29,19 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.feature)
-    alias(libs.plugins.nordic.hilt)
-}
+package no.nordicsemi.android.wifi.provisioner.ble.view
 
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.feature.ble"
-}
+import no.nordicsemi.android.common.navigation.createDestination
+import no.nordicsemi.android.common.navigation.createSimpleDestination
+import no.nordicsemi.android.common.navigation.defineDestination
+import no.nordicsemi.android.wifi.provisioner.ble.scanner.BleScannerDestination
+import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
+import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WiFiAccessPointListsScreen
 
-dependencies {
-    implementation(project(":lib:ble:provisioner"))
+val BleProvisioningDestinationId = createSimpleDestination("ble-provisioning-destination")
+val WiFiAccessPointsListId = createDestination<Unit, WifiData>("wifi-access-points-destination")
 
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.nordic.scanner)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewModel.compose)
-
-    implementation(libs.nordic.core)
-    implementation(libs.nordic.theme)
-    implementation(libs.nordic.navigation)
-    implementation(libs.nordic.logger)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.nordic.blek.uiscanner)
-    implementation(libs.nordic.permissions.ble)
-
-    implementation(libs.accompanist.placeholder)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-}
+val BleProvisioningDestinations = listOf(
+    defineDestination(BleProvisioningDestinationId) { BleProvisioningScreen() },
+    defineDestination(WiFiAccessPointsListId) { WiFiAccessPointListsScreen() }
+) + BleScannerDestination

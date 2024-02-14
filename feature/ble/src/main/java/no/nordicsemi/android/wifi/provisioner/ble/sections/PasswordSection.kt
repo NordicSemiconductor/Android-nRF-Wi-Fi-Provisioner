@@ -29,42 +29,23 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.feature)
-    alias(libs.plugins.nordic.hilt)
-}
+package no.nordicsemi.android.wifi.provisioner.ble.sections
 
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.feature.ble"
-}
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import no.nordicsemi.android.wifi.provisioner.ble.view.HomeScreenViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.OnShowPasswordDialog
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.home.view.components.ClickableDataItem
 
-dependencies {
-    implementation(project(":lib:ble:provisioner"))
-
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.nordic.scanner)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewModel.compose)
-
-    implementation(libs.nordic.core)
-    implementation(libs.nordic.theme)
-    implementation(libs.nordic.navigation)
-    implementation(libs.nordic.logger)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.nordic.blek.uiscanner)
-    implementation(libs.nordic.permissions.ble)
-
-    implementation(libs.accompanist.placeholder)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+@Composable
+internal fun PasswordSection(isEditable: Boolean = false, onEvent: (HomeScreenViewEvent) -> Unit) {
+    ClickableDataItem(
+        iconRes = R.drawable.ic_password,
+        title = stringResource(id = R.string.password),
+        isEditable = isEditable,
+        description = stringResource(id = R.string.password_encoded)
+    ) {
+        onEvent(OnShowPasswordDialog)
+    }
 }

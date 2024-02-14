@@ -29,42 +29,36 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.feature)
-    alias(libs.plugins.nordic.hilt)
-}
+package no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel
 
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.feature.ble"
-}
+import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.ScanRecordsForSsid
+import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
+import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
+import javax.inject.Inject
 
-dependencies {
-    implementation(project(":lib:ble:provisioner"))
+class WifiAggregator @Inject constructor() {
 
-    implementation(libs.androidx.lifecycle.runtime.compose)
+    private val records = mutableMapOf<String, List<ScanRecordDomain>>()
 
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
+    fun addWifi(record: ScanRecordDomain): List<ScanRecordsForSsid> {
+        if (record.wifiInfo.authModeDomain == null) {
+            return createResult(records)
+        }
 
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.nordic.scanner)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewModel.compose)
+        val ssid = record.wifiInfo.ssid
+        val ssidRecords = records[ssid]?.let {
+            (it + record).distinctBy { it.wifiInfo.channel }.sortedByDescending { it.rssi }
+        } ?: listOf(record)
+        this.records[ssid] = ssidRecords
+        return createResult(records)
+    }
 
-    implementation(libs.nordic.core)
-    implementation(libs.nordic.theme)
-    implementation(libs.nordic.navigation)
-    implementation(libs.nordic.logger)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.nordic.blek.uiscanner)
-    implementation(libs.nordic.permissions.ble)
-
-    implementation(libs.accompanist.placeholder)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    private fun createResult(records: Map<String, List<ScanRecordDomain>>): List<ScanRecordsForSsid> {
+        return records.map {
+            ScanRecordsForSsid(
+                WifiData(it.key, it.value.first().wifiInfo.authModeDomain!!, it.value.first()),
+                it.value
+            )
+        }
+    }
 }

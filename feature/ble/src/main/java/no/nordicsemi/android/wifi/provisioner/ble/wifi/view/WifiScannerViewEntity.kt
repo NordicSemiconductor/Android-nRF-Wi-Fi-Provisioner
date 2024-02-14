@@ -29,42 +29,42 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.feature)
-    alias(libs.plugins.nordic.hilt)
+package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
+
+import no.nordicsemi.android.wifi.provisioner.ble.domain.AuthModeDomain
+import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
+import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.WifiSortOption
+
+data class WifiScannerViewEntity(
+    val isLoading: Boolean = true,
+    val error: Throwable? = null,
+    val sortOption: WifiSortOption = WifiSortOption.RSSI,
+    private val items: List<ScanRecordsForSsid> = emptyList()
+) {
+    val sortedItems: List<ScanRecordsForSsid> = when (sortOption) {
+        WifiSortOption.NAME -> items.sortedBy { it.wifiData.ssid }
+        WifiSortOption.RSSI -> items.sortedByDescending { it.biggestRssi }
+    }
+
 }
 
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.feature.ble"
+data class ScanRecordsForSsid(
+    val wifiData: WifiData,
+    val items: List<ScanRecordDomain> = emptyList(),
+) {
+
+    val biggestRssi: Int = items.maxOf { it.rssi ?: 0 }
+
 }
 
-dependencies {
-    implementation(project(":lib:ble:provisioner"))
+data class WifiData(
+    val ssid: String,
+    val authMode: AuthModeDomain,
+    val channelFallback: ScanRecordDomain, //Needed for proto v1
+    val selectedChannel: ScanRecordDomain? = null
+) {
 
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.nordic.scanner)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewModel.compose)
-
-    implementation(libs.nordic.core)
-    implementation(libs.nordic.theme)
-    implementation(libs.nordic.navigation)
-    implementation(libs.nordic.logger)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.nordic.blek.uiscanner)
-    implementation(libs.nordic.permissions.ble)
-
-    implementation(libs.accompanist.placeholder)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    fun isPasswordRequired(): Boolean {
+        return authMode != AuthModeDomain.OPEN
+    }
 }

@@ -29,42 +29,43 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.feature)
-    alias(libs.plugins.nordic.hilt)
+package no.nordicsemi.android.wifi.provisioner.ble.sections
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import no.nordicsemi.android.wifi.provisioner.home.view.components.DataItem
+import no.nordicsemi.android.wifi.provisioner.home.view.components.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.home.view.components.LoadingItem
+import no.nordicsemi.android.wifi.provisioner.ble.Error
+import no.nordicsemi.android.wifi.provisioner.ble.Loading
+import no.nordicsemi.android.wifi.provisioner.ble.Resource
+import no.nordicsemi.android.wifi.provisioner.ble.Success
+import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+
+@Composable
+internal fun VersionSection(version: Resource<VersionDomain>) {
+    when (version) {
+        is Error -> ErrorSection(version.error)
+        is Loading -> LoadingItem()
+        is Success -> VersionSection(version = version.data)
+    }
 }
 
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.feature.ble"
+@Composable
+private fun ErrorSection(error: Throwable) {
+    ErrorDataItem(
+        iconRes = R.drawable.ic_version,
+        title = stringResource(id = R.string.dk_version),
+        error = error
+    )
 }
 
-dependencies {
-    implementation(project(":lib:ble:provisioner"))
-
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.nordic.scanner)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.viewModel.compose)
-
-    implementation(libs.nordic.core)
-    implementation(libs.nordic.theme)
-    implementation(libs.nordic.navigation)
-    implementation(libs.nordic.logger)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.nordic.blek.uiscanner)
-    implementation(libs.nordic.permissions.ble)
-
-    implementation(libs.accompanist.placeholder)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+@Composable
+private fun VersionSection(version: VersionDomain) {
+    DataItem(
+        iconRes = R.drawable.ic_version,
+        title = stringResource(id = R.string.dk_version),
+        description = version.value.toString()
+    )
 }
