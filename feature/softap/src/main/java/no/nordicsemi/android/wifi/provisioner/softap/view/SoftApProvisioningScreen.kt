@@ -29,39 +29,32 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner
+package no.nordicsemi.android.wifi.provisioner.softap.view
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
-import dagger.hilt.android.AndroidEntryPoint
-import no.nordicsemi.android.common.navigation.NavigationView
-import no.nordicsemi.android.common.theme.NordicActivity
-import no.nordicsemi.android.common.theme.NordicTheme
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestinations
-import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestinations
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
+import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
+import no.nordicsemi.android.common.theme.view.NordicAppBar
+import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 
-@AndroidEntryPoint
-class MainActivity : NordicActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        enableEdgeToEdge()
-
-        setContent {
-            NordicTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    NavigationView(
-                        destinations = HomeDestination +
-                                BleProvisioningDestinations +
-                                SoftApProvisionerDestinations
-                    )
-                }
-            }
-        }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SoftApProvisioningScreen() {
+    val viewModel = hiltViewModel<SimpleNavigationViewModel>()
+    Column {
+        NordicAppBar(
+            text = stringResource(id = R.string.label_wifi_provisioner),
+            actions = {
+                LoggerAppBarIcon(
+                    onClick = { /*TODO*/ }
+                )
+            },
+            showBackButton = true,
+            onNavigationButtonClick = viewModel::navigateUp
+        )
     }
 }

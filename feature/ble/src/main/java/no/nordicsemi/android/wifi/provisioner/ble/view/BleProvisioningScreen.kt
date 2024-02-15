@@ -40,7 +40,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -73,28 +72,21 @@ fun BleProvisioningScreen() {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onEvent: (BleProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
-
-    Scaffold(
-        topBar = {
-            NordicAppBar(
-                text = stringResource(id = R.string.app_name),
-                actions = {
-                    LoggerAppBarIcon(
-                        onClick = { viewModel.onEvent(OpenLoggerEvent) }
-                    )
-                },
-                showBackButton = true,
-                onNavigationButtonClick = viewModel::navigateUp
-            )
-        },
-        containerColor = MaterialTheme.colorScheme.surface,
-    ) { paddingValues ->
-        Column(modifier = Modifier.padding(paddingValues)) {
-            Box(modifier = Modifier.weight(1f)) {
-                Content(state) { viewModel.onEvent(it) }
-            }
-            ActionButtonSection(state, onEvent)
+    Column {
+        NordicAppBar(
+            text = stringResource(id = R.string.label_ble_provisioner),
+            actions = {
+                LoggerAppBarIcon(
+                    onClick = { viewModel.onEvent(OpenLoggerEvent) }
+                )
+            },
+            showBackButton = true,
+            onNavigationButtonClick = viewModel::navigateUp
+        )
+        Box(modifier = Modifier.weight(1f)) {
+            Content(state) { viewModel.onEvent(it) }
         }
+        ActionButtonSection(state, onEvent)
     }
 
     if (state.showPasswordDialog == true) {

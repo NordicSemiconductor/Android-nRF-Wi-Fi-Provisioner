@@ -65,15 +65,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.wifi.provisioner.app.R
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestinationId
+import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestinationId
 
 @Composable
 fun HomeScreen() {
     val vm: SimpleNavigationViewModel = hiltViewModel()
 
     Scaffold(
-        topBar = {
-
-        },
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = colorResource(id = no.nordicsemi.android.common.theme.R.color.appBarColor),
     ) { innerPadding ->
@@ -96,7 +94,7 @@ fun HomeScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(id = R.string.app_name),
+                text = stringResource(id = R.string.label_ble_provisioner),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.ExtraBold
             )
@@ -119,7 +117,7 @@ fun HomeScreen() {
                 Button(onClick = { vm.navigateTo(BleProvisioningDestinationId) }) {
                     Text(text = "Provision over BLE")
                 }
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = { vm.navigateTo(SoftApProvisionerDestinationId) }) {
                     Text(text = "Provision over Wi-Fi")
                 }
             }
