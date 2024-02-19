@@ -68,3 +68,4 @@ include(":lib:softap")
 //if (file('../Android-BLE-Library').exists()) {
 //    includeBuild('../Android-BLE-Library')
 //}
+include(":feature:ui")

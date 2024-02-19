@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.password
+package no.nordicsemi.android.wifi.provisioner.ble.password
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -48,6 +48,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.password.DismissEvent
+import no.nordicsemi.android.wifi.provisioner.password.PasswordDialogEvent
+import no.nordicsemi.android.wifi.provisioner.password.PasswordSetDialogEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

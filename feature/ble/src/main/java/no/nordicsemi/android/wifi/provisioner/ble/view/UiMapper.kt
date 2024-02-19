@@ -31,7 +31,14 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.view
 
-import androidx.annotation.DrawableRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SignalWifi4Bar
+import androidx.compose.material.icons.filled.SignalWifiOff
+import androidx.compose.material.icons.filled.SignalWifiStatusbarConnectedNoInternet4
+import androidx.compose.material.icons.filled.WifiFind
+import androidx.compose.material.icons.outlined.SignalWifi4BarLock
+import androidx.compose.material.icons.outlined.SignalWifiStatusbarConnectedNoInternet4
+import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import no.nordicsemi.android.wifi.provisioner.ble.domain.AuthModeDomain
@@ -40,62 +47,50 @@ import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionFailureRe
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
-@DrawableRes
-internal fun WifiConnectionStateDomain?.toIcon(): Int {
-    return when (this) {
-        WifiConnectionStateDomain.DISCONNECTED -> R.drawable.ic_wifi_error
-        WifiConnectionStateDomain.AUTHENTICATION,
-        WifiConnectionStateDomain.ASSOCIATION,
-        WifiConnectionStateDomain.OBTAINING_IP -> R.drawable.ic_wifi_loading
-        WifiConnectionStateDomain.CONNECTED -> R.drawable.ic_wifi_ok
-        WifiConnectionStateDomain.CONNECTION_FAILED -> R.drawable.ic_wifi_error
-        null -> R.drawable.ic_no_wifi
-    }
+internal fun WifiConnectionStateDomain?.toImageVector() = when (this) {
+    WifiConnectionStateDomain.DISCONNECTED -> Icons.Outlined.SignalWifiStatusbarConnectedNoInternet4
+    WifiConnectionStateDomain.AUTHENTICATION,
+    WifiConnectionStateDomain.ASSOCIATION,
+    WifiConnectionStateDomain.OBTAINING_IP -> Icons.Default.WifiFind
+    WifiConnectionStateDomain.CONNECTED -> Icons.Default.SignalWifi4Bar
+    WifiConnectionStateDomain.CONNECTION_FAILED -> Icons.Default.SignalWifiStatusbarConnectedNoInternet4
+    null -> Icons.Default.SignalWifiOff
 }
 
 @Composable
-internal fun WifiConnectionStateDomain?.toDisplayString(): String {
-    return when (this) {
-        WifiConnectionStateDomain.DISCONNECTED -> R.string.wifi_status_disconnected
-        WifiConnectionStateDomain.AUTHENTICATION -> R.string.wifi_status_authentication
-        WifiConnectionStateDomain.ASSOCIATION -> R.string.wifi_status_association
-        WifiConnectionStateDomain.OBTAINING_IP -> R.string.wifi_status_obtaining_ip
-        WifiConnectionStateDomain.CONNECTED -> R.string.wifi_status_connected
-        WifiConnectionStateDomain.CONNECTION_FAILED -> R.string.wifi_status_error
-        null -> R.string.wifi_status_unprovisioned
-    }.let { stringResource(id = it) }
-}
+internal fun WifiConnectionStateDomain?.toDisplayString() = when (this) {
+    WifiConnectionStateDomain.DISCONNECTED -> R.string.wifi_status_disconnected
+    WifiConnectionStateDomain.AUTHENTICATION -> R.string.wifi_status_authentication
+    WifiConnectionStateDomain.ASSOCIATION -> R.string.wifi_status_association
+    WifiConnectionStateDomain.OBTAINING_IP -> R.string.wifi_status_obtaining_ip
+    WifiConnectionStateDomain.CONNECTED -> R.string.wifi_status_connected
+    WifiConnectionStateDomain.CONNECTION_FAILED -> R.string.wifi_status_error
+    null -> R.string.wifi_status_unprovisioned
+}.let { stringResource(id = it) }
 
-@DrawableRes
-internal fun AuthModeDomain?.toIcon(): Int {
-    return when (this) {
-        AuthModeDomain.OPEN -> R.drawable.ic_wifi_open
-        AuthModeDomain.WEP,
-        AuthModeDomain.WPA_PSK,
-        AuthModeDomain.WPA2_PSK,
-        AuthModeDomain.WPA_WPA2_PSK,
-        AuthModeDomain.WPA2_ENTERPRISE,
-        AuthModeDomain.WPA3_PSK,
-        null -> R.drawable.ic_wifi_lock
-    }
+internal fun AuthModeDomain?.toImageVector() = when (this) {
+    AuthModeDomain.OPEN -> Icons.Outlined.Wifi
+    AuthModeDomain.WEP,
+    AuthModeDomain.WPA_PSK,
+    AuthModeDomain.WPA2_PSK,
+    AuthModeDomain.WPA_WPA2_PSK,
+    AuthModeDomain.WPA2_ENTERPRISE,
+    AuthModeDomain.WPA3_PSK,
+    null -> Icons.Outlined.SignalWifi4BarLock
 }
 
 @Composable
-internal fun BandDomain.toDisplayString(): String {
-    return when (this) {
-        BandDomain.BAND_ANY -> R.string.any
-        BandDomain.BAND_2_4_GH -> R.string.band_2_4
-        BandDomain.BAND_5_GH -> R.string.band_5
-    }.let { stringResource(id = it) }
-}
+internal fun BandDomain.toDisplayString() = when (this) {
+    BandDomain.BAND_ANY -> R.string.any
+    BandDomain.BAND_2_4_GH -> R.string.band_2_4
+    BandDomain.BAND_5_GH -> R.string.band_5
+}.let { stringResource(id = it) }
 
 @Composable
-internal fun WifiConnectionFailureReasonDomain.toDisplayString(): String {
-    return when (this) {
-        WifiConnectionFailureReasonDomain.AUTH_ERROR -> R.string.error_auth
-        WifiConnectionFailureReasonDomain.NETWORK_NOT_FOUND -> R.string.error_network_not_found
-        WifiConnectionFailureReasonDomain.TIMEOUT -> R.string.error_timeout
-        WifiConnectionFailureReasonDomain.FAIL_IP -> R.string.error_ip_fail
-        WifiConnectionFailureReasonDomain.FAIL_CONN -> R.string.error_fail_connection
-    }.let { stringResource(id = it) }
-}
+internal fun WifiConnectionFailureReasonDomain.toDisplayString() = when (this) {
+    WifiConnectionFailureReasonDomain.AUTH_ERROR -> R.string.error_auth
+    WifiConnectionFailureReasonDomain.NETWORK_NOT_FOUND -> R.string.error_network_not_found
+    WifiConnectionFailureReasonDomain.TIMEOUT -> R.string.error_timeout
+    WifiConnectionFailureReasonDomain.FAIL_IP -> R.string.error_ip_fail
+    WifiConnectionFailureReasonDomain.FAIL_CONN -> R.string.error_fail_connection
+}.let { stringResource(id = it) }

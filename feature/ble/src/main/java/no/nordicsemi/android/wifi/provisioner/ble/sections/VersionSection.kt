@@ -31,17 +31,19 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.sections
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.home.view.components.DataItem
-import no.nordicsemi.android.wifi.provisioner.home.view.components.ErrorDataItem
-import no.nordicsemi.android.wifi.provisioner.home.view.components.LoadingItem
 import no.nordicsemi.android.wifi.provisioner.ble.Error
 import no.nordicsemi.android.wifi.provisioner.ble.Loading
 import no.nordicsemi.android.wifi.provisioner.ble.Resource
 import no.nordicsemi.android.wifi.provisioner.ble.Success
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.DataItem
+import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
 
 @Composable
 internal fun VersionSection(version: Resource<VersionDomain>) {
@@ -64,7 +66,7 @@ private fun ErrorSection(error: Throwable) {
 @Composable
 private fun VersionSection(version: VersionDomain) {
     DataItem(
-        iconRes = R.drawable.ic_version,
+        imageVector = Icons.Default.Code,
         title = stringResource(id = R.string.dk_version),
         description = version.value.toString()
     )

@@ -31,21 +31,25 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.sections
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Password
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnShowPasswordDialog
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.home.view.components.ClickableDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
 
 @Composable
 internal fun PasswordSection(isEditable: Boolean = false, onEvent: (BleProvisioningViewEvent) -> Unit) {
     ClickableDataItem(
-        iconRes = R.drawable.ic_password,
+        imageVector = Icons.Outlined.Password,
         title = stringResource(id = R.string.password),
         isEditable = isEditable,
-        description = stringResource(id = R.string.password_encoded)
-    ) {
-        onEvent(OnShowPasswordDialog)
-    }
+        description = stringResource(id = R.string.password_encoded),
+        onClick = {
+            onEvent(OnShowPasswordDialog)
+        },
+        buttonText = stringResource(id = R.string.set_password)
+    )
 }

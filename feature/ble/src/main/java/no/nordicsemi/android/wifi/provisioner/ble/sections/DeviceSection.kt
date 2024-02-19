@@ -31,7 +31,10 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.sections
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.kotlin.ble.core.ServerDevice
@@ -39,7 +42,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnProvisionNextDeviceEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectDeviceClickEvent
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.home.view.components.ClickableDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
 
 @Composable
 internal fun DeviceSection(
@@ -61,26 +64,27 @@ private fun BluetoothDevice(
     onEvent: (BleProvisioningViewEvent) -> Unit
 ) {
     ClickableDataItem(
-        iconRes = R.drawable.ic_phone_ok,
+        imageVector = Icons.Outlined.PhoneAndroid,
         title = device.name ?: device.address,
         isEditable = isEditable,
-        description = device.address
-    ) {
-        onEvent(OnSelectDeviceClickEvent)
-    }
+        description = device.address,
+        onClick = { onEvent(OnSelectDeviceClickEvent) },
+        buttonText = stringResource(id = R.string.change_device)
+    )
 }
+
 @Composable
 private fun DeviceNotSelectedSection(
     onEvent: (BleProvisioningViewEvent) -> Unit
 ) {
     ClickableDataItem(
-        iconRes = R.drawable.ic_phone_ok,
+        imageVector = Icons.Outlined.PhoneAndroid,
         title = "Not selected",
         isEditable = false,
-        description = "Please select a device to provision"
-    ) {
-        onEvent(OnProvisionNextDeviceEvent)
-    }
+        description = "Please select a device to provision",
+        onClick = { onEvent(OnProvisionNextDeviceEvent) },
+        buttonText = stringResource(id = R.string.change_device)
+    )
 }
 
 @Preview

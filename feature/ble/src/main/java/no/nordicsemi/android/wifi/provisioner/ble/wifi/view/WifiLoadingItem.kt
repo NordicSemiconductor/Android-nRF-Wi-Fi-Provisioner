@@ -48,7 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.wifi.provisioner.home.view.components.applyPlaceholder
+import no.nordicsemi.android.wifi.provisioner.ui.applyPlaceholder
 
 @Composable
 fun WifiLoadingItem() {

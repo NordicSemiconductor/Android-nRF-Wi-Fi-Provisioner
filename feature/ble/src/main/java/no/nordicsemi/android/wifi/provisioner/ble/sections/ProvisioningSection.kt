@@ -36,23 +36,25 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.wifi.provisioner.home.view.components.DataItem
-import no.nordicsemi.android.wifi.provisioner.home.view.components.LoadingItem
-import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
+import no.nordicsemi.android.common.theme.view.ProgressItem
+import no.nordicsemi.android.common.theme.view.ProgressItemStatus
 import no.nordicsemi.android.wifi.provisioner.ble.Error
 import no.nordicsemi.android.wifi.provisioner.ble.Loading
 import no.nordicsemi.android.wifi.provisioner.ble.Resource
 import no.nordicsemi.android.wifi.provisioner.ble.Success
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
-import no.nordicsemi.android.common.theme.view.ProgressItem
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
+import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.DataItem
+import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
 
 @Composable
 internal fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
@@ -82,7 +84,7 @@ private fun ProvisioningSection(
     errorMessage: String? = null
 ) {
     DataItem(
-        iconRes = R.drawable.ic_upload_wifi,
+        imageVector = Icons.Default.Wifi,
         title = stringResource(id = R.string.provision_status),
         description = status.toDisplayString(),
         isInitiallyExpanded = true

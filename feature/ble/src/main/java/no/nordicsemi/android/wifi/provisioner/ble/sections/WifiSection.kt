@@ -36,11 +36,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectWifiEvent
-import no.nordicsemi.android.wifi.provisioner.home.view.components.ClickableDataItem
-import no.nordicsemi.android.wifi.provisioner.ble.view.toIcon
+import no.nordicsemi.android.wifi.provisioner.ble.view.toImageVector
 import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
 
 @Composable
 internal fun WifiSection(
@@ -50,13 +50,15 @@ internal fun WifiSection(
 ) {
     Column {
         ClickableDataItem(
-            iconRes = record.authMode.toIcon(),
+            imageVector = record.authMode.toImageVector(),
             title = stringResource(id = R.string.selected_wifi),
             isEditable = isEditable,
-            description = record.selectedChannel?.let { getDescription(record = it) } ?: record.ssid
-        ) {
-            onEvent(OnSelectWifiEvent)
-        }
+            description = record.selectedChannel?.let { getDescription(record = it) } ?: record.ssid,
+            onClick =  {
+                onEvent(OnSelectWifiEvent)
+            },
+            buttonText = stringResource(id = R.string.change_device)
+        )
     }
 }
 

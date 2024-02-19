@@ -60,7 +60,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -69,10 +68,10 @@ import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
-import no.nordicsemi.android.wifi.provisioner.ble.view.toIcon
+import no.nordicsemi.android.wifi.provisioner.ble.view.toImageVector
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.WifiScannerViewModel
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.home.view.components.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -111,9 +110,7 @@ private fun LoadingItem() {
 
 @Composable
 private fun ErrorItem(error: Throwable) {
-    Box(
-        modifier = Modifier.padding(16.dp)
-    ) {
+    Box(modifier = Modifier.padding(16.dp)) {
         ErrorDataItem(
             iconRes = R.drawable.ic_error,
             title = stringResource(id = R.string.wifi_scanning),
@@ -168,7 +165,7 @@ private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = wifiData.authMode.toIcon()),
+            imageVector = wifiData.authMode.toImageVector(),
             contentDescription = stringResource(id = R.string.cd_wifi_icon),
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier

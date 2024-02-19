@@ -40,6 +40,7 @@ android {
 
 dependencies {
 
+    implementation(project(":feature:ui"))
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.androidx.compose.ui)

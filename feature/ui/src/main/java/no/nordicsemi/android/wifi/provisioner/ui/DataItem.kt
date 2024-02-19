@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.home.view.components
+package no.nordicsemi.android.wifi.provisioner.ui
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
@@ -48,6 +48,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -58,12 +59,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
 @Composable
 fun ErrorDataItem(
@@ -97,13 +98,12 @@ fun ErrorDataItem(
 
 @Composable
 fun DataItem(
-    @DrawableRes
-    iconRes: Int,
+    imageVector: ImageVector,
     title: String,
     description: String
 ) {
     DataItem(
-        iconRes = iconRes,
+        imageVector = imageVector,
         title = title,
         description = description,
         isExpanded = null
@@ -112,12 +112,12 @@ fun DataItem(
 
 @Composable
 fun ClickableDataItem(
-    @DrawableRes
-    iconRes: Int,
+    imageVector: ImageVector,
     title: String,
     description: String,
     isEditable: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    buttonText:String
 ) {
     Row(
         modifier = Modifier
@@ -128,7 +128,7 @@ fun ClickableDataItem(
     ) {
         Box(modifier = Modifier.weight(1f)) {
             DataItem(
-                iconRes = iconRes,
+                imageVector = imageVector,
                 title = title,
                 description = description,
                 isExpanded = null
@@ -138,16 +138,13 @@ fun ClickableDataItem(
         TextButton(
             onClick = { onClick() },
             enabled = isEditable
-        ) {
-            Text(text = stringResource(id = R.string.change_device))
-        }
+        ) { Text(text = buttonText) }
     }
 }
 
 @Composable
 fun DataItem(
-    @DrawableRes
-    iconRes: Int,
+    imageVector: ImageVector,
     title: String,
     description: String,
     isInitiallyExpanded: Boolean = false,
@@ -162,7 +159,7 @@ fun DataItem(
             .padding(vertical = 8.dp)
     ) {
         DataItem(
-            iconRes = iconRes,
+            imageVector = imageVector,
             title = title,
             description = description,
             isExpanded = isExpanded.value
@@ -184,15 +181,14 @@ fun DataItem(
 
 @Composable
 private fun DataItem(
-    @DrawableRes
-    iconRes: Int,
+    imageVector: ImageVector,
     title: String,
     description: String,
     isExpanded: Boolean?
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            painter = painterResource(id = iconRes),
+            imageVector = imageVector,
             contentDescription = stringResource(id = R.string.cd_data_item_icon)
         )
 
@@ -214,6 +210,7 @@ private fun DataItem(
     }
 }
 
+
 @Composable
 private fun ExpandedIcon(isExpanded: Boolean) {
     val icon = if (isExpanded) {
@@ -227,11 +224,11 @@ private fun ExpandedIcon(isExpanded: Boolean) {
 @Preview
 @Composable
 private fun DataItemPreview() {
-    DataItem(iconRes = R.drawable.ic_version, title = "Title", description = "Description")
+    DataItem(imageVector = Icons.Outlined.Code, title = "Title", description = "Description") { }
 }
 
 @Preview
 @Composable
 private fun DataItemExpandedPreview() {
-    DataItem(iconRes = R.drawable.ic_version, title = "Title", description = "Description") { }
+    DataItem(imageVector = Icons.Outlined.Code, title = "Title", description = "Description") { }
 }

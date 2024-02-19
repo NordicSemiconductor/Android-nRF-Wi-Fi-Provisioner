@@ -61,8 +61,8 @@ import no.nordicsemi.android.wifi.provisioner.ble.sections.VolatileMemorySwitch
 import no.nordicsemi.android.wifi.provisioner.ble.sections.WifiSection
 import no.nordicsemi.android.wifi.provisioner.ble.viewmodel.BleViewModel
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.home.view.sections.UnprovisioningSection
-import no.nordicsemi.android.wifi.provisioner.password.PasswordDialog
+import no.nordicsemi.android.wifi.provisioner.ble.sections.UnprovisioningSection
+import no.nordicsemi.android.wifi.provisioner.ble.password.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.password.PasswordSetDialogEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,6 +87,7 @@ fun BleProvisioningScreen() {
             Content(state) { viewModel.onEvent(it) }
         }
         ActionButtonSection(state, onEvent)
+        Spacer(modifier = Modifier.size(16.dp))
     }
 
     if (state.showPasswordDialog == true) {

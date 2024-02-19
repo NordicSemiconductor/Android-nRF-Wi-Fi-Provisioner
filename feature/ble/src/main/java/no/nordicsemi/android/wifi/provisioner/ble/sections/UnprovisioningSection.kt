@@ -29,21 +29,23 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.home.view.sections
+package no.nordicsemi.android.wifi.provisioner.ble.sections
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SignalWifiStatusbar4Bar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.home.view.components.DataItem
-import no.nordicsemi.android.wifi.provisioner.home.view.components.ErrorDataItem
-import no.nordicsemi.android.wifi.provisioner.home.view.components.LoadingItem
 import no.nordicsemi.android.wifi.provisioner.ble.Error
 import no.nordicsemi.android.wifi.provisioner.ble.Loading
 import no.nordicsemi.android.wifi.provisioner.ble.Resource
 import no.nordicsemi.android.wifi.provisioner.ble.Success
+import no.nordicsemi.android.wifi.provisioner.ui.DataItem
+import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
 
 @Composable
 internal fun UnprovisioningSection(status: Resource<Unit>) {
@@ -67,7 +69,7 @@ private fun ErrorItem(error: Throwable) {
 @Composable
 private fun ProvisioningSection() {
     DataItem(
-        iconRes = R.drawable.ic_upload_wifi,
+        imageVector = Icons.Default.SignalWifiStatusbar4Bar,
         title = stringResource(id = R.string.unprovision_status),
         description = stringResource(id = R.string.success)
     )
