@@ -36,12 +36,13 @@
     <application
         android:name="no.nordicsemi.android.wifi.provisioner.WifiProvisionerApplication"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/label_ble_provisioner"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NordicTheme"
-        tools:targetApi="31">
+        tools:targetApi="tiramisu">
         <activity
             android:name="no.nordicsemi.android.wifi.provisioner.MainActivity"
             android:exported="true"

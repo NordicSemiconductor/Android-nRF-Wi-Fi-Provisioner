@@ -31,8 +31,6 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -80,9 +78,7 @@ import no.nordicsemi.android.wifi.provisioner.softap.viewmodel.SoftApViewModel
 @Composable
 fun SoftApProvisioningScreen() {
     val viewModel = hiltViewModel<SoftApViewModel>()
-    val context = LocalContext.current
-    val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    LocalContext.current
 
     var ssid by rememberSaveable { mutableStateOf("mobileappsrules") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -175,7 +171,10 @@ fun SoftApProvisioningScreen() {
                 TextButton(
                     onClick = {
                         showDialog = false
-                        viewModel.connect(connectivityManager)
+                        viewModel.connect(
+                            ssid = ssid,
+                            password = password
+                        )
                     }
                 ) { Text(text = "Confirm") }
             }

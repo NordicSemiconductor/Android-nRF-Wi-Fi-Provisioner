@@ -41,6 +41,7 @@ android {
 dependencies {
 
     implementation(project(":feature:ui"))
+    implementation(project(":lib:softap"))
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.androidx.compose.ui)
@@ -51,7 +52,6 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.nordic.scanner)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.viewModel.compose)
 
@@ -64,4 +64,11 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+    implementation("com.squareup.okhttp3:okhttp-tls:5.0.0-alpha.12")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
 }
