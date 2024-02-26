@@ -30,7 +30,7 @@
   -->
 
 <resources>
-    <string name="app_name">nRF Wi-Fi Provisioner</string>
+    <string name="label_ble_provisioner">nRF Wi-Fi Provisioner</string>
 
     <string name="change_device">Change</string>
     <string name="ic_nrf70">An icon of nRF70 Series</string>
@@ -82,7 +82,6 @@
     <string name="unprovision_status">Unrovisioning status</string>
     <string name="success">Success</string>
 
-    <string name="cd_data_item_icon">Icon representing data available in the section.</string>
 
     <string name="wifi_status_connecting">Connecting</string>
     <string name="wifi_status_authentication">Authentication</string>

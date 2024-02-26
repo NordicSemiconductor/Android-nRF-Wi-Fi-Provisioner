@@ -48,15 +48,18 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            from("no.nordicsemi.android.gradle:version-catalog:1.4.6")
+            from("no.nordicsemi.android.gradle:version-catalog:1.11.4")
         }
     }
 }
 
 rootProject.name = "Android-nRF-Wifi-Provisioner"
 include(":app")
-include(":lib_provisioner")
-include(":lib_proto")
+include(":feature:ble")
+include(":feature:softap")
+include(":lib:ble:provisioner")
+include(":lib:ble:proto")
+include(":lib:softap")
 
 //if (file('../Android-Common-Libraries').exists()) {
 //    includeBuild('../Android-Common-Libraries')
@@ -65,3 +68,4 @@ include(":lib_proto")
 //if (file('../Android-BLE-Library').exists()) {
 //    includeBuild('../Android-BLE-Library')
 //}
+include(":feature:ui")
