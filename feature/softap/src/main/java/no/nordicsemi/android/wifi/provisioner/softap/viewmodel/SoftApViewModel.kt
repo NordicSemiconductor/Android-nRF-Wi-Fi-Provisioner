@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package no.nordicsemi.android.wifi.provisioner.softap.viewmodel
 
 import android.os.Build
