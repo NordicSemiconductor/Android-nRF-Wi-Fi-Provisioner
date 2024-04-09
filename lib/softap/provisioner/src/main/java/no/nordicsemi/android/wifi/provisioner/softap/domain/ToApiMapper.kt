@@ -35,10 +35,6 @@ fun WifiConfigDomain.toApi(): WifiConfig {
     )
 }
 
-fun ScanResultsDomain.toApi(): ScanResults = ScanResults(
-    results = wifiScanResults.map { it.toApi() }
-)
-
 fun WifiScanResultDomain.toApi(): WifiScanResult = WifiScanResult(
     ssid = ssid,
     bssid = bssid,
@@ -46,4 +42,8 @@ fun WifiScanResultDomain.toApi(): WifiScanResult = WifiScanResult(
     channel = channel,
     authMode = authModeDomain.toApi(),
     rssi = rssi
+)
+
+fun ScanResultsDomain.toApi(): ScanResults = ScanResults(
+    results = wifiScanResults.map { it.toApi() }
 )

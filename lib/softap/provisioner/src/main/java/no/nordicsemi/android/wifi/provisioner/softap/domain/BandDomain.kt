@@ -31,8 +31,6 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.domain
 
-import no.nordicsemi.android.wifi.provisioner.softap.proto.Band
-
 enum class BandDomain(val id: Int) {
     BAND_UNSPECIFIED(0),
     BAND_2_4_GH(1),
