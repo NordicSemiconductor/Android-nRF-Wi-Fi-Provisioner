@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":lib:softap:proto"))
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.okhttp)
