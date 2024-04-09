@@ -6,8 +6,7 @@ import no.nordicsemi.android.wifi.provisioner.softap.proto.ScanResults
 import no.nordicsemi.android.wifi.provisioner.softap.proto.WifiConfig
 import no.nordicsemi.android.wifi.provisioner.softap.proto.WifiScanResult
 
-
-fun AuthModeDomain.toApi() : AuthMode = when(this) {
+internal fun AuthModeDomain.toApi() : AuthMode = when(this) {
     AuthModeDomain.AUTH_MODE_UNSPECIFIED -> AuthMode.AUTH_MODE_UNSPECIFIED
     AuthModeDomain.OPEN -> AuthMode.OPEN
     AuthModeDomain.WEP -> AuthMode.WEP
@@ -25,7 +24,7 @@ internal fun BandDomain.toApi() : Band = when(this) {
     BandDomain.BAND_6_GH -> Band.BAND_6_GHZ
 }
 
-fun WifiConfigDomain.toApi(): WifiConfig {
+internal fun WifiConfigDomain.toApi(): WifiConfig {
     return WifiConfig(
         ssid = ssid,
         passphrase = passphrase,
@@ -35,7 +34,7 @@ fun WifiConfigDomain.toApi(): WifiConfig {
     )
 }
 
-fun WifiScanResultDomain.toApi(): WifiScanResult = WifiScanResult(
+internal fun WifiScanResultDomain.toApi(): WifiScanResult = WifiScanResult(
     ssid = ssid,
     bssid = bssid,
     band = bandDomain.toApi(),
@@ -44,6 +43,6 @@ fun WifiScanResultDomain.toApi(): WifiScanResult = WifiScanResult(
     rssi = rssi
 )
 
-fun ScanResultsDomain.toApi(): ScanResults = ScanResults(
+internal fun ScanResultsDomain.toApi(): ScanResults = ScanResults(
     results = wifiScanResults.map { it.toApi() }
 )

@@ -6,8 +6,7 @@ import no.nordicsemi.android.wifi.provisioner.softap.proto.ScanResults
 import no.nordicsemi.android.wifi.provisioner.softap.proto.WifiConfig
 import no.nordicsemi.android.wifi.provisioner.softap.proto.WifiScanResult
 
-
-fun AuthMode.toDomain() : AuthModeDomain = when(this) {
+internal fun AuthMode.toDomain() : AuthModeDomain = when(this) {
     AuthMode.AUTH_MODE_UNSPECIFIED -> AuthModeDomain.AUTH_MODE_UNSPECIFIED
     AuthMode.OPEN -> AuthModeDomain.OPEN
     AuthMode.WEP -> AuthModeDomain.WEP
@@ -25,7 +24,7 @@ internal fun Band.toDomain() : BandDomain = when(this) {
     Band.BAND_6_GHZ -> BandDomain.BAND_6_GH
 }
 
-fun WifiConfig.toDomain(): WifiConfigDomain {
+internal fun WifiConfig.toDomain(): WifiConfigDomain {
     return WifiConfigDomain(
         ssid = ssid,
         passphrase = passphrase,
@@ -35,7 +34,7 @@ fun WifiConfig.toDomain(): WifiConfigDomain {
     )
 }
 
-fun WifiScanResult.toDomain(): WifiScanResultDomain = WifiScanResultDomain(
+internal fun WifiScanResult.toDomain(): WifiScanResultDomain = WifiScanResultDomain(
     ssid = ssid,
     bssid = bssid,
     bandDomain = band.toDomain(),
