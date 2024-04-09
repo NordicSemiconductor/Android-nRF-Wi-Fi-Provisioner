@@ -41,7 +41,7 @@ android {
 dependencies {
 
     implementation(project(":feature:ui"))
-    implementation(project(":lib:softap"))
+    implementation(project(":lib:softap:provisioner"))
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.androidx.compose.ui)

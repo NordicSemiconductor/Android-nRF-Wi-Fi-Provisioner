@@ -73,25 +73,15 @@ object WifiServiceModule {
 
     private const val CERTIFICATE = "" +
             "-----BEGIN CERTIFICATE-----\n" +
-            "MIIDmTCCAoGgAwIBAgIUNPeHg7DpZ5bXuQIi6Xb5+3QsLU8wDQYJKoZIhvcNAQEL\n" +
-            "BQAwXDELMAkGA1UEBhMCTk8xDzANBgNVBAgMBk5vcndheTEhMB8GA1UECgwYSW50\n" +
-            "ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMRkwFwYDVQQDDBBodHRwc2VydmVyLmxvY2Fs\n" +
-            "MB4XDTIzMDgyOTA5MDUxMVoXDTMzMDgyNjA5MDUxMVowXDELMAkGA1UEBhMCTk8x\n" +
-            "DzANBgNVBAgMBk5vcndheTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkg\n" +
-            "THRkMRkwFwYDVQQDDBBodHRwc2VydmVyLmxvY2FsMIIBIjANBgkqhkiG9w0BAQEF\n" +
-            "AAOCAQ8AMIIBCgKCAQEAtu0duZvD2kDOg1Qqh9VxhC/kVpquO3C31w8J3CgI/tZA\n" +
-            "hlOGxxjXySrQdHUUpQHjWk9LaQhD8TMag8hA+4Rxx+MJpvx6G29se9dbG7TRTswx\n" +
-            "MdRweXjlygjl+2DJr5Fy7541ceRfBc2O2+AZWsCxxryVhEyIUSAIhEL7cEF2NV7m\n" +
-            "3O5POSPSOe86s8REaRbnrEcVAXGgViNf2oQGLAS2ul8gzkIcU/7/foHNI8RL/9qD\n" +
-            "arQrxyUrUzAnGxdaaVgajbHVGpGyKOuhEYwZlHZbJI+juHtw3iDaOb8oz1fXsoDo\n" +
-            "mSO0Zzt4Q/pGvxgitbBKKHaM0juo2q81tto/pa82bwIDAQABo1MwUTAdBgNVHQ4E\n" +
-            "FgQUfLgHfBTGAvqmcg/c7AhbLwaA5WUwHwYDVR0jBBgwFoAUfLgHfBTGAvqmcg/c\n" +
-            "7AhbLwaA5WUwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAYieg\n" +
-            "3NtCYNWAq0ASjMUIlN4xTWlWPvQMLcvaBWs27GB8dYR9uq450G1ADZqMWV7CWT5G\n" +
-            "6QVVUj5XOCLhlmIfuBBdh5Yw9DSq7f6ALa+eUwsn/yC2pVrMYiWuSwAMB0XO06ip\n" +
-            "p95K05lDFhjAzHTNJSXs0bHFNnxDwk687hfWQCsjPh2Gocg5OGJVq6b9KA9kv3FT\n" +
-            "ndfNnVdyfBsKn/USf96kJ97qUkTWKwNNvPn9eBhP9T5FdTfv9bCjv3kqHTCSvF5/\n" +
-            "Hv7J6UHlxNcWxBDq0FGj3jxKoxUyXuDi7curcCPPC/gy57NMyg0nyq/gE4alJKVH\n" +
-            "8ticzSyJlz9rS7AbAg==\n" +
+            "MIIB1jCCAXugAwIBAgIUbOY1v8ubBZy6qIsZXelxvLy5l+QwCgYIKoZIzj0EAwIw\n" +
+            "YDELMAkGA1UEBhMCVVMxDTALBgNVBAgMBFRlc3QxDTALBgNVBAcMBFRlc3QxGjAY\n" +
+            "BgNVBAoMEVRlc3QgT3JnYW5pemF0aW9uMRcwFQYDVQQDDA53aWZpcHJvdi5sb2Nh\n" +
+            "bDAeFw0yNDAzMjYxMzI4MzNaFw0yNTAzMjYxMzI4MzNaMGAxCzAJBgNVBAYTAlVT\n" +
+            "MQ0wCwYDVQQIDARUZXN0MQ0wCwYDVQQHDARUZXN0MRowGAYDVQQKDBFUZXN0IE9y\n" +
+            "Z2FuaXphdGlvbjEXMBUGA1UEAwwOd2lmaXByb3YubG9jYWwwWTATBgcqhkjOPQIB\n" +
+            "BggqhkjOPQMBBwNCAAR6COfDiVYhNJkqCe3COkrN/Y9U8LPSDElE+mDk0ri7Ivb8\n" +
+            "LefdeYP3HgoTEEgem5eDNy10UZlf6+q6VUWyCH8toxMwETAPBgNVHRMBAf8EBTAD\n" +
+            "AQH/MAoGCCqGSM49BAMCA0kAMEYCIQDmEcPlg4GuPIAE9xvpW8t8LGit/+eDWCqE\n" +
+            "3ADi/H6f0QIhALUgBnN1+7awE7M1FvSnizX3b5ff7BfzltskPYnpjxqS\n" +
             "-----END CERTIFICATE-----\n"
 }

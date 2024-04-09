@@ -14,11 +14,11 @@ import retrofit2.http.Path
 interface WifiService {
 
     @Headers("Content-Type: text/plain")
-    @GET("wifi/ssid")
+    @GET("prov/networks")
     suspend fun listSsids(): Response<ResponseBody>
 
     @Headers("Content-Type: text/plain")
-    @PUT("wifi/prov")
+    @PUT("prov/configure")
     suspend fun provision(@Body credentials: String): Response<ResponseBody>
 
     @Headers("Content-Type: text/plain")

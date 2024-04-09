@@ -29,44 +29,16 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-pluginManagement {
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
+plugins {
+    alias(libs.plugins.nordic.library)
+    alias(libs.plugins.nordic.kotlin)
+    alias(libs.plugins.wire)
 }
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        mavenLocal()
-        google()
-        mavenCentral()
-        maven(url = "https://jitpack.io")
-    }
-    versionCatalogs {
-        create("libs") {
-            from("no.nordicsemi.android.gradle:version-catalog:1.11.4")
-        }
-    }
+wire {
+    kotlin {}
 }
 
-rootProject.name = "Android-nRF-Wifi-Provisioner"
-include(":app")
-include(":feature:ble")
-include(":feature:softap")
-include(":lib:ble:provisioner")
-include(":lib:ble:proto")
-include(":lib:softap:proto")
-include(":lib:softap:provisioner")
-
-//if (file('../Android-Common-Libraries').exists()) {
-//    includeBuild('../Android-Common-Libraries')
-//}
-//
-//if (file('../Android-BLE-Library').exists()) {
-//    includeBuild('../Android-BLE-Library')
-//}
-include(":feature:ui")
+android {
+    namespace = "no.nordicsemi.android.wifi.provisioner.softap.proto"
+}
