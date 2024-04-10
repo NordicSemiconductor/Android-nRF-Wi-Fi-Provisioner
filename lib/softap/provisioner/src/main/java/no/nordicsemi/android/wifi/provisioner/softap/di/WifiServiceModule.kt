@@ -8,6 +8,7 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.di
 
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +21,7 @@ import okhttp3.logging.HttpLoggingInterceptor.Level
 import okhttp3.tls.HandshakeCertificates
 import okhttp3.tls.decodeCertificatePem
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.converter.wire.WireConverterFactory
 import retrofit2.create
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -49,6 +50,7 @@ object WifiServiceModule {
 
         // This is a work around to avoid unknown host exception
         val hostNameVerifier = HostnameVerifier { hostname, session ->
+            Log.d("AAAA", "Hostname: $hostname")
             true
         }
 
@@ -67,9 +69,11 @@ object WifiServiceModule {
     fun provideService(client: OkHttpClient): WifiService = Retrofit.Builder()
         .baseUrl("https://192.0.2.1/")
         .client(client)
-        .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(WireConverterFactory.create())
         .build()
         .create()
+
+    internal val SERVICE_NAME = "wifiprov"
 
     private const val CERTIFICATE = "" +
             "-----BEGIN CERTIFICATE-----\n" +
