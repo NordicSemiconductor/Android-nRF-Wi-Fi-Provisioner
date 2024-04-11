@@ -34,7 +34,7 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
         override fun onServiceFound(service: NsdServiceInfo) {
             // A service was found! Do something with it.
             Log.d("AAAA", "Service discovery success $service")
-            if (service.serviceName == "wifiprov") {
+            if (service.serviceName == SERVICE_NAME) {
                 nsdManager.resolveService(service, resolveListener)
             }
         }
