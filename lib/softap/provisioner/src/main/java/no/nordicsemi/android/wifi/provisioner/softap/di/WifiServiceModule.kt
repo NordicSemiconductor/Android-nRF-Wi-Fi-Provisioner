@@ -62,9 +62,8 @@ object WifiServiceModule {
             .build()
 
         // This is a work around to avoid unknown host exception
-        val hostNameVerifier = HostnameVerifier { hostname, session ->
-            Log.d("AAAA", "Hostname: $hostname")
-            true
+        val hostNameVerifier = HostnameVerifier { hostname, _ ->
+            hostname.contains(NetworkServiceDiscoveryListener.SERVICE_NAME)
         }
 
         return OkHttpClient.Builder()
@@ -73,7 +72,6 @@ object WifiServiceModule {
             .hostnameVerifier(hostNameVerifier)
             .followRedirects(false)
             .dns {
-                Log.d("AAAA", "DNS: $it")
                 nsdListener.discoveredIps
             }
             .readTimeout(10, TimeUnit.SECONDS)
