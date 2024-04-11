@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
+import no.nordicsemi.android.wifi.provisioner.softap.NetworkServiceDiscoveryListener
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
 import no.nordicsemi.android.wifi.provisioner.softap.WifiService
 import javax.inject.Singleton
@@ -22,10 +23,12 @@ object SoftApManagerModule {
     @Singleton
     fun provideSoftApManager(
         @ApplicationContext context: Context,
+        nsdListener: NetworkServiceDiscoveryListener,
         wifiService: WifiService,
         @IODispatcher coroutineDispatcher: CoroutineDispatcher
     ) = SoftApManager(
         context = context,
+        nsdListener = nsdListener,
         wifiService = wifiService,
         coroutineDispatcher = coroutineDispatcher
     )

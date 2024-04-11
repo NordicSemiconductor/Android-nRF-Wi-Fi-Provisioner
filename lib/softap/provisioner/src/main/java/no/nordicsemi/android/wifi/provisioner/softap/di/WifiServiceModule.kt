@@ -8,12 +8,17 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.di
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.nsd.NsdManager
 import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import no.nordicsemi.android.wifi.provisioner.softap.BuildConfig
+import no.nordicsemi.android.wifi.provisioner.softap.NetworkServiceDiscoveryListener
 import no.nordicsemi.android.wifi.provisioner.softap.WifiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,7 +42,15 @@ object WifiServiceModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideNetworkServiceDiscoveryListener(@ApplicationContext context : Context): NetworkServiceDiscoveryListener {
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val nsdManager = context.getSystemService(Context.NSD_SERVICE) as NsdManager
+        return NetworkServiceDiscoveryListener(nsdManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(nsdListener: NetworkServiceDiscoveryListener): OkHttpClient {
         val interceptor = HttpLoggingInterceptor().apply {
             level = when {
                 BuildConfig.DEBUG -> Level.BODY
@@ -59,6 +72,10 @@ object WifiServiceModule {
             .addInterceptor(interceptor)
             .hostnameVerifier(hostNameVerifier)
             .followRedirects(false)
+            .dns {
+                Log.d("AAAA", "DNS: $it")
+                nsdListener.discoveredIps
+            }
             .readTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .build()
@@ -67,13 +84,11 @@ object WifiServiceModule {
     @Provides
     @Singleton
     fun provideService(client: OkHttpClient): WifiService = Retrofit.Builder()
-        .baseUrl("https://192.0.2.1/")
+        .baseUrl("https://${NetworkServiceDiscoveryListener.SERVICE_NAME}.local/")
         .client(client)
         .addConverterFactory(WireConverterFactory.create())
         .build()
         .create()
-
-    internal val SERVICE_NAME = "wifiprov"
 
     private const val CERTIFICATE = "" +
             "-----BEGIN CERTIFICATE-----\n" +

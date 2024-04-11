@@ -8,6 +8,7 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.nsd.NsdManager
+import android.net.nsd.NsdServiceInfo
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
 import android.util.Log
@@ -16,9 +17,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
-import no.nordicsemi.android.wifi.provisioner.softap.credentials.Credentials
-import okhttp3.ResponseBody
-import retrofit2.Response
+import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
+import no.nordicsemi.android.wifi.provisioner.softap.domain.toApi
+import no.nordicsemi.android.wifi.provisioner.softap.domain.toDomain
 import javax.inject.Inject
 
 /**
@@ -33,6 +34,7 @@ import javax.inject.Inject
  */
 class SoftApManager @Inject constructor(
     context: Context,
+    private val nsdListener: NetworkServiceDiscoveryListener,
     private val wifiService: WifiService,
     private val coroutineDispatcher: CoroutineDispatcher
 ) {
@@ -43,6 +45,9 @@ class SoftApManager @Inject constructor(
     private var _provisioningState =
         MutableStateFlow<ProvisioningState>(ProvisioningState.Disconnected)
     val provisioningState = _provisioningState.asStateFlow()
+
+    private val _discoveredServices = mutableListOf<NsdServiceInfo>()
+    private var discoveredService: NsdServiceInfo? = null
 
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
 
@@ -69,7 +74,6 @@ class SoftApManager @Inject constructor(
         override fun onUnavailable() {
             // do failure processing here..
             Log.d("AAAA", "Something went wrong!")
-            disconnect()
         }
     }
 
@@ -108,35 +112,34 @@ class SoftApManager @Inject constructor(
     }
 
     /**
+     * Discover services on the network.
+     */
+    suspend fun discoverServices() {
+        val serviceInfo = nsdListener.discoverServices()
+        _provisioningState.value =
+            ProvisioningState.NetworkServiceDiscoveryComplete(serviceInfo!!)
+    }
+
+    /**
+     * Stops the network service discovery.
+     */
+    fun stopDiscovery() {
+        nsdListener.stopDiscovery()
+    }
+
+    /**
      * Lists the SSIDs scanned by the nRF7002 device
      */
-    suspend fun listSsids(): Response<ResponseBody> = withContext(coroutineDispatcher) {
-        wifiService.listSsids()
+    suspend fun listSsids() = withContext(coroutineDispatcher) {
+        wifiService.listSsids().toDomain()
     }
 
     /**
      * Provisions the nRF7002 device a wifi network with the given credentials.
      *
-     * @param credentials Credentials of the wifi network.
+     * @param config Credentials of the wifi network.
      */
-    suspend fun provision(credentials: Credentials) = withContext(coroutineDispatcher) {
-        wifiService.provision(credentials.value).also {
-            nsdManager.discoverServices(
-                "_https._tcp",
-                NsdManager.PROTOCOL_DNS_SD,
-                NetworkServiceDiscoveryListener(nsdManager = nsdManager)
-            )
-        }
-
-    }
-
-    /**
-     * Toggles the given LED on the nRF7000 device.
-     *
-     * @param led    Led number to blink.
-     * @param toggle Boolean representing on or off.
-     */
-    suspend fun blink(led: Int, toggle: Boolean) = withContext(coroutineDispatcher) {
-        wifiService.blink(led = led, toggle = if (toggle) "1" else "0")
+    suspend fun provision(config: WifiConfigDomain) = withContext(coroutineDispatcher) {
+        wifiService.provision(config.toApi())
     }
 }
