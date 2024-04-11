@@ -11,7 +11,6 @@ package no.nordicsemi.android.wifi.provisioner.softap.di
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.nsd.NsdManager
-import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
