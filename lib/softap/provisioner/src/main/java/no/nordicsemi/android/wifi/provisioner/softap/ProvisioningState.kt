@@ -25,16 +25,6 @@ sealed class ProvisioningState {
     data object Connected : ProvisioningState()
 
     /**
-     * State when the discovering the network services available on the network.
-     */
-    data object InitiatingNetworkServiceDiscovery : ProvisioningState()
-
-    /**
-     * State when the network service discovery is complete.
-     */
-    data class NetworkServiceDiscoveryComplete(val serviceInfo : NsdServiceInfo) : ProvisioningState()
-
-    /**
      * State when connected to a Unprovisioned Wifi Node
      */
     data object Provisioning : ProvisioningState()

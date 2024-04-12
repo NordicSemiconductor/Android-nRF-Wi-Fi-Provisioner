@@ -26,22 +26,19 @@ import javax.inject.Inject
  * Created by Roshan Rajaratnam on 23/02/2024.
  *
  * Entry point to the SoftApManager
- *
- * @param context             Application context.
- * @param wifiService         WifiServer api.
- * @param coroutineDispatcher Coroutine dispatcher.
- *
+ * @property connectivityManager Android's connectivity manager.
+ * @property nsdListener         Network service discovery listener.
+ * @property wifiService         WifiServer api.
+ * @property coroutineDispatcher Coroutine dispatcher.
+ * @property provisioningState   Provisioning state.
+ * @constructor Create empty SoftApManager.
  */
 class SoftApManager @Inject constructor(
-    context: Context,
+    private val connectivityManager: ConnectivityManager,
     private val nsdListener: NetworkServiceDiscoveryListener,
     private val wifiService: WifiService,
     private val coroutineDispatcher: CoroutineDispatcher
 ) {
-    private val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    private val nsdManager = context.getSystemService(Context.NSD_SERVICE) as NsdManager
-
     private var _provisioningState =
         MutableStateFlow<ProvisioningState>(ProvisioningState.Disconnected)
     val provisioningState = _provisioningState.asStateFlow()
@@ -114,16 +111,16 @@ class SoftApManager @Inject constructor(
     /**
      * Discover services on the network.
      */
-    suspend fun discoverServices() {
+    suspend fun discoverServices(): NsdServiceInfo {
         val serviceInfo = nsdListener.discoverServices()
-        _provisioningState.value =
-            ProvisioningState.NetworkServiceDiscoveryComplete(serviceInfo!!)
+        nsdListener.stopDiscovery()
+        return serviceInfo!!
     }
 
     /**
      * Stops the network service discovery.
      */
-    fun stopDiscovery() {
+    private fun stopDiscovery() {
         nsdListener.stopDiscovery()
     }
 

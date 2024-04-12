@@ -41,8 +41,13 @@ object WifiServiceModule {
 
     @Provides
     @Singleton
+    fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager {
+        return context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
+    @Provides
+    @Singleton
     fun provideNetworkServiceDiscoveryListener(@ApplicationContext context : Context): NetworkServiceDiscoveryListener {
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val nsdManager = context.getSystemService(Context.NSD_SERVICE) as NsdManager
         return NetworkServiceDiscoveryListener(nsdManager)
     }
