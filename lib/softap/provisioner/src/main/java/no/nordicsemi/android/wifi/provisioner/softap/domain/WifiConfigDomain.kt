@@ -36,5 +36,5 @@ data class WifiConfigDomain(
     val passphrase: String,
     val bandDomain: BandDomain = BandDomain.BAND_UNSPECIFIED,
     val channel: Int = 0,
-    val authModeDomain: AuthModeDomain = AuthModeDomain.AUTH_MODE_UNSPECIFIED
+    val authModeDomain: AuthModeDomain
 )
