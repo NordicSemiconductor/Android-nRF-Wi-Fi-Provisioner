@@ -2,6 +2,7 @@
 <resources>
     <string name="label_wifi_provisioner">"Wi-Fi Provisioner "</string>
     <string name="setup_wifi">Setup Wi-Fi</string>
+    <string name="setup_wifi_rationale">Please provide the Wi-Fi SSID and the Password</string>
     <string name="change_wifi">Change Wi-Fi</string>
     <string name="dismiss">Dismiss</string>
     <string name="confirm">Confirm</string>
