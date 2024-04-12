@@ -111,7 +111,7 @@ fun SoftApProvisioningScreen() {
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             Button(onClick = { showDialog = true }) {
-                Text(text = "Setup Wi-Fi")
+                Text(text = stringResource(id = R.string.setup_wifi))
             }
         }
     }
@@ -124,7 +124,7 @@ fun SoftApProvisioningScreen() {
             },
             title = {
                 Text(
-                    text = "Setup Wi-fi",
+                    text = stringResource(id = R.string.setup_wifi),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
@@ -133,7 +133,7 @@ fun SoftApProvisioningScreen() {
             text = {
                 Column {
                     Text(
-                        text = "Please provide the Wi-Fi SSID and the Password",
+                        text = stringResource(id = R.string.setup_wifi_rationale),
                         modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.bodyMedium
                     )
