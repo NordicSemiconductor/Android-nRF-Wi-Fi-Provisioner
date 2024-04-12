@@ -16,7 +16,9 @@ import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.wifi.provisioner.softap.ProvisioningState
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
-import no.nordicsemi.android.wifi.provisioner.softap.credentials.Credentials
+import no.nordicsemi.android.wifi.provisioner.softap.domain.AuthModeDomain
+import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
+import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 /**
@@ -26,16 +28,16 @@ import javax.inject.Inject
 class SoftApViewModel @Inject constructor(
     navigator: Navigator,
     savedStateHandle: SavedStateHandle,
-    private val softApManager: SoftApManager
+    private val softApManager: SoftApManager,
+    private val okHttpClient: OkHttpClient
 ) : SimpleNavigationViewModel(navigator = navigator, savedStateHandle = savedStateHandle) {
-
     init {
         softApManager.provisioningState.onEach {
             when (it) {
                 ProvisioningState.Disconnected -> {}
                 ProvisioningState.Connecting -> {}
                 ProvisioningState.Connected -> {
-                    provision()
+                    discoverServices()
                 }
                 ProvisioningState.Provisioning -> {}
                 ProvisioningState.ProvisioningComplete -> {}
@@ -43,34 +45,61 @@ class SoftApViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        softApManager.disconnect()
+    }
+
     @RequiresApi(Build.VERSION_CODES.Q)
     internal fun connect(ssid: String = "mobileappsrules", password: String) {
         softApManager.connect(ssid = ssid, password = password)
     }
 
-    internal fun listSsids() {
-        val handler = CoroutineExceptionHandler { _, t ->
-            Log.e("AAAA", "$t")
-        }
-        viewModelScope.launch(handler) {
-            softApManager.listSsids()
+    private fun discoverServices() {
+        viewModelScope.launch {
+            softApManager.discoverServices()
+            listSsids()
         }
     }
 
-    internal fun provision(
-        credentials: Credentials = Credentials(
-            ssid = "OnHub",
-            password = "newbird379"
-        )
-    ) {
+    private fun listSsids() {
         val handler = CoroutineExceptionHandler { _, t ->
             Log.e("AAAA", "$t")
         }
         viewModelScope.launch(handler) {
-            softApManager.provision(credentials = credentials).also { response ->
-                if (response.isSuccessful) {
-                    softApManager.disconnect()
+            val result = softApManager.listSsids()
+            Log.d("AAAA", "Results: $result")
+            if (result.wifiScanResults.isNotEmpty()) {
+                val wifConfig = WifiConfigDomain(
+                    ssid = "",
+                    passphrase = "",
+                    authModeDomain = AuthModeDomain.WPA3_PSK,
+                )
+                provision(wifConfig)
+            }
+        }
+    }
+
+    private fun provision(config: WifiConfigDomain) {
+
+        val handler = CoroutineExceptionHandler { _, t ->
+            Log.e("AAAA", "$t")
+        }
+        viewModelScope.launch(handler) {
+            try {
+                softApManager.provision(config = config).also { response ->
+                    if (response.isSuccessful) {
+                        softApManager.disconnect()
+                        softApManager.discoverServices()
+                    }
                 }
+            } catch (exception: Exception) {
+                // TODO This workaround was added to start the service discovery again once the
+                //  provisioning is completed. This has to be cleaned up once the fw disconnects
+                //  gracefully.
+                Log.e("AAAA", "Error: $exception")
+                softApManager.disconnect()
+                softApManager.discoverServices()
             }
         }
     }
