@@ -63,7 +63,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.viewmodel.BleViewModel
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ble.sections.UnprovisioningSection
 import no.nordicsemi.android.wifi.provisioner.ble.password.PasswordDialog
-import no.nordicsemi.android.wifi.provisioner.password.PasswordSetDialogEvent
+import no.nordicsemi.android.wifi.provisioner.ble.password.PasswordSetDialogEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

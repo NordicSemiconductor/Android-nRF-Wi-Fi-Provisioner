@@ -40,9 +40,6 @@ import no.nordicsemi.android.kotlin.ble.ui.scanner.DeviceSelected
 import no.nordicsemi.android.kotlin.ble.ui.scanner.ScannerScreen
 import no.nordicsemi.android.kotlin.ble.ui.scanner.ScanningCancelled
 import no.nordicsemi.android.kotlin.ble.ui.scanner.main.DeviceListItem
-import no.nordicsemi.android.wifi.provisioner.scanner.ProvisioningData
-import no.nordicsemi.android.wifi.provisioner.scanner.ProvisioningSection
-import no.nordicsemi.android.wifi.provisioner.scanner.provisioningData
 
 val BleScannerDestinationId =
     createDestination<Unit, ServerDevice>("ble-scanner-destination")

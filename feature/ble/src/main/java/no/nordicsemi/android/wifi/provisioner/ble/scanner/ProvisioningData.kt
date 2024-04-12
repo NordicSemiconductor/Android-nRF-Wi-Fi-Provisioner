@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.scanner
+package no.nordicsemi.android.wifi.provisioner.ble.scanner
 
 import android.os.ParcelUuid
 import no.nordicsemi.android.common.core.DataByteArray

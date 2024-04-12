@@ -68,7 +68,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.OnVolatileMemoryChangedEv
 import no.nordicsemi.android.wifi.provisioner.ble.view.OpenLoggerEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.WiFiAccessPointsListId
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
-import no.nordicsemi.android.wifi.provisioner.repository.ProvisionerResourceRepository
+import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
 import javax.inject.Inject
 
 @HiltViewModel

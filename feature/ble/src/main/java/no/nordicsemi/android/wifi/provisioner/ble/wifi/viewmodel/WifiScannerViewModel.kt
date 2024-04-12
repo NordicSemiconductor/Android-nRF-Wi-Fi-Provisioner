@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.Navigator
-import no.nordicsemi.android.wifi.provisioner.repository.ProvisionerResourceRepository
+import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.NavigateUpEvent
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.OnSortOptionSelected
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData

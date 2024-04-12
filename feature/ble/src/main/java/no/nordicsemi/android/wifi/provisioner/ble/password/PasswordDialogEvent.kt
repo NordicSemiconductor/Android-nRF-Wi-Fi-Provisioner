@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.password
+package no.nordicsemi.android.wifi.provisioner.ble.password
 
 sealed interface PasswordDialogEvent
 

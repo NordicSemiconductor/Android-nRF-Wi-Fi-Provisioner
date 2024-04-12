@@ -48,9 +48,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.password.DismissEvent
-import no.nordicsemi.android.wifi.provisioner.password.PasswordDialogEvent
-import no.nordicsemi.android.wifi.provisioner.password.PasswordSetDialogEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

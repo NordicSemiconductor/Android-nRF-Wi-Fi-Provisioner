@@ -38,6 +38,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import no.nordicsemi.android.wifi.provisioner.ble.ProvisionerRepository
+import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
 
 @Module
 @InstallIn(SingletonComponent::class)

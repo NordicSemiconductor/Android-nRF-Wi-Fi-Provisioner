@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.repository
+package no.nordicsemi.android.wifi.provisioner.ble.repository
 
 import android.bluetooth.BluetoothDevice
 import kotlinx.coroutines.flow.Flow

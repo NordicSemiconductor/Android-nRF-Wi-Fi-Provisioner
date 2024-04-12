@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.scanner
+package no.nordicsemi.android.wifi.provisioner.ble.scanner
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
