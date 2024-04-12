@@ -2,12 +2,10 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap
 
-import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build

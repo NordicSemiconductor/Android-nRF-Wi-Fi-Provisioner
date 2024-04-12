@@ -1,7 +1,5 @@
 package no.nordicsemi.android.wifi.provisioner.softap
 
-import android.net.nsd.NsdServiceInfo
-
 /**
  * Created by Roshan Rajaratnam on 23/02/2024.
  *

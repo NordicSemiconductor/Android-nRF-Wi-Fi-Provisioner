@@ -1,6 +1,7 @@
 package no.nordicsemi.android.wifi.provisioner.softap.di
 
 import android.content.Context
+import android.net.ConnectivityManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,12 +23,12 @@ object SoftApManagerModule {
     @Provides
     @Singleton
     fun provideSoftApManager(
-        @ApplicationContext context: Context,
+        connectivityManager: ConnectivityManager,
         nsdListener: NetworkServiceDiscoveryListener,
         wifiService: WifiService,
         @IODispatcher coroutineDispatcher: CoroutineDispatcher
     ) = SoftApManager(
-        context = context,
+        connectivityManager = connectivityManager,
         nsdListener = nsdListener,
         wifiService = wifiService,
         coroutineDispatcher = coroutineDispatcher
