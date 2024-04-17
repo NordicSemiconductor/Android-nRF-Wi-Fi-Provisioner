@@ -52,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.wifi.provisioner.event.WifiSortOption
 import no.nordicsemi.android.wifi.provisioner.ui.R
 import no.nordicsemi.android.common.theme.R as themeR
 

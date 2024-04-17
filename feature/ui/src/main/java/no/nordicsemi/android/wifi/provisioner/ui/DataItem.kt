@@ -97,6 +97,36 @@ fun ErrorDataItem(
 }
 
 @Composable
+fun ErrorDataItem(
+    imageVector: ImageVector,
+    title: String,
+    error: Throwable?
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = imageVector,
+            contentDescription = stringResource(id = R.string.cd_data_item_icon),
+        )
+
+        Spacer(modifier = Modifier.size(16.dp))
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge
+            )
+
+            Text(
+                text = error?.message ?: stringResource(id = R.string.unknown_error),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+    }
+}
+
+
+@Composable
 fun DataItem(
     imageVector: ImageVector,
     title: String,

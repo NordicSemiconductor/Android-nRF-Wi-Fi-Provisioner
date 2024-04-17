@@ -57,9 +57,10 @@ rootProject.name = "Android-nRF-Wifi-Provisioner"
 include(":app")
 include(":feature:ble")
 include(":feature:softap")
-include(":lib:ble:provisioner")
+include(":feature:ui")
+include(":feature:common")
 include(":lib:ble:proto")
-include(":lib:softap:proto")
+include(":lib:ble:provisioner")
 include(":lib:softap:provisioner")
 
 //if (file('../Android-Common-Libraries').exists()) {
@@ -69,4 +70,3 @@ include(":lib:softap:provisioner")
 //if (file('../Android-BLE-Library').exists()) {
 //    includeBuild('../Android-BLE-Library')
 //}
-include(":feature:ui")

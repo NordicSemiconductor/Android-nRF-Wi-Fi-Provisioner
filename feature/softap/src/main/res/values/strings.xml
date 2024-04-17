@@ -6,4 +6,6 @@
     <string name="change_wifi">Change Wi-Fi</string>
     <string name="dismiss">Dismiss</string>
     <string name="confirm">Confirm</string>
+    <string name="wifi_access_points_title">Wi-Fi Access Points</string>
+    <string name="wifi_scanning">Scanning error</string>
 </resources>

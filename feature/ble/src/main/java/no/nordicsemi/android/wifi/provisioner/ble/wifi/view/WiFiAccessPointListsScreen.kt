@@ -66,6 +66,10 @@ import no.nordicsemi.android.common.theme.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.ble.view.toImageVector
+import no.nordicsemi.android.wifi.provisioner.event.NavigateUpEvent
+import no.nordicsemi.android.wifi.provisioner.event.OnSortOptionSelected
+import no.nordicsemi.android.wifi.provisioner.event.WifiScannerViewEvent
+import no.nordicsemi.android.wifi.provisioner.event.WifiSelectedEvent
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiLoadingItem

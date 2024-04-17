@@ -40,6 +40,7 @@ android {
 
 dependencies {
 
+    implementation(project(":feature:common"))
     implementation(project(":feature:ui"))
     implementation(project(":lib:softap:provisioner"))
     implementation(libs.androidx.lifecycle.runtime.compose)

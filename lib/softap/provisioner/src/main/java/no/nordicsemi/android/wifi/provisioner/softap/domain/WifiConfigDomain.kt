@@ -32,9 +32,6 @@
 package no.nordicsemi.android.wifi.provisioner.softap.domain
 
 data class WifiConfigDomain(
-    val ssid: String,
-    val passphrase: String,
-    val bandDomain: BandDomain = BandDomain.BAND_UNSPECIFIED,
-    val channel: Int = 0,
-    val authModeDomain: AuthModeDomain
+    val wifiInfoDomain: WifiInfoDomain?,
+    val passphrase: String
 )

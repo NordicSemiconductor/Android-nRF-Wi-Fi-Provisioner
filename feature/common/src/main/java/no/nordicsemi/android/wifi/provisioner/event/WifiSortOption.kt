@@ -29,16 +29,8 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.library)
-    alias(libs.plugins.nordic.kotlin)
-    alias(libs.plugins.wire)
-}
+package no.nordicsemi.android.wifi.provisioner.event
 
-wire {
-    kotlin {}
-}
-
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.softap.proto"
+enum class WifiSortOption {
+    NAME, RSSI
 }

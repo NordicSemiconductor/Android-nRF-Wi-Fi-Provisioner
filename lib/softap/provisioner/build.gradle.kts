@@ -1,14 +1,17 @@
 plugins {
     alias(libs.plugins.nordic.library)
     alias(libs.plugins.nordic.hilt)
+    alias(libs.plugins.wire)
 }
 
+wire {
+    kotlin {}
+}
 android {
     namespace = "no.nordicsemi.android.wifi.provisioner.softap"
 }
 
 dependencies {
-    implementation(project(":lib:softap:proto"))
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalars)

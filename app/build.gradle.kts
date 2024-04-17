@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":lib:ble:provisioner"))
     implementation(project(":feature:ble"))
     implementation(project(":feature:softap"))
+    implementation(project(":feature:common"))
 
     implementation(libs.androidx.lifecycle.runtime.compose)
 

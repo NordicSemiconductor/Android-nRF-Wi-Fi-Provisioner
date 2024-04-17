@@ -39,8 +39,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":lib:ble:provisioner"))
+    implementation(project(":feature:common"))
     implementation(project(":feature:ui"))
+    implementation(project(":lib:ble:provisioner"))
 
     implementation(libs.androidx.lifecycle.runtime.compose)
 

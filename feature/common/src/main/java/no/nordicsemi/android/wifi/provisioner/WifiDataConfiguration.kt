@@ -1,0 +1,3 @@
+package no.nordicsemi.android.wifi.provisioner
+
+interface WifiDataConfiguration

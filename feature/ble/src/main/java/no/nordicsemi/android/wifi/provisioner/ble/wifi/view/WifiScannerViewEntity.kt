@@ -31,9 +31,10 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
 
+import no.nordicsemi.android.wifi.provisioner.WifiDataConfiguration
 import no.nordicsemi.android.wifi.provisioner.ble.domain.AuthModeDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
-import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortOption
+import no.nordicsemi.android.wifi.provisioner.event.WifiSortOption
 
 data class WifiScannerViewEntity(
     val isLoading: Boolean = true,
@@ -59,7 +60,7 @@ data class WifiData(
     val authMode: AuthModeDomain,
     val channelFallback: ScanRecordDomain, //Needed for proto v1
     val selectedChannel: ScanRecordDomain? = null
-) {
+) : WifiDataConfiguration {
     fun isPasswordRequired(): Boolean {
         return authMode != AuthModeDomain.OPEN
     }

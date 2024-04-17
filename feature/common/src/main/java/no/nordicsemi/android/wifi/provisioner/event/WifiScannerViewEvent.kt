@@ -29,8 +29,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ui.view
+package no.nordicsemi.android.wifi.provisioner.event
 
-enum class WifiSortOption {
-    NAME, RSSI
-}
+import no.nordicsemi.android.wifi.provisioner.WifiDataConfiguration
+
+sealed class WifiScannerViewEvent
+
+data object NavigateUpEvent : WifiScannerViewEvent()
+
+data class WifiSelectedEvent(val wifiData: WifiDataConfiguration) : WifiScannerViewEvent()
+
+data class OnSortOptionSelected(val sortOption: WifiSortOption) : WifiScannerViewEvent()

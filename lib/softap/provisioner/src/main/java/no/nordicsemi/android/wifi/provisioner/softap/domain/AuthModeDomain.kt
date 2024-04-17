@@ -32,12 +32,11 @@
 package no.nordicsemi.android.wifi.provisioner.softap.domain
 
 enum class AuthModeDomain(val id: Int) {
-    AUTH_MODE_UNSPECIFIED(0),
-    OPEN(1),
-    WEP(2),
-    WPA_PSK(3),
-    WPA2_PSK(4),
-    WPA_WPA2_PSK(5),
-    WPA2_ENTERPRISE(6),
-    WPA3_PSK(7)
+    OPEN(0),
+    WEP(1),
+    WPA_PSK(2),
+    WPA2_PSK(3),
+    WPA_WPA2_PSK(4),
+    WPA2_ENTERPRISE(5),
+    WPA3_PSK(6)
 }

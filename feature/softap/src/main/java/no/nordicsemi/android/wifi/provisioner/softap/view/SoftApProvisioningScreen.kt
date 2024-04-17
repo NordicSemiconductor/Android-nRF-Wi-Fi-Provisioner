@@ -80,7 +80,7 @@ fun SoftApProvisioningScreen() {
     val viewModel = hiltViewModel<SoftApViewModel>()
     LocalContext.current
 
-    var ssid by rememberSaveable { mutableStateOf("mobileappsrules") }
+    var ssid by rememberSaveable { mutableStateOf("0018F0-nrf-wifiprov") }
     var password by rememberSaveable { mutableStateOf("") }
     var showDialog by rememberSaveable { mutableStateOf(false) }
     var showPassword by rememberSaveable { mutableStateOf(false) }

@@ -38,6 +38,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:common"))
+
     implementation(libs.nordic.theme)
 
     implementation(libs.androidx.compose.ui)
