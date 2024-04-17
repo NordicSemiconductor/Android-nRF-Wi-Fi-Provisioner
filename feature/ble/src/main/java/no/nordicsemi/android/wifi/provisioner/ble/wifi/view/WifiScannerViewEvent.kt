@@ -31,11 +31,11 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
 
-import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.WifiSortOption
+import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortOption
 
 internal sealed class WifiScannerViewEvent
 
-internal object NavigateUpEvent : WifiScannerViewEvent()
+internal data object NavigateUpEvent : WifiScannerViewEvent()
 
 internal data class WifiSelectedEvent(val wifiData: WifiData) : WifiScannerViewEvent()
 

@@ -2,4 +2,8 @@
 <resources>
     <string name="cd_data_item_icon">Icon representing data available in the section.</string>
     <string name="unknown_error">Unknown Error</string>
+
+    <string name="sorting_hint">Sort by:</string>
+    <string name="sorting_name">Name</string>
+    <string name="sorting_rssi">RSSI</string>
 </resources>

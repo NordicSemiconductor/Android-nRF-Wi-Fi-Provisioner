@@ -2,7 +2,9 @@ package no.nordicsemi.android.wifi.provisioner.softap
 
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import kotlinx.coroutines.sync.Mutex
 import java.net.InetAddress
 
@@ -21,6 +23,7 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
 
     private var _serviceInfo: NsdServiceInfo? = null
 
+
     /**
      * Callback used to listen for service discovery.
      */
@@ -33,8 +36,9 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
 
         override fun onServiceFound(service: NsdServiceInfo) {
             // A service was found! Do something with it.
-            Log.d("AAAA", "Service discovery success $service")
+            Log.d("AAAA", "Service discovered $service")
             if (service.serviceName == SERVICE_NAME) {
+                Log.d("AAAA", "Resolving service $service")
                 nsdManager.resolveService(service, resolveListener)
             }
         }

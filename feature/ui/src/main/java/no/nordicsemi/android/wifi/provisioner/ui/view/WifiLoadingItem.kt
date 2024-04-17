@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
+package no.nordicsemi.android.wifi.provisioner.ui.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

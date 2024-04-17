@@ -33,7 +33,7 @@ package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
 
 import no.nordicsemi.android.wifi.provisioner.ble.domain.AuthModeDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
-import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.WifiSortOption
+import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortOption
 
 data class WifiScannerViewEntity(
     val isLoading: Boolean = true,
@@ -45,16 +45,13 @@ data class WifiScannerViewEntity(
         WifiSortOption.NAME -> items.sortedBy { it.wifiData.ssid }
         WifiSortOption.RSSI -> items.sortedByDescending { it.biggestRssi }
     }
-
 }
 
 data class ScanRecordsForSsid(
     val wifiData: WifiData,
     val items: List<ScanRecordDomain> = emptyList(),
 ) {
-
     val biggestRssi: Int = items.maxOf { it.rssi ?: 0 }
-
 }
 
 data class WifiData(
@@ -63,7 +60,6 @@ data class WifiData(
     val channelFallback: ScanRecordDomain, //Needed for proto v1
     val selectedChannel: ScanRecordDomain? = null
 ) {
-
     fun isPasswordRequired(): Boolean {
         return authMode != AuthModeDomain.OPEN
     }

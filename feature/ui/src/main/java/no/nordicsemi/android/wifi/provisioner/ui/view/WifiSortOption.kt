@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel
+package no.nordicsemi.android.wifi.provisioner.ui.view
 
 enum class WifiSortOption {
     NAME, RSSI

@@ -41,11 +41,8 @@ data class WifiInfoDomain(
     val authModeDomain: AuthModeDomain?
 ) {
 
-    val macAddress: String
-
-    init {
-        macAddress = bssid.toByteArray().joinToString(":") {
-            "%02x".format(it).uppercase()
-        }
+    val macAddress: String = bssid.toByteArray().joinToString(":") {
+        "%02x".format(it).uppercase()
     }
+
 }

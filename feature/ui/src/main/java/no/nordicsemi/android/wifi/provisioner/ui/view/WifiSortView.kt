@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
+package no.nordicsemi.android.wifi.provisioner.ui.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,12 +52,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.WifiSortOption
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.R
 import no.nordicsemi.android.common.theme.R as themeR
 
 @Composable
-internal fun WifiSortView(
+fun WifiSortView(
     sortOption: WifiSortOption,
     onChanged: (WifiSortOption) -> Unit,
 ) {

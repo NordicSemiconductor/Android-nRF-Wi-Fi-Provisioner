@@ -51,6 +51,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.Error
 import no.nordicsemi.android.wifi.provisioner.ble.Loading
 import no.nordicsemi.android.wifi.provisioner.ble.Success
 import no.nordicsemi.android.wifi.provisioner.ble.view.WiFiAccessPointsListId
+import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortOption
 import javax.inject.Inject
 
 @HiltViewModel

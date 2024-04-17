@@ -136,8 +136,4 @@
     <string name="select_wifi">Select Wi-Fi</string>
 
     <string name="persistent_storage">Persistent storage</string>
-
-    <string name="sorting_hint">Sort by:</string>
-    <string name="sorting_name">Name</string>
-    <string name="sorting_rssi">RSSI</string>
 </resources>

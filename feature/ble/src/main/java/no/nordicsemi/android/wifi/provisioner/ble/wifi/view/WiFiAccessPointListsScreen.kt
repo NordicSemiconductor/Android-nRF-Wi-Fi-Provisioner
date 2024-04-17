@@ -53,7 +53,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -62,34 +61,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.ble.view.toImageVector
-import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.WifiScannerViewModel
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.view.WifiLoadingItem
+import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun WiFiAccessPointListsScreen() {
-    val viewModel = hiltViewModel<WifiScannerViewModel>()
-    val viewEntity by viewModel.state.collectAsStateWithLifecycle()
-    val onEvent: (WifiScannerViewEvent) -> Unit = { viewModel.onEvent(it) }
+internal fun WiFiAccessPointListsScreen(
+    viewEntity: WifiScannerViewEntity,
+    onEvent: (WifiScannerViewEvent) -> Unit
+) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         NordicAppBar(
             text = stringResource(id = R.string.wifi_title),
-            onNavigationButtonClick = { viewModel.onEvent(NavigateUpEvent) }
+            onNavigationButtonClick = { onEvent(NavigateUpEvent) }
         )
 
         if (viewEntity.isLoading) {
             LoadingItem()
         } else if (viewEntity.error != null) {
-            ErrorItem(viewEntity.error!!)
+            ErrorItem(viewEntity.error)
         } else {
             WifiList(viewEntity, onEvent)
         }
