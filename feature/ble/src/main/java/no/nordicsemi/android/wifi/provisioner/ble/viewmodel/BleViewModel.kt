@@ -49,7 +49,7 @@ import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewMod
 import no.nordicsemi.android.kotlin.ble.core.RealServerDevice
 import no.nordicsemi.android.wifi.provisioner.ble.Loading
 import no.nordicsemi.android.wifi.provisioner.ble.Success
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.launchWithCatch
 import no.nordicsemi.android.wifi.provisioner.ble.scanner.BleScannerDestinationId
@@ -233,10 +233,15 @@ class BleViewModel @Inject constructor(
             .let { pendingJobs.add(it) }
     }
 
-    private fun WifiData.toConfig(): WifiConfigDomain {
+    private fun WifiData.toConfig(): no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain {
         val state = _state.value
         val wifiInfo = selectedChannel?.wifiInfo ?: channelFallback.wifiInfo
         val anyChannel = selectedChannel?.wifiInfo?.let { false } ?: true
-        return WifiConfigDomain(wifiInfo, state.password, !state.persistentMemory, anyChannel)
+        return no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain(
+            wifiInfo,
+            state.password,
+            !state.persistentMemory,
+            anyChannel
+        )
     }
 }

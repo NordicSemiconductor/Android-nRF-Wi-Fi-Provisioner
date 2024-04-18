@@ -63,13 +63,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.getWiFiRes
-import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.ble.view.toImageVector
-import no.nordicsemi.android.wifi.provisioner.event.NavigateUpEvent
-import no.nordicsemi.android.wifi.provisioner.event.OnSortOptionSelected
-import no.nordicsemi.android.wifi.provisioner.event.WifiScannerViewEvent
-import no.nordicsemi.android.wifi.provisioner.event.WifiSelectedEvent
+import no.nordicsemi.android.wifi.provisioner.common.event.NavigateUpEvent
+import no.nordicsemi.android.wifi.provisioner.common.event.OnSortOptionSelected
+import no.nordicsemi.android.wifi.provisioner.common.event.WifiScannerViewEvent
+import no.nordicsemi.android.wifi.provisioner.common.event.WifiSelectedEvent
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiLoadingItem
@@ -142,7 +142,7 @@ private fun WifiList(viewEntity: WifiScannerViewEntity, onEvent: (WifiScannerVie
 @Composable
 private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent) -> Unit) {
     val wifiData = records.wifiData
-    val selectedScanRecord = remember { mutableStateOf<ScanRecordDomain?>(null) }
+    val selectedScanRecord = remember { mutableStateOf<no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain?>(null) }
     val scanRecord = selectedScanRecord.value
     val wifi = scanRecord?.wifiInfo
 

@@ -29,9 +29,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.softap.domain
+package no.nordicsemi.kotlin.wifi.provisioner.domain
 
 data class WifiConfigDomain(
-    val wifiInfoDomain: WifiInfoDomain?,
-    val passphrase: String
+    val info: WifiInfoDomain,
+    val passphrase: String?,
+    val volatileMemory: Boolean,
+    val anyChannel: Boolean
 )

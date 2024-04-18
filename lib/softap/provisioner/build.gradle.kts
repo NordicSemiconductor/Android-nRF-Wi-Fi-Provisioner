@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    api(project(":lib:domain"))
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalars)

@@ -31,10 +31,10 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
 
-import no.nordicsemi.android.wifi.provisioner.WifiDataConfiguration
-import no.nordicsemi.android.wifi.provisioner.ble.domain.AuthModeDomain
-import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
-import no.nordicsemi.android.wifi.provisioner.event.WifiSortOption
+import no.nordicsemi.android.wifi.provisioner.common.WifiDataConfiguration
+import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
+import no.nordicsemi.android.wifi.provisioner.common.event.WifiSortOption
 
 data class WifiScannerViewEntity(
     val isLoading: Boolean = true,
@@ -50,18 +50,18 @@ data class WifiScannerViewEntity(
 
 data class ScanRecordsForSsid(
     val wifiData: WifiData,
-    val items: List<ScanRecordDomain> = emptyList(),
+    val items: List<no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain> = emptyList(),
 ) {
     val biggestRssi: Int = items.maxOf { it.rssi ?: 0 }
 }
 
 data class WifiData(
     val ssid: String,
-    val authMode: AuthModeDomain,
-    val channelFallback: ScanRecordDomain, //Needed for proto v1
-    val selectedChannel: ScanRecordDomain? = null
+    val authMode: no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain,
+    val channelFallback: no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain, //Needed for proto v1
+    val selectedChannel: no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain? = null
 ) : WifiDataConfiguration {
     fun isPasswordRequired(): Boolean {
-        return authMode != AuthModeDomain.OPEN
+        return authMode != no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.OPEN
     }
 }

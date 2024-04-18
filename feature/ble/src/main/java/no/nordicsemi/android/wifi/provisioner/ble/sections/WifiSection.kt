@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectWifiEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.toImageVector
-import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
@@ -63,7 +63,7 @@ internal fun WifiSection(
 }
 
 @Composable
-private fun getDescription(record: ScanRecordDomain): String {
+private fun getDescription(record: no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain): String {
     return StringBuilder()
         .append(record.wifiInfo.ssid)
         .appendLine()

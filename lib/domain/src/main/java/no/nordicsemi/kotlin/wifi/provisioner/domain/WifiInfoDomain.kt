@@ -29,20 +29,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.domain
+package no.nordicsemi.kotlin.wifi.provisioner.domain
 
-import okio.ByteString
 
 data class WifiInfoDomain(
     val ssid: String,
-    internal val bssid: ByteString,
-    val band: BandDomain?,
+    internal val bssid: String,
+    val band: BandDomain,
     val channel: Int,
     val authModeDomain: AuthModeDomain?
 ) {
-
     val macAddress: String = bssid.toByteArray().joinToString(":") {
         "%02x".format(it).uppercase()
     }
-
 }

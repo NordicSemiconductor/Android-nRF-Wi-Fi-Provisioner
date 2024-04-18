@@ -39,6 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":lib:ble:proto"))
+    api(project(":lib:domain"))
     implementation(libs.nordic.ble.ktx)
 }

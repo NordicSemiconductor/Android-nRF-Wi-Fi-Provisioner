@@ -6,6 +6,11 @@ import no.nordicsemi.android.wifi.provisioner.softap.proto.ScanRecord
 import no.nordicsemi.android.wifi.provisioner.softap.proto.ScanResults
 import no.nordicsemi.android.wifi.provisioner.softap.proto.WifiConfig
 import no.nordicsemi.android.wifi.provisioner.softap.proto.WifiInfo
+import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.BandDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain
 
 internal fun AuthModeDomain.toApi() = when(this) {
     AuthModeDomain.OPEN -> AuthMode.OPEN
@@ -18,29 +23,30 @@ internal fun AuthModeDomain.toApi() = when(this) {
 }
 
 internal fun BandDomain.toApi() = when(this) {
-    BandDomain.BAND_UNSPECIFIED -> Band.BAND_UNSPECIFIED
+    BandDomain.BAND_ANY -> Band.BAND_UNSPECIFIED
     BandDomain.BAND_2_4_GH -> Band.BAND_2_4_GHZ
     BandDomain.BAND_5_GH -> Band.BAND_5_GHZ
     BandDomain.BAND_6_GH -> Band.BAND_6_GHZ
 }
 
 internal fun WifiConfigDomain.toApi() = WifiConfig(
-    info = wifiInfoDomain?.toApi(),
-    passphrase = passphrase
+    info = info.toApi(),
+    passphrase = passphrase ?: ""
 )
 
 internal fun WifiInfoDomain.toApi() = WifiInfo(
     ssid = ssid,
-    band = bandDomain.toApi(),
+    band = band.toApi(),
     channel = channel,
     authMode = authModeDomain.toApi()
 )
 
 internal fun ScanRecordDomain.toApi() = ScanRecord(
-    wifi = infoDomain?.toApi(),
-    rssi = rssi
+    wifi = wifiInfo?.toApi(),
+    rssi = rssi ?: 0
 )
 
+@Suppress("unused")
 internal fun ScanResultsDomain.toApi() = ScanResults(
     results = results.map { it.toApi() }
 )

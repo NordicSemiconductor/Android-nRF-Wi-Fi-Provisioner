@@ -41,8 +41,7 @@ import androidx.compose.material.icons.outlined.SignalWifiStatusbarConnectedNoIn
 import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.ble.domain.AuthModeDomain
-import no.nordicsemi.android.wifi.provisioner.ble.domain.BandDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionFailureReasonDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
@@ -68,14 +67,14 @@ internal fun WifiConnectionStateDomain?.toDisplayString() = when (this) {
     null -> R.string.wifi_status_unprovisioned
 }.let { stringResource(id = it) }
 
-internal fun AuthModeDomain?.toImageVector() = when (this) {
-    AuthModeDomain.OPEN -> Icons.Outlined.Wifi
-    AuthModeDomain.WEP,
-    AuthModeDomain.WPA_PSK,
-    AuthModeDomain.WPA2_PSK,
-    AuthModeDomain.WPA_WPA2_PSK,
-    AuthModeDomain.WPA2_ENTERPRISE,
-    AuthModeDomain.WPA3_PSK,
+internal fun no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain?.toImageVector() = when (this) {
+    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.OPEN -> Icons.Outlined.Wifi
+    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WEP,
+    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_PSK,
+    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_PSK,
+    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_WPA2_PSK,
+    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_ENTERPRISE,
+    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA3_PSK,
     null -> Icons.Outlined.SignalWifi4BarLock
 }
 

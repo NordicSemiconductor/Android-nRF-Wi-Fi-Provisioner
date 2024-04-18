@@ -33,7 +33,7 @@ package no.nordicsemi.android.wifi.provisioner.ble.domain
 
 data class DeviceStatusDomain(
     val wifiState: WifiConnectionStateDomain?,
-    val wifiInfo: WifiInfoDomain?,
+    val wifiInfo: no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain?,
     val connectionInfo: ConnectionInfoDomain?,
     val scanParams: ScanParamsDomain?
 ) {

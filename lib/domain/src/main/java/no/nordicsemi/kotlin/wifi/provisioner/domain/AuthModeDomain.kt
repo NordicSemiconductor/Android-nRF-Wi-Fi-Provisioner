@@ -29,9 +29,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.domain
+package no.nordicsemi.kotlin.wifi.provisioner.domain
 
-data class ScanRecordDomain(
-    val rssi: Int?,
-    val wifiInfo: WifiInfoDomain
-)
+enum class AuthModeDomain(val id: Int) {
+    OPEN(0),
+    WEP(1),
+    WPA_PSK(2),
+    WPA2_PSK(3),
+    WPA_WPA2_PSK(4),
+    WPA2_ENTERPRISE(5),
+    WPA3_PSK(6)
+}

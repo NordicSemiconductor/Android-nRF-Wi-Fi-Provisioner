@@ -47,7 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.RssiIcon
-import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 
@@ -55,7 +55,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 internal fun SelectChannelDialog(
     records: ScanRecordsForSsid,
     onDismiss: () -> Unit,
-    onRecordSelected: (ScanRecordDomain?) -> Unit
+    onRecordSelected: (no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain?) -> Unit
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -88,8 +88,8 @@ internal fun SelectChannelDialog(
 
 @Composable
 private fun ChannelListItem(
-    record: ScanRecordDomain,
-    onRecordSelected: (ScanRecordDomain) -> Unit
+    record: no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain,
+    onRecordSelected: (no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain) -> Unit
 ) {
     val wifi = record.wifiInfo
 

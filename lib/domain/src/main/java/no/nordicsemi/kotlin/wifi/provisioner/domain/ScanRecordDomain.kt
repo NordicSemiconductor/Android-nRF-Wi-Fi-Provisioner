@@ -29,10 +29,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.domain
+package no.nordicsemi.kotlin.wifi.provisioner.domain
 
-enum class BandDomain(val id: Int) {
-    BAND_ANY(0),
-    BAND_2_4_GH(1),
-    BAND_5_GH(2)
-}
+data class ScanRecordDomain(
+    val rssi: Int?,
+    val wifiInfo: WifiInfoDomain?
+)

@@ -80,15 +80,15 @@ internal fun ConnectionState.toDomain(): WifiConnectionStateDomain {
     }
 }
 
-internal fun AuthMode.toDomain(): AuthModeDomain {
+internal fun AuthMode.toDomain(): no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain {
     return when (this) {
-        AuthMode.OPEN -> AuthModeDomain.OPEN
-        AuthMode.WEP -> AuthModeDomain.WEP
-        AuthMode.WPA_PSK -> AuthModeDomain.WPA_PSK
-        AuthMode.WPA2_PSK -> AuthModeDomain.WPA2_PSK
-        AuthMode.WPA_WPA2_PSK -> AuthModeDomain.WPA_WPA2_PSK
-        AuthMode.WPA2_ENTERPRISE -> AuthModeDomain.WPA2_ENTERPRISE
-        AuthMode.WPA3_PSK -> AuthModeDomain.WPA3_PSK
+        AuthMode.OPEN -> no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.OPEN
+        AuthMode.WEP -> no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WEP
+        AuthMode.WPA_PSK -> no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_PSK
+        AuthMode.WPA2_PSK -> no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_PSK
+        AuthMode.WPA_WPA2_PSK -> no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_WPA2_PSK
+        AuthMode.WPA2_ENTERPRISE -> no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_ENTERPRISE
+        AuthMode.WPA3_PSK -> no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA3_PSK
     }
 }
 
@@ -110,8 +110,8 @@ internal fun ConnectionFailureReason.toDomain(): WifiConnectionFailureReasonDoma
     }
 }
 
-internal fun WifiInfo.toDomain(): WifiInfoDomain {
-    return WifiInfoDomain(
+internal fun WifiInfo.toDomain(): no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain {
+    return no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain(
         ssid.utf8(),
         bssid,
         band?.toDomain(),
@@ -120,9 +120,9 @@ internal fun WifiInfo.toDomain(): WifiInfoDomain {
     )
 }
 
-internal fun ScanRecord.toDomain(): ScanRecordDomain {
+internal fun ScanRecord.toDomain(): no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain {
     Log.d(TAG, "mapper: $this")
-    return ScanRecordDomain(rssi, wifi!!.toDomain())
+    return no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain(rssi, wifi!!.toDomain())
 }
 
 internal fun ByteString.toIp(): String {

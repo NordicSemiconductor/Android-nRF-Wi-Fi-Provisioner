@@ -37,16 +37,16 @@ import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiConfig
 import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiInfo
 import okio.ByteString.Companion.toByteString
 
-internal fun WifiConfigDomain.toApi(): WifiConfig {
+internal fun no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain.toApi(): WifiConfig {
     return WifiConfig(
         wifi = info.toApi(),
-        passphrase = password?.toByteArray()?.toByteString(),
+        passphrase = passphrase?.toByteArray()?.toByteString(),
         volatileMemory = volatileMemory,
         anyChannel = anyChannel
     )
 }
 
-internal fun WifiInfoDomain.toApi(): WifiInfo {
+internal fun no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain.toApi(): WifiInfo {
     return WifiInfo(
         ssid = ssid.toByteArray().toByteString(),
         bssid = bssid,
@@ -64,14 +64,14 @@ internal fun BandDomain.toApi(): Band {
     }
 }
 
-internal fun AuthModeDomain.toApi(): AuthMode {
+internal fun no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.toApi(): AuthMode {
     return when (this) {
-        AuthModeDomain.OPEN -> AuthMode.OPEN
-        AuthModeDomain.WEP -> AuthMode.WEP
-        AuthModeDomain.WPA_PSK -> AuthMode.WPA_PSK
-        AuthModeDomain.WPA2_PSK -> AuthMode.WPA2_PSK
-        AuthModeDomain.WPA_WPA2_PSK -> AuthMode.WPA_WPA2_PSK
-        AuthModeDomain.WPA2_ENTERPRISE -> AuthMode.WPA2_ENTERPRISE
-        AuthModeDomain.WPA3_PSK -> AuthMode.WPA3_PSK
+        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.OPEN -> AuthMode.OPEN
+        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WEP -> AuthMode.WEP
+        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_PSK -> AuthMode.WPA_PSK
+        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_PSK -> AuthMode.WPA2_PSK
+        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_WPA2_PSK -> AuthMode.WPA_WPA2_PSK
+        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_ENTERPRISE -> AuthMode.WPA2_ENTERPRISE
+        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA3_PSK -> AuthMode.WPA3_PSK
     }
 }

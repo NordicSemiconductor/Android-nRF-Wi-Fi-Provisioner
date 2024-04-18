@@ -33,14 +33,14 @@ package no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel
 
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.ScanRecordsForSsid
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
-import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import javax.inject.Inject
 
 class WifiAggregator @Inject constructor() {
 
-    private val records = mutableMapOf<String, List<ScanRecordDomain>>()
+    private val records = mutableMapOf<String, List<no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain>>()
 
-    fun addWifi(record: ScanRecordDomain): List<ScanRecordsForSsid> {
+    fun addWifi(record: no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain): List<ScanRecordsForSsid> {
         if (record.wifiInfo.authModeDomain == null) {
             return createResult(records)
         }
@@ -53,7 +53,7 @@ class WifiAggregator @Inject constructor() {
         return createResult(records)
     }
 
-    private fun createResult(records: Map<String, List<ScanRecordDomain>>): List<ScanRecordsForSsid> {
+    private fun createResult(records: Map<String, List<no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain>>): List<ScanRecordsForSsid> {
         return records.map {
             ScanRecordsForSsid(
                 WifiData(it.key, it.value.first().wifiInfo.authModeDomain!!, it.value.first()),

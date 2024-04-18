@@ -29,11 +29,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.softap.domain
+package no.nordicsemi.android.wifi.provisioner.common.event
 
-enum class BandDomain(val id: Int) {
-    BAND_UNSPECIFIED(0),
-    BAND_2_4_GH(1),
-    BAND_5_GH(2),
-    BAND_6_GH(3)
-}
+import no.nordicsemi.android.wifi.provisioner.common.WifiDataConfiguration
+
+sealed class WifiScannerViewEvent
+
+data object NavigateUpEvent : WifiScannerViewEvent()
+
+data class WifiSelectedEvent(val wifiData: WifiDataConfiguration) : WifiScannerViewEvent()
+
+data class OnSortOptionSelected(val sortOption: WifiSortOption) : WifiScannerViewEvent()

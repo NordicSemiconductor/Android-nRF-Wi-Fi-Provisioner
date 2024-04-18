@@ -40,9 +40,9 @@ import kotlinx.coroutines.flow.onStart
 import no.nordicsemi.android.wifi.provisioner.ble.ProvisionerRepository
 import no.nordicsemi.android.wifi.provisioner.ble.Resource
 import no.nordicsemi.android.wifi.provisioner.ble.domain.DeviceStatusDomain
-import no.nordicsemi.android.wifi.provisioner.ble.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 
@@ -62,7 +62,7 @@ class ProvisionerResourceRepository(
         return runTask { repository.getStatus() }
     }
 
-    fun startScan(): Flow<Resource<ScanRecordDomain>> {
+    fun startScan(): Flow<Resource<no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain>> {
         return repository.startScan()
             .map { Resource.createSuccess(it) }
             .onStart { emit(Resource.createLoading()) }
@@ -76,7 +76,7 @@ class ProvisionerResourceRepository(
         repository.stopScan()
     }
 
-    fun setConfig(config: WifiConfigDomain): Flow<Resource<WifiConnectionStateDomain>> {
+    fun setConfig(config: no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain): Flow<Resource<WifiConnectionStateDomain>> {
         return repository.setConfig(config)
             .map { Resource.createSuccess(it) }
             .onStart { emit(Resource.createLoading()) }

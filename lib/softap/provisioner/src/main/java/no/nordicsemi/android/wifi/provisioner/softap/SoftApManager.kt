@@ -15,9 +15,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
-import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toApi
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain
 import javax.inject.Inject
 
 /**
