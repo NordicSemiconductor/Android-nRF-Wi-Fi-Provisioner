@@ -36,12 +36,9 @@ import androidx.compose.material.icons.filled.SignalWifi4Bar
 import androidx.compose.material.icons.filled.SignalWifiOff
 import androidx.compose.material.icons.filled.SignalWifiStatusbarConnectedNoInternet4
 import androidx.compose.material.icons.filled.WifiFind
-import androidx.compose.material.icons.outlined.SignalWifi4BarLock
 import androidx.compose.material.icons.outlined.SignalWifiStatusbarConnectedNoInternet4
-import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionFailureReasonDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
@@ -65,24 +62,6 @@ internal fun WifiConnectionStateDomain?.toDisplayString() = when (this) {
     WifiConnectionStateDomain.CONNECTED -> R.string.wifi_status_connected
     WifiConnectionStateDomain.CONNECTION_FAILED -> R.string.wifi_status_error
     null -> R.string.wifi_status_unprovisioned
-}.let { stringResource(id = it) }
-
-internal fun no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain?.toImageVector() = when (this) {
-    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.OPEN -> Icons.Outlined.Wifi
-    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WEP,
-    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_PSK,
-    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_PSK,
-    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_WPA2_PSK,
-    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_ENTERPRISE,
-    no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA3_PSK,
-    null -> Icons.Outlined.SignalWifi4BarLock
-}
-
-@Composable
-internal fun BandDomain.toDisplayString() = when (this) {
-    BandDomain.BAND_ANY -> R.string.any
-    BandDomain.BAND_2_4_GH -> R.string.band_2_4
-    BandDomain.BAND_5_GH -> R.string.band_5
 }.let { stringResource(id = it) }
 
 @Composable

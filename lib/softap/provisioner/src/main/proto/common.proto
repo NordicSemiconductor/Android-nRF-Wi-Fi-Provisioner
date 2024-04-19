@@ -1,14 +1,13 @@
-syntax = "proto3";
+syntax = "proto2";
 
 option java_multiple_files = true;
 option java_package = "no.nordicsemi.android.wifi.provisioner.softap.proto";
 
 // Common ENUMs
 enum Band {
-  BAND_UNSPECIFIED = 0;
+  BAND_ANY = 0;
   BAND_2_4_GHZ = 1;
   BAND_5_GHZ = 2;
-  BAND_6_GHZ = 3;
 }
 
 enum AuthMode {
@@ -22,20 +21,21 @@ enum AuthMode {
 }
 
 message WifiInfo {
-  string ssid = 1;
-  Band band = 3;
-  uint32 channel = 4;
-  AuthMode authMode = 5;
+  required bytes ssid = 1;
+  required bytes bssid = 2;
+  optional Band band = 3;
+  required uint32 channel = 4;
+  optional AuthMode auth = 5;
 }
 
 message WifiConfig {
-  WifiInfo info = 1;
-  string passphrase = 2;
+  optional WifiInfo wifi = 1;
+  optional bytes passphrase = 2;
 }
 
 message ScanRecord {
-  WifiInfo wifi = 1;
-  int32 rssi = 2;
+  optional WifiInfo wifi = 1;
+  optional int32 rssi = 2;
 }
 
 message ScanResults {

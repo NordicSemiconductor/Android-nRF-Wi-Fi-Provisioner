@@ -40,18 +40,18 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.Navigator
-import no.nordicsemi.android.wifi.provisioner.common.WifiDataConfiguration
+import no.nordicsemi.kotlin.wifi.provisioner.common.WifiDataConfiguration
 import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
-import no.nordicsemi.android.wifi.provisioner.common.event.NavigateUpEvent
-import no.nordicsemi.android.wifi.provisioner.common.event.OnSortOptionSelected
+import no.nordicsemi.kotlin.wifi.provisioner.common.event.NavigateUpEvent
+import no.nordicsemi.kotlin.wifi.provisioner.common.event.OnSortOptionSelected
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiScannerViewEntity
-import no.nordicsemi.android.wifi.provisioner.common.event.WifiScannerViewEvent
-import no.nordicsemi.android.wifi.provisioner.common.event.WifiSelectedEvent
+import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiScannerViewEvent
+import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiSelectedEvent
 import no.nordicsemi.android.wifi.provisioner.ble.Error
 import no.nordicsemi.android.wifi.provisioner.ble.Loading
 import no.nordicsemi.android.wifi.provisioner.ble.Success
 import no.nordicsemi.android.wifi.provisioner.ble.view.WiFiAccessPointsListId
-import no.nordicsemi.android.wifi.provisioner.common.event.WifiSortOption
+import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiSortOption
 import javax.inject.Inject
 
 @HiltViewModel

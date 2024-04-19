@@ -37,7 +37,7 @@ import android.content.Context
 import no.nordicsemi.android.wifi.provisioner.ble.domain.DeviceStatusDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
-import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain
+import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ResponseErrorException
@@ -97,7 +97,7 @@ interface ProvisionerRepository {
      * @throws [ResponseErrorException] when the IoT reports result different that success
      * @throws [NotificationTimeoutException] when the first result is not received before timeout time
      */
-    fun startScan(): Flow<no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain>
+    fun startScan(): Flow<ScanRecordDomain>
 
     /**
      * Stop scanning for available Wi-Fi's. Should be called after [startScan].
@@ -112,7 +112,7 @@ interface ProvisionerRepository {
      * @throws [ResponseErrorException] when the IoT reports result different that success
      * @throws [NotificationTimeoutException] when the first result is not received before timeout time
      */
-    fun setConfig(config: no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain): Flow<WifiConnectionStateDomain>
+    fun setConfig(config: WifiConfigDomain): Flow<WifiConnectionStateDomain>
 
     /**
      * Unprovision the DK - forget slected SSID, password, etc.

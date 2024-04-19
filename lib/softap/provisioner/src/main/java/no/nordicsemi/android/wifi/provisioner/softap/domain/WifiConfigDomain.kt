@@ -29,16 +29,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    alias(libs.plugins.nordic.library)
-    alias(libs.plugins.nordic.kotlin)
-    alias(libs.plugins.wire)
-}
+package no.nordicsemi.android.wifi.provisioner.softap.domain
 
-wire {
-    kotlin {}
-}
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain
 
-android {
-    namespace = "no.nordicsemi.android.wifi.provisioner.ble.proto"
-}
+data class WifiConfigDomain(
+    val info: WifiInfoDomain?,
+    val passphrase: String?
+)

@@ -31,11 +31,12 @@
 
 package no.nordicsemi.kotlin.wifi.provisioner.domain
 
+import okio.ByteString
 
 data class WifiInfoDomain(
     val ssid: String,
-    internal val bssid: String,
-    val band: BandDomain,
+    val bssid: ByteString,
+    val band: BandDomain?,
     val channel: Int,
     val authModeDomain: AuthModeDomain?
 ) {

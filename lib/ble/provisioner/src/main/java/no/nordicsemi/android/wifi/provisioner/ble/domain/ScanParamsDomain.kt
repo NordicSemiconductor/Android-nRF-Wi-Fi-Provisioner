@@ -31,6 +31,8 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.domain
 
+import no.nordicsemi.kotlin.wifi.provisioner.domain.BandDomain
+
 data class ScanParamsDomain(
     val band: BandDomain,
     val passive: Boolean,

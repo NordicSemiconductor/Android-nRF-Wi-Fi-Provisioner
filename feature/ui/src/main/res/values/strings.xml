@@ -6,4 +6,8 @@
     <string name="sorting_hint">Sort by:</string>
     <string name="sorting_name">Name</string>
     <string name="sorting_rssi">RSSI</string>
+
+    <string name="band_2_4">2.4 GHz</string>
+    <string name="band_5">5 GHz</string>
+    <string name="any">Any</string>
 </resources>

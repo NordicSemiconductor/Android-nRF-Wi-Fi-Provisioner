@@ -32,6 +32,7 @@
 plugins {
     alias(libs.plugins.nordic.library)
     alias(libs.plugins.nordic.kotlin)
+    alias(libs.plugins.wire)
 }
 
 android {
@@ -41,4 +42,12 @@ android {
 dependencies {
     api(project(":lib:domain"))
     implementation(libs.nordic.ble.ktx)
+    implementation(libs.nordic.ble.common)
+    implementation(libs.nordic.uilogger)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+}
+
+wire {
+    kotlin {}
 }

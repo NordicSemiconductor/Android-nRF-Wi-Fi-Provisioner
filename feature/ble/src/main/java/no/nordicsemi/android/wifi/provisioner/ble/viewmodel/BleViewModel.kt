@@ -49,12 +49,12 @@ import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewMod
 import no.nordicsemi.android.kotlin.ble.core.RealServerDevice
 import no.nordicsemi.android.wifi.provisioner.ble.Loading
 import no.nordicsemi.android.wifi.provisioner.ble.Success
-import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.launchWithCatch
+import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
 import no.nordicsemi.android.wifi.provisioner.ble.scanner.BleScannerDestinationId
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnFinishedEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnHidePasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnPasswordSelectedEvent
@@ -68,7 +68,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.OnVolatileMemoryChangedEv
 import no.nordicsemi.android.wifi.provisioner.ble.view.OpenLoggerEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.WiFiAccessPointsListId
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
-import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
+import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
 import javax.inject.Inject
 
 @HiltViewModel
@@ -93,7 +93,7 @@ class BleViewModel @Inject constructor(
 
         navigationManager.resultFrom(WiFiAccessPointsListId)
             .mapNotNull { it as? NavigationResult.Success }
-            .onEach { installWifi(it.value) }
+            .onEach { installWifi(it.value as WifiData) }
             .launchIn(viewModelScope)
     }
 
@@ -233,11 +233,11 @@ class BleViewModel @Inject constructor(
             .let { pendingJobs.add(it) }
     }
 
-    private fun WifiData.toConfig(): no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain {
+    private fun WifiData.toConfig(): WifiConfigDomain {
         val state = _state.value
         val wifiInfo = selectedChannel?.wifiInfo ?: channelFallback.wifiInfo
         val anyChannel = selectedChannel?.wifiInfo?.let { false } ?: true
-        return no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain(
+        return WifiConfigDomain(
             wifiInfo,
             state.password,
             !state.persistentMemory,

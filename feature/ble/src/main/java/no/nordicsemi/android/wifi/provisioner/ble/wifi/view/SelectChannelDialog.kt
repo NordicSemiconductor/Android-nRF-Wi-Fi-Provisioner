@@ -47,15 +47,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.RssiIcon
-import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
+import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 
 @Composable
 internal fun SelectChannelDialog(
     records: ScanRecordsForSsid,
     onDismiss: () -> Unit,
-    onRecordSelected: (no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain?) -> Unit
+    onRecordSelected: (ScanRecordDomain?) -> Unit
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -88,8 +88,8 @@ internal fun SelectChannelDialog(
 
 @Composable
 private fun ChannelListItem(
-    record: no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain,
-    onRecordSelected: (no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain) -> Unit
+    record: ScanRecordDomain,
+    onRecordSelected: (ScanRecordDomain) -> Unit
 ) {
     val wifi = record.wifiInfo
 
@@ -101,18 +101,20 @@ private fun ChannelListItem(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = stringResource(id = R.string.channel, wifi.channel.toString()),
+                text = stringResource(id = R.string.channel, wifi?.channel.toString()),
                 style = MaterialTheme.typography.labelLarge
             )
 
-            if (wifi.macAddress.isNotEmpty()) {
+            wifi?.macAddress?.takeIf {
+                it.isNotEmpty()
+            }?.let {
                 Text(
                     text = stringResource(id = R.string.bssid, wifi.macAddress),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
 
-            wifi.band?.toDisplayString()?.let {
+            wifi?.band?.toDisplayString()?.let {
                 Text(
                     text = stringResource(id = R.string.band, it),
                     style = MaterialTheme.typography.bodySmall

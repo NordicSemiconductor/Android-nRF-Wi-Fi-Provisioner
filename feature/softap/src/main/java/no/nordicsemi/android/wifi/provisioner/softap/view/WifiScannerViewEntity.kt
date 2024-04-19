@@ -31,8 +31,8 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
-import no.nordicsemi.android.wifi.provisioner.common.WifiDataConfiguration
-import no.nordicsemi.android.wifi.provisioner.common.event.WifiSortOption
+import no.nordicsemi.kotlin.wifi.provisioner.common.WifiDataConfiguration
+import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiSortOption
 import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 

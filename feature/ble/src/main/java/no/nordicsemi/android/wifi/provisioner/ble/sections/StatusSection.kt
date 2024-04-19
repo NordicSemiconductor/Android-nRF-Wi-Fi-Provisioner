@@ -52,6 +52,7 @@ import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
+import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 
 @Composable
 internal fun StatusSection(status: Resource<DeviceStatusDomain>) {

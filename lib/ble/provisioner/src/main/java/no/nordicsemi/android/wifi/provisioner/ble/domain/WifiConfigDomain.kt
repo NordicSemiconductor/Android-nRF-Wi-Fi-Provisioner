@@ -29,8 +29,13 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.common.event
+package no.nordicsemi.android.wifi.provisioner.ble.domain
 
-enum class WifiSortOption {
-    NAME, RSSI
-}
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain
+
+data class WifiConfigDomain(
+    val info: WifiInfoDomain?,
+    val passphrase: String?,
+    val volatileMemory: Boolean,
+    val anyChannel: Boolean
+)

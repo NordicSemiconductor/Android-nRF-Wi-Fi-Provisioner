@@ -38,25 +38,25 @@ import javax.inject.Inject
 
 class WifiAggregator @Inject constructor() {
 
-    private val records = mutableMapOf<String, List<no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain>>()
+    private val records = mutableMapOf<String, List<ScanRecordDomain>>()
 
-    fun addWifi(record: no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain): List<ScanRecordsForSsid> {
-        if (record.wifiInfo.authModeDomain == null) {
+    fun addWifi(record: ScanRecordDomain): List<ScanRecordsForSsid> {
+        if (record.wifiInfo?.authModeDomain == null) {
             return createResult(records)
         }
 
-        val ssid = record.wifiInfo.ssid
+        val ssid = record.wifiInfo!!.ssid
         val ssidRecords = records[ssid]?.let {
-            (it + record).distinctBy { it.wifiInfo.channel }.sortedByDescending { it.rssi }
+            (it + record).distinctBy { it.wifiInfo?.channel }.sortedByDescending { it.rssi }
         } ?: listOf(record)
         this.records[ssid] = ssidRecords
         return createResult(records)
     }
 
-    private fun createResult(records: Map<String, List<no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain>>): List<ScanRecordsForSsid> {
+    private fun createResult(records: Map<String, List<ScanRecordDomain>>): List<ScanRecordsForSsid> {
         return records.map {
             ScanRecordsForSsid(
-                WifiData(it.key, it.value.first().wifiInfo.authModeDomain!!, it.value.first()),
+                WifiData(it.key, it.value.first().wifiInfo?.authModeDomain!!, it.value.first()),
                 it.value
             )
         }

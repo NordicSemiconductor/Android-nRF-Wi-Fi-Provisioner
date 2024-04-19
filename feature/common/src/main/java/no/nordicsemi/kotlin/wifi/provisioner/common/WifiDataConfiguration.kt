@@ -1,6 +1,7 @@
-package no.nordicsemi.android.wifi.provisioner.common
+package no.nordicsemi.kotlin.wifi.provisioner.common
 
 import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
+
 
 /**
  * Common interface for the Wifi data configuration.

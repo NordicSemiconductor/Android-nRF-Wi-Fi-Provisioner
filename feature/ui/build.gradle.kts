@@ -39,6 +39,7 @@ android {
 
 dependencies {
     implementation(project(":feature:common"))
+    implementation(project(":lib:domain"))
 
     implementation(libs.nordic.theme)
 

@@ -35,43 +35,37 @@ import no.nordicsemi.android.wifi.provisioner.ble.proto.AuthMode
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Band
 import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiConfig
 import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiInfo
+import no.nordicsemi.kotlin.wifi.provisioner.domain.*
+
 import okio.ByteString.Companion.toByteString
 
-internal fun no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConfigDomain.toApi(): WifiConfig {
-    return WifiConfig(
-        wifi = info.toApi(),
-        passphrase = passphrase?.toByteArray()?.toByteString(),
-        volatileMemory = volatileMemory,
-        anyChannel = anyChannel
-    )
+internal fun WifiConfigDomain.toApi() = WifiConfig(
+    wifi = info?.toApi(),
+    passphrase = passphrase?.toByteArray()?.toByteString(),
+    volatileMemory = volatileMemory,
+    anyChannel = anyChannel
+)
+
+internal fun WifiInfoDomain.toApi() = WifiInfo(
+    ssid = ssid.toByteArray().toByteString(),
+    bssid = bssid,
+    band = band?.toApi(),
+    channel = channel,
+    auth = authModeDomain?.toApi()
+)
+
+internal fun BandDomain.toApi() = when (this) {
+    BandDomain.BAND_ANY -> Band.BAND_ANY
+    BandDomain.BAND_2_4_GH -> Band.BAND_2_4_GH
+    BandDomain.BAND_5_GH -> Band.BAND_5_GH
 }
 
-internal fun no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain.toApi(): WifiInfo {
-    return WifiInfo(
-        ssid = ssid.toByteArray().toByteString(),
-        bssid = bssid,
-        band = band?.toApi(),
-        channel = channel,
-        auth = authModeDomain?.toApi()
-    )
-}
-
-internal fun BandDomain.toApi(): Band {
-    return when (this) {
-        BandDomain.BAND_ANY -> Band.BAND_ANY
-        BandDomain.BAND_2_4_GH -> Band.BAND_2_4_GH
-        BandDomain.BAND_5_GH -> Band.BAND_5_GH
-    }
-}
-
-internal fun no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.toApi(): AuthMode {
-    return when (this) {
-        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.OPEN -> AuthMode.OPEN
-        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WEP -> AuthMode.WEP
-        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_PSK -> AuthMode.WPA_PSK
-        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_PSK -> AuthMode.WPA2_PSK
-        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA_WPA2_PSK -> AuthMode.WPA_WPA2_PSK
-        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA2_ENTERPRISE -> AuthMode.WPA2_ENTERPRISE
-        no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain.WPA3_PSK -> AuthMode.WPA3_PSK
-    }
+internal fun AuthModeDomain.toApi(): AuthMode = when (this) {
+    AuthModeDomain.OPEN -> AuthMode.OPEN
+    AuthModeDomain.WEP -> AuthMode.WEP
+    AuthModeDomain.WPA_PSK -> AuthMode.WPA_PSK
+    AuthModeDomain.WPA2_PSK -> AuthMode.WPA2_PSK
+    AuthModeDomain.WPA_WPA2_PSK -> AuthMode.WPA_WPA2_PSK
+    AuthModeDomain.WPA2_ENTERPRISE -> AuthMode.WPA2_ENTERPRISE
+    AuthModeDomain.WPA3_PSK -> AuthMode.WPA3_PSK
 }
