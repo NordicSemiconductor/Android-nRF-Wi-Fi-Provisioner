@@ -37,17 +37,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.Navigator
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiDataConfiguration
-import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSelectedEvent
 import no.nordicsemi.android.wifi.provisioner.ble.Error
 import no.nordicsemi.android.wifi.provisioner.ble.Loading
 import no.nordicsemi.android.wifi.provisioner.ble.Success
+import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
 import no.nordicsemi.android.wifi.provisioner.ble.view.WiFiAccessPointsListId
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiAggregator
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.viewmodel.GenericWifiScannerViewModel
 import javax.inject.Inject
 
@@ -63,14 +59,6 @@ internal class WifiScannerViewModel @Inject constructor(
 
     init {
         startScan()
-    }
-
-    override fun onEvent(event: WifiScannerViewEvent) {
-        when (event) {
-            NavigateUpEvent -> navigateUp()
-            is WifiSelectedEvent -> navigateUp(event.wifiData)
-            is OnSortOptionSelected -> onSortOptionSelected(event.sortOption)
-        }
     }
 
     private fun startScan() {
@@ -104,7 +92,7 @@ internal class WifiScannerViewModel @Inject constructor(
         }
     }
 
-    override fun navigateUp(wifiData: WifiDataConfiguration) {
+    override fun navigateUp(wifiData: WifiData) {
         viewModelScope.launch {
             stopScanning()
             navigationManager.navigateUpWithResult(WiFiAccessPointsListId, wifiData)

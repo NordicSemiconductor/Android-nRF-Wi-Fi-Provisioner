@@ -8,14 +8,14 @@ import no.nordicsemi.android.common.navigation.createDestination
 import no.nordicsemi.android.common.navigation.createSimpleDestination
 import no.nordicsemi.android.common.navigation.defineDestination
 import no.nordicsemi.android.wifi.provisioner.softap.viewmodel.WifiScannerViewModel
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiDataConfiguration
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 
 /**
  * Created by Roshan Rajaratnam on 14/02/2024.
  */
 
 val SoftApProvisionerDestinationId = createSimpleDestination("softap-provider-destination")
-val WiFiAccessPointsDestinationId = createDestination<Unit, WifiDataConfiguration>(
+val WiFiAccessPointsDestinationId = createDestination<Unit, WifiData>(
     name = "wifi-access-points-destination1"
 )
 

@@ -5,7 +5,7 @@ import no.nordicsemi.android.common.navigation.Navigator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiAggregator
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiDataConfiguration
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiScannerViewEntity
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
@@ -21,7 +21,7 @@ abstract class GenericWifiScannerViewModel(
     protected val _state = MutableStateFlow(WifiScannerViewEntity())
     val state = _state.asStateFlow()
 
-    open fun onEvent(event: WifiScannerViewEvent) {
+    fun onEvent(event: WifiScannerViewEvent) {
         when (event) {
             NavigateUpEvent -> navigateUp()
             is WifiSelectedEvent -> navigateUp(event.wifiData)
@@ -29,11 +29,11 @@ abstract class GenericWifiScannerViewModel(
         }
     }
 
-    protected fun onSortOptionSelected(sortOption: WifiSortOption) {
+    private fun onSortOptionSelected(sortOption: WifiSortOption) {
         _state.value = _state.value.copy(sortOption = sortOption)
     }
 
     protected abstract fun navigateUp()
 
-    protected abstract fun navigateUp(wifiData: WifiDataConfiguration)
+    protected abstract fun navigateUp(wifiData: WifiData)
 }

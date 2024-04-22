@@ -55,11 +55,11 @@ data class ScanRecordsForSsid(
 }
 
 data class WifiData(
-    override val ssid: String,
-    override val authMode: AuthModeDomain,
+    val ssid: String,
+    val authMode: AuthModeDomain,
     val channelFallback: ScanRecordDomain, //Needed for proto v1
     val selectedChannel: ScanRecordDomain? = null
-) : WifiDataConfiguration {
+) {
     fun isPasswordRequired(): Boolean {
         return authMode != AuthModeDomain.OPEN
     }

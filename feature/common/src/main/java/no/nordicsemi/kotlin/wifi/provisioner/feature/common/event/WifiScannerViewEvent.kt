@@ -31,12 +31,12 @@
 
 package no.nordicsemi.kotlin.wifi.provisioner.feature.common.event
 
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiDataConfiguration
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 
 sealed class WifiScannerViewEvent
 
 data object NavigateUpEvent : WifiScannerViewEvent()
 
-data class WifiSelectedEvent(val wifiData: WifiDataConfiguration) : WifiScannerViewEvent()
+data class WifiSelectedEvent(val wifiData: WifiData) : WifiScannerViewEvent()
 
 data class OnSortOptionSelected(val sortOption: WifiSortOption) : WifiScannerViewEvent()

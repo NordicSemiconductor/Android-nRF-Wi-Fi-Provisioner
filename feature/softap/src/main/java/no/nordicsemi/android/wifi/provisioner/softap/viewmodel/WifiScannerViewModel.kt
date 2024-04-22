@@ -38,12 +38,9 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
+import no.nordicsemi.android.wifi.provisioner.softap.view.WiFiAccessPointsDestinationId
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiAggregator
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiDataConfiguration
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSelectedEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.viewmodel.GenericWifiScannerViewModel
 import javax.inject.Inject
 
@@ -59,14 +56,6 @@ internal class WifiScannerViewModel @Inject constructor(
 
     init {
         listSsids()
-    }
-
-    override fun onEvent(event: WifiScannerViewEvent) {
-        when (event) {
-            NavigateUpEvent -> navigateUp()
-            is WifiSelectedEvent -> navigateUp(event.wifiData)
-            is OnSortOptionSelected -> onSortOptionSelected(event.sortOption)
-        }
     }
 
     private fun listSsids() {
@@ -88,7 +77,7 @@ internal class WifiScannerViewModel @Inject constructor(
         navigationManager.navigateUp()
     }
 
-    override fun navigateUp(wifiData: WifiDataConfiguration) {
-        // navigationManager.navigate(WiFiAccessPointsListId, wifiData)
+    override fun navigateUp(wifiData: WifiData) {
+        navigationManager.navigateUpWithResult(WiFiAccessPointsDestinationId, wifiData)
     }
 }
