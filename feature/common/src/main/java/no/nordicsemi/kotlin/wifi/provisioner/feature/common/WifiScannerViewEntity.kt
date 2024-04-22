@@ -29,8 +29,38 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.kotlin.wifi.provisioner.common.event
+package no.nordicsemi.kotlin.wifi.provisioner.feature.common
 
-enum class WifiSortOption {
-    NAME, RSSI
+import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSortOption
+
+data class WifiScannerViewEntity(
+    val isLoading: Boolean = true,
+    val error: Throwable? = null,
+    val sortOption: WifiSortOption = WifiSortOption.RSSI,
+    private val items: List<ScanRecordsForSsid> = emptyList()
+) {
+    val sortedItems: List<ScanRecordsForSsid> = when (sortOption) {
+        WifiSortOption.NAME -> items.sortedBy { it.wifiData.ssid }
+        WifiSortOption.RSSI -> items.sortedByDescending { it.biggestRssi }
+    }
+}
+
+data class ScanRecordsForSsid(
+    val wifiData: WifiData,
+    val items: List<ScanRecordDomain> = emptyList(),
+) {
+    val biggestRssi: Int = items.maxOf { it.rssi ?: 0 }
+}
+
+data class WifiData(
+    override val ssid: String,
+    override val authMode: AuthModeDomain,
+    val channelFallback: ScanRecordDomain, //Needed for proto v1
+    val selectedChannel: ScanRecordDomain? = null
+) : WifiDataConfiguration {
+    fun isPasswordRequired(): Boolean {
+        return authMode != AuthModeDomain.OPEN
+    }
 }

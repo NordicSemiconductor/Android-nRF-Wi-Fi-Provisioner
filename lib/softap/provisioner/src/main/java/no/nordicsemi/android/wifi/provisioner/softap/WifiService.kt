@@ -14,11 +14,11 @@ import retrofit2.http.POST
  */
 interface WifiService {
 
-    @Headers("Content-Type: text/plain")
+    @Headers("Content-Type: application/x-protobuf")
     @GET("prov/networks")
     suspend fun listSsids(): ScanResults
 
-    @Headers("Content-Type: text/plain")
+    @Headers("Content-Type: application/x-protobuf")
     @POST("prov/configure")
     suspend fun provision(@Body config: WifiConfig): Response<ResponseBody>
 }

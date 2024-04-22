@@ -1,4 +1,4 @@
-package no.nordicsemi.kotlin.wifi.provisioner.common
+package no.nordicsemi.kotlin.wifi.provisioner.feature.common
 
 import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
 

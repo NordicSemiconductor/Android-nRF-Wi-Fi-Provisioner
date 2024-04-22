@@ -29,39 +29,39 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
+package no.nordicsemi.kotlin.wifi.provisioner.feature.common
 
-import no.nordicsemi.kotlin.wifi.provisioner.common.WifiDataConfiguration
-import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiSortOption
+import javax.inject.Inject
 
-data class WifiScannerViewEntity(
-    val isLoading: Boolean = true,
-    val error: Throwable? = null,
-    val sortOption: WifiSortOption = WifiSortOption.RSSI,
-    private val items: List<ScanRecordsForSsid> = emptyList()
-) {
-    val sortedItems: List<ScanRecordsForSsid> = when (sortOption) {
-        WifiSortOption.NAME -> items.sortedBy { it.wifiData.ssid }
-        WifiSortOption.RSSI -> items.sortedByDescending { it.biggestRssi }
+class WifiAggregator @Inject constructor() {
+
+    private val records = mutableMapOf<String, List<ScanRecordDomain>>()
+
+    fun addWifi(record: ScanRecordDomain): List<ScanRecordsForSsid> {
+        if (record.wifiInfo?.authModeDomain == null) {
+            return createResult(records)
+        }
+
+        val ssid = record.wifiInfo!!.ssid
+        val ssidRecords = records[ssid]?.let {
+            (it + record).distinctBy { it.wifiInfo?.channel }.sortedByDescending { it.rssi }
+        } ?: listOf(record)
+        this.records[ssid] = ssidRecords
+        return createResult(records)
     }
-}
 
-data class ScanRecordsForSsid(
-    val wifiData: WifiData,
-    val items: List<ScanRecordDomain> = emptyList(),
-) {
-    val biggestRssi: Int = items.maxOf { it.rssi ?: 0 }
-}
+    fun addWifi(records: List<ScanRecordDomain>): List<ScanRecordsForSsid> {
+        records.forEach { addWifi(it) }
+        return createResult(this.records)
+    }
 
-data class WifiData(
-    override val ssid: String,
-    override val authMode: AuthModeDomain,
-    val channelFallback: ScanRecordDomain, //Needed for proto v1
-    val selectedChannel: ScanRecordDomain? = null
-) : WifiDataConfiguration {
-    fun isPasswordRequired(): Boolean {
-        return authMode != AuthModeDomain.OPEN
+    private fun createResult(records: Map<String, List<ScanRecordDomain>>): List<ScanRecordsForSsid> {
+        return records.map {
+            ScanRecordsForSsid(
+                WifiData(it.key, it.value.first().wifiInfo?.authModeDomain!!, it.value.first()),
+                it.value
+            )
+        }
     }
 }

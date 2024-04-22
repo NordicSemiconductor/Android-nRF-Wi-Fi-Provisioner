@@ -29,9 +29,9 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.kotlin.wifi.provisioner.common.event
+package no.nordicsemi.kotlin.wifi.provisioner.feature.common.event
 
-import no.nordicsemi.kotlin.wifi.provisioner.common.WifiDataConfiguration
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiDataConfiguration
 
 sealed class WifiScannerViewEvent
 

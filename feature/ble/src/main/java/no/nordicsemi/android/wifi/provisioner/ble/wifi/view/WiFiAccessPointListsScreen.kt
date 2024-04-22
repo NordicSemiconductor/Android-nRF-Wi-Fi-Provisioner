@@ -65,14 +65,17 @@ import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiLoadingItem
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.NavigateUpEvent
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.OnSortOptionSelected
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiScannerViewEvent
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiSelectedEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiScannerViewEntity
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSelectedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,7 +94,7 @@ internal fun WiFiAccessPointListsScreen(
         if (viewEntity.isLoading) {
             LoadingItem()
         } else if (viewEntity.error != null) {
-            ErrorItem(viewEntity.error)
+            ErrorItem(viewEntity.error!!)
         } else {
             WifiList(viewEntity, onEvent)
         }

@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
+package no.nordicsemi.android.wifi.provisioner.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -47,12 +47,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.RssiIcon
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 
 @Composable
-internal fun SelectChannelDialog(
+fun SelectChannelDialog(
     records: ScanRecordsForSsid,
     onDismiss: () -> Unit,
     onRecordSelected: (ScanRecordDomain?) -> Unit

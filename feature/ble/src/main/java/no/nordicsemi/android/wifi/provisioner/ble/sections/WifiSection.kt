@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectWifiEvent
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
-import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector

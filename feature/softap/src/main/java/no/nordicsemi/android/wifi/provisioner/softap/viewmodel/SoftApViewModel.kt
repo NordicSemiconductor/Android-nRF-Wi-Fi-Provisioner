@@ -16,8 +16,8 @@ import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.wifi.provisioner.softap.ProvisioningState
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
-import no.nordicsemi.android.wifi.provisioner.softap.domain.AuthModeDomain
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
+import no.nordicsemi.android.wifi.provisioner.softap.view.WiFiAccessPointsDestinationId
 import okhttp3.OkHttpClient
 import javax.inject.Inject
 
@@ -39,6 +39,7 @@ class SoftApViewModel @Inject constructor(
                 ProvisioningState.Connected -> {
                     discoverServices()
                 }
+
                 ProvisioningState.Provisioning -> {}
                 ProvisioningState.ProvisioningComplete -> {}
             }
@@ -51,14 +52,14 @@ class SoftApViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    internal fun connect(ssid: String = "mobileappsrules", password: String) {
+    internal fun connect(ssid: String = "0018F0-nrf-wifiprov", password: String) {
         softApManager.connect(ssid = ssid, password = password)
     }
 
     private fun discoverServices() {
         viewModelScope.launch {
             softApManager.discoverServices()
-            listSsids()
+            navigateTo(WiFiAccessPointsDestinationId)
         }
     }
 
@@ -68,14 +69,20 @@ class SoftApViewModel @Inject constructor(
         }
         viewModelScope.launch(handler) {
             val result = softApManager.listSsids()
-            Log.d("AAAA", "Results: $result")
-            if (result.wifiScanResults.isNotEmpty()) {
-                val wifConfig = WifiConfigDomain(
-                    ssid = "",
-                    passphrase = "",
-                    authModeDomain = AuthModeDomain.WPA3_PSK,
-                )
-                provision(wifConfig)
+            Log.d("AAAA", "Results: ${result.results}")
+            result.results.forEach {
+                it.wifiInfo?.takeIf { wifiInfo ->
+                    wifiInfo.ssid == "OnHub"
+                }?.let { wifiInfo ->
+                    Log.d("AAAA", "Found the device!")
+                    val wifiConfig = WifiConfigDomain(
+                        info = wifiInfo,
+                        passphrase = "newbird379",
+                    )
+                    Log.d("AAAA", "WifiConfig: $wifiConfig")
+                    provision(wifiConfig)
+                    return@forEach
+                }
             }
         }
     }

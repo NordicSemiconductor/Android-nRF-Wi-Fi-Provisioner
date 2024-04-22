@@ -7,6 +7,17 @@
     <string name="sorting_name">Name</string>
     <string name="sorting_rssi">RSSI</string>
 
+    <string name="select_wifi">Select Wi-Fi</string>
+    <string name="clear">Clear</string>
+    <string name="dismiss">Dismiss</string>
+
+
+    <string name="ip_4">IPv4: %s</string>
+    <string name="ssid">SSID: %s</string>
+    <string name="bssid">BSSID: %s</string>
+    <string name="band">Band: %s</string>
+    <string name="band_and_channel">Band: %s, Channel: %s</string>
+    <string name="channel">Channel: %s</string>
     <string name="band_2_4">2.4 GHz</string>
     <string name="band_5">5 GHz</string>
     <string name="any">Any</string>

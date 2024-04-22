@@ -38,7 +38,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.Success
 import no.nordicsemi.android.wifi.provisioner.ble.domain.DeviceStatusDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
-import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WifiData
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 
 data class BleViewEntity(
     val device: ServerDevice? = null,

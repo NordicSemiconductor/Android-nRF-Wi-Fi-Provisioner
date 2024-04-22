@@ -64,16 +64,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.getWiFiRes
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.NavigateUpEvent
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.OnSortOptionSelected
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiScannerViewEvent
-import no.nordicsemi.kotlin.wifi.provisioner.common.event.WifiSelectedEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSelectedEvent
 import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiLoadingItem
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiScannerViewEntity
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +85,6 @@ internal fun WiFiAccessPointsScreen(
     viewEntity: WifiScannerViewEntity,
     onEvent: (WifiScannerViewEvent) -> Unit
 ) {
-
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         NordicAppBar(
             text = stringResource(id = R.string.wifi_access_points_title),
@@ -92,7 +94,7 @@ internal fun WiFiAccessPointsScreen(
         if (viewEntity.isLoading) {
             LoadingItem()
         } else if (viewEntity.error != null) {
-            ErrorItem(viewEntity.error)
+            ErrorItem(viewEntity.error!!)
         } else {
             WifiList(viewEntity, onEvent)
         }
@@ -150,13 +152,13 @@ private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent
     val showSelectChannelDialog = rememberSaveable { mutableStateOf(false) }
 
     if (showSelectChannelDialog.value) {
-        /*SelectChannelDialog(
+        SelectChannelDialog(
             records = records,
             onDismiss = { showSelectChannelDialog.value = false }
         ) {
             selectedScanRecord.value = it
             showSelectChannelDialog.value = false
-        }*/
+        }
     }
 
     Row(
