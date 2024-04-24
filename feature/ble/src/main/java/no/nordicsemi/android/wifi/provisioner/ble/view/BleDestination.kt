@@ -38,20 +38,22 @@ import no.nordicsemi.android.common.navigation.createDestination
 import no.nordicsemi.android.common.navigation.createSimpleDestination
 import no.nordicsemi.android.common.navigation.defineDestination
 import no.nordicsemi.android.wifi.provisioner.ble.scanner.BleScannerDestination
-import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.WiFiAccessPointListsScreen
-import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.WifiScannerViewModel
+import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.BleWifiScannerScreen
+import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.BleWifiScannerViewModel
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 
-val BleProvisioningDestinationId = createSimpleDestination("ble-provisioning-destination")
-val WiFiAccessPointsListId = createDestination<Unit, WifiData>(
-    name = "wifi-access-points-destination"
+val BleProvisioningDestination = createSimpleDestination("ble-provisioning-destination")
+val BleWifiScannerDestination = createDestination<Unit, WifiData>(
+    name = "wifi-access-points-ble-destination"
 )
 
 val BleProvisioningDestinations = listOf(
-    defineDestination(BleProvisioningDestinationId) { BleProvisioningScreen() },
-    defineDestination(WiFiAccessPointsListId) {
-        val viewModel = hiltViewModel<WifiScannerViewModel>()
+    defineDestination(BleProvisioningDestination) {
+        BleProvisioningScreen()
+    },
+    defineDestination(BleWifiScannerDestination) {
+        val viewModel = hiltViewModel<BleWifiScannerViewModel>()
         val viewEntity by viewModel.state.collectAsStateWithLifecycle()
-        WiFiAccessPointListsScreen(viewEntity = viewEntity, onEvent = viewModel::onEvent)
+        BleWifiScannerScreen(viewEntity = viewEntity, onEvent = viewModel::onEvent)
     }
 ) + BleScannerDestination

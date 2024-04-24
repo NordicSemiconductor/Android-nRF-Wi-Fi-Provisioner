@@ -29,58 +29,60 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.sections
+package no.nordicsemi.android.wifi.provisioner.softap.sections
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.wifi.provisioner.softap.view.entity.SoftApViewEntity
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnVolatileMemoryChangedEvent
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionClickEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionNextDeviceEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
 
 @Composable
-fun VolatileMemorySwitch(
-    volatileMemory: Boolean,
-    enabled: Boolean,
-    onEvent: (ProvisioningViewEvent) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_storage),
-            contentDescription = stringResource(id = R.string.cd_data_item_icon),
-        )
+fun ActionButtonSection(viewEntity: SoftApViewEntity, onEvent: (ProvisioningViewEvent) -> Unit) {
+    if (viewEntity.device == null) {
+        ActionButton(stringResource(id = R.string.start)) {
+            onEvent(OnProvisionNextDeviceEvent)
+        }
+    } else if(viewEntity.network == null) {
+        ActionButton(stringResource(id = R.string.select_wifi)) {
+            onEvent(OnSelectWifiEvent)
+        }
+    } else if(viewEntity.password == null) {
+        onEvent(OnShowPasswordDialog)
+    } else if(viewEntity.hasFinishedWithSuccess()) {
+        ActionButton(stringResource(id = R.string.next_device)) {
+            onEvent(OnProvisionNextDeviceEvent)
+        }
+    } else {
+        ActionButton(stringResource(id = R.string.provision)) {
+            onEvent(OnProvisionClickEvent)
+        }
+    }
+}
 
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Text(
-            text = stringResource(id = R.string.persistent_storage),
-            style = MaterialTheme.typography.labelLarge,
+@Composable
+private fun ActionButton(text: String, onClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+        Button(
+            onClick = onClick,
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        )
-
-        Checkbox(
-            checked = volatileMemory,
-            enabled = enabled,
-            onCheckedChange = { onEvent(OnVolatileMemoryChangedEvent) },
-            modifier = Modifier.padding(horizontal = 8.dp)
-        )
+                .align(Alignment.Center)
+                .widthIn(min = 100.dp)
+        ) {
+            Text(text = text)
+        }
     }
 }

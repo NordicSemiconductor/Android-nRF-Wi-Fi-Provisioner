@@ -42,18 +42,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnFinishedEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnProvisionClickEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnProvisionNextDeviceEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectWifiEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnShowPasswordDialog
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnUnprovisionEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
+import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnFinishedEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionClickEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionNextDeviceEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnUnprovisionEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.view.ViewEntity
 
 @Composable
-fun ActionButtonSection(viewEntity: BleViewEntity, onEvent: (BleProvisioningViewEvent) -> Unit) {
+fun ActionButtonSection(viewEntity: BleViewEntity, onEvent: (ProvisioningViewEvent) -> Unit) {
     if (viewEntity.isRunning()) {
         return
     }

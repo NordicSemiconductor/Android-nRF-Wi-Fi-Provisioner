@@ -29,68 +29,27 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.sections
+package no.nordicsemi.android.wifi.provisioner.ui.view.section
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PhoneAndroid
+import androidx.compose.material.icons.outlined.Password
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import no.nordicsemi.android.common.theme.NordicTheme
-import no.nordicsemi.android.kotlin.ble.core.ServerDevice
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnProvisionNextDeviceEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectDeviceClickEvent
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.R
 
 @Composable
-internal fun DeviceSection(
-    device: ServerDevice?,
-    isEditable: Boolean = false,
-    onEvent: (BleProvisioningViewEvent) -> Unit
-) {
-    if (device == null) {
-        DeviceNotSelectedSection(onEvent)
-    } else {
-        BluetoothDevice(device, isEditable, onEvent)
-    }
-}
-
-@Composable
-private fun BluetoothDevice(
-    device: ServerDevice,
-    isEditable: Boolean = false,
-    onEvent: (BleProvisioningViewEvent) -> Unit
-) {
+fun PasswordSection(isEditable: Boolean = false, onEvent: (ProvisioningViewEvent) -> Unit) {
     ClickableDataItem(
-        imageVector = Icons.Outlined.PhoneAndroid,
-        title = device.name ?: device.address,
+        imageVector = Icons.Outlined.Password,
+        title = stringResource(id = R.string.password),
         isEditable = isEditable,
-        description = device.address,
-        onClick = { onEvent(OnSelectDeviceClickEvent) },
-        buttonText = stringResource(id = R.string.change_device)
+        description = stringResource(id = R.string.password_encoded),
+        onClick = {
+            onEvent(OnShowPasswordDialog)
+        },
+        buttonText = stringResource(id = R.string.set_password)
     )
-}
-
-@Composable
-private fun DeviceNotSelectedSection(
-    onEvent: (BleProvisioningViewEvent) -> Unit
-) {
-    ClickableDataItem(
-        imageVector = Icons.Outlined.PhoneAndroid,
-        title = "Not selected",
-        isEditable = false,
-        description = "Please select a device to provision",
-        onClick = { onEvent(OnProvisionNextDeviceEvent) },
-        buttonText = stringResource(id = R.string.change_device)
-    )
-}
-
-@Preview
-@Composable
-private fun DeviceNotSelectedSectionPreview() {
-    NordicTheme {
-        DeviceNotSelectedSection {}
-    }
 }

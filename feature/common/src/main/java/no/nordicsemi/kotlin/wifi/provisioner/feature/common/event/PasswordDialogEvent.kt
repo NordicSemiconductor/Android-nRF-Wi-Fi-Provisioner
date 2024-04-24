@@ -29,20 +29,10 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.sections
+package no.nordicsemi.kotlin.wifi.provisioner.feature.common.event
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LinkOff
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ui.DataItem
+sealed interface PasswordDialogEvent
 
-@Composable
-fun DisconnectedDeviceStatus() {
-    DataItem(
-        imageVector = Icons.Outlined.LinkOff,
-        title = stringResource(id = R.string.device_info),
-        description = stringResource(id = R.string.disconnected)
-    )
-}
+data class PasswordSetDialogEvent(val password: String) : PasswordDialogEvent
+
+object DismissEvent : PasswordDialogEvent

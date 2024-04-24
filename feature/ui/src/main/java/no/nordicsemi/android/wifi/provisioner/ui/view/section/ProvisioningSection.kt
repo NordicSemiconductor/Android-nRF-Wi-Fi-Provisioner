@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.sections
+package no.nordicsemi.android.wifi.provisioner.ui.view.section
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,18 +46,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.ProgressItem
 import no.nordicsemi.android.common.theme.view.ProgressItemStatus
-import no.nordicsemi.android.wifi.provisioner.ble.Error
-import no.nordicsemi.android.wifi.provisioner.ble.Loading
-import no.nordicsemi.android.wifi.provisioner.ble.Resource
-import no.nordicsemi.android.wifi.provisioner.ble.Success
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
-import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
 import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
+import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.android.wifi.provisioner.ui.view.toDisplayString
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
 
 @Composable
-internal fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
+fun ProvisioningSection(status: Resource<WifiConnectionStateDomain>) {
     val lastStatus = rememberSaveable { mutableStateOf(WifiConnectionStateDomain.DISCONNECTED) }
 
     when (status) {

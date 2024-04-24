@@ -29,10 +29,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.password
+package no.nordicsemi.kotlin.wifi.provisioner.domain
 
-sealed interface PasswordDialogEvent
-
-data class PasswordSetDialogEvent(val password: String) : PasswordDialogEvent
-
-object DismissEvent : PasswordDialogEvent
+data class ScanParamsDomain(
+    val band: BandDomain,
+    val passive: Boolean,
+    val periodMs: Int,
+    val groupChannels: Int
+)

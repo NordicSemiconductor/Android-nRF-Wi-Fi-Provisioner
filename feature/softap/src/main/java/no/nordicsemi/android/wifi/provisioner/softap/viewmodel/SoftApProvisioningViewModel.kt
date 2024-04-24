@@ -29,16 +29,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.viewmodel
+package no.nordicsemi.android.wifi.provisioner.softap.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -46,15 +44,15 @@ import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.NavigationResult
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
-import no.nordicsemi.android.kotlin.ble.core.RealServerDevice
-import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
-import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
-import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
-import no.nordicsemi.android.wifi.provisioner.ble.launchWithCatch
-import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
-import no.nordicsemi.android.wifi.provisioner.ble.scanner.BleScannerDestinationId
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
+import no.nordicsemi.android.wifi.provisioner.softap.SoftAp
+import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
+import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
+import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApConnectorDestination
+import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApWifiScannerDestination
+import no.nordicsemi.android.wifi.provisioner.softap.view.entity.SoftApViewEntity
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnFinishedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
@@ -66,83 +64,61 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPassword
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnUnprovisionEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnVolatileMemoryChangedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OpenLoggerEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleWifiScannerDestination
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 import javax.inject.Inject
 
 @HiltViewModel
-class BleViewModel @Inject constructor(
+class SoftApProvisioningViewModel @Inject constructor(
+    private val softApManager: SoftApManager,
     private val navigationManager: Navigator,
-    private val repository: ProvisionerResourceRepository,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : SimpleNavigationViewModel(navigator = navigationManager, savedStateHandle) {
 
-    private var connectionObserverJob: Job? = null
-
-    private val _state = MutableStateFlow(BleViewEntity())
+    private val _state = MutableStateFlow(SoftApViewEntity())
     val state = _state.asStateFlow()
 
-    private val pendingJobs = mutableListOf<Job>()
-
     init {
-        navigationManager.resultFrom(BleScannerDestinationId)
+        navigationManager.resultFrom(SoftApConnectorDestination)
             .mapNotNull { it as? NavigationResult.Success }
-            .onEach { installBluetoothDevice(it.value as RealServerDevice) }
+            .onEach { result ->
+                result.value?.let {
+                    installSoftApDevice(it)
+                }
+            }
             .launchIn(viewModelScope)
-
-        navigationManager.resultFrom(BleWifiScannerDestination)
+        navigationManager.resultFrom(SoftApWifiScannerDestination)
             .mapNotNull { it as? NavigationResult.Success }
             .onEach { installWifi(it.value) }
             .launchIn(viewModelScope)
     }
 
     fun onEvent(event: ProvisioningViewEvent) {
-        if (event != OpenLoggerEvent) {
-            cancelPendingJobs()
-        }
         when (event) {
             OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
-            OnSelectDeviceClickEvent -> requestBluetoothDevice()
-            OnSelectWifiEvent -> navigationManager.navigateTo(BleWifiScannerDestination)
+            OnSelectDeviceClickEvent -> requestWifiDevice()
+            OnSelectWifiEvent -> navigationManager.navigateTo(SoftApWifiScannerDestination)
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
             OnShowPasswordDialog -> showPasswordDialog()
             OpenLoggerEvent -> {}//repository.openLogger()
             OnUnprovisionEvent -> cancelConfig()
             OnProvisionNextDeviceEvent -> provisionNextDevice()
-            OnVolatileMemoryChangedEvent -> onVolatileMemoryChangeEvent()
+            OnVolatileMemoryChangedEvent -> {}
         }
-    }
-
-    private fun onVolatileMemoryChangeEvent() {
-        _state.value = _state.value.copy(
-            persistentMemory = _state.value.persistentMemory.not(),
-            provisioningStatus = null
-        )
     }
 
     private fun provisionNextDevice() {
         viewModelScope.launch {
-            cancelPendingJobs()
-            connectionObserverJob?.cancel()
             launch { release() }
-            requestBluetoothDevice()
+            requestSoftApDevice()
             delay(500) //nasty delay to prevent screen change before navigation
-            _state.value = BleViewEntity()
+            _state.value = SoftApViewEntity()
         }
     }
 
     private fun cancelConfig() {
-        repository.forgetConfig().onEach {
-            _state.value = _state.value.copy(unprovisioningStatus = it)
-        }.launchIn(viewModelScope)
-    }
 
-    private fun cancelPendingJobs() {
-        pendingJobs.forEach { it.cancel() }
-        pendingJobs.clear()
     }
 
     private fun showPasswordDialog() {
@@ -156,92 +132,81 @@ class BleViewModel @Inject constructor(
     private fun finish() {
         viewModelScope.launch {
             release()
-            _state.value = BleViewEntity()
+            _state.value = SoftApViewEntity()
         }
     }
 
-    private suspend fun release() {
+    private fun release() {
         try {
-            repository.release()
+            _state.value.device?.let {
+                softApManager.disconnect()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun requestBluetoothDevice() {
-        navigationManager.navigateTo(BleScannerDestinationId)
+    private fun requestSoftApDevice() {
+        navigationManager.navigateTo(SoftApConnectorDestination)
+    }
+
+    private fun requestWifiDevice() {
+        release()
+        navigationManager.navigateTo(SoftApConnectorDestination)
     }
 
     private fun installWifi(wifiData: WifiData) {
         _state.value = _state.value.copy(
             network = wifiData,
             password = null,
-            provisioningStatus = null,
             showPasswordDialog = wifiData.isPasswordRequired()
         )
     }
 
-    private fun installBluetoothDevice(device: RealServerDevice) {
-        _state.value = BleViewEntity(device = device, version = Loading())
-        viewModelScope.launchWithCatch {
-            release()
-            repository.start(device.device)
-                .onEach { updateConnectionStatus(it) }
-                .launchIn(viewModelScope)
-                .let { connectionObserverJob = it }
-            loadVersion()
-        }
-    }
-
-    private fun updateConnectionStatus(connectionStatus: ConnectionStatus) {
-        _state.value = _state.value.copy(isConnected = !connectionStatus.isDisconnecting())
-    }
-
-    private fun loadVersion() {
-        repository.readVersion()
-            .cancellable()
-            .onEach {
-                _state.value = _state.value.copy(version = it)
-
-                (_state.value.version as? Success)?.let {
-                    loadStatus()
-                }
-            }.launchIn(viewModelScope)
-            .let { pendingJobs.add(it) }
-    }
-
-    private fun loadStatus() {
-        repository.getStatus()
-            .cancellable()
-            .onEach {
-                _state.value = _state.value.copy(status = it)
-            }.launchIn(viewModelScope)
-            .let { pendingJobs.add(it) }
+    private fun installSoftApDevice(device: SoftAp) {
+        _state.value = SoftApViewEntity(device = device)
     }
 
     private fun onPasswordSelected(password: String) {
-        _state.value = _state.value.copy(password = password, provisioningStatus = null)
+        _state.value = _state.value.copy(password = password)
     }
 
     private fun provision() {
-        val state = _state.value
-        repository.setConfig(state.network!!.toConfig())
-            .cancellable()
-            .onEach {
-                _state.value = _state.value.copy(provisioningStatus = it)
-            }.launchIn(viewModelScope)
-            .let { pendingJobs.add(it) }
+        viewModelScope.launch {
+            val state = _state.value
+            val network = state.network
+            network?.let {
+                softApManager.provision(it.toConfig()).also { response ->
+                    if (response.isSuccessful) {
+                        val nsdServiceInfo = softApManager.discoverServices()
+                        _state.value = state.copy(
+                            device = state.device?.apply {
+                                connectionInfoDomain = connectionInfoDomain?.copy(
+                                    ipv4Address = nsdServiceInfo.host.toString()
+                                )
+                            },
+                            provisioningStatus = Resource.createSuccess(
+                                data = WifiConnectionStateDomain.CONNECTED
+                            )
+                        )
+                    } else {
+                        _state.value = state.copy(
+                            provisioningStatus = Resource.createError(
+                                Throwable("Provisioning failed")
+                            )
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun WifiData.toConfig(): WifiConfigDomain {
         val state = _state.value
         val wifiInfo = selectedChannel?.wifiInfo ?: channelFallback.wifiInfo
-        val anyChannel = selectedChannel?.wifiInfo?.let { false } ?: true
         return WifiConfigDomain(
             wifiInfo,
-            state.password,
-            !state.persistentMemory,
-            anyChannel
+            state.password
         )
     }
 }

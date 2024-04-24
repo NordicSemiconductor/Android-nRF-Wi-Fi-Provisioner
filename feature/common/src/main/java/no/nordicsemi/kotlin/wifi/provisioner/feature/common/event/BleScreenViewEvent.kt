@@ -29,12 +29,28 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.domain
+package no.nordicsemi.kotlin.wifi.provisioner.feature.common.event
 
-enum class WifiConnectionFailureReasonDomain(val id: Int) {
-    AUTH_ERROR(0),
-    NETWORK_NOT_FOUND(1),
-    TIMEOUT(2),
-    FAIL_IP(3),
-    FAIL_CONN(4),
-}
+sealed interface ProvisioningViewEvent
+
+data object OnSelectDeviceClickEvent : ProvisioningViewEvent
+
+data object OnFinishedEvent : ProvisioningViewEvent
+
+data object OnProvisionNextDeviceEvent : ProvisioningViewEvent
+
+data object OnSelectWifiEvent : ProvisioningViewEvent
+
+data object OnShowPasswordDialog : ProvisioningViewEvent
+
+data object OnHidePasswordDialog : ProvisioningViewEvent
+
+data class OnPasswordSelectedEvent(val password: String) : ProvisioningViewEvent
+
+data object OnProvisionClickEvent : ProvisioningViewEvent
+
+data object OpenLoggerEvent : ProvisioningViewEvent
+
+data object OnUnprovisionEvent : ProvisioningViewEvent
+
+data object OnVolatileMemoryChangedEvent : ProvisioningViewEvent

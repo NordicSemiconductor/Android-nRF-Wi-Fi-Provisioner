@@ -107,6 +107,8 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
      */
     internal fun stopDiscovery() {
         nsdManager.stopServiceDiscovery(nsdListener)
+        if(mutex.isLocked)
+            mutex.unlock()
     }
 
     internal companion object {

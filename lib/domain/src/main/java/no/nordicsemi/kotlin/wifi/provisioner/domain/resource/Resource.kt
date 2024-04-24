@@ -29,14 +29,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.domain
+package no.nordicsemi.kotlin.wifi.provisioner.domain.resource
 
-data class DeviceStatusDomain(
-    val wifiState: WifiConnectionStateDomain?,
-    val wifiInfo: no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain?,
-    val connectionInfo: ConnectionInfoDomain?,
-    val scanParams: ScanParamsDomain?
-) {
+sealed interface Resource<T> {
 
-    fun isContentEmpty() = wifiInfo == null && scanParams == null
+    companion object {
+        fun <T> createLoading(): Resource<T> = Loading()
+        fun <T> createSuccess(data: T): Resource<T> = Success(data)
+        fun <T> createError(error: Throwable): Resource<T> = Error(error)
+    }
 }
+
+class Loading<T> : Resource<T>
+data class Success<T>(val data: T): Resource<T>
+data class Error<T>(val error: Throwable): Resource<T>

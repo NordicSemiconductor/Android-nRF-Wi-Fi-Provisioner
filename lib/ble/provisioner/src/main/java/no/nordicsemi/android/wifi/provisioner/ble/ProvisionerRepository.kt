@@ -34,11 +34,11 @@ package no.nordicsemi.android.wifi.provisioner.ble
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import no.nordicsemi.android.wifi.provisioner.ble.domain.DeviceStatusDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ResponseErrorException
 import no.nordicsemi.android.wifi.provisioner.ble.internal.NotificationTimeoutException

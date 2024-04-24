@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.softap.view
+package no.nordicsemi.android.wifi.provisioner.ble.wifi.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,7 +48,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -64,11 +63,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.getWiFiRes
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSelectedEvent
-import no.nordicsemi.android.wifi.provisioner.feature.softap.R
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
@@ -77,17 +72,22 @@ import no.nordicsemi.android.wifi.provisioner.ui.view.WifiLoadingItem
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiScannerViewEntity
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSelectedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun WiFiAccessPointsScreen(
+internal fun BleWifiScannerScreen(
     viewEntity: WifiScannerViewEntity,
     onEvent: (WifiScannerViewEvent) -> Unit
 ) {
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         NordicAppBar(
-            text = stringResource(id = R.string.wifi_access_points_title),
+            text = stringResource(id = R.string.wifi_title),
             onNavigationButtonClick = { onEvent(NavigateUpEvent) }
         )
 
@@ -117,7 +117,7 @@ private fun LoadingItem() {
 private fun ErrorItem(error: Throwable) {
     Box(modifier = Modifier.padding(16.dp)) {
         ErrorDataItem(
-            imageVector = Icons.Outlined.WarningAmber,
+            iconRes = R.drawable.ic_error,
             title = stringResource(id = R.string.wifi_scanning),
             error = error
         )

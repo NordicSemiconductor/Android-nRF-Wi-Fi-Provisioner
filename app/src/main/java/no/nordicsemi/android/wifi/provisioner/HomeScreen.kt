@@ -58,8 +58,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.wifi.provisioner.app.R
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestinationId
-import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestinationId
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestination
+import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestination
 
 @Composable
 fun HomeScreen() {
@@ -95,10 +95,10 @@ fun HomeScreen() {
                 )
             }
             Row(modifier = Modifier.fillMaxWidth(), Arrangement.SpaceEvenly) {
-                Button(onClick = { vm.navigateTo(BleProvisioningDestinationId) }) {
+                Button(onClick = { vm.navigateTo(BleProvisioningDestination) }) {
                     Text(text = "Provision over BLE")
                 }
-                Button(onClick = { vm.navigateTo(SoftApProvisionerDestinationId) }) {
+                Button(onClick = { vm.navigateTo(SoftApProvisionerDestination) }) {
                     Text(text = "Provision over Wi-Fi")
                 }
             }

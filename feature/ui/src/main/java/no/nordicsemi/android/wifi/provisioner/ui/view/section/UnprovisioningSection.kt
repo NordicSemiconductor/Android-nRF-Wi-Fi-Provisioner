@@ -29,44 +29,48 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.sections
+package no.nordicsemi.android.wifi.provisioner.ui.view.section
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SignalWifiStatusbar4Bar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnSelectWifiEvent
-import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
-import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
+import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.wifi.provisioner.ui.DataItem
+import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
+import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 
 @Composable
-internal fun WifiSection(
-    record: WifiData,
-    isEditable: Boolean = false,
-    onEvent: (BleProvisioningViewEvent) -> Unit
-) {
-    Column {
-        ClickableDataItem(
-            imageVector = record.authMode.toImageVector(),
-            title = stringResource(id = R.string.selected_wifi),
-            isEditable = isEditable,
-            description = record.selectedChannel?.let { getDescription(record = it) } ?: record.ssid,
-            onClick =  {
-                onEvent(OnSelectWifiEvent)
-            },
-            buttonText = stringResource(id = R.string.change_device)
-        )
+fun UnprovisioningSection(status: Resource<Unit>) {
+    when (status) {
+        is Error -> ErrorItem(status.error)
+        is Loading -> LoadingItem(modifier = Modifier.padding(vertical = 8.dp))
+        is Success -> ProvisioningSection()
     }
 }
 
+
 @Composable
-private fun getDescription(record: ScanRecordDomain): String {
-    return StringBuilder()
-        .append(record.wifiInfo?.ssid)
-        .appendLine()
-        .append(stringResource(id = R.string.channel, record.wifiInfo?.channel.toString()))
-        .toString()
+private fun ErrorItem(error: Throwable) {
+    ErrorDataItem(
+        iconRes = R.drawable.ic_upload_wifi,
+        title = stringResource(id = R.string.unprovision_status),
+        error = error
+    )
+}
+
+@Composable
+private fun ProvisioningSection() {
+    DataItem(
+        imageVector = Icons.Default.SignalWifiStatusbar4Bar,
+        title = stringResource(id = R.string.unprovision_status),
+        description = stringResource(id = R.string.success)
+    )
 }

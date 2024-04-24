@@ -35,18 +35,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.ble.Error
-import no.nordicsemi.android.wifi.provisioner.ble.Loading
-import no.nordicsemi.android.wifi.provisioner.ble.Resource
-import no.nordicsemi.android.wifi.provisioner.ble.Success
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 
 @Composable
-internal fun VersionSection(version: Resource<VersionDomain>) {
+fun VersionSection(version: Resource<VersionDomain>) {
     when (version) {
         is Error -> ErrorSection(version.error)
         is Loading -> LoadingItem()

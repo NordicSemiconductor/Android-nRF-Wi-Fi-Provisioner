@@ -31,153 +31,124 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.outlined.Wifi
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.feature.softap.R
-import no.nordicsemi.android.wifi.provisioner.softap.sections.WifiDeviceNotSelected
-import no.nordicsemi.android.wifi.provisioner.softap.viewmodel.SoftApViewModel
+import no.nordicsemi.android.wifi.provisioner.softap.sections.ActionButtonSection
+import no.nordicsemi.android.wifi.provisioner.softap.view.entity.SoftApViewEntity
+import no.nordicsemi.android.wifi.provisioner.softap.viewmodel.SoftApProvisioningViewModel
+import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.DeviceNotSelectedSection
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.DisconnectedDeviceStatus
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.PasswordSection
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.SoftApDevice
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.WifiSection
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OpenLoggerEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordSetDialogEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoftApProvisioningScreen() {
-    val viewModel = hiltViewModel<SoftApViewModel>()
-    LocalContext.current
+    val viewModel = hiltViewModel<SoftApProvisioningViewModel>()
 
-    var ssid by rememberSaveable { mutableStateOf("0018F0-nrf-wifiprov") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var showDialog by rememberSaveable { mutableStateOf(false) }
-    var showPassword by rememberSaveable { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 56.dp)
-    ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val onEvent: (ProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
+    Column {
         NordicAppBar(
             text = stringResource(id = R.string.label_wifi_provisioner),
             actions = {
                 LoggerAppBarIcon(
-                    onClick = { /*TODO*/ }
+                    onClick = { viewModel.onEvent(OpenLoggerEvent) }
                 )
             },
             showBackButton = true,
             onNavigationButtonClick = viewModel::navigateUp
         )
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp)
-        ) {
-            Spacer(modifier = Modifier.size(12.dp))
-            WifiDeviceNotSelected { showDialog = true }
-            Spacer(modifier = Modifier.size(12.dp))
+        Box(modifier = Modifier.weight(1f)) {
+            Content(state) { viewModel.onEvent(it) }
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Button(onClick = { showDialog = true }) {
-                Text(text = stringResource(id = R.string.setup_wifi))
-            }
-        }
+        ActionButtonSection(state, onEvent)
+        Spacer(modifier = Modifier.size(16.dp))
     }
 
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            icon = {
-                   Icon(imageVector = Icons.Outlined.Wifi, contentDescription = null)
-            },
-            title = {
-                Text(
-                    text = stringResource(id = R.string.setup_wifi),
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
-                )
-            },
-            text = {
-                Column {
-                    Text(
-                        text = stringResource(id = R.string.setup_wifi_rationale),
-                        modifier = Modifier.fillMaxWidth(),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Spacer(modifier = Modifier.size(size = 16.dp))
-                    OutlinedTextField(value = ssid, onValueChange = { ssid = it })
-                    Spacer(modifier = Modifier.size(size = 8.dp))
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        visualTransformation = if(showPassword)
-                            VisualTransformation.None
-                        else
-                            PasswordVisualTransformation(),
-                        trailingIcon = {
-                            IconButton(onClick = { showPassword = !showPassword }) {
-                                Icon(
-                                    imageVector = if (!showPassword)
-                                        Icons.Outlined.Visibility
-                                    else Icons.Outlined.VisibilityOff,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                    }
-                ) { Text(text = "Cancel") }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                        viewModel.connect(
-                            ssid = ssid,
-                            password = password
-                        )
-                    }
-                ) { Text(text = "Confirm") }
+    if (state.showPasswordDialog == true) {
+        PasswordDialog { event ->
+            (event as? PasswordSetDialogEvent)?.let {
+                onEvent(OnPasswordSelectedEvent(it.password))
             }
-        )
+            onEvent(OnHidePasswordDialog)
+        }
     }
+}
+
+@Composable
+private fun Content(state: SoftApViewEntity, onEvent: (ProvisioningViewEvent) -> Unit) {
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp)
+    ) {
+        Spacer(modifier = Modifier.size(12.dp))
+
+        state.device?.let {
+            SoftApDevice(it.ssid , it.connectionInfoDomain!!.ipv4Address, true, onEvent)
+        } ?: DeviceNotSelectedSection(onEvent)
+
+        Spacer(modifier = Modifier.size(12.dp))
+
+        if (!state.isConnected && state.device != null) {
+            DisconnectedDeviceStatus()
+        } else {
+
+            Spacer(modifier = Modifier.size(12.dp))
+
+            // state.status?.let { StatusSection(it) }
+
+            state.network?.let {
+                Spacer(modifier = Modifier.size(12.dp))
+
+                SectionTitle(text = stringResource(id = R.string.section_provisioning))
+
+                Spacer(modifier = Modifier.size(12.dp))
+
+                WifiSection(it, false, onEvent)
+            }
+
+            state.password?.let {
+                Spacer(modifier = Modifier.size(10.dp))
+
+                PasswordSection(false, onEvent)
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun SectionTitle(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.secondary
+    )
 }

@@ -29,13 +29,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.domain
+package no.nordicsemi.kotlin.wifi.provisioner.domain
 
-enum class WifiConnectionStateDomain(val id: Int) {
-    DISCONNECTED(0),
-    AUTHENTICATION(1),
-    ASSOCIATION(2),
-    OBTAINING_IP(3),
-    CONNECTED(4),
-    CONNECTION_FAILED(5)
+data class DeviceStatusDomain(
+    val wifiState: WifiConnectionStateDomain?,
+    val wifiInfo: WifiInfoDomain?,
+    val connectionInfo: ConnectionInfoDomain?,
+    val scanParams: ScanParamsDomain?
+) {
+
+    fun isContentEmpty() = wifiInfo == null && scanParams == null
 }

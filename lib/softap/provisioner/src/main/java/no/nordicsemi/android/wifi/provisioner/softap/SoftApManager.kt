@@ -14,10 +14,12 @@ import androidx.annotation.RequiresApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.withContext
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toApi
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ConnectionInfoDomain
 import javax.inject.Inject
 
 /**
@@ -43,6 +45,8 @@ class SoftApManager @Inject constructor(
 
     private val _discoveredServices = mutableListOf<NsdServiceInfo>()
     private var discoveredService: NsdServiceInfo? = null
+    private val mutex = Mutex(true)
+    private var isConnected = false
 
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
 
@@ -52,22 +56,27 @@ class SoftApManager @Inject constructor(
             // do success processing here..
             try {
                 if (connectivityManager.bindProcessToNetwork(network)) {
+                    isConnected = true
                     Log.d(
                         "AAAA", "Link properties ${
                             connectivityManager.getLinkProperties(network)?.toString()
                         }"
                     )
-                    _provisioningState.value = ProvisioningState.Connected
+                    // _provisioningState.value = ProvisioningState.Connected()
                 } else {
                     disconnect()
                 }
             } catch (e: Exception) {
+                disconnect()
                 Log.e("AAAA", "Error: $e")
+            } finally {
+                mutex.unlock()
             }
         }
 
         override fun onUnavailable() {
             // do failure processing here..
+            mutex.unlock()
             Log.d("AAAA", "Something went wrong!")
         }
     }
@@ -80,7 +89,8 @@ class SoftApManager @Inject constructor(
      * the SSID or the passphrase of the network that the device must be provisioned into.
      */
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun connect(ssid: String, password: String = "") {
+    suspend fun connect(ssid: String, password: String = ""): SoftAp? {
+        isConnected = false
         _provisioningState.value = ProvisioningState.Connecting
         val specifier = WifiNetworkSpecifier.Builder()
             .setSsid(ssid)
@@ -93,6 +103,11 @@ class SoftApManager @Inject constructor(
             .setNetworkSpecifier(specifier)
             .build()
         connectivityManager.requestNetwork(request, networkCallback)
+        mutex.lock()
+        val service = discoverServices()
+        return if (isConnected) SoftAp(ssid = ssid, password = password).apply {
+            connectionInfoDomain = ConnectionInfoDomain(ipv4Address = service.host.toString())
+        } else null
     }
 
     /**

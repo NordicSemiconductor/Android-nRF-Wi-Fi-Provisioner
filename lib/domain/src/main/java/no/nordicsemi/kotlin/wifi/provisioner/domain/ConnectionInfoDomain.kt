@@ -29,13 +29,8 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.domain
+package no.nordicsemi.kotlin.wifi.provisioner.domain
 
-import no.nordicsemi.kotlin.wifi.provisioner.domain.BandDomain
-
-data class ScanParamsDomain(
-    val band: BandDomain,
-    val passive: Boolean,
-    val periodMs: Int,
-    val groupChannels: Int
+data class ConnectionInfoDomain(
+    val ipv4Address: String
 )

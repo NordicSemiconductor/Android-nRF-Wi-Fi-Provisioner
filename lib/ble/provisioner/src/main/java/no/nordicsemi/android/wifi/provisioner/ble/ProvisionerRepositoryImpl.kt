@@ -36,11 +36,11 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import no.nordicsemi.android.wifi.provisioner.ble.domain.DeviceStatusDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.toApi
 import no.nordicsemi.android.wifi.provisioner.ble.domain.toDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus

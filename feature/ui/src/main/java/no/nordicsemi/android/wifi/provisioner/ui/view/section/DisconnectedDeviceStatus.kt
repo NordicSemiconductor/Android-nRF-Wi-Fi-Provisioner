@@ -29,48 +29,20 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.sections
+package no.nordicsemi.android.wifi.provisioner.ui.view.section
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SignalWifiStatusbar4Bar
+import androidx.compose.material.icons.outlined.LinkOff
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ble.Error
-import no.nordicsemi.android.wifi.provisioner.ble.Loading
-import no.nordicsemi.android.wifi.provisioner.ble.Resource
-import no.nordicsemi.android.wifi.provisioner.ble.Success
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
-import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
-import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
+import no.nordicsemi.android.wifi.provisioner.ui.R
 
 @Composable
-internal fun UnprovisioningSection(status: Resource<Unit>) {
-    when (status) {
-        is Error -> ErrorItem(status.error)
-        is Loading -> LoadingItem(modifier = Modifier.padding(vertical = 8.dp))
-        is Success -> ProvisioningSection()
-    }
-}
-
-
-@Composable
-private fun ErrorItem(error: Throwable) {
-    ErrorDataItem(
-        iconRes = R.drawable.ic_upload_wifi,
-        title = stringResource(id = R.string.unprovision_status),
-        error = error
-    )
-}
-
-@Composable
-private fun ProvisioningSection() {
+fun DisconnectedDeviceStatus() {
     DataItem(
-        imageVector = Icons.Default.SignalWifiStatusbar4Bar,
-        title = stringResource(id = R.string.unprovision_status),
-        description = stringResource(id = R.string.success)
+        imageVector = Icons.Outlined.LinkOff,
+        title = stringResource(id = R.string.device_info),
+        description = stringResource(id = R.string.disconnected)
     )
 }

@@ -32,26 +32,28 @@
 package no.nordicsemi.android.wifi.provisioner.ble.view
 
 import no.nordicsemi.android.kotlin.ble.core.ServerDevice
-import no.nordicsemi.android.wifi.provisioner.ble.Loading
-import no.nordicsemi.android.wifi.provisioner.ble.Resource
-import no.nordicsemi.android.wifi.provisioner.ble.Success
-import no.nordicsemi.android.wifi.provisioner.ble.domain.DeviceStatusDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
+import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.view.ViewEntity
 
 data class BleViewEntity(
     val device: ServerDevice? = null,
     val version: Resource<VersionDomain>? = null,
     val status: Resource<DeviceStatusDomain>? = null,
-    val network: WifiData? = null,
-    val password: String? = null,
+    override val network: WifiData? = null,
+    override val password: String? = null,
     val persistentMemory: Boolean = true,
-    val showPasswordDialog: Boolean? = null,
-    val provisioningStatus: Resource<WifiConnectionStateDomain>? = null,
+    override val showPasswordDialog: Boolean? = null,
+    override val provisioningStatus: Resource<WifiConnectionStateDomain>? = null,
     val unprovisioningStatus: Resource<Unit>? = null,
-    val isConnected: Boolean = true
-) {
+    override val isConnected: Boolean = true
+) : ViewEntity {
+
     fun isStatusSuccess(): Boolean {
         return device != null && version is Success && status is Success
     }
@@ -65,7 +67,11 @@ data class BleViewEntity(
     }
 
     fun isRunning(): Boolean {
-        return device != null && version == null || version is Loading || status is Loading || provisioningStatus is Loading || unprovisioningStatus is Loading
+        return device != null && version == null
+                || version is Loading
+                || status is Loading
+                || provisioningStatus is Loading
+                || unprovisioningStatus is Loading
     }
 
     fun hasFinished(): Boolean {
@@ -76,7 +82,7 @@ data class BleViewEntity(
                 || unprovisioningStatus is Success
     }
 
-    fun hasFinishedWithSuccess(): Boolean {
+    override fun hasFinishedWithSuccess(): Boolean {
         val status = (provisioningStatus as? Success)?.data
         return isConnected
                 && (status == WifiConnectionStateDomain.CONNECTED

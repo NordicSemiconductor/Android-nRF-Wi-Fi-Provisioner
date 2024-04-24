@@ -29,73 +29,56 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel
+package no.nordicsemi.android.wifi.provisioner.softap.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.Navigator
-import no.nordicsemi.android.wifi.provisioner.ble.Error
-import no.nordicsemi.android.wifi.provisioner.ble.Loading
-import no.nordicsemi.android.wifi.provisioner.ble.Success
-import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
-import no.nordicsemi.android.wifi.provisioner.ble.view.WiFiAccessPointsListId
+import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
+import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApWifiScannerDestination
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiAggregator
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.viewmodel.GenericWifiScannerViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-internal class WifiScannerViewModel @Inject constructor(
+internal class SoftApWifiScannerViewModel @Inject constructor(
     navigationManager: Navigator,
     wifiAggregator: WifiAggregator,
-    private val repository: ProvisionerResourceRepository
+    private val softApManager: SoftApManager
 ) : GenericWifiScannerViewModel(
     navigationManager = navigationManager,
     wifiAggregator = wifiAggregator
 ) {
 
     init {
-        startScan()
+        listSsids()
     }
 
-    private fun startScan() {
-        repository.startScan().onEach {
+    private fun listSsids() {
+        val handler = CoroutineExceptionHandler { _, throwable ->
+            Log.e("AAAA", "$throwable")
+        }
+
+        viewModelScope.launch(handler) {
+            val ssids = softApManager.listSsids()
             val state = _state.value
-
-            _state.value = when (it) {
-                is Error -> state.copy(isLoading = false, error = it.error)
-                is Loading -> state.copy(isLoading = true)
-                is Success -> state.copy(
-                    isLoading = false,
-                    error = null,
-                    items = wifiAggregator.addWifi(it.data)
-                )
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    private suspend fun stopScanning() {
-        try {
-            repository.stopScanBlocking()
-        } catch (e: Exception) {
-            e.printStackTrace()
+            _state.value = state.copy(
+                isLoading = false, error = null,
+                items = wifiAggregator.addWifi(
+                    ssids.results
+                ),
+            )
         }
     }
-
     override fun navigateUp() {
-        viewModelScope.launch {
-            stopScanning()
-            navigationManager.navigateUp()
-        }
+        navigationManager.navigateUp()
     }
 
     override fun navigateUp(wifiData: WifiData) {
-        viewModelScope.launch {
-            stopScanning()
-            navigationManager.navigateUpWithResult(WiFiAccessPointsListId, wifiData)
-        }
+        navigationManager.navigateUpWithResult(SoftApWifiScannerDestination, wifiData)
     }
 }

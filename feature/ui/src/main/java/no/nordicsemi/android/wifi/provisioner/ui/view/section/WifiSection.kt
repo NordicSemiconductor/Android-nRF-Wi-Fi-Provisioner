@@ -29,17 +29,44 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble
+package no.nordicsemi.android.wifi.provisioner.ui.view.section
 
-sealed interface Resource<T> {
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEvent
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
+import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 
-    companion object {
-        fun <T> createLoading(): Resource<T> = Loading()
-        fun <T> createSuccess(data: T): Resource<T> = Success(data)
-        fun <T> createError(error: Throwable): Resource<T> = Error(error)
+@Composable
+fun WifiSection(
+    record: WifiData,
+    isEditable: Boolean = false,
+    onEvent: (ProvisioningViewEvent) -> Unit
+) {
+    Column {
+        ClickableDataItem(
+            imageVector = record.authMode.toImageVector(),
+            title = stringResource(id = R.string.selected_wifi),
+            isEditable = isEditable,
+            description = record.selectedChannel?.let { getDescription(record = it) } ?: record.ssid,
+            onClick =  {
+                onEvent(OnSelectWifiEvent)
+            },
+            buttonText = stringResource(id = R.string.change_device)
+        )
     }
 }
 
-class Loading<T> : Resource<T>
-data class Success<T>(val data: T): Resource<T>
-data class Error<T>(val error: Throwable): Resource<T>
+@Composable
+private fun getDescription(record: ScanRecordDomain): String {
+    return StringBuilder()
+        .append(record.wifiInfo?.ssid)
+        .appendLine()
+        .append(stringResource(id = R.string.channel, record.wifiInfo?.channel.toString()))
+        .toString()
+}

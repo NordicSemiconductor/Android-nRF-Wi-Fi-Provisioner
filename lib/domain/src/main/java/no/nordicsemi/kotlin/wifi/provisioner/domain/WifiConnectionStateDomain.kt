@@ -29,27 +29,13 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.sections
+package no.nordicsemi.kotlin.wifi.provisioner.domain
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Password
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningViewEvent
-import no.nordicsemi.android.wifi.provisioner.ble.view.OnShowPasswordDialog
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
-
-@Composable
-internal fun PasswordSection(isEditable: Boolean = false, onEvent: (BleProvisioningViewEvent) -> Unit) {
-    ClickableDataItem(
-        imageVector = Icons.Outlined.Password,
-        title = stringResource(id = R.string.password),
-        isEditable = isEditable,
-        description = stringResource(id = R.string.password_encoded),
-        onClick = {
-            onEvent(OnShowPasswordDialog)
-        },
-        buttonText = stringResource(id = R.string.set_password)
-    )
+enum class WifiConnectionStateDomain(val id: Int) {
+    DISCONNECTED(0),
+    AUTHENTICATION(1),
+    ASSOCIATION(2),
+    OBTAINING_IP(3),
+    CONNECTED(4),
+    CONNECTION_FAILED(5)
 }

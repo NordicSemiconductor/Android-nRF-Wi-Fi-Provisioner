@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ble.view
+package no.nordicsemi.android.wifi.provisioner.ui.view
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SignalWifi4Bar
@@ -39,11 +39,12 @@ import androidx.compose.material.icons.filled.WifiFind
 import androidx.compose.material.icons.outlined.SignalWifiStatusbarConnectedNoInternet4
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionFailureReasonDomain
-import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConnectionStateDomain
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionFailureReasonDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
+import no.nordicsemi.android.wifi.provisioner.ui.R
 
-internal fun WifiConnectionStateDomain?.toImageVector() = when (this) {
+@Composable
+fun WifiConnectionStateDomain?.toImageVector() = when (this) {
     WifiConnectionStateDomain.DISCONNECTED -> Icons.Outlined.SignalWifiStatusbarConnectedNoInternet4
     WifiConnectionStateDomain.AUTHENTICATION,
     WifiConnectionStateDomain.ASSOCIATION,
@@ -54,7 +55,7 @@ internal fun WifiConnectionStateDomain?.toImageVector() = when (this) {
 }
 
 @Composable
-internal fun WifiConnectionStateDomain?.toDisplayString() = when (this) {
+fun WifiConnectionStateDomain?.toDisplayString() = when (this) {
     WifiConnectionStateDomain.DISCONNECTED -> R.string.wifi_status_disconnected
     WifiConnectionStateDomain.AUTHENTICATION -> R.string.wifi_status_authentication
     WifiConnectionStateDomain.ASSOCIATION -> R.string.wifi_status_association
@@ -65,7 +66,7 @@ internal fun WifiConnectionStateDomain?.toDisplayString() = when (this) {
 }.let { stringResource(id = it) }
 
 @Composable
-internal fun WifiConnectionFailureReasonDomain.toDisplayString() = when (this) {
+fun WifiConnectionFailureReasonDomain.toDisplayString() = when (this) {
     WifiConnectionFailureReasonDomain.AUTH_ERROR -> R.string.error_auth
     WifiConnectionFailureReasonDomain.NETWORK_NOT_FOUND -> R.string.error_network_not_found
     WifiConnectionFailureReasonDomain.TIMEOUT -> R.string.error_timeout

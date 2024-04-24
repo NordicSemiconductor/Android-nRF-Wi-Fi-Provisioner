@@ -42,7 +42,12 @@ import no.nordicsemi.android.wifi.provisioner.ble.proto.ScanRecord
 import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiInfo
 import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.BandDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ConnectionInfoDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanParamsDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionFailureReasonDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiInfoDomain
 import okio.ByteString
 
