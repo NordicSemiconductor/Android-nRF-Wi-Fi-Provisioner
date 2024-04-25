@@ -38,8 +38,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Router
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -64,7 +62,6 @@ import no.nordicsemi.android.wifi.provisioner.ui.view.section.SoftApDeviceNotSel
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.WifiSection
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OpenLoggerEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordSetDialogEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 
@@ -80,7 +77,7 @@ fun SoftApProvisioningScreen() {
             text = stringResource(id = R.string.label_wifi_provisioner),
             actions = {
                 LoggerAppBarIcon(
-                    onClick = { viewModel.onEvent(OpenLoggerEvent) }
+                    onClick = { }
                 )
             },
             showBackButton = true,
