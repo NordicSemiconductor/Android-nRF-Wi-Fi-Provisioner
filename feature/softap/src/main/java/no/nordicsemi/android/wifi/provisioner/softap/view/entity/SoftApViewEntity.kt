@@ -7,6 +7,9 @@ import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.view.ViewEntity
 
+/**
+ * SoftApViewEntity is a data class that represents the view state of the SoftAp provisioning screen
+ */
 data class SoftApViewEntity(
     val device: SoftAp? = null,
     override val network: WifiData? = null,
@@ -14,6 +17,7 @@ data class SoftApViewEntity(
     override val showPasswordDialog: Boolean? = null,
     override val provisioningStatus: Resource<WifiConnectionStateDomain>? = null,
     override val isConnected: Boolean = true,
+    val isAuthorized: Boolean = false,
 ) : ViewEntity {
 
     override fun hasFinishedWithSuccess(): Boolean {

@@ -30,7 +30,6 @@ import javax.inject.Inject
  * @property nsdListener         Network service discovery listener.
  * @property wifiService         WifiServer api.
  * @property coroutineDispatcher Coroutine dispatcher.
- * @property provisioningState   Provisioning state.
  * @constructor Create empty SoftApManager.
  */
 class SoftApManager @Inject constructor(
@@ -39,10 +38,6 @@ class SoftApManager @Inject constructor(
     private val wifiService: WifiService,
     private val coroutineDispatcher: CoroutineDispatcher
 ) {
-    private var _provisioningState =
-        MutableStateFlow<ProvisioningState>(ProvisioningState.Disconnected)
-    val provisioningState = _provisioningState.asStateFlow()
-
     private val _discoveredServices = mutableListOf<NsdServiceInfo>()
     private var discoveredService: NsdServiceInfo? = null
     private val mutex = Mutex(true)
@@ -62,7 +57,6 @@ class SoftApManager @Inject constructor(
                             connectivityManager.getLinkProperties(network)?.toString()
                         }"
                     )
-                    // _provisioningState.value = ProvisioningState.Connected()
                 } else {
                     disconnect()
                 }
@@ -91,7 +85,6 @@ class SoftApManager @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.Q)
     suspend fun connect(ssid: String, password: String = ""): SoftAp? {
         isConnected = false
-        _provisioningState.value = ProvisioningState.Connecting
         val specifier = WifiNetworkSpecifier.Builder()
             .setSsid(ssid)
             .setWpa2Passphrase(password)
@@ -118,7 +111,6 @@ class SoftApManager @Inject constructor(
             connectivityManager.bindProcessToNetwork(null)
         }
         connectivityManager.unregisterNetworkCallback(networkCallback)
-        _provisioningState.value = ProvisioningState.Disconnected
     }
 
     /**

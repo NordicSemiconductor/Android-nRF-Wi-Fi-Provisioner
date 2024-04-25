@@ -19,5 +19,8 @@ interface ViewEntity {
     val provisioningStatus: Resource<WifiConnectionStateDomain>?
     val isConnected: Boolean
 
+    /**
+     * Check if the provisioning has finished successfully.
+     */
     fun hasFinishedWithSuccess(): Boolean
 }
