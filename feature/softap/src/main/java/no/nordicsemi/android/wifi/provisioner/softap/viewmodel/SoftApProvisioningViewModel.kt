@@ -61,9 +61,6 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionNex
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectDeviceClickEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnUnprovisionEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnVolatileMemoryChangedEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OpenLoggerEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 import javax.inject.Inject
 
@@ -101,10 +98,7 @@ class SoftApProvisioningViewModel @Inject constructor(
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
             OnShowPasswordDialog -> showPasswordDialog()
-            OpenLoggerEvent -> {}//repository.openLogger()
-            OnUnprovisionEvent -> cancelConfig()
             OnProvisionNextDeviceEvent -> provisionNextDevice()
-            OnVolatileMemoryChangedEvent -> {}
         }
     }
 
@@ -115,10 +109,6 @@ class SoftApProvisioningViewModel @Inject constructor(
             delay(500) //nasty delay to prevent screen change before navigation
             _state.value = SoftApViewEntity()
         }
-    }
-
-    private fun cancelConfig() {
-
     }
 
     private fun showPasswordDialog() {

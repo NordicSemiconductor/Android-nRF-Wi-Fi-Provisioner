@@ -35,6 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.outlined.Router
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import no.nordicsemi.android.common.theme.NordicTheme
@@ -80,11 +81,23 @@ fun SoftApDevice(
 }
 
 @Composable
-fun DeviceNotSelectedSection(
+fun SoftApDeviceNotSelected(onEvent: (ProvisioningViewEvent) -> Unit) {
+    DeviceNotSelectedSection(imageVector = Icons.Outlined.Router, onEvent = onEvent)
+}
+
+@Composable
+fun BluetoothDeviceNotSelected(onEvent: (ProvisioningViewEvent) -> Unit) {
+    DeviceNotSelectedSection(imageVector = Icons.Outlined.PhoneAndroid, onEvent = onEvent)
+}
+
+
+@Composable
+private fun DeviceNotSelectedSection(
+    imageVector: ImageVector = Icons.Outlined.PhoneAndroid,
     onEvent: (ProvisioningViewEvent) -> Unit
 ) {
     ClickableDataItem(
-        imageVector = Icons.Outlined.PhoneAndroid,
+        imageVector = imageVector,
         title = "Not selected",
         isEditable = false,
         description = "Please select a device to provision",

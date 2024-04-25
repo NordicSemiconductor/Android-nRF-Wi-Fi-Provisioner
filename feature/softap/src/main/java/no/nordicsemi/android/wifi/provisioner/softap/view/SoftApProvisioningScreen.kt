@@ -38,6 +38,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Router
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -55,10 +57,10 @@ import no.nordicsemi.android.wifi.provisioner.softap.sections.ActionButtonSectio
 import no.nordicsemi.android.wifi.provisioner.softap.view.entity.SoftApViewEntity
 import no.nordicsemi.android.wifi.provisioner.softap.viewmodel.SoftApProvisioningViewModel
 import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
-import no.nordicsemi.android.wifi.provisioner.ui.view.section.DeviceNotSelectedSection
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.DisconnectedDeviceStatus
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.PasswordSection
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.SoftApDevice
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.SoftApDeviceNotSelected
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.WifiSection
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
@@ -111,8 +113,8 @@ private fun Content(state: SoftApViewEntity, onEvent: (ProvisioningViewEvent) ->
         Spacer(modifier = Modifier.size(12.dp))
 
         state.device?.let {
-            SoftApDevice(it.ssid , it.connectionInfoDomain!!.ipv4Address, true, onEvent)
-        } ?: DeviceNotSelectedSection(onEvent)
+            SoftApDevice(it.ssid, it.connectionInfoDomain!!.ipv4Address, true, onEvent)
+        } ?: SoftApDeviceNotSelected(onEvent = onEvent)
 
         Spacer(modifier = Modifier.size(12.dp))
 

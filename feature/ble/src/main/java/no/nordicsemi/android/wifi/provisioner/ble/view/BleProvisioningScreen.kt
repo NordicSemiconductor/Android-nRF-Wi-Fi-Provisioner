@@ -50,24 +50,23 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.theme.view.NordicAppBar
-import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordSetDialogEvent
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ActionButtonSection
-import no.nordicsemi.android.wifi.provisioner.ui.view.section.ProvisioningSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.StatusSection
-import no.nordicsemi.android.wifi.provisioner.ui.view.section.UnprovisioningSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.VersionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.VolatileMemorySwitch
 import no.nordicsemi.android.wifi.provisioner.ble.viewmodel.BleViewModel
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.BluetoothDevice
-import no.nordicsemi.android.wifi.provisioner.ui.view.section.DeviceNotSelectedSection
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.BluetoothDeviceNotSelected
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.DisconnectedDeviceStatus
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.PasswordSection
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.ProvisioningSection
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.UnprovisioningSection
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.WifiSection
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OpenLoggerEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordSetDialogEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,7 +114,7 @@ private fun Content(state: BleViewEntity, onEvent: (ProvisioningViewEvent) -> Un
         Spacer(modifier = Modifier.size(12.dp))
 
         if (state.device == null) {
-            DeviceNotSelectedSection(onEvent)
+            BluetoothDeviceNotSelected(onEvent = onEvent)
         } else {
             BluetoothDevice(state.device.name, state.device.address, !state.isRunning(), onEvent)
         }

@@ -30,8 +30,7 @@
  */
 
 package no.nordicsemi.kotlin.wifi.provisioner.feature.common.event
-
-sealed interface ProvisioningViewEvent
+interface ProvisioningViewEvent
 
 data object OnSelectDeviceClickEvent : ProvisioningViewEvent
 
@@ -48,9 +47,3 @@ data object OnHidePasswordDialog : ProvisioningViewEvent
 data class OnPasswordSelectedEvent(val password: String) : ProvisioningViewEvent
 
 data object OnProvisionClickEvent : ProvisioningViewEvent
-
-data object OpenLoggerEvent : ProvisioningViewEvent
-
-data object OnUnprovisionEvent : ProvisioningViewEvent
-
-data object OnVolatileMemoryChangedEvent : ProvisioningViewEvent

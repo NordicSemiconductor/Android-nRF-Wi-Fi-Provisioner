@@ -63,12 +63,12 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionNex
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectDeviceClickEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnUnprovisionEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnVolatileMemoryChangedEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OpenLoggerEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleWifiScannerDestination
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
+import no.nordicsemi.android.wifi.provisioner.ble.view.OnUnprovisionEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.OnVolatileMemoryChangedEvent
+import no.nordicsemi.android.wifi.provisioner.ble.view.OpenLoggerEvent
 import javax.inject.Inject
 
 @HiltViewModel

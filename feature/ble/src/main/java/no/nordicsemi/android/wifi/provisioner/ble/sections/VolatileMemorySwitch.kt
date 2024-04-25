@@ -46,8 +46,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.wifi.provisioner.ble.view.OnVolatileMemoryChangedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnVolatileMemoryChangedEvent
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
 @Composable
