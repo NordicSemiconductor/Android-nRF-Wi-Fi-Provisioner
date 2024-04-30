@@ -39,7 +39,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -178,7 +177,6 @@ class SoftApProvisioningViewModel @Inject constructor(
 
     private fun provision() {
         val state = _state.value
-        val device = state.device ?: return
         val network = state.network ?: return
         val handler = CoroutineExceptionHandler { _, throwable ->
             Log.d("AAAA", "Provisioning failed $throwable")

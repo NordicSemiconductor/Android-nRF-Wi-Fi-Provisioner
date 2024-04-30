@@ -8,8 +8,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.navigation.createDestination
 import no.nordicsemi.android.common.navigation.createSimpleDestination
 import no.nordicsemi.android.common.navigation.defineDestination
-import no.nordicsemi.android.common.navigation.defineDialogDestination
-import no.nordicsemi.android.wifi.provisioner.softap.SoftAp
 import no.nordicsemi.android.wifi.provisioner.softap.viewmodel.SoftApWifiScannerViewModel
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
