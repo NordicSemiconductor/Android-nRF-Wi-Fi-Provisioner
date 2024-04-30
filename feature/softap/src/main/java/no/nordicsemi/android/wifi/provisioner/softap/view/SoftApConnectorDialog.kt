@@ -76,7 +76,7 @@ internal fun SoftApConnectorDialog(
                 ) {
                     CircularProgressIndicator()
                     Text(
-                        text = stringResource(id = R.string.softap_rationale),
+                        text = stringResource(id = R.string.discovering_services),
                         modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.bodyMedium
                     )
