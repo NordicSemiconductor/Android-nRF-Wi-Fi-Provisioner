@@ -2,7 +2,8 @@
 <resources>
     <string name="label_wifi_provisioner">"Wi-Fi Provisioner "</string>
     <string name="soft_ap">Soft AP</string>
-    <string name="softap_rationale">Enter the SSID and password of the SoftAp you want to connect to.</string>
+    <string name="softap_rationale">Enter the SSID and password of the Soft AP you want to connect to.</string>
+    <string name="softap_connection_rationale">Connecting to Soft AP…</string>
     <string name="change_wifi">Change Wi-Fi</string>
     <string name="dismiss">Dismiss</string>
     <string name="confirm">Confirm</string>

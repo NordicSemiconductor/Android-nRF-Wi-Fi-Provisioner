@@ -60,6 +60,7 @@ import no.nordicsemi.android.wifi.provisioner.ui.view.section.PasswordSection
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.SoftApDevice
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.SoftApDeviceNotSelected
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.WifiSection
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnFinishedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordSetDialogEvent
@@ -96,7 +97,7 @@ fun SoftApProvisioningScreen() {
             connect = { ssid, passphrase ->
                 onEvent(OnSoftApConnectEvent(ssid, passphrase))
             }, dismiss = {
-                onEvent(OnHidePasswordDialog)
+                onEvent(OnFinishedEvent)
             }
         )
     }

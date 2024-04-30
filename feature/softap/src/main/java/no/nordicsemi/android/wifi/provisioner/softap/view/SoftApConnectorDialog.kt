@@ -75,6 +75,11 @@ internal fun SoftApConnectorDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CircularProgressIndicator()
+                    Text(
+                        text = stringResource(id = R.string.softap_rationale),
+                        modifier = Modifier.fillMaxWidth(),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             } else {
                 showButtons = true

@@ -181,7 +181,11 @@ class SoftApManager(
      * @param config Credentials of the wifi network.
      */
     suspend fun provision(config: WifiConfigDomain) =
-        softApProvisioningService.provision(config.toApi())
+        softApProvisioningService.provision(config.toApi()).also {
+            if(it.isSuccessful){
+                softAp?.wifiConfigDomain = config
+            }
+        }
 
     /**
      * Disconnects from an unprovisioned or a newly provisioned device.
