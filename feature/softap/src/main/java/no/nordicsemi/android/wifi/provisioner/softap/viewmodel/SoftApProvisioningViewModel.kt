@@ -31,7 +31,6 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.viewmodel
 
-import android.net.nsd.NsdServiceInfo
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -146,10 +145,6 @@ class SoftApProvisioningViewModel @Inject constructor(
             password = null,
             showPasswordDialog = wifiData.isPasswordRequired()
         )
-    }
-
-    private fun installSoftApDevice(device: SoftAp) {
-        _state.value = SoftApViewEntity(device = device)
     }
 
     private fun onPasswordSelected(password: String) {
