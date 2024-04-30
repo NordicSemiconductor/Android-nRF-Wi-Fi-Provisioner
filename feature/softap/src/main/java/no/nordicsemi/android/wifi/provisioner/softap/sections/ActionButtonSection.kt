@@ -61,8 +61,10 @@ fun ActionButtonSection(viewEntity: SoftApViewEntity, onEvent: (ProvisioningView
             onEvent(OnSelectWifiEvent)
         }
     } else if(viewEntity.password == null) {
-        onEvent(OnShowPasswordDialog)
-    } else if(viewEntity.hasFinishedWithSuccess()) {
+        ActionButton( stringResource(id = R.string.password_select)) {
+            onEvent(OnShowPasswordDialog)
+        }
+    } else if(viewEntity.hasFinished()) {
         ActionButton(stringResource(id = R.string.next_device)) {
             onEvent(OnProvisionNextDeviceEvent)
         }

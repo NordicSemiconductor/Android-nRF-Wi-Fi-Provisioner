@@ -35,4 +35,4 @@ sealed interface PasswordDialogEvent
 
 data class PasswordSetDialogEvent(val password: String) : PasswordDialogEvent
 
-object DismissEvent : PasswordDialogEvent
+data object DismissEvent : PasswordDialogEvent

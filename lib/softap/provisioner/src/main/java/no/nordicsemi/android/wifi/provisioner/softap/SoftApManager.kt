@@ -2,76 +2,90 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap
 
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.suspendCancellableCoroutine
+import no.nordicsemi.android.wifi.provisioner.softap.Open.passphrase
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toApi
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ConnectionInfoDomain
-import javax.inject.Inject
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.wire.WireConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Created by Roshan Rajaratnam on 23/02/2024.
  *
  * Entry point to the SoftApManager
- * @property connectivityManager Android's connectivity manager.
- * @property nsdListener         Network service discovery listener.
- * @property wifiService         WifiServer api.
- * @property coroutineDispatcher Coroutine dispatcher.
+ *
  * @constructor Create empty SoftApManager.
  */
-class SoftApManager @Inject constructor(
-    private val connectivityManager: ConnectivityManager,
-    private val nsdListener: NetworkServiceDiscoveryListener,
-    private val wifiService: WifiService,
-    private val coroutineDispatcher: CoroutineDispatcher
+class SoftApManager(
+    context: Context,
+    hostNameConfiguration: HostNameConfiguration = HostNameConfiguration(),
 ) {
+    var softAp: SoftAp? = null
+        private set
+
     private val _discoveredServices = mutableListOf<NsdServiceInfo>()
     private var discoveredService: NsdServiceInfo? = null
-    private val mutex = Mutex(true)
     private var isConnected = false
 
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+    private val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private val nsdManager = context.getSystemService(Context.NSD_SERVICE) as NsdManager
+    private val nsdListener = NetworkServiceDiscoveryListener(nsdManager, serviceName = hostNameConfiguration.serviceName)
 
-        @RequiresApi(Build.VERSION_CODES.M)
-        override fun onAvailable(network: Network) {
-            super.onAvailable(network)
-            // do success processing here..
-            try {
-                if (connectivityManager.bindProcessToNetwork(network)) {
-                    isConnected = true
-                    Log.d(
-                        "AAAA", "Link properties ${
-                            connectivityManager.getLinkProperties(network)?.toString()
-                        }"
-                    )
-                } else {
-                    disconnect()
-                }
-            } catch (e: Exception) {
-                disconnect()
-                Log.e("AAAA", "Error: $e")
-            } finally {
-                mutex.unlock()
-            }
-        }
-
-        override fun onUnavailable() {
-            // do failure processing here..
-            mutex.unlock()
-            Log.d("AAAA", "Something went wrong!")
+    private val interceptor = HttpLoggingInterceptor().apply {
+        level = when {
+            BuildConfig.DEBUG -> HttpLoggingInterceptor.Level.BODY
+            else -> HttpLoggingInterceptor.Level.NONE
         }
     }
+
+    private val hostNameVerifier = HostnameVerifier { hostname, _ ->
+        hostname.contains(hostNameConfiguration.serviceName)
+    }
+
+    private val client = OkHttpClient.Builder()
+        .sslSocketFactory(
+            hostNameConfiguration.handshakeCertificates.sslSocketFactory(),
+            hostNameConfiguration.handshakeCertificates.trustManager
+        )
+        .addInterceptor(interceptor)
+        .hostnameVerifier { hostname, _ ->
+            hostname.contains(hostNameConfiguration.serviceName)
+        }
+        .followRedirects(false)
+        .dns {
+            nsdListener.discoveredIps
+        }
+        .readTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
+        .build()
+
+    private val softApProvisioningService = Retrofit.Builder()
+        .baseUrl(hostNameConfiguration.hostName)
+        .client(client)
+        .addConverterFactory(WireConverterFactory.create())
+        .build()
+        .create(SoftApProvisioningService::class.java)
+
+    private lateinit var networkCallback: ConnectivityManager.NetworkCallback
 
     /**
      * Connects to an unprovisioned wifi device by establishing a temporary wifi network connection
@@ -81,65 +95,110 @@ class SoftApManager @Inject constructor(
      * the SSID or the passphrase of the network that the device must be provisioned into.
      */
     @RequiresApi(Build.VERSION_CODES.Q)
-    suspend fun connect(ssid: String, password: String = ""): SoftAp? {
-        isConnected = false
-        val specifier = WifiNetworkSpecifier.Builder()
+    suspend fun connect(
+        ssid: String,
+        passphraseConfiguration: PassphraseConfiguration,
+    ): Unit = suspendCancellableCoroutine { continuation ->
+        networkCallback = object : ConnectivityManager.NetworkCallback() {
+
+            @RequiresApi(Build.VERSION_CODES.Q)
+            override fun onAvailable(network: Network) {
+                // do success processing here..\
+                if (connectivityManager.bindProcessToNetwork(network)) {
+                    isConnected = true
+                    softAp = SoftAp(
+                        ssid = ssid,
+                        passphraseConfiguration = passphraseConfiguration
+                    )
+                    continuation.resume(Unit)
+                } else {
+                    disconnect()
+                    continuation.resumeWithException(
+                        exception = IllegalStateException("Failed to bind to the network.")
+                    )
+                }
+            }
+
+            override fun onUnavailable() {
+                // do failure processing here..
+                disconnect()
+                continuation.resumeWithException(
+                    exception = IllegalStateException("Failed to bind to the network.")
+                )
+            }
+        }
+
+        val wifNetworkBuilder = WifiNetworkSpecifier.Builder()
             .setSsid(ssid)
-            .setWpa2Passphrase(password)
-            .build()
+
+        val networkSpecifier = when (passphraseConfiguration) {
+            is Open -> wifNetworkBuilder.setWpa2Passphrase(passphrase)
+            is Wpa2Passphrase -> wifNetworkBuilder.setWpa2Passphrase(passphrase)
+            is Wpa3Passphrase -> wifNetworkBuilder.setWpa3Passphrase(passphrase)
+        }.build()
 
         val request = NetworkRequest.Builder()
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .setNetworkSpecifier(specifier)
+            .setNetworkSpecifier(networkSpecifier)
             .build()
-        connectivityManager.requestNetwork(request, networkCallback)
-        mutex.lock()
-        val service = discoverServices()
-        return if (isConnected) SoftAp(ssid = ssid, password = password).apply {
-            connectionInfoDomain = ConnectionInfoDomain(ipv4Address = service.host.toString())
-        } else null
-    }
 
-    /**
-     * Disconnects from an unprovisioned or a newly provisioned device.
-     */
-    fun disconnect() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            connectivityManager.bindProcessToNetwork(null)
+        connectivityManager.requestNetwork(request, networkCallback)
+
+        // Invoked if the coroutine calling this suspend function is cancelled.
+        continuation.invokeOnCancellation {
+            connectivityManager.unregisterNetworkCallback(networkCallback)
         }
-        connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
     /**
      * Discover services on the network.
+     *
+     * @param nsdServiceInfo NsdServiceInfo instance.
      */
-    suspend fun discoverServices(): NsdServiceInfo {
-        val serviceInfo = nsdListener.discoverServices()
-        nsdListener.stopDiscovery()
-        return serviceInfo!!
-    }
-
-    /**
-     * Stops the network service discovery.
-     */
-    private fun stopDiscovery() {
-        nsdListener.stopDiscovery()
+    suspend fun discoverServices(
+        nsdServiceInfo: NsdServiceInfo = NsdServiceInfo()
+            .apply {
+                serviceName = "wifiprov"
+                serviceType = "_http._tcp."
+            }
+    ) {
+        val serviceInfo = nsdListener
+            .discoverServices(nsdServiceInfo = nsdServiceInfo)
+        softAp?.apply {
+            connectionInfoDomain = ConnectionInfoDomain(ipv4Address = serviceInfo.host.toString())
+        }
     }
 
     /**
      * Lists the SSIDs scanned by the nRF7002 device
      */
-    suspend fun listSsids() = withContext(coroutineDispatcher) {
-        wifiService.listSsids().toDomain()
-    }
+    suspend fun listSsids() = softApProvisioningService.listSsids().toDomain()
 
     /**
      * Provisions the nRF7002 device a wifi network with the given credentials.
      *
      * @param config Credentials of the wifi network.
      */
-    suspend fun provision(config: WifiConfigDomain) = withContext(coroutineDispatcher) {
-        wifiService.provision(config.toApi())
+    suspend fun provision(config: WifiConfigDomain) =
+        softApProvisioningService.provision(config.toApi())
+
+    /**
+     * Disconnects from an unprovisioned or a newly provisioned device.
+     */
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun disconnect() {
+        isConnected = false
+        connectivityManager.bindProcessToNetwork(null)
+        connectivityManager.unregisterNetworkCallback(networkCallback)
+    }
+
+    /**
+     * Did provisioning complete.
+     *
+     * @param nsdServiceInfo NsdServiceInfo instance.
+     */
+    suspend fun verify(nsdServiceInfo: NsdServiceInfo) {
+        discoverServices(nsdServiceInfo = nsdServiceInfo)
     }
 }

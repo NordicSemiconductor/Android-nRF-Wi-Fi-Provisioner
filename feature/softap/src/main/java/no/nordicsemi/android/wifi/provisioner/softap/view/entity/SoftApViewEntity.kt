@@ -18,12 +18,17 @@ data class SoftApViewEntity(
     override val provisioningStatus: Resource<WifiConnectionStateDomain>? = null,
     override val isConnected: Boolean = true,
     val isAuthorized: Boolean = false,
+    val showSoftApDialog: Boolean = false,
+    val isNetworkServiceDiscoveryCompleted: Boolean? = null
 ) : ViewEntity {
+
+    override fun hasFinished(): Boolean {
+        val status = (provisioningStatus as? Success)?.data
+        return status == WifiConnectionStateDomain.DISCONNECTED
+    }
 
     override fun hasFinishedWithSuccess(): Boolean {
         val status = (provisioningStatus as? Success)?.data
-        return (isConnected
-                && status == WifiConnectionStateDomain.CONNECTED)
-                || status == WifiConnectionStateDomain.CONNECTION_FAILED
+        return status == WifiConnectionStateDomain.CONNECTED
     }
 }

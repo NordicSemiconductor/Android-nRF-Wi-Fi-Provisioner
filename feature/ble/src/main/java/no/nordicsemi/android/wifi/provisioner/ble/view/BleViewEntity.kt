@@ -74,7 +74,7 @@ data class BleViewEntity(
                 || unprovisioningStatus is Loading
     }
 
-    fun hasFinished(): Boolean {
+    override fun hasFinished(): Boolean {
         val status = (provisioningStatus as? Success)?.data
         return !isConnected
                 || status == WifiConnectionStateDomain.CONNECTED

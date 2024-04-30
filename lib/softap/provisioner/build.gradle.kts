@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.nordic.library)
-    alias(libs.plugins.nordic.hilt)
+    alias(libs.plugins.nordic.kotlin)
     alias(libs.plugins.wire)
 }
 
@@ -10,6 +10,9 @@ android {
 
 dependencies {
     api(project(":lib:domain"))
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.annotation)
+    implementation(libs.nordic.core)
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalars)

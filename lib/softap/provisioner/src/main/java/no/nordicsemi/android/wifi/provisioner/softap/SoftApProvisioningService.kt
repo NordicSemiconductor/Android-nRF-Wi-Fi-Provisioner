@@ -12,7 +12,7 @@ import retrofit2.http.POST
 /**
  * Created by Roshan Rajaratnam on 19/02/2024.
  */
-interface WifiService {
+interface SoftApProvisioningService {
 
     @Headers("Content-Type: application/x-protobuf")
     @GET("prov/networks")

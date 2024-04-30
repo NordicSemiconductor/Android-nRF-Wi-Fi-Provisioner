@@ -31,9 +31,14 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.viewmodel
 
+import android.net.nsd.NsdServiceInfo
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,10 +49,12 @@ import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.NavigationResult
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
+import no.nordicsemi.android.wifi.provisioner.softap.Open
+import no.nordicsemi.android.wifi.provisioner.softap.PassphraseConfiguration
 import no.nordicsemi.android.wifi.provisioner.softap.SoftAp
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
-import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApConnectorDestination
+import no.nordicsemi.android.wifi.provisioner.softap.view.OnSoftApConnectEvent
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApWifiScannerDestination
 import no.nordicsemi.android.wifi.provisioner.softap.view.entity.SoftApViewEntity
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
@@ -73,16 +80,12 @@ class SoftApProvisioningViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(SoftApViewEntity())
     val state = _state.asStateFlow()
+    private val nsdServiceInfo = NsdServiceInfo().apply {
+        serviceName = "wifiprov"
+        serviceType = "_http._tcp."
+    }
 
     init {
-        navigationManager.resultFrom(SoftApConnectorDestination)
-            .mapNotNull { it as? NavigationResult.Success }
-            .onEach { result ->
-                result.value?.let {
-                    installSoftApDevice(it)
-                }
-            }
-            .launchIn(viewModelScope)
         navigationManager.resultFrom(SoftApWifiScannerDestination)
             .mapNotNull { it as? NavigationResult.Success }
             .onEach { installWifi(it.value) }
@@ -93,7 +96,11 @@ class SoftApProvisioningViewModel @Inject constructor(
         when (event) {
             OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
-            OnSelectDeviceClickEvent -> requestWifiDevice()
+            OnSelectDeviceClickEvent -> provisionNextDevice()
+            is OnSoftApConnectEvent ->
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                    connect(ssid = event.ssid, passphraseConfiguration = event.passphraseConfiguration)
+                }
             OnSelectWifiEvent -> navigationManager.navigateTo(SoftApWifiScannerDestination)
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
@@ -103,12 +110,7 @@ class SoftApProvisioningViewModel @Inject constructor(
     }
 
     private fun provisionNextDevice() {
-        viewModelScope.launch {
-            launch { release() }
-            requestSoftApDevice()
-            delay(500) //nasty delay to prevent screen change before navigation
-            _state.value = SoftApViewEntity()
-        }
+        requestSoftApDevice()
     }
 
     private fun showPasswordDialog() {
@@ -129,7 +131,9 @@ class SoftApProvisioningViewModel @Inject constructor(
     private fun release() {
         try {
             _state.value.device?.let {
-                softApManager.disconnect()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    softApManager.disconnect()
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -137,12 +141,8 @@ class SoftApProvisioningViewModel @Inject constructor(
     }
 
     private fun requestSoftApDevice() {
-        navigationManager.navigateTo(SoftApConnectorDestination)
-    }
-
-    private fun requestWifiDevice() {
         release()
-        navigationManager.navigateTo(SoftApConnectorDestination)
+        _state.value = SoftApViewEntity(showSoftApDialog = true)
     }
 
     private fun installWifi(wifiData: WifiData) {
@@ -161,22 +161,39 @@ class SoftApProvisioningViewModel @Inject constructor(
         _state.value = _state.value.copy(password = password)
     }
 
-    private fun provision() {
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun connect(
+        ssid: String = "0018F0-nrf-wifiprov",
+        passphraseConfiguration: PassphraseConfiguration = Open
+    ) {
         viewModelScope.launch {
-            val state = _state.value
-            val network = state.network
-            network?.let {
-                softApManager.provision(it.toConfig()).also { response ->
+            softApManager.run {
+                connect(ssid = ssid, passphraseConfiguration = passphraseConfiguration)
+                _state.value = _state.value.copy(isNetworkServiceDiscoveryCompleted = false)
+                discoverServices()
+                _state.value = SoftApViewEntity(device = softAp, isNetworkServiceDiscoveryCompleted = true)
+            }
+        }
+    }
+
+    private fun provision() {
+        val state = _state.value
+        val device = state.device ?: return
+        val network = state.network ?: return
+        val handler = CoroutineExceptionHandler { _, throwable ->
+            Log.d("AAAA", "Provisioning failed $throwable")
+            _state.value = state.copy(
+                provisioningStatus = Resource.createError(throwable)
+            )
+        }
+        viewModelScope.launch(handler) {
+            softApManager.run {
+                provision(config = network.toConfig()).also { response ->
                     if (response.isSuccessful) {
-                        val nsdServiceInfo = softApManager.discoverServices()
                         _state.value = state.copy(
-                            device = state.device?.apply {
-                                connectionInfoDomain = connectionInfoDomain?.copy(
-                                    ipv4Address = nsdServiceInfo.host.toString()
-                                )
-                            },
+                            device = softApManager.softAp,
                             provisioningStatus = Resource.createSuccess(
-                                data = WifiConnectionStateDomain.CONNECTED
+                                data = WifiConnectionStateDomain.DISCONNECTED
                             )
                         )
                     } else {
@@ -194,9 +211,6 @@ class SoftApProvisioningViewModel @Inject constructor(
     private fun WifiData.toConfig(): WifiConfigDomain {
         val state = _state.value
         val wifiInfo = selectedChannel?.wifiInfo ?: channelFallback.wifiInfo
-        return WifiConfigDomain(
-            wifiInfo,
-            state.password
-        )
+        return WifiConfigDomain(info = wifiInfo, passphrase = state.password)
     }
 }

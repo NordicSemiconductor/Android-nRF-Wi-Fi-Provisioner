@@ -20,6 +20,6 @@ private fun WifiNotSelectedSection(
         isEditable = false,
         description = "Please select a device to provision",
         onClick = onClick,
-        buttonText = stringResource(id = R.string.setup_wifi)
+        buttonText = stringResource(id = R.string.soft_ap)
     )
 }

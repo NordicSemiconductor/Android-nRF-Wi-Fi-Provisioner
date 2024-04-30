@@ -18,9 +18,6 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerVie
  * Created by Roshan Rajaratnam on 14/02/2024.
  */
 val SoftApProvisionerDestination = createSimpleDestination("softap-provisioner-destination")
-val SoftApConnectorDestination = createDestination<Unit, SoftAp?>(
-    "softap-connector-destination"
-)
 val SoftApWifiScannerDestination = createDestination<Unit, WifiData>(
     name = "wifi-access-points-softap-destination"
 )
@@ -31,9 +28,6 @@ val SoftApProvisionerDestinations = listOf(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             SoftApProvisioningScreen()
         }
-    },
-    defineDialogDestination(SoftApConnectorDestination) {
-        SoftApConnectorScreen()
     },
     defineDestination(SoftApWifiScannerDestination) {
         val viewModel = hiltViewModel<SoftApWifiScannerViewModel>()
