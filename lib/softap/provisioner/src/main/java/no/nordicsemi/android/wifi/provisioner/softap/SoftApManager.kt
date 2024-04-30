@@ -48,7 +48,7 @@ class SoftApManager(
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val nsdManager = context.getSystemService(Context.NSD_SERVICE) as NsdManager
-    private val nsdListener = NetworkServiceDiscoveryListener(nsdManager, serviceName = hostNameConfiguration.serviceName)
+    private val nsdListener = NetworkServiceDiscoveryListener(nsdManager)
 
     private val interceptor = HttpLoggingInterceptor().apply {
         level = when {

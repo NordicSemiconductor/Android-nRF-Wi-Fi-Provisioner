@@ -15,7 +15,7 @@ import kotlin.coroutines.resumeWithException
  * @property discoveredIps List of discovered IP addresses of the network services. Note that this
  *                         list could be empty if no services are discovered.
  */
-class NetworkServiceDiscoveryListener internal constructor(private val nsdManager: NsdManager, private val serviceName: String) {
+class NetworkServiceDiscoveryListener internal constructor(private val nsdManager: NsdManager) {
     private val _discoveredIps = mutableListOf<InetAddress>()
     val discoveredIps: List<InetAddress>
         get() = _discoveredIps
@@ -57,7 +57,7 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
             override fun onServiceFound(service: NsdServiceInfo) {
                 // A service was found! Do something with it.
                 Log.d("AAAA", "Service discovered $service")
-                if (service.serviceName == serviceName) {
+                if (service.serviceName == nsdServiceInfo.serviceName) {
                     Log.d("AAAA", "Resolving service $service")
                     nsdManager.resolveService(service, resolveListener)
                 }

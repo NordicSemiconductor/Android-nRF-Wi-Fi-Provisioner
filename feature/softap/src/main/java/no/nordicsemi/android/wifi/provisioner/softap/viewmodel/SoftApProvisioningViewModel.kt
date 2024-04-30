@@ -79,10 +79,6 @@ class SoftApProvisioningViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(SoftApViewEntity())
     val state = _state.asStateFlow()
-    private val nsdServiceInfo = NsdServiceInfo().apply {
-        serviceName = "wifiprov"
-        serviceType = "_http._tcp."
-    }
 
     init {
         navigationManager.resultFrom(SoftApWifiScannerDestination)
