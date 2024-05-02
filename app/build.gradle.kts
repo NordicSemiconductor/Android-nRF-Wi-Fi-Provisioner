@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":feature:ble"))
     implementation(project(":feature:softap"))
     implementation(project(":feature:common"))
+    implementation(project(":feature:ui"))
     implementation(project(":lib:ble:provisioner"))
     implementation(project(":lib:softap:provisioner"))
 

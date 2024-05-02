@@ -42,7 +42,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -50,7 +50,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -60,58 +59,63 @@ import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewMod
 import no.nordicsemi.android.wifi.provisioner.app.R
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestination
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestination
+import no.nordicsemi.android.wifi.provisioner.ui.ProvisionOverBle
+import no.nordicsemi.android.wifi.provisioner.ui.ProvisionOverWifi
 
 @Composable
 fun HomeScreen() {
     val vm: SimpleNavigationViewModel = hiltViewModel()
 
-    Scaffold(
-        containerColor = colorResource(id = no.nordicsemi.android.common.theme.R.color.appBarColor),
-    ) { innerPadding ->
+    Scaffold(containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues = innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.size(16.dp))
             Text(
                 text = stringResource(id = R.string.label_ble_provisioner),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.ExtraBold
             )
-            Row(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .weight(weight = 1f),
-                horizontalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_nrf70),
-                    contentDescription = stringResource(id = R.string.ic_nrf70),
+
+                Row(
                     modifier = Modifier
-                        .widthIn(max = 200.dp)
-                        .padding(8.dp)
-                        .background(Color.White)
-                )
-            }
-            Row(modifier = Modifier.fillMaxWidth(), Arrangement.SpaceEvenly) {
-                Button(onClick = { vm.navigateTo(BleProvisioningDestination) }) {
-                    Text(text = "Provision over BLE")
+                        .fillMaxWidth()
+                    /*.weight(weight = 1f)*/,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_nrf70),
+                        contentDescription = stringResource(id = R.string.ic_nrf70),
+                        modifier = Modifier
+                            .widthIn(max = 200.dp)
+                            .padding(8.dp)
+                            .background(Color.White)
+                    )
                 }
-                Button(onClick = { vm.navigateTo(SoftApProvisionerDestination) }) {
-                    Text(text = "Provision over Wi-Fi")
+                LazyColumn {
+                    item {
+                        ProvisionOverBle {
+                            vm.navigateTo(BleProvisioningDestination)
+                        }
+                    }
+                    item {
+                        ProvisionOverWifi {
+                            vm.navigateTo(SoftApProvisionerDestination)
+                        }
+                    }
                 }
+                Spacer(modifier = Modifier.size(16.dp))
             }
-            Spacer(modifier = Modifier.size(16.dp))
         }
     }
-}
-
-@Composable
-private fun SectionTitle(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.secondary
-    )
 }
