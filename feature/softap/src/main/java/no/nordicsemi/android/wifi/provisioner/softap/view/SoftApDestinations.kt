@@ -1,7 +1,6 @@
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -20,7 +19,6 @@ val SoftApWifiScannerDestination = createDestination<Unit, WifiData>(
     name = "wifi-access-points-softap-destination"
 )
 
-@RequiresApi(Build.VERSION_CODES.Q)
 val SoftApProvisionerDestinations = listOf(
     defineDestination(SoftApProvisionerDestination) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

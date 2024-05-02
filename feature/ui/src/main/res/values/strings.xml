@@ -95,10 +95,10 @@
 
     <string name="persistent_storage">Persistent storage</string>
 
-    <string name="provision_over_ble">Provision over BLE</string>
+    <string name="provision_over_ble">Provision over Bluetooth LE</string>
     <string name="provision_over_ble_rationale">This mode allows provisioning a nRF700x device to a
-        Wi-Fi network by providing the Wi-Fi credentials over BLE, by directly connecting to the
-        device using BLE
+        Wi-Fi network by providing the Wi-Fi credentials, directly connecting to the
+        device using Bluetooth LE
     </string>
     <string name="provision_over_wi_fi">Provision over Wi-Fi</string>
     <string name="provision_over_wifi_rationale">This mode allows provisioning a nRF700x device to a

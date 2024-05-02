@@ -49,9 +49,7 @@ class MainActivity : NordicActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         enableEdgeToEdge()
-
         setContent {
             NordicTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {

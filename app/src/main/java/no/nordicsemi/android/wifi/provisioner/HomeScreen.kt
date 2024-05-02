@@ -34,59 +34,60 @@ package no.nordicsemi.android.wifi.provisioner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
+import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.app.R
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestination
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestination
 import no.nordicsemi.android.wifi.provisioner.ui.ProvisionOverBle
 import no.nordicsemi.android.wifi.provisioner.ui.ProvisionOverWifi
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val vm: SimpleNavigationViewModel = hiltViewModel()
-
-    Scaffold(containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
-        Column(
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
+            NordicAppBar(
+                text = stringResource(id = R.string.label_ble_provisioner)
+            )
+        },
+    ) { innerPadding ->
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues = innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Horizontal,
+                    ),
+                ),
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Spacer(modifier = Modifier.size(16.dp))
-            Text(
-                text = stringResource(id = R.string.label_ble_provisioner),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.ExtraBold
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(weight = 1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-
+            item {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,19 +103,20 @@ fun HomeScreen() {
                             .background(Color.White)
                     )
                 }
-                LazyColumn {
-                    item {
-                        ProvisionOverBle {
-                            vm.navigateTo(BleProvisioningDestination)
-                        }
-                    }
-                    item {
-                        ProvisionOverWifi {
-                            vm.navigateTo(SoftApProvisionerDestination)
-                        }
-                    }
+            }
+            /*item {
+                NordicText(
+                    text = stringResource(id = R.string.app_info),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }*/
+            item {
+                ProvisionOverBle {
+                    vm.navigateTo(BleProvisioningDestination)
                 }
-                Spacer(modifier = Modifier.size(16.dp))
+                ProvisionOverWifi {
+                    vm.navigateTo(SoftApProvisionerDestination)
+                }
             }
         }
     }
