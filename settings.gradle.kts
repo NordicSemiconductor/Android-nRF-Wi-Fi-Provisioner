@@ -57,10 +57,12 @@ rootProject.name = "Android-nRF-Wifi-Provisioner"
 include(":app")
 include(":feature:ble")
 include(":feature:softap")
+include(":feature:nfc")
 include(":feature:ui")
 include(":feature:common")
 include(":lib:ble")
 include(":lib:softap")
+include(":lib:nfc")
 include(":lib:domain")
 
 //if (file('../Android-Common-Libraries').exists()) {

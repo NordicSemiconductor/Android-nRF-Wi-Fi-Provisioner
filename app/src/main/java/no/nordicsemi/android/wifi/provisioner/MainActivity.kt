@@ -45,6 +45,7 @@ import no.nordicsemi.android.common.navigation.NavigationView
 import no.nordicsemi.android.common.theme.NordicActivity
 import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestinations
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.view.NfcProvisionerDestinations
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestinations
 
 @AndroidEntryPoint
@@ -60,7 +61,8 @@ class MainActivity : NordicActivity() {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     NavigationView(
                         destinations = (HomeDestination +
-                                BleProvisioningDestinations).run {
+                                BleProvisioningDestinations +
+                                NfcProvisionerDestinations).run {
                                     // Soft AP is available on Android 10 and newer.
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                         this + SoftApProvisionerDestinations
