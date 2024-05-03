@@ -9,17 +9,21 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
+import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import no.nordicsemi.android.wifi.provisioner.softap.Open.passphrase
+import no.nordicsemi.android.wifi.provisioner.softap.domain.ScanResultsDomain
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toApi
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ConnectionInfoDomain
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.wire.WireConverterFactory
 import java.util.concurrent.TimeUnit
@@ -43,8 +47,10 @@ class SoftApManager(
 
     private val _discoveredServices = mutableListOf<NsdServiceInfo>()
     private var discoveredService: NsdServiceInfo? = null
-    private var isConnected = false
+    private var isBoundToNetwork = false
 
+    private val wifiManager =
+        context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val nsdManager = context.getSystemService(Context.NSD_SERVICE) as NsdManager
@@ -93,19 +99,29 @@ class SoftApManager(
      *
      * Note: The SSID and the password are the ones used to connect to the unprovisioned device, not
      * the SSID or the passphrase of the network that the device must be provisioned into.
+     *
+     * @throws WifiNotEnabledException if the wifi is not enabled.
+     * @throws FailedToBindToNetwork if the device failed to bind to the connected wifi network.
+     *                               Call [connect] to connect to the softap and bind to the network.
      */
     @RequiresApi(Build.VERSION_CODES.Q)
+    @Throws(WifiNotEnabledException::class, FailedToBindToNetwork::class)
     suspend fun connect(
         ssid: String,
         passphraseConfiguration: PassphraseConfiguration,
     ): Unit = suspendCancellableCoroutine { continuation ->
+        if (!wifiManager.isWifiEnabled)
+            continuation.resumeWithException(
+                exception = WifiNotEnabledException
+            )
+
         networkCallback = object : ConnectivityManager.NetworkCallback() {
 
             @RequiresApi(Build.VERSION_CODES.Q)
             override fun onAvailable(network: Network) {
                 // do success processing here..\
                 if (connectivityManager.bindProcessToNetwork(network)) {
-                    isConnected = true
+                    isBoundToNetwork = true
                     softAp = SoftAp(
                         ssid = ssid,
                         passphraseConfiguration = passphraseConfiguration
@@ -114,7 +130,7 @@ class SoftApManager(
                 } else {
                     disconnect()
                     continuation.resumeWithException(
-                        exception = IllegalStateException("Failed to bind to the network.")
+                        exception = FailedToBindToNetwork
                     )
                 }
             }
@@ -127,7 +143,6 @@ class SoftApManager(
                 )
             }
         }
-
         val wifNetworkBuilder = WifiNetworkSpecifier.Builder()
             .setSsid(ssid)
 
@@ -155,6 +170,9 @@ class SoftApManager(
      * Discover services on the network.
      *
      * @param nsdServiceInfo NsdServiceInfo instance.
+     * @throws WifiNotEnabledException if the wifi is not enabled.
+     * @throws FailedToBindToNetwork if the device failed to bind to the connected wifi network.
+     *                               Call [connect] to connect to the softap and bind to the network.
      */
     suspend fun discoverServices(
         nsdServiceInfo: NsdServiceInfo = NsdServiceInfo()
@@ -163,6 +181,8 @@ class SoftApManager(
                 serviceType = "_http._tcp."
             }
     ) {
+        require(wifiManager.isWifiEnabled) { throw WifiNotEnabledException }
+        require(isBoundToNetwork) { throw FailedToBindToNetwork }
         val serviceInfo = nsdListener
             .discoverServices(nsdServiceInfo = nsdServiceInfo)
         softAp?.apply {
@@ -171,34 +191,54 @@ class SoftApManager(
     }
 
     /**
-     * Lists the SSIDs scanned by the nRF7002 device
+     * Lists the SSIDs scanned by the nRF700x device
+     *
+     * @return ScanResultsDomain containing the list of SSIDs.
+     * @throws WifiNotEnabledException if the wifi is not enabled.
+     * @throws FailedToBindToNetwork if the device failed to bind to the connected wifi network.
+     *                               Call [connect] to connect to the softap and bind to the network.
      */
-    suspend fun listSsids() = softApProvisioningService.listSsids().toDomain()
+    suspend fun listSsids(): ScanResultsDomain {
+        require(wifiManager.isWifiEnabled) { throw WifiNotEnabledException }
+        require(isBoundToNetwork) { throw FailedToBindToNetwork }
+        return softApProvisioningService.listSsids().toDomain()
+    }
 
     /**
      * Provisions the nRF7002 device a wifi network with the given credentials.
      *
      * @param config Credentials of the wifi network.
+     * @return Response<ResponseBody> received from the device.
+     * @throws WifiNotEnabledException if the wifi is not enabled.
+     * @throws FailedToBindToNetwork if the device failed to bind to the connected wifi network.
+     *                               Call [connect] to connect to the softap and bind to the network.
      */
-    suspend fun provision(config: WifiConfigDomain) =
-        softApProvisioningService.provision(config.toApi()).also {
-            if(it.isSuccessful){
+    suspend fun provision(config: WifiConfigDomain): Response<ResponseBody> {
+        require(wifiManager.isWifiEnabled) { throw WifiNotEnabledException }
+        require(isBoundToNetwork) { throw FailedToBindToNetwork }
+        return softApProvisioningService.provision(config.toApi()).also {
+            if (it.isSuccessful) {
                 softAp?.wifiConfigDomain = config
             }
         }
+    }
 
     /**
      * Disconnects from an unprovisioned or a newly provisioned device.
+     * @throws WifiNotEnabledException if the wifi is not enabled.
+     * @throws FailedToBindToNetwork if the device failed to bind to the connected wifi network.
+     *                               Call [connect] to connect to the softap and bind to the network.
      */
     @RequiresApi(Build.VERSION_CODES.Q)
     fun disconnect() {
-        isConnected = false
+        isBoundToNetwork = false
         connectivityManager.bindProcessToNetwork(null)
         connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
     /**
-     * Did provisioning complete.
+     * Verifies if the provisioning completed successfully. Note for this to work, both the devices
+     * and provisioning app has to be connected to the same network.
      *
      * @param nsdServiceInfo NsdServiceInfo instance.
      */
