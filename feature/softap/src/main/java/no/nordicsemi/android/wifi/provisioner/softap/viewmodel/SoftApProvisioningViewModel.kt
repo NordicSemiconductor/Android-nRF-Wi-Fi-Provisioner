@@ -93,7 +93,10 @@ class SoftApProvisioningViewModel @Inject constructor(
             OnSelectDeviceClickEvent -> provisionNextDevice()
             is OnSoftApConnectEvent ->
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                    connect(ssid = event.ssid, passphraseConfiguration = event.passphraseConfiguration)
+                    connect(
+                        ssid = event.ssid,
+                        passphraseConfiguration = event.passphraseConfiguration
+                    )
                 }
             OnSelectWifiEvent -> navigationManager.navigateTo(SoftApWifiScannerDestination)
             OnProvisionClickEvent -> provision()
