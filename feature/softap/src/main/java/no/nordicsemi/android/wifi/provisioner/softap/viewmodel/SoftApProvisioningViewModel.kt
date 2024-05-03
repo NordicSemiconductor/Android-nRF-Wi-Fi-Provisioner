@@ -49,7 +49,6 @@ import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.wifi.provisioner.softap.Open
 import no.nordicsemi.android.wifi.provisioner.softap.PassphraseConfiguration
-import no.nordicsemi.android.wifi.provisioner.softap.SoftAp
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.view.OnSoftApConnectEvent
