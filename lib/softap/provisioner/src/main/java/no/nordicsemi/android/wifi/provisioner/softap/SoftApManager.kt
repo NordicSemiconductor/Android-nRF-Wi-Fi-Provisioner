@@ -4,7 +4,6 @@ package no.nordicsemi.android.wifi.provisioner.softap
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.LinkAddress
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
@@ -20,7 +19,6 @@ import no.nordicsemi.android.wifi.provisioner.softap.domain.ScanResultsDomain
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toApi
 import no.nordicsemi.android.wifi.provisioner.softap.domain.toDomain
-import no.nordicsemi.kotlin.wifi.provisioner.domain.ConnectionInfoDomain
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -262,8 +260,8 @@ class SoftApManager(
             isConnected = false
             isBoundToNetwork = false
             connectivityManager.bindProcessToNetwork(null)
-            connectivityManager.unregisterNetworkCallback(networkCallback)
         }
+        connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
     /**
