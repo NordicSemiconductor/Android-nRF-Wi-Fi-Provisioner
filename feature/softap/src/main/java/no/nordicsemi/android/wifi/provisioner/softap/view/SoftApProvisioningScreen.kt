@@ -122,7 +122,7 @@ private fun Content(state: SoftApViewEntity, onEvent: (ProvisioningViewEvent) ->
         Spacer(modifier = Modifier.size(12.dp))
 
         state.device?.let {
-            SoftApDevice(it.ssid, it.connectionInfoDomain!!.ipv4Address, true, onEvent)
+            SoftApDevice(it.name, it.connectionInfoDomain!!.ipv4Address, true, onEvent)
         } ?: SoftApDeviceNotSelected(onEvent = onEvent)
 
         Spacer(modifier = Modifier.size(12.dp))

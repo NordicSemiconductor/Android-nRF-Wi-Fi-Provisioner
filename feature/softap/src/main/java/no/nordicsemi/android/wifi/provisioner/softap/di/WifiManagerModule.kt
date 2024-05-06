@@ -1,6 +1,7 @@
 package no.nordicsemi.android.wifi.provisioner.softap.di
 
 import android.content.Context
+import android.net.wifi.WifiManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,10 +15,10 @@ import javax.inject.Singleton
  */
 @Module
 @InstallIn(SingletonComponent::class)
-object SoftApManagerModule {
+object WifiManagerModule {
 
     @Provides
     @Singleton
-    fun provideSoftApManager(@ApplicationContext context: Context) =
-        SoftApManager(context = context)
+    fun provideWifiManager(@ApplicationContext context: Context) =
+        context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 }

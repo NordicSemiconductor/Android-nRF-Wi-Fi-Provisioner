@@ -31,13 +31,15 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.viewmodel
 
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -66,11 +68,13 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectDevice
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
 class SoftApProvisioningViewModel @Inject constructor(
     private val softApManager: SoftApManager,
+    private val wifiManager: WifiManager,
     private val navigationManager: Navigator,
     savedStateHandle: SavedStateHandle,
 ) : SimpleNavigationViewModel(navigator = navigationManager, savedStateHandle) {
@@ -85,18 +89,23 @@ class SoftApProvisioningViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        softApManager.disconnect()
+    }
+
     fun onEvent(event: ProvisioningViewEvent) {
         when (event) {
             OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
             OnSelectDeviceClickEvent -> provisionNextDevice()
-            is OnSoftApConnectEvent ->
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                    connect(
-                        ssid = event.ssid,
-                        passphraseConfiguration = event.passphraseConfiguration
-                    )
-                }
+            is OnSoftApConnectEvent -> {
+                connect(
+                    ssid = event.ssid,
+                    passphraseConfiguration = event.passphraseConfiguration
+                )
+            }
+
             OnSelectWifiEvent -> navigationManager.navigateTo(SoftApWifiScannerDestination)
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
@@ -153,7 +162,6 @@ class SoftApProvisioningViewModel @Inject constructor(
         _state.value = _state.value.copy(password = password)
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     private fun connect(
         ssid: String = "0018F0-nrf-wifiprov",
         passphraseConfiguration: PassphraseConfiguration = Open
@@ -163,7 +171,8 @@ class SoftApProvisioningViewModel @Inject constructor(
                 connect(ssid = ssid, passphraseConfiguration = passphraseConfiguration)
                 _state.value = _state.value.copy(isNetworkServiceDiscoveryCompleted = false)
                 discoverServices()
-                _state.value = SoftApViewEntity(device = softAp, isNetworkServiceDiscoveryCompleted = true)
+                _state.value =
+                    SoftApViewEntity(device = softAp, isNetworkServiceDiscoveryCompleted = true)
             }
         }
     }
@@ -173,11 +182,16 @@ class SoftApProvisioningViewModel @Inject constructor(
         val network = state.network ?: return
         val handler = CoroutineExceptionHandler { _, throwable ->
             Log.d("AAAA", "Provisioning failed $throwable")
-            _state.value = state.copy(
-                provisioningStatus = Resource.createError(throwable)
-            )
+            if (throwable is SocketTimeoutException) {
+                _state.value = state.copy(
+                    device = softApManager.softAp,
+                    provisioningStatus = Resource.createSuccess(
+                        data = WifiConnectionStateDomain.DISCONNECTED
+                    )
+                )
+            }
         }
-        viewModelScope.launch(handler) {
+        viewModelScope.launch(Dispatchers.IO + handler) {
             softApManager.run {
                 provision(config = network.toConfig()).also { response ->
                     if (response.isSuccessful) {
@@ -187,6 +201,8 @@ class SoftApProvisioningViewModel @Inject constructor(
                                 data = WifiConnectionStateDomain.DISCONNECTED
                             )
                         )
+                        // discoverServices()
+                        verify()
                     } else {
                         _state.value = state.copy(
                             provisioningStatus = Resource.createError(
@@ -197,6 +213,9 @@ class SoftApProvisioningViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun isConnectedToTheSameNetwork() {
     }
 
     private fun WifiData.toConfig(): WifiConfigDomain {

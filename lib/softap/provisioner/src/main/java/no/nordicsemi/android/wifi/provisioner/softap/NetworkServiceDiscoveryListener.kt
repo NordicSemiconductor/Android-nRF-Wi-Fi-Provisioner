@@ -4,6 +4,8 @@ import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.util.Log
 import kotlinx.coroutines.suspendCancellableCoroutine
+import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager.Companion.KEY_LINK_ADDR
+import okio.ByteString.Companion.toByteString
 import java.net.InetAddress
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -26,9 +28,10 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
      * @return NsdServiceInfo instance.
      */
     internal suspend fun discoverServices(
+        macAddress: String? = null,
         nsdServiceInfo: NsdServiceInfo
     ): NsdServiceInfo = suspendCancellableCoroutine { continuation ->
-
+        _discoveredIps.clear()
         lateinit var nsdListener: NsdManager.DiscoveryListener
 
         val resolveListener = object : NsdManager.ResolveListener {
@@ -40,13 +43,32 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
             override fun onServiceResolved(serviceInfo: NsdServiceInfo?) {
                 Log.d("AAAA", "Resolve success: $serviceInfo")
                 serviceInfo?.let {
-                    Log.d("AAAA", "Service attributes: ${serviceInfo.attributes}")
-                    _discoveredIps.add(it.host)
-                    continuation.resume(it)
-                    nsdManager.stopServiceDiscovery(nsdListener)
+                    if (macAddress == null) {
+                        Log.d("AAAA", "Service attributes: ${serviceInfo.attributes}")
+                        stopDiscovery(it)
+                    } else {
+                        val mac = serviceInfo.attributes?.get(KEY_LINK_ADDR)?.toByteString()?.utf8()
+                        if (mac == macAddress) {
+                            stopDiscovery(it)
+                        }
+                    }
+                    /*if(nsdServiceInfo.attributes.isEmpty() || nsdServiceInfo.attributes == serviceInfo.attributes){
+                        Log.d("AAAA", "Service attributes: ${serviceInfo.attributes}")
+                        _discoveredIps.add(it.host)
+                        continuation.resume(it)
+                        nsdManager.stopServiceDiscovery(nsdListener)
+                    }*/
                 }
             }
+
+            private fun stopDiscovery(serviceInfo: NsdServiceInfo) {
+                Log.d("AAAA", "Service attributes: ${serviceInfo.attributes}")
+                _discoveredIps.add(serviceInfo.host)
+                continuation.resume(serviceInfo)
+                nsdManager.stopServiceDiscovery(nsdListener)
+            }
         }
+
         nsdListener = object : NsdManager.DiscoveryListener {
 
             // Called as soon as service discovery begins.
@@ -55,8 +77,12 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
             }
 
             override fun onServiceFound(service: NsdServiceInfo) {
-                // A service was found! Do something with it.
                 Log.d("AAAA", "Service discovered $service")
+                // Check if the service name found matches the service name we are looking for.
+                // Service attributes could be null if the service is not yet resolved, so if both [service] and [nsdServiceInfo]
+                // may be have null attributes, we can assume that this device and its services has not been discovered yet.
+                // In the case of [nsdServiceInfo] having attributes, we can assume that the device has been discovered and we can
+                // compare the link address to see if the service is the one we are looking for.
                 if (service.serviceName == nsdServiceInfo.serviceName) {
                     Log.d("AAAA", "Resolving service $service")
                     nsdManager.resolveService(service, resolveListener)
@@ -74,8 +100,10 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
             }
 
             override fun onStartDiscoveryFailed(serviceType: String, errorCode: Int) {
-                Log.e("AAAA", "error on starting service discovery for " +
-                        "$serviceType failed: $errorCode")
+                Log.e(
+                    "AAAA", "error on starting service discovery for " +
+                            "$serviceType failed: $errorCode"
+                )
                 continuation.resumeWithException(
                     Throwable("Discovery failed: Error code:$errorCode")
                 )

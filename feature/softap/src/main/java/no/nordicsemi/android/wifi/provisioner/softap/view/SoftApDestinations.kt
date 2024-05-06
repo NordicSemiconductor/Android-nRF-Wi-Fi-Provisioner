@@ -21,9 +21,7 @@ val SoftApWifiScannerDestination = createDestination<Unit, WifiData>(
 
 val SoftApProvisionerDestinations = listOf(
     defineDestination(SoftApProvisionerDestination) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            SoftApProvisioningScreen()
-        }
+        SoftApProvisioningScreen()
     },
     defineDestination(SoftApWifiScannerDestination) {
         val viewModel = hiltViewModel<SoftApWifiScannerViewModel>()

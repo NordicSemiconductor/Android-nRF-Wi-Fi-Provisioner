@@ -4,6 +4,7 @@ package no.nordicsemi.android.wifi.provisioner.softap
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.LinkAddress
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
@@ -23,6 +24,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.domain.ConnectionInfoDomain
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import okio.ByteString.Companion.toByteString
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.wire.WireConverterFactory
@@ -30,6 +32,7 @@ import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+
 
 /**
  * Created by Roshan Rajaratnam on 23/02/2024.
@@ -48,6 +51,7 @@ class SoftApManager(
     private val _discoveredServices = mutableListOf<NsdServiceInfo>()
     private var discoveredService: NsdServiceInfo? = null
     private var isBoundToNetwork = false
+    private var isConnected = false
 
     private val wifiManager =
         context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -114,13 +118,25 @@ class SoftApManager(
             continuation.resumeWithException(
                 exception = WifiNotEnabledException
             )
-
+        /*
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    wifiManager.isWifiEnabled = true
+                    val wifiConfiguration = WifiConfiguration()
+                    wifiConfiguration.SSID = String.format("\"%s\"", ssid)
+                    wifiConfiguration.preSharedKey = String.format("\"%s\"", passphraseConfiguration.passphrase)
+                    val wifiID = wifiManager.addNetwork(wifiConfiguration)
+                    Log.d("AAAA", "wifiID: $wifiID")
+                    wifiConfiguration.networkId = wifiID
+                    wifiManager.enableNetwork(wifiID, true)
+                } else {
+                }*/
         networkCallback = object : ConnectivityManager.NetworkCallback() {
 
             @RequiresApi(Build.VERSION_CODES.Q)
             override fun onAvailable(network: Network) {
                 // do success processing here..\
                 if (connectivityManager.bindProcessToNetwork(network)) {
+                    isConnected = true
                     isBoundToNetwork = true
                     softAp = SoftAp(
                         ssid = ssid,
@@ -167,12 +183,13 @@ class SoftApManager(
     }
 
     /**
-     * Discover services on the network.
+     * Discovers and resolves the mDNS services on the network.
      *
-     * @param nsdServiceInfo NsdServiceInfo instance.
+     * Note: If the mDNS service on the Soft AP is to be discovered make sure to call [connect]
+     * before calling this method.
+     *
+     * @param nsdServiceInfo NsdServiceInfo to be discovered.
      * @throws WifiNotEnabledException if the wifi is not enabled.
-     * @throws FailedToBindToNetwork if the device failed to bind to the connected wifi network.
-     *                               Call [connect] to connect to the softap and bind to the network.
      */
     suspend fun discoverServices(
         nsdServiceInfo: NsdServiceInfo = NsdServiceInfo()
@@ -182,12 +199,22 @@ class SoftApManager(
             }
     ) {
         require(wifiManager.isWifiEnabled) { throw WifiNotEnabledException }
-        require(isBoundToNetwork) { throw FailedToBindToNetwork }
-        val serviceInfo = nsdListener
-            .discoverServices(nsdServiceInfo = nsdServiceInfo)
+        val serviceInfo = discoverNetworkServices(nsdServiceInfo = nsdServiceInfo)
         softAp?.apply {
-            connectionInfoDomain = ConnectionInfoDomain(ipv4Address = serviceInfo.host.toString())
+            this.serviceInfo = serviceInfo
         }
+    }
+
+    private suspend fun discoverNetworkServices(
+        macAddress: String? = null,
+        nsdServiceInfo: NsdServiceInfo
+    ): NsdServiceInfo {
+        val serviceInfo = nsdListener
+            .discoverServices(
+                macAddress = macAddress,
+                nsdServiceInfo = nsdServiceInfo
+            )
+        return serviceInfo
     }
 
     /**
@@ -231,18 +258,36 @@ class SoftApManager(
      */
     @RequiresApi(Build.VERSION_CODES.Q)
     fun disconnect() {
-        isBoundToNetwork = false
-        connectivityManager.bindProcessToNetwork(null)
-        connectivityManager.unregisterNetworkCallback(networkCallback)
+        if (isConnected) {
+            isConnected = false
+            isBoundToNetwork = false
+            connectivityManager.bindProcessToNetwork(null)
+            connectivityManager.unregisterNetworkCallback(networkCallback)
+        }
     }
 
     /**
-     * Verifies if the provisioning completed successfully. Note for this to work, both the devices
-     * and provisioning app has to be connected to the same network.
+     * Verifies if the provisioning completed successfully.
      *
-     * @param nsdServiceInfo NsdServiceInfo instance.
+     * Note: Before calling this ensure that both the phone and the provisioned soft ap device are
+     * on the same wifi network.
      */
-    suspend fun verify(nsdServiceInfo: NsdServiceInfo) {
-        discoverServices(nsdServiceInfo = nsdServiceInfo)
+    suspend fun verify() = softAp?.takeIf {
+        it.serviceInfo != null
+    }?.let {
+        val serviceInfo = discoverNetworkServices(
+            macAddress = it.macAddress,
+            nsdServiceInfo = NsdServiceInfo().apply {
+                serviceName = "wifiprov"
+                serviceType = "_http._tcp."
+            }
+        )
+        val mac = serviceInfo.attributes[KEY_LINK_ADDR]?.toByteString()?.utf8()
+        mac == it.macAddress
+    } ?: false
+
+
+    companion object {
+        const val KEY_LINK_ADDR = "linkaddr"
     }
 }

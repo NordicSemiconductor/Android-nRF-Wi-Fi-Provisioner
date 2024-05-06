@@ -75,9 +75,9 @@ internal fun SoftApConnectorDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CircularProgressIndicator()
+                    Spacer(modifier = Modifier.size(16.dp))
                     Text(
                         text = stringResource(id = R.string.discovering_services),
-                        modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
