@@ -31,6 +31,7 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.viewmodel
 
+import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.util.Log
@@ -202,7 +203,15 @@ class SoftApProvisioningViewModel @Inject constructor(
                             )
                         )
                         // discoverServices()
-                        verify()
+                        if(verify()){
+                            // wifiManager.network
+                            _state.value = state.copy(
+                                device = softApManager.softAp,
+                                provisioningStatus = Resource.createSuccess(
+                                    data = WifiConnectionStateDomain.CONNECTED
+                                )
+                            )
+                        }
                     } else {
                         _state.value = state.copy(
                             provisioningStatus = Resource.createError(

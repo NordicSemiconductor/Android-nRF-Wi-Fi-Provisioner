@@ -69,31 +69,22 @@ internal fun SoftApConnectorDialog(
                 )
             } else if (!isNetworkServiceDiscoveryCompleted) {
                 showButtons = false
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Text(
-                        text = stringResource(id = R.string.discovering_services),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+                CircularProgressIndicatorContent(
+                    text = stringResource(id = R.string.discovering_services)
+                )
             } else {
                 showButtons = true
             }
         },
         dismissButton = {
-            if(showButtons) {
+            if (showButtons) {
                 TextButton(onClick = dismiss) {
                     Text(text = "Cancel")
                 }
             }
         },
         confirmButton = {
-            if(showButtons) {
+            if (showButtons) {
                 TextButton(onClick = { connect(ssid, Open) }) {
                     Text(text = "Confirm")
                 }
@@ -137,6 +128,22 @@ private fun SoftApConnectorContent(
                     )
                 }
             }
+        )
+    }
+}
+
+@Composable
+fun CircularProgressIndicatorContent(text: String) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator()
+        Spacer(modifier = Modifier.size(16.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

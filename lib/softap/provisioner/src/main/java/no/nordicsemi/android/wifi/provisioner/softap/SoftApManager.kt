@@ -93,7 +93,7 @@ class SoftApManager(
         .build()
         .create(SoftApProvisioningService::class.java)
 
-    private lateinit var networkCallback: ConnectivityManager.NetworkCallback
+    private var networkCallback: ConnectivityManager.NetworkCallback? = null
 
     /**
      * Connects to an unprovisioned wifi device by establishing a temporary wifi network connection
@@ -112,22 +112,10 @@ class SoftApManager(
         ssid: String,
         passphraseConfiguration: PassphraseConfiguration,
     ): Unit = suspendCancellableCoroutine { continuation ->
-        if (!wifiManager.isWifiEnabled)
-            continuation.resumeWithException(
-                exception = WifiNotEnabledException
-            )
-        /*
-                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    wifiManager.isWifiEnabled = true
-                    val wifiConfiguration = WifiConfiguration()
-                    wifiConfiguration.SSID = String.format("\"%s\"", ssid)
-                    wifiConfiguration.preSharedKey = String.format("\"%s\"", passphraseConfiguration.passphrase)
-                    val wifiID = wifiManager.addNetwork(wifiConfiguration)
-                    Log.d("AAAA", "wifiID: $wifiID")
-                    wifiConfiguration.networkId = wifiID
-                    wifiManager.enableNetwork(wifiID, true)
-                } else {
-                }*/
+        if (!wifiManager.isWifiEnabled) {
+            continuation.resumeWithException(exception = WifiNotEnabledException)
+        }
+
         networkCallback = object : ConnectivityManager.NetworkCallback() {
 
             @RequiresApi(Build.VERSION_CODES.Q)
@@ -172,11 +160,11 @@ class SoftApManager(
             .setNetworkSpecifier(networkSpecifier)
             .build()
 
-        connectivityManager.requestNetwork(request, networkCallback)
+        connectivityManager.requestNetwork(request, networkCallback!!)
 
         // Invoked if the coroutine calling this suspend function is cancelled.
         continuation.invokeOnCancellation {
-            connectivityManager.unregisterNetworkCallback(networkCallback)
+            connectivityManager.unregisterNetworkCallback(networkCallback!!)
         }
     }
 
@@ -261,7 +249,10 @@ class SoftApManager(
             isBoundToNetwork = false
             connectivityManager.bindProcessToNetwork(null)
         }
-        connectivityManager.unregisterNetworkCallback(networkCallback)
+
+        networkCallback?.let {
+            connectivityManager.unregisterNetworkCallback(it)
+        }
     }
 
     /**
