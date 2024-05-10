@@ -87,4 +87,20 @@
     <string name="select_wifi">Select Wi-Fi</string>
 
     <string name="persistent_storage">Persistent storage</string>
+
+    <string name="provision_over_ble">Provision over Bluetooth LE</string>
+    <string name="provision_over_ble_rationale">This mode allows provisioning a nRF700x device to a
+        Wi-Fi network by providing the Wi-Fi credentials, directly connecting to the
+        device using Bluetooth LE
+    </string>
+    <string name="provision_over_wi_fi">Provision over Wi-Fi</string>
+    <string name="provision_over_wifi_rationale">This mode allows provisioning a nRF700x device to a
+        Wi-Fi network by providing the Wi-Fi credentials over Wi-Fi by directly connecting to the
+        Soft AP advertised by the device.
+    </string>
+
+    <string name="provision_over_nfc">Provision over NFC</string>
+    <string name="provision_over_nfc_rationale">This mode allows provisioning a nRF700x device to a
+        Wi-Fi network by providing the Wi-Fi credentials via NFC.
+    </string>
 </resources>

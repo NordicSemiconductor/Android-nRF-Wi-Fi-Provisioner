@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.SectionTitle
 
-
 @Composable
 fun ProvisionOverWifiSection(onClick: () -> Unit) {
     OutlinedCard(
@@ -32,6 +31,24 @@ fun ProvisionOverWifiSection(onClick: () -> Unit) {
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = stringResource(R.string.provision_over_wifi_rationale),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Composable
+fun ProvisionOverNfc(onClick: () -> Unit) {
+    OutlinedCard(
+        modifier = Modifier
+            .padding(all = 8.dp)
+            .clickable(onClick = onClick)
+    ) {
+        Column(modifier = Modifier.padding(all = 16.dp)) {
+            SectionTitle(text = stringResource(R.string.provision_over_nfc))
+            Spacer(modifier = Modifier.size(8.dp))
+            Text(
+                text = stringResource(R.string.provision_over_nfc_rationale),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
