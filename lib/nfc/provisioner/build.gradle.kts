@@ -11,5 +11,4 @@ android {
 dependencies {
     implementation(libs.nordic.ble.ktx)
     implementation(libs.nordic.ble.common)
-    api(project(":lib:softap:provisioner"))
 }
