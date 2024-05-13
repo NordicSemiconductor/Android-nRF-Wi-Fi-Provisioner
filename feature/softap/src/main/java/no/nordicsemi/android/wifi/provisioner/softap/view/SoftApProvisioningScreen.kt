@@ -31,6 +31,8 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -66,6 +68,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSele
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordSetDialogEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoftApProvisioningScreen() {

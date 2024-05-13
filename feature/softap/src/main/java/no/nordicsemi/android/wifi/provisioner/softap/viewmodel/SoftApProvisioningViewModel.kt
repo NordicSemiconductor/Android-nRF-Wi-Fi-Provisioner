@@ -31,16 +31,14 @@
 
 package no.nordicsemi.android.wifi.provisioner.softap.viewmodel
 
-import android.net.ConnectivityManager
-import android.net.wifi.WifiManager
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -75,7 +73,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SoftApProvisioningViewModel @Inject constructor(
     private val softApManager: SoftApManager,
-    private val wifiManager: WifiManager,
     private val navigationManager: Navigator,
     savedStateHandle: SavedStateHandle,
 ) : SimpleNavigationViewModel(navigator = navigationManager, savedStateHandle) {
@@ -90,11 +87,13 @@ class SoftApProvisioningViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCleared() {
         super.onCleared()
         softApManager.disconnect()
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun onEvent(event: ProvisioningViewEvent) {
         when (event) {
             OnFinishedEvent -> finish()
@@ -163,6 +162,7 @@ class SoftApProvisioningViewModel @Inject constructor(
         _state.value = _state.value.copy(password = password)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun connect(
         ssid: String = "0018F0-nrf-wifiprov",
         passphraseConfiguration: PassphraseConfiguration = Open
@@ -222,9 +222,6 @@ class SoftApProvisioningViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun isConnectedToTheSameNetwork() {
     }
 
     private fun WifiData.toConfig(): WifiConfigDomain {

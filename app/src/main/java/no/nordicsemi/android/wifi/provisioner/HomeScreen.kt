@@ -31,6 +31,7 @@
 
 package no.nordicsemi.android.wifi.provisioner
 
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -114,8 +115,10 @@ fun HomeScreen() {
                 ProvisionOverBle {
                     vm.navigateTo(BleProvisioningDestination)
                 }
-                ProvisionOverWifi {
-                    vm.navigateTo(SoftApProvisionerDestination)
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                    ProvisionOverWifi {
+                        vm.navigateTo(SoftApProvisionerDestination)
+                    }
                 }
             }
         }
