@@ -39,6 +39,9 @@ internal class NfcProvisioningViewModel @Inject constructor(
             }
 
             OnBackClickEvent -> navigator.navigateUp()
+            is OnNetworkSelectedEvent -> {
+                // Navigate to connect to the selected network.
+            }
         }
     }
 
