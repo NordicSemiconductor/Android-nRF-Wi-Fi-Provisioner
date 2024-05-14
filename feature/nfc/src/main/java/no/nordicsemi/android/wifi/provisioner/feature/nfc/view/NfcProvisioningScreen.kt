@@ -1,5 +1,8 @@
 package no.nordicsemi.android.wifi.provisioner.feature.nfc.view
 
+import android.app.Activity
+import android.net.wifi.ScanResult
+import android.nfc.NdefMessage
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
@@ -30,12 +33,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -43,15 +48,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import no.nordicsemi.android.common.permissions.nfc.RequireNfc
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireLocationForWifi
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireWifi
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.AskForPassword
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.Home
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.NfcManagerViewModel
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.NfcProvisioningViewEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.NfcProvisioningViewModel
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.OnBackClickEvent
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.OnPasswordConfirmedEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.OnScanClickEvent
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.Provisioning
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.Scan
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -61,6 +71,8 @@ internal fun NfcProvisioningScreen() {
     val viewModel: NfcProvisioningViewModel = hiltViewModel()
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val onEvent: (NfcProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
+    var openPasswordDialog by remember { mutableStateOf(false) }
+    var scanResult: ScanResult? = null
 
     RequireWifi {
         RequireLocationForWifi {
@@ -76,18 +88,143 @@ internal fun NfcProvisioningScreen() {
                 )
                 // Show Content.
                 when (val s = viewState.view) {
-                   Home -> {
+                    Home -> {
                         // Show the home screen.
-                       NfcProvisioningHomeView(onEvent)
+                        NfcProvisioningHomeView(onEvent)
                     }
+
                     is Scan -> {
                         // Show the scanning screen.
                         WifiScannerView(s.networkState, onEvent)
+                    }
+
+                    is AskForPassword -> {
+                        // Show the screen to ask for the password.
+                        openPasswordDialog = true
+                        scanResult = s.network
+                    }
+
+                    Provisioning -> {
+                        // TODO: Show the provisioning screen.
+                        // Publish the NDEF message to the tag.
+                        ProvisioningView(
+                            ndefMessage = viewModel.ndefMessage!!
+                        )
+                    }
+                }
+                if (openPasswordDialog) {
+                    // Open a dialog to enter the WiFi credentials manually.
+                    scanResult?.let { result ->
+                        PasswordDialog(
+                            scanResult = result,
+                            onCancelClick = { openPasswordDialog = false },
+                            onConfirmClick = { password, scanResult ->
+                                openPasswordDialog = false
+                                // Go to the next screen.
+                                onEvent(OnPasswordConfirmedEvent(password, scanResult))
+                            }
+                        )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+internal fun ProvisioningView(
+    ndefMessage: NdefMessage
+) {
+    val nfcManagerVm: NfcManagerViewModel = hiltViewModel()
+    val context = LocalContext.current
+
+    RequireNfc {
+        DisposableEffect(key1 = nfcManagerVm) {
+            nfcManagerVm.onScan(context as Activity, ndefMessage)
+            onDispose { nfcManagerVm.onPause(context) }
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
+        ) {
+            Text(text = "Hold the NFC tag near the device to provision the WiFi network.")
+        }
+    }
+}
+
+@Composable
+internal fun PasswordDialog(
+    scanResult: ScanResult,
+    onCancelClick: () -> Unit,
+    onConfirmClick: (String, ScanResult) -> Unit,
+) {
+    var password by remember { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = { },
+        icon = {
+            Icon(imageVector = Icons.Outlined.Wifi, contentDescription = null)
+        },
+        title = {
+            Text(
+                text = "Setup WiFi",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        text = {
+            Column {
+                var ssid by remember { mutableStateOf(scanResult.SSID) }
+
+                var showPassword by remember { mutableStateOf(false) }
+                Text(
+                    text = "Setup WiFi",
+                    modifier = Modifier.fillMaxWidth(),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(modifier = Modifier.size(size = 16.dp))
+                OutlinedTextField(value = ssid, onValueChange = { ssid = it })
+                Spacer(modifier = Modifier.size(size = 8.dp))
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    visualTransformation = if (showPassword)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
+                    trailingIcon = {
+                        IconButton(onClick = { showPassword = !showPassword }) {
+                            Icon(
+                                imageVector = if (!showPassword)
+                                    Icons.Outlined.VisibilityOff
+                                else Icons.Outlined.Visibility,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onCancelClick()
+                }
+            ) { Text(text = "Cancel") }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmClick(
+                        password,
+                        scanResult
+                    )
+                }
+            ) { Text(text = "Confirm") }
+        }
+    )
 }
 
 @Composable
