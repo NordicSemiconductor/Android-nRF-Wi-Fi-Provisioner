@@ -19,5 +19,18 @@ internal data object OnBackClickEvent: NfcProvisioningViewEvent
 
 /**
  * Event triggered when the wifi network is selected.
+ *
+ * @param network The selected network.
  */
 internal data class OnNetworkSelectedEvent(val network: ScanResult) : NfcProvisioningViewEvent
+
+/**
+ * Event triggered when password is confirmed.
+ *
+ * @param password The password entered by the user.
+ * @param network The selected network.
+ */
+internal data class OnPasswordConfirmedEvent(
+    val password: String,
+    val network: ScanResult,
+    ) : NfcProvisioningViewEvent
