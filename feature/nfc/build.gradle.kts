@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(project(":feature:common"))
     api(project(":lib:nfc:provisioner"))
+    implementation(libs.nordic.permissions.nfc)
 }
