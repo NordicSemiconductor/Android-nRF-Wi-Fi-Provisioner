@@ -29,3 +29,10 @@ internal data object Home : NfcProvisioningView
 internal data class Scan(
     val networkState: NetworkState<List<ScanResult>> = Loading(),
 ) : NfcProvisioningView
+
+internal data class AskForPassword(
+    val network: ScanResult,
+) : NfcProvisioningView
+
+internal data object Provisioning : NfcProvisioningView
+
