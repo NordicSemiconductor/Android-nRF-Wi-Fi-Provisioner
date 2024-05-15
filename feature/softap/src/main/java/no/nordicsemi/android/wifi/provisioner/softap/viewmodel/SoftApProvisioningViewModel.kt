@@ -97,7 +97,10 @@ class SoftApProvisioningViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.Q)
     fun onEvent(event: ProvisioningViewEvent) {
         when (event) {
-            OnFinishedEvent -> finish()
+            OnFinishedEvent -> {
+                _state.value = _state.value.copy(showProvisioningDialog = false)
+                finish()
+            }
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
             OnSelectDeviceClickEvent -> provisionNextDevice()
             is OnSoftApConnectEvent -> {
@@ -180,6 +183,7 @@ class SoftApProvisioningViewModel @Inject constructor(
     }
 
     private fun provision() {
+        _state.value = _state.value.copy(showProvisioningDialog = true)
         val state = _state.value
         val network = state.network ?: return
         val handler = CoroutineExceptionHandler { _, throwable ->
@@ -187,7 +191,13 @@ class SoftApProvisioningViewModel @Inject constructor(
             // provisioning due to timing constraints. In such cases, we can ignore the response
             // and assume that the provisioning was successful.
             if (throwable is SocketTimeoutException) {
-                handleResponse(state)
+                _state.value = state.copy(
+                    device = softApManager.softAp,
+                    provisioningStatus = Resource.createSuccess(
+                        data = WifiConnectionStateDomain.CONNECTED,
+                    ),
+                    showProvisioningDialog = false
+                )
             }
         }
         viewModelScope.launch(Dispatchers.IO + handler) {
@@ -219,8 +229,9 @@ class SoftApProvisioningViewModel @Inject constructor(
                 _state.value = state.copy(
                     device = softApManager.softAp,
                     provisioningStatus = Resource.createSuccess(
-                        data = WifiConnectionStateDomain.CONNECTED
-                    )
+                        data = WifiConnectionStateDomain.CONNECTED,
+                    ),
+                    showProvisioningDialog = false
                 )
             }
         }

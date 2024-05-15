@@ -19,6 +19,7 @@ data class SoftApViewEntity(
     override val isConnected: Boolean = true,
     val isAuthorized: Boolean = false,
     val showSoftApDialog: Boolean = false,
+    val showProvisioningDialog: Boolean = false,
     val isNetworkServiceDiscoveryCompleted: Boolean? = null
 ) : ViewEntity {
 

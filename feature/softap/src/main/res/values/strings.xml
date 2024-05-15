@@ -27,5 +27,8 @@
     <string name="section_device">Device status</string>
     <string name="section_provisioning">Provisioning data</string>
     <string name="section_status">Upload status</string>
+    <string name="provisioning">Provisioning</string>
+    <string name="provisioning_device_rationale">Please wait while the device is being provisioned.
+        This may take around 5-10 seconds to complete.</string>
 
 </resources>

@@ -75,7 +75,7 @@ fun SoftApProvisioningScreen() {
     val viewModel = hiltViewModel<SoftApProvisioningViewModel>()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val onEvent: (ProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
+    val onEvent: (ProvisioningViewEvent) -> Unit = viewModel::onEvent
     Column {
         NordicAppBar(
             text = stringResource(id = R.string.label_wifi_provisioner),
@@ -111,6 +111,12 @@ fun SoftApProvisioningScreen() {
                 onEvent(OnPasswordSelectedEvent(it.password))
             }
             onEvent(OnHidePasswordDialog)
+        }
+    }
+
+    if(state.showProvisioningDialog){
+        SoftApProvisioningDialog{
+            onEvent(OnFinishedEvent)
         }
     }
 }
