@@ -2,7 +2,7 @@
 <resources>
     <string name="label_wifi_provisioner">"Wi-Fi Provisioner "</string>
     <string name="soft_ap">Connect to Device</string>
-    <string name="softap_rationale">Enter the SSID of the Soft AP you want to connect to.
+    <string name="softap_rationale">Enter the SSID of the SoftAP you want to connect to.
     \n\nNote: Make sure the nRF 700x device is powered on and in range.
     </string>
     <string name="discovering_services">Discovering services…</string>

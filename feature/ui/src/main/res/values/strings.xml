@@ -100,7 +100,7 @@
         Wi-Fi credentials to the provisionee and verify provisioning status.
     </string>
     <string name="provision_over_wi_fi">Provision over Wi-Fi</string>
-    <string name="provision_over_wifi_rationale">This mode uses temporary a Wi-Fi network (Soft AP)
+    <string name="provision_over_wifi_rationale">This mode uses temporary a Wi-Fi network (SoftAP)
         created by the provisionee to send Wi-Fi credentials. Communication is encrypted using TLS.
     </string>
 </resources>
