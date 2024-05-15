@@ -50,6 +50,6 @@ fun PasswordSection(isEditable: Boolean = false, onEvent: (ProvisioningViewEvent
         onClick = {
             onEvent(OnShowPasswordDialog)
         },
-        buttonText = stringResource(id = R.string.set_password)
+        buttonText = stringResource(id = R.string.change)
     )
 }

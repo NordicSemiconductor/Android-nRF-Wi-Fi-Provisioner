@@ -57,7 +57,7 @@ fun WifiSection(
             onClick =  {
                 onEvent(OnSelectWifiEvent)
             },
-            buttonText = stringResource(id = R.string.change_device)
+            buttonText = stringResource(id = R.string.change)
         )
     }
 }

@@ -108,7 +108,7 @@ private fun SoftApConnectorContent(
         )
         Spacer(modifier = Modifier.size(size = 16.dp))
         OutlinedTextField(value = ssid, onValueChange = onSsidChange)
-        Spacer(modifier = Modifier.size(size = 8.dp))
+        /*Spacer(modifier = Modifier.size(size = 8.dp))
         OutlinedTextField(
             value = password,
             onValueChange = onPasswordChange,
@@ -126,6 +126,6 @@ private fun SoftApConnectorContent(
                     )
                 }
             }
-        )
+        )*/
     }
 }

@@ -58,7 +58,7 @@ fun BluetoothDevice(
         isEditable = isEditable,
         description = address,
         onClick = { onEvent(OnSelectDeviceClickEvent) },
-        buttonText = stringResource(id = R.string.change_device)
+        buttonText = stringResource(id = R.string.change)
     )
 }
 
@@ -76,7 +76,7 @@ fun SoftApDevice(
         isEditable = isEditable,
         description = address,
         onClick = { onEvent(OnSelectDeviceClickEvent) },
-        buttonText = stringResource(id = R.string.change_device)
+        buttonText = stringResource(id = R.string.change)
     )
 }
 
@@ -102,7 +102,7 @@ private fun DeviceNotSelectedSection(
         isEditable = false,
         description = "Please select a device to provision",
         onClick = { onEvent(OnProvisionNextDeviceEvent) },
-        buttonText = stringResource(id = R.string.change_device)
+        buttonText = stringResource(id = R.string.change)
     )
 }
 

@@ -115,7 +115,7 @@ fun SoftApProvisioningScreen() {
     }
 
     if(state.showProvisioningDialog){
-        SoftApProvisioningDialog{
+        SoftApProvisioningDialog(state){
             onEvent(OnFinishedEvent)
         }
     }

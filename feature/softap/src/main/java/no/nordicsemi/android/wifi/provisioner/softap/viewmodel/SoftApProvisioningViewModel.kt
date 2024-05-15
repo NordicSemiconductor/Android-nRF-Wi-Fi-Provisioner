@@ -131,10 +131,9 @@ class SoftApProvisioningViewModel @Inject constructor(
     }
 
     private fun finish() {
-        viewModelScope.launch {
-            release()
-            _state.value = SoftApViewEntity()
-        }
+        release()
+        _state.value = SoftApViewEntity()
+        navigateUp()
     }
 
     private fun release() {
@@ -168,7 +167,7 @@ class SoftApProvisioningViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun connect(
-        ssid: String = "0018F0-nrf-wifiprov",
+        ssid: String = "nrf-wifiprov",
         passphraseConfiguration: PassphraseConfiguration = Open
     ) {
         viewModelScope.launch {
@@ -195,8 +194,7 @@ class SoftApProvisioningViewModel @Inject constructor(
                     device = softApManager.softAp,
                     provisioningStatus = Resource.createSuccess(
                         data = WifiConnectionStateDomain.CONNECTED,
-                    ),
-                    showProvisioningDialog = false
+                    )
                 )
             }
         }
@@ -230,8 +228,7 @@ class SoftApProvisioningViewModel @Inject constructor(
                     device = softApManager.softAp,
                     provisioningStatus = Resource.createSuccess(
                         data = WifiConnectionStateDomain.CONNECTED,
-                    ),
-                    showProvisioningDialog = false
+                    )
                 )
             }
         }

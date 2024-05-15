@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="change_device">Change</string>
+    <string name="change">Change</string>
 
     <string name="sorting_hint">Sort by:</string>
     <string name="sorting_name">Name</string>

@@ -64,10 +64,8 @@ fun ActionButtonSection(viewEntity: SoftApViewEntity, onEvent: (ProvisioningView
         ActionButton( stringResource(id = R.string.password_select)) {
             onEvent(OnShowPasswordDialog)
         }
-    } else if(viewEntity.hasFinished()) {
-        ActionButton(stringResource(id = R.string.next_device)) {
-            onEvent(OnProvisionNextDeviceEvent)
-        }
+    } else if(viewEntity.hasFinished() || viewEntity.hasFinishedWithSuccess()) {
+
     } else {
         ActionButton(stringResource(id = R.string.provision)) {
             onEvent(OnProvisionClickEvent)

@@ -2,8 +2,8 @@
 <resources>
     <string name="label_wifi_provisioner">"Wi-Fi Provisioner "</string>
     <string name="soft_ap">Soft AP</string>
-    <string name="softap_rationale">Enter the SSID and passphrase of the Soft AP you want to connect to.
-    \n\nNote: Make sure the nRF 700x device is powered on.
+    <string name="softap_rationale">Enter the SSID of the nRF700x device you want to connect to.
+    \n\nNote: Make sure the nRF 700x device is powered on and in range.
     </string>
     <string name="discovering_services">Discovering services…</string>
     <string name="change_wifi">Change Wi-Fi</string>
@@ -30,5 +30,7 @@
     <string name="provisioning">Provisioning</string>
     <string name="provisioning_device_rationale">Please wait while the device is being provisioned.
         This may take around 5-10 seconds to complete.</string>
+    <string name="ok">OK</string>
+    <string name="provisioning_device_success">Provisioning completed.</string>
 
 </resources>
