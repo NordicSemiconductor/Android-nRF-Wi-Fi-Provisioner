@@ -24,7 +24,8 @@ data class SoftApViewEntity(
 
     override fun hasFinished(): Boolean {
         val status = (provisioningStatus as? Success)?.data
-        return status == WifiConnectionStateDomain.DISCONNECTED
+        return status == WifiConnectionStateDomain.DISCONNECTED ||
+                status == WifiConnectionStateDomain.CONNECTED
     }
 
     override fun hasFinishedWithSuccess(): Boolean {

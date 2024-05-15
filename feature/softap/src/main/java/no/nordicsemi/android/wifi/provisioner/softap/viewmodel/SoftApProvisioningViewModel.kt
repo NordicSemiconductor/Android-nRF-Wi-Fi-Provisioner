@@ -36,6 +36,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -182,36 +183,18 @@ class SoftApProvisioningViewModel @Inject constructor(
         val state = _state.value
         val network = state.network ?: return
         val handler = CoroutineExceptionHandler { _, throwable ->
-            Log.d("AAAA", "Provisioning failed $throwable")
+            // There is always chance that a socket timeout is thrown from the DK during
+            // provisioning due to timing constraints. In such cases, we can ignore the response
+            // and assume that the provisioning was successful.
             if (throwable is SocketTimeoutException) {
-                _state.value = state.copy(
-                    device = softApManager.softAp,
-                    provisioningStatus = Resource.createSuccess(
-                        data = WifiConnectionStateDomain.DISCONNECTED
-                    )
-                )
+                handleResponse(state)
             }
         }
         viewModelScope.launch(Dispatchers.IO + handler) {
             softApManager.run {
                 provision(config = network.toConfig()).also { response ->
                     if (response.isSuccessful) {
-                        _state.value = state.copy(
-                            device = softApManager.softAp,
-                            provisioningStatus = Resource.createSuccess(
-                                data = WifiConnectionStateDomain.DISCONNECTED
-                            )
-                        )
-                        // discoverServices()
-                        if(verify()){
-                            // wifiManager.network
-                            _state.value = state.copy(
-                                device = softApManager.softAp,
-                                provisioningStatus = Resource.createSuccess(
-                                    data = WifiConnectionStateDomain.CONNECTED
-                                )
-                            )
-                        }
+                        handleResponse(state)
                     } else {
                         _state.value = state.copy(
                             provisioningStatus = Resource.createError(
@@ -220,6 +203,25 @@ class SoftApProvisioningViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+        }
+    }
+
+    private fun handleResponse(state : SoftApViewEntity){
+        viewModelScope.launch {
+            _state.value = state.copy(
+                device = softApManager.softAp,
+                provisioningStatus = Resource.createSuccess(
+                    data = WifiConnectionStateDomain.DISCONNECTED
+                )
+            )
+            if(softApManager.verify()){
+                _state.value = state.copy(
+                    device = softApManager.softAp,
+                    provisioningStatus = Resource.createSuccess(
+                        data = WifiConnectionStateDomain.CONNECTED
+                    )
+                )
             }
         }
     }
