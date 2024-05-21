@@ -18,12 +18,6 @@ internal class PermissionUtils(
         get() = (context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager)
             .isWifiEnabled
 
-    val isLocationEnabled: Boolean
-        get() = if (dataProvider.isMarshmallowOrAbove) {
-            val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            LocationManagerCompat.isLocationEnabled(lm)
-        } else true
-
     val isWifiAvailable: Boolean
         get() = context.packageManager.hasSystemFeature(PackageManager.FEATURE_WIFI)
 
@@ -46,14 +40,6 @@ internal class PermissionUtils(
 
     val areNecessaryWifiPermissionsGranted: Boolean
         get() = isWifiPermissionGranted
-
-    fun markWifiPermissionRequested() {
-        dataProvider.wifiPermissionRequested = true
-    }
-
-    fun markLocationPermissionRequested() {
-        dataProvider.locationPermissionRequested = true
-    }
 
     fun isWifiPermissionDeniedForever(context: Context): Boolean {
         return dataProvider.isTiramisuOrAbove &&

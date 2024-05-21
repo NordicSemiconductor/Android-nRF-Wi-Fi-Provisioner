@@ -1,4 +1,4 @@
-package no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel
+package no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel
 
 import android.app.Activity
 import android.nfc.NdefMessage

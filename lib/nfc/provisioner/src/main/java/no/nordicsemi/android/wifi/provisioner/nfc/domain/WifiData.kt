@@ -10,5 +10,6 @@ data class WifiData(
     val ssid: String,
     val password: String,
     val authType: String,
+    val encryptionMode: String = "NONE",
     // TODO: Add more fields as required.
 )

@@ -1,4 +1,4 @@
-package no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel
+package no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel
 
 import android.nfc.NdefMessage
 import android.os.Build
@@ -14,7 +14,6 @@ import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.wifi.provisioner.nfc.WifiConfigNdefMessageBuilder
 import no.nordicsemi.android.wifi.provisioner.nfc.WifiManagerRepository
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -60,16 +59,8 @@ internal class NfcProvisioningViewModel @Inject constructor(
 
             is OnPasswordConfirmedEvent -> {
                 // Create a NdefMessage with the network details.
-                ndefMessage = wifiConfigNdefMessageBuilder.createNdefMessage(
-                    wifiNetwork = WifiData(
-                        ssid = event.network.SSID,
-                        password = event.password,
-                        authType = "WPA2-PSK", // TODO: For now, we are only supporting WPA2_PSK.
-                    )
-                )
-                /* wifiConfigNdefMessageBuilder.onNfcTap(activity = event.activity
-                         ,ndefMessage)*/
-
+                ndefMessage = wifiConfigNdefMessageBuilder.createNdefMessage(event.wifiData)
+                // Navigate to the NFC tag screen.
                 _viewState.value = _viewState.value.copy(
                     view = Provisioning
                 )

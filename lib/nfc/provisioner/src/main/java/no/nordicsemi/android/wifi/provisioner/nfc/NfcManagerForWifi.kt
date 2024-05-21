@@ -76,6 +76,9 @@ class NfcManagerForWifi @Inject constructor(
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
+                    } else {
+                        // The tag does not support Ndef or NdefFormatable.
+                        // Show an error message.
                     }
                 }
             }

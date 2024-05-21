@@ -17,5 +17,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(project(":feature:common"))
     api(project(":lib:nfc:provisioner"))
+    api(project(":lib:domain")) // TODD: Remove this once feature:common is utilized in this module.
     implementation(libs.nordic.permissions.nfc)
 }

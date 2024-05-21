@@ -2,6 +2,7 @@ package no.nordicsemi.android.wifi.provisioner.feature.nfc.view
 
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiSsid
+import android.os.Build
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,8 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.getScanResultSecurity
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.NfcProvisioningViewEvent
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel.OnNetworkSelectedEvent
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.NfcProvisioningViewEvent
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnNetworkSelectedEvent
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.NetworkState
@@ -112,10 +113,17 @@ internal fun WifiList(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 // Display the SSID of the access point
-                Text(
-                    text = getSSid(network.wifiSsid),
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Text(
+                        text = getSSid(network.wifiSsid),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                } else {
+                    Text(
+                        text = network.SSID,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
                 // Display the address of the access point.
                 Text(
                     text = network.BSSID.uppercase(),

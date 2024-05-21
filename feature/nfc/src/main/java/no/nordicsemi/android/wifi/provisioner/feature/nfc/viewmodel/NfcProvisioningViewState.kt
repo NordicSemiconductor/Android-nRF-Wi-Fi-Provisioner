@@ -1,4 +1,4 @@
-package no.nordicsemi.android.wifi.provisioner.feature.nfc.viemodel
+package no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel
 
 import android.net.wifi.ScanResult
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
@@ -35,4 +35,3 @@ internal data class AskForPassword(
 ) : NfcProvisioningView
 
 internal data object Provisioning : NfcProvisioningView
-
