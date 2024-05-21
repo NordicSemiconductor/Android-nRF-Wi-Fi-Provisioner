@@ -5,10 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.net.wifi.WifiManager
 import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat
 
 internal class PermissionUtils(
     private val context: Context,
