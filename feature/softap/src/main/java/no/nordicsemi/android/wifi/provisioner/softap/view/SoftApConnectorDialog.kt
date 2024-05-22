@@ -5,12 +5,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,15 +19,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 import no.nordicsemi.android.wifi.provisioner.softap.Open
 import no.nordicsemi.android.wifi.provisioner.softap.PassphraseConfiguration
 import no.nordicsemi.android.wifi.provisioner.ui.CircularProgressIndicatorContent
-
 
 @Composable
 internal fun SoftApConnectorDialog(
@@ -91,6 +85,51 @@ internal fun SoftApConnectorDialog(
     )
 }
 
+
+
+
+@Composable
+internal fun EditSsidDialog(
+    ssidName: String = "nrf-wifiprov",
+    onSsidChange: (String) -> Unit,
+    dismiss: () -> Unit,
+) {
+    var ssid by rememberSaveable { mutableStateOf(ssidName) }
+    var password by rememberSaveable { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = dismiss,
+        icon = { Icon(imageVector = Icons.Outlined.Wifi, contentDescription = null) },
+        title = {
+            Text(
+                text = stringResource(id = R.string.soft_ap),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        text = {
+            SoftApConnectorContent(
+                ssid = ssid,
+                password = password,
+                onSsidChange = { ssid = it },
+                onPasswordChange = { password = it },
+                onShowPassword = {}
+            )
+        },
+        dismissButton = {
+            TextButton(onClick = dismiss) {
+                Text(text = "Cancel")
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onSsidChange(ssid) }) {
+                Text(text = "Confirm")
+            }
+        }
+    )
+}
+
 @Composable
 private fun SoftApConnectorContent(
     ssid: String,
@@ -99,7 +138,6 @@ private fun SoftApConnectorContent(
     onPasswordChange: (String) -> Unit,
     onShowPassword: () -> Unit
 ) {
-    var showPassword by rememberSaveable { mutableStateOf(true) }
     Column {
         Text(
             text = stringResource(id = R.string.softap_rationale),
@@ -108,24 +146,5 @@ private fun SoftApConnectorContent(
         )
         Spacer(modifier = Modifier.size(size = 16.dp))
         OutlinedTextField(value = ssid, onValueChange = onSsidChange)
-        /*Spacer(modifier = Modifier.size(size = 8.dp))
-        OutlinedTextField(
-            value = password,
-            onValueChange = onPasswordChange,
-            visualTransformation = if (showPassword)
-                VisualTransformation.None
-            else
-                PasswordVisualTransformation(),
-            trailingIcon = {
-                IconButton(onClick = { showPassword = !showPassword }) {
-                    Icon(
-                        imageVector = if (!showPassword)
-                            Icons.Outlined.Visibility
-                        else Icons.Outlined.VisibilityOff,
-                        contentDescription = null
-                    )
-                }
-            }
-        )*/
     }
 }

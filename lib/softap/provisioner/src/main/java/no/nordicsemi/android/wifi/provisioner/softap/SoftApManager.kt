@@ -131,18 +131,14 @@ class SoftApManager(
                     continuation.resume(Unit)
                 } else {
                     disconnect()
-                    continuation.resumeWithException(
-                        exception = FailedToBindToNetwork
-                    )
+                    continuation.resumeWithException(exception = FailedToBindToNetwork)
                 }
             }
 
             override fun onUnavailable() {
                 // do failure processing here..
                 disconnect()
-                continuation.resumeWithException(
-                    exception = IllegalStateException("Failed to bind to the network.")
-                )
+                continuation.resumeWithException(exception = UnableToConnectToNetwork)
             }
         }
         val wifNetworkBuilder = WifiNetworkSpecifier.Builder()

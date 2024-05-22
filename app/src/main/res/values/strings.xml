@@ -71,7 +71,7 @@
     <string name="device_info">Device status</string>
     <string name="disconnected">Disconnected</string>
     <string name="status_info">Wi-Fi status</string>
-    <string name="selected_wifi">Selected Wi-Fi</string>
+    <string name="selected_ssid">Selected Wi-Fi</string>
     <string name="start_provisioning">Start provisioning</string>
     <string name="dk_version">Version</string>
     <string name="wifi_scanning">Scanning error</string>

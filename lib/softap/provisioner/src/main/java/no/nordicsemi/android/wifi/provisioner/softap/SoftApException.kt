@@ -13,9 +13,23 @@ data object WifiNotEnabledException : SoftApException() {
 }
 
 /**
+ * An exception that is thrown when the SoftAp manager fails to connect to the SoftAP network.
+ */
+data object UnableToConnectToNetwork : SoftApException() {
+    private fun readResolve(): Any = UnableToConnectToNetwork
+}
+
+/**
  * An exception that is thrown when the SoftAp manager fails to bind to the connected SoftAP
  * network.
  */
 data object FailedToBindToNetwork : SoftApException() {
-    private fun readResolve(): Any = WifiNotEnabledException
+    private fun readResolve(): Any = FailedToBindToNetwork
+}
+
+/**
+ * An exception that is thrown when the SoftAp manager loses connectivity from the SoftAP.
+ */
+data object OnConnectionLost : SoftApException() {
+    private fun readResolve(): Any = OnConnectionLost
 }

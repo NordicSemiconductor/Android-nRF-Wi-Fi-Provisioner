@@ -18,8 +18,9 @@ dependencies {
     implementation(libs.retrofit.converter.scalars)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
-    implementation("com.squareup.retrofit2:converter-wire:2.11.0")
+    implementation(libs.retrofit.converter.wire)
     implementation("com.squareup.okhttp3:okhttp-tls:5.0.0-alpha.12")
+    implementation("org.slf4j:slf4j-api:1.7.36")
 }
 
 wire {

@@ -113,3 +113,65 @@ fun PasswordDialog(onEvent: (PasswordDialogEvent) -> Unit) {
         }
     )
 }
+
+
+@Composable
+fun PasswordDialog(
+    onConfirmPressed: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val passwordField = rememberSaveable { mutableStateOf("") }
+    val passwordVisible = rememberSaveable { mutableStateOf(false) }
+
+    val visualTransformation = if (passwordVisible.value) {
+        VisualTransformation.None
+    } else {
+        PasswordVisualTransformation()
+    }
+
+    val image = if (passwordVisible.value) {
+        Icons.Filled.Visibility
+    } else {
+        Icons.Filled.VisibilityOff
+    }
+
+    val description = if (passwordVisible.value) {
+        stringResource(id = R.string.hide_password)
+    } else {
+        stringResource(id = R.string.show_password)
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(id = R.string.set_password)) },
+        text = {
+            OutlinedTextField(
+                value = passwordField.value,
+                label = { Text(text = stringResource(id = R.string.password)) },
+                visualTransformation = visualTransformation,
+                onValueChange = {
+                    passwordField.value = it
+                },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                        Icon(imageVector = image, description)
+                    }
+                }
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                passwordField.value.let {
+                    onConfirmPressed(passwordField.value)
+                }
+            }) {
+                Text(stringResource(id = R.string.accept))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(id = R.string.dismiss))
+            }
+        }
+    )
+}

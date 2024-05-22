@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
     implementation(libs.nordic.uilogger)
+    implementation(libs.nordic.logger)
 
     implementation(libs.accompanist.placeholder)
 
@@ -70,6 +71,8 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
-    implementation("com.squareup.okhttp3:okhttp-tls:5.0.0-alpha.12")
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+
+    // Timber & SLF4J
+    implementation ("com.arcao:slf4j-timber:3.1")
+    implementation ("no.nordicsemi.android:log-timber:2.3.0")
 }

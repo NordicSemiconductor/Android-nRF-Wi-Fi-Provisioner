@@ -63,7 +63,7 @@ fun WifiSection(
 }
 
 @Composable
-private fun getDescription(record: ScanRecordDomain): String {
+fun getDescription(record: ScanRecordDomain): String {
     return StringBuilder()
         .append(record.wifiInfo?.ssid)
         .appendLine()
