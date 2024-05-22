@@ -28,7 +28,7 @@
     <string name="setup_wifi_title">Setup Wi-Fi</string>
     <string name="authentication">Authentication</string>
     <string name="authentication_placeholder">Select authentication</string>
-    <string name="ssid">SSID</string>
+    <string name="ssid_label">SSID</string>
     <string name="ssid_placeholder">Enter SSID</string>
     <string name="encryption">Encryption</string>
     <string name="encryption_placeholder">Select encryption</string>

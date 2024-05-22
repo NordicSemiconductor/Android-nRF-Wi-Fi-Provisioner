@@ -11,8 +11,10 @@ import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -62,29 +64,21 @@ internal fun PasswordDialog(
             ) {
                 var showPassword by remember { mutableStateOf(false) }
 
+                // Show the SSID of the selected network. The SSID is read-only.
                 OutlinedTextField(
                     value = scanResult.SSID,
                     readOnly = true,
-                    label = { Text(text = stringResource(id = R.string.ssid)) },
+                    label = { Text(text = stringResource(id = R.string.ssid_label)) },
                     onValueChange = { }
                 )
-                OutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    visualTransformation = if (showPassword)
-                        VisualTransformation.None
-                    else
-                        PasswordVisualTransformation(),
-                    trailingIcon = {
-                        IconButton(onClick = { showPassword = !showPassword }) {
-                            Icon(
-                                imageVector = if (!showPassword)
-                                    Icons.Outlined.VisibilityOff
-                                else Icons.Outlined.Visibility,
-                                contentDescription = null
-                            )
-                        }
-                    }
+                // Show the password field.
+                PasswordInputField(
+                    input = password,
+                    label = stringResource(id = R.string.password),
+                    placeholder = stringResource(id = R.string.password_placeholder),
+                    showPassword = showPassword,
+                    onShowPassChange = { showPassword = !showPassword },
+                    onUpdate = { password = it },
                 )
             }
         },
