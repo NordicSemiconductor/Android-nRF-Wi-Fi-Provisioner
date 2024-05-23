@@ -34,19 +34,6 @@
 
     <string name="change">Change</string>
     <string name="ic_nrf70">An icon of nRF70 Series</string>
-    <string name="app_info">The nRF Wi-Fi Provisioner app allows provisioning nRF 700x devices to
-        Wi-Fi networks over Bluetooth LE.\n\n
-
-        ### Key features:\n
-        * Provisioning nRF 700x devices to Wi-Fi networks.\n
-        * Displaying connection status of provisioned devices.\n
-        * Re-provisioning already provisioned devices to alternate networks.\n\n
-
-        ### Requirements:\n
-        * [nRF700x DK](https://www.nordicsemi.com/News/2022/08/Nordic-Semiconductor-announces-its-first-WiFi-chip).\n
-        * Wi-Fi Provisioning Service sample programmed.\n\n
-
-        Make sure the device is powered ON and in range.</string>
 
     <string name="section_device">Device status</string>
     <string name="section_provisioning">Provisioning data</string>
@@ -54,11 +41,7 @@
 
     <string name="unknown_error">Unknown error</string>
 
-    <string name="no_device_info">1. Make sure the device is <b>turned on</b> and is connected to a power source.</string>
-
-    <string name="unprovisioned">Unprovisioned</string>
     <string name="start">Start</string>
-    <string name="select_device">Select device</string>
     <string name="next_device">Next device</string>
     <string name="finish">Finish</string>
     <string name="set_password">Set password</string>
@@ -84,7 +67,6 @@
 
     <string name="cd_data_item_icon">Icon representing data available in the section.</string>
 
-    <string name="wifi_status_connecting">Connecting</string>
     <string name="wifi_status_authentication">Authentication</string>
     <string name="wifi_status_association">Association</string>
     <string name="wifi_status_obtaining_ip">Obtaining IP</string>
@@ -122,9 +104,7 @@
 
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
-    <string name="app_version">Version: %s (%s)</string>
 
-    <string name="state_disconnected">Disconnected</string>
     <string name="state_authentication">Authentication</string>
     <string name="state_association">Association</string>
     <string name="state_obtaining_ip">Obtaining IP</string>

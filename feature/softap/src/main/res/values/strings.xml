@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label_wifi_provisioner">"Wi-Fi Provisioner"</string>
     <string name="provision_over_wifi">"Provision over Wi-Fi"</string>
     <string name="soft_ap">Connect to Device</string>
     <string name="softap_rationale">Enter the SSID of the SoftAP you want to connect to.
@@ -9,10 +8,7 @@
     <string name="discover_services">Discover services</string>
     <string name="discovered_services">Services discovered.</string>
     <string name="discovering_services">Discovering services</string>
-    <string name="resolving_ip_address">Resolving IP Address…</string>
-    <string name="change_wifi">Change Wi-Fi</string>
     <string name="dismiss">Dismiss</string>
-    <string name="confirm">Confirm</string>
     <string name="wifi_access_points_title">Wi-Fi Access Points</string>
     <string name="wifi_scanning">Scanning error</string>
 
@@ -32,31 +28,18 @@
     <string name="section_provisioning">Provisioning data</string>
     <string name="section_status">Upload status</string>
     <string name="provision">Provision</string>
-    <string name="provisioning">Provisioning</string>
-    <string name="provisioned">Provisioned</string>
     <string name="verify">Verify</string>
-    <string name="verifying">Verifying</string>
-    <string name="verified">Verified</string>
-    <string name="provisioning_device_rationale">Please wait while the device is being provisioned.
-        This may take around 5-10 seconds to complete.</string>
-    <string name="ok">OK</string>
-    <string name="provisioning_device_success">Provisioning completed.</string>
-    <string name="title_connect_to_device">Connect to Device</string>
     <string name="connect">Connect</string>
     <string name="connecting">Connecting…</string>
     <string name="connected">Connected</string>
     <string name="change">Change</string>
     <string name="select_wifi">Select Wi-Fi</string>
-    <string name="select_a_wifi">Select a Wi-Fi Network</string>
-    <string name="edit">Edit</string>
     <string name="start">Start</string>
-    <string name="listing_wifi_networks">Listing Wi-Fi networks</string>
     <string name="edit_ssid">Edit SSID</string>
     <string name="select">Select</string>
     <string name="set_passphrase">Set Passphrase</string>
     <string name="set">Set</string>
     <string name="configure">Configure</string>
-    <string name="selected_ssid">Selected Wi-Fi: %s</string>
     <string name="select_wifi_rationale">Select a Wi-Fi Network to provision the nRF 700x device to</string>
     <string name="set_passphrase_rationale">Please set the passphrase for the selected Wi-Fi Network.</string>
     <string name="set_passphrase_value">Passphrase: %s</string>
