@@ -63,6 +63,7 @@ import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
+import java.net.SocketTimeoutException
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

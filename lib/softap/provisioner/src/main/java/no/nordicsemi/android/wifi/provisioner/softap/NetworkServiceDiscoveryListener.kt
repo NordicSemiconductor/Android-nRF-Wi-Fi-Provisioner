@@ -109,7 +109,6 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
                 )
             }
         }
-
         nsdManager.discoverServices(
             nsdServiceInfo.serviceType,
             NsdManager.PROTOCOL_DNS_SD,

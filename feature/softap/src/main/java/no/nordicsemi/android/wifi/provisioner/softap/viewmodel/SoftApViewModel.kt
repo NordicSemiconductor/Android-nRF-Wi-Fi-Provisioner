@@ -180,10 +180,10 @@ class SoftApViewModel @Inject constructor(
                     // There is always chance that a socket timeout is thrown from the DK during
                     // provisioning due to timing constraints. In such cases, we can ignore the response
                     // and assume that the provisioning was successful.
-                    Timber.log(Log.WARN, e, "Provisioning succeeded due to timeout")
-                    _state.value = _state.value.copy(error = e)
+                    Timber.log(Log.WARN, e, "Connection timed out, provisioning succeeded!")
                 } catch (e: Exception) {
-
+                    Timber.log(Log.WARN, e, "Error, provisioning succeeded!")
+                    _state.value = _state.value.copy(error = e)
                 } finally {
                     _state.value = _state.value.copy(provisionState = WizardStepState.COMPLETED)
                 }
