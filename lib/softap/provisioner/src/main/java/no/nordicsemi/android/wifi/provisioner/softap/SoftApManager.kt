@@ -13,6 +13,7 @@ import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
 import androidx.annotation.RequiresApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import no.nordicsemi.android.wifi.provisioner.softap.Open.passphrase
 import no.nordicsemi.android.wifi.provisioner.softap.domain.ScanResultsDomain
@@ -37,6 +38,8 @@ import kotlin.coroutines.resumeWithException
  *
  * Entry point to the SoftApManager
  *
+ * @param context               Context of the application.
+ * @param hostNameConfiguration HostNameConfiguration to be used for the SoftApManager.
  * @constructor Create empty SoftApManager.
  */
 class SoftApManager(
@@ -53,6 +56,10 @@ class SoftApManager(
 
     private val wifiManager =
         context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+    val isWifiEnabled: Boolean
+        get() = wifiManager.isWifiEnabled
+
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     private val nsdManager = context.getSystemService(Context.NSD_SERVICE) as NsdManager
@@ -106,14 +113,16 @@ class SoftApManager(
      * @throws FailedToBindToNetwork if the device failed to bind to the connected wifi network.
      *                               Call [connect] to connect to the softap and bind to the network.
      */
+    @OptIn(InternalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.Q)
     @Throws(WifiNotEnabledException::class, FailedToBindToNetwork::class)
     suspend fun connect(
         ssid: String,
         passphraseConfiguration: PassphraseConfiguration,
     ): Unit = suspendCancellableCoroutine { continuation ->
-        if (!wifiManager.isWifiEnabled) {
+        if (!isWifiEnabled) {
             continuation.resumeWithException(exception = WifiNotEnabledException)
+            return@suspendCancellableCoroutine
         }
 
         networkCallback = object : ConnectivityManager.NetworkCallback() {
@@ -180,7 +189,7 @@ class SoftApManager(
                 serviceType = "_http._tcp."
             }
     ) {
-        require(wifiManager.isWifiEnabled) { throw WifiNotEnabledException }
+        require(isWifiEnabled) { throw WifiNotEnabledException }
         val serviceInfo = discoverNetworkServices(nsdServiceInfo = nsdServiceInfo)
         softAp?.apply {
             this.serviceInfo = serviceInfo
@@ -208,7 +217,7 @@ class SoftApManager(
      *                               Call [connect] to connect to the softap and bind to the network.
      */
     suspend fun listSsids(): ScanResultsDomain {
-        require(wifiManager.isWifiEnabled) { throw WifiNotEnabledException }
+        require(isWifiEnabled) { throw WifiNotEnabledException }
         require(isBoundToNetwork) { throw FailedToBindToNetwork }
         return softApProvisioningService.listSsids().toDomain()
     }
@@ -223,7 +232,7 @@ class SoftApManager(
      *                               Call [connect] to connect to the softap and bind to the network.
      */
     suspend fun provision(config: WifiConfigDomain): Response<ResponseBody> {
-        require(wifiManager.isWifiEnabled) { throw WifiNotEnabledException }
+        require(isWifiEnabled) { throw WifiNotEnabledException }
         require(isBoundToNetwork) { throw FailedToBindToNetwork }
         return softApProvisioningService.provision(config.toApi()).also {
             if (it.isSuccessful) {

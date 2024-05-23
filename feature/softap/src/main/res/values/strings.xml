@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label_wifi_provisioner">"Wi-Fi Provisioner "</string>
+    <string name="label_wifi_provisioner">"Wi-Fi Provisioner"</string>
+    <string name="provision_over_wifi">"Provision over Wi-Fi"</string>
     <string name="soft_ap">Connect to Device</string>
     <string name="softap_rationale">Enter the SSID of the SoftAP you want to connect to.
     \n\nNote: Make sure the nRF 700x device is powered on and in range.
@@ -63,5 +64,8 @@
     <string name="provisioning_completed">Provisioning completed.</string>
     <string name="provisioning_rationale">Provides the Wi-Fi credentials to the device.</string>
     <string name="optional_verification_rationale">Optionally verify if provisioning succeeded.</string>
+    <string name="provision_over_wifi_rationale">This mode uses temporary a Wi-Fi network (SoftAP)
+        created by the provisionee to send Wi-Fi credentials. Communication is encrypted using TLS.
+    </string>
 
 </resources>

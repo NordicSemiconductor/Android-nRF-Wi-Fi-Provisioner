@@ -1,4 +1,4 @@
-package no.nordicsemi.android.wifi.provisioner.ui
+package no.nordicsemi.android.wifi.provisioner.softap.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -12,36 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.SectionTitle
 
 
 @Composable
-fun ProvisionOverBle(onClick: () -> Unit) {
+fun ProvisionOverWifiSection(onClick: () -> Unit) {
     OutlinedCard(
         modifier = Modifier
             .padding(all = 8.dp)
             .clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.padding(all = 16.dp)) {
-            SectionTitle(text = stringResource(R.string.provision_over_ble))
-            Spacer(modifier = Modifier.size(8.dp))
-            Text(
-                text = stringResource(R.string.provision_over_ble_rationale),
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-@Composable
-fun ProvisionOverWifi(onClick: () -> Unit) {
-    OutlinedCard(
-        modifier = Modifier
-            .padding(all = 8.dp)
-            .clickable(onClick = onClick)
-    ) {
-        Column(modifier = Modifier.padding(all = 16.dp)) {
-            SectionTitle(text = stringResource(R.string.provision_over_wi_fi))
+            SectionTitle(text = stringResource(R.string.provision_over_wifi))
             Spacer(modifier = Modifier.size(8.dp))
             Text(
                 text = stringResource(R.string.provision_over_wifi_rationale),

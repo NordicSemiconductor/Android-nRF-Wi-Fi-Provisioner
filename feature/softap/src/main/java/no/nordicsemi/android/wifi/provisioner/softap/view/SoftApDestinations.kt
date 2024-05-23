@@ -46,7 +46,8 @@ val SoftApProvisionerDestinations = listOf(
                 },
                 onProvisionPressed = viewModel::onProvisionPressed,
                 verify = viewModel::verify,
-                navigateUp = viewModel::navigateUp
+                navigateUp = viewModel::navigateUp,
+                resetError = viewModel::onSnackBarDismissed,
             )
         }
     },

@@ -1,11 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -23,7 +22,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -62,6 +64,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoftApScreen(
     state: SoftApScreenState,
@@ -71,28 +74,39 @@ fun SoftApScreen(
     onPasswordEntered: (String) -> Unit,
     onProvisionPressed: () -> Unit,
     verify: () -> Unit,
-    navigateUp: (() -> Unit)
+    navigateUp: (() -> Unit),
+    resetError: () -> Unit
 ) {
     var ssidName by rememberSaveable { mutableStateOf("nrf-wifiprov") }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    Column {
-        NordicAppBar(
-            text = stringResource(id = R.string.label_wifi_provisioner),
-            actions = {
-                LoggerAppBarIcon(
-                    onClick = onLoggerAppBarIconPressed
-                )
-            },
-            showBackButton = true,
-            onNavigationButtonClick = navigateUp
-        )
-        OutlinedCard(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(vertical = 16.dp, horizontal = 8.dp),
-        ) {
-            runCatching {
+    if (state.error != null) {
+        showSnackBar(scope, snackbarHostState, state.error) {
+            resetError()
+        }
+    }
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
+            NordicAppBar(
+                text = stringResource(id = R.string.provision_over_wifi),
+                actions = {
+                    LoggerAppBarIcon(onClick = onLoggerAppBarIconPressed)
+                },
+                showBackButton = true,
+                onNavigationButtonClick = navigateUp
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            OutlinedCard(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(vertical = 16.dp, horizontal = 8.dp),
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -108,7 +122,9 @@ fun SoftApScreen(
                         connectionState = state.connectionState,
                         serviceDiscoveryState = state.discoveringServicesState,
                         ssidName = ssidName,
-                        start = { start(ssidName, Open) }
+                        start = {
+                            start(ssidName, Open)
+                        }
                     )
                     SelectWifi(
                         provisioningState = state.provisionState,
@@ -134,8 +150,6 @@ fun SoftApScreen(
                         verify = verify
                     )
                 }
-            }.onFailure {
-                showSnackBar(scope, snackbarHostState, it)
             }
         }
     }
@@ -144,7 +158,8 @@ fun SoftApScreen(
 private fun showSnackBar(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    throwable: Throwable
+    throwable: Throwable,
+    onDismissed: () -> Unit
 ) {
     scope.launch {
         val message = when (throwable) {
@@ -154,7 +169,14 @@ private fun showSnackBar(
             is OnConnectionLost -> "Connection lost!"
             else -> "${throwable::class.simpleName}: ${throwable.message}"
         }
-        snackbarHostState.showSnackbar(message = message)
+        val result = snackbarHostState.showSnackbar(message = message)
+        when (result) {
+            SnackbarResult.Dismissed -> {
+                onDismissed()
+            }
+
+            SnackbarResult.ActionPerformed -> {}
+        }
     }
 }
 
@@ -278,7 +300,16 @@ private fun SelectWifi(
         showVerticalDivider = true
     ) {
         if (wifiData != null && selectWifiState != WizardStepState.INACTIVE) {
-            Text(text = "SSID: ${wifiData.ssid}, band: ${wifiData.channelFallback.wifiInfo?.band?.toDisplayString()}")
+            Text(
+                text = "SSID: ${wifiData.ssid}, band: " +
+                        "${
+                            wifiData
+                                .let {
+                                    it.selectedChannel?.wifiInfo?.band?.toDisplayString()
+                                        ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
+                                }
+                        }"
+            )
         } else {
             Text(text = stringResource(R.string.select_wifi_rationale))
         }

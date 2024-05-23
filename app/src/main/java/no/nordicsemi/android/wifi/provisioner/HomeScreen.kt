@@ -63,10 +63,10 @@ import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.app.R
+import no.nordicsemi.android.wifi.provisioner.ble.sections.ProvisionOverBleSection
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestination
+import no.nordicsemi.android.wifi.provisioner.softap.view.ProvisionOverWifiSection
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestination
-import no.nordicsemi.android.wifi.provisioner.ui.ProvisionOverBle
-import no.nordicsemi.android.wifi.provisioner.ui.ProvisionOverWifi
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -121,10 +121,10 @@ fun HomeScreen() {
                 )
             }*/
             item {
-                ProvisionOverBle {
+                ProvisionOverBleSection {
                     vm.navigateTo(BleProvisioningDestination)
                 }
-                ProvisionOverWifi {
+                ProvisionOverWifiSection {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         vm.navigateTo(SoftApProvisionerDestination)
                     } else {

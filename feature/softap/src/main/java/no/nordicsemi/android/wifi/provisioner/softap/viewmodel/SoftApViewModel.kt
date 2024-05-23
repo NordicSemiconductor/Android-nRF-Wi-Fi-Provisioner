@@ -38,6 +38,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -53,6 +54,7 @@ import no.nordicsemi.android.log.timber.nRFLoggerTree
 import no.nordicsemi.android.wifi.provisioner.softap.Open
 import no.nordicsemi.android.wifi.provisioner.softap.PassphraseConfiguration
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
+import no.nordicsemi.android.wifi.provisioner.softap.WifiNotEnabledException
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApWifiScannerDestination
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
@@ -113,12 +115,12 @@ class SoftApViewModel @Inject constructor(
         Timber.plant(nRFLoggerTree(context, "SoftAP Manager", ssid).also {
             logger = it
         })
-
-        viewModelScope.launch {
+        val handler = CoroutineExceptionHandler() { _, throwable ->
+            _state.value = _state.value.copy(error = throwable)
+        }
+        viewModelScope.launch(handler) {
             connect(ssid, passphraseConfiguration)
             discoverServices()
-            // listSsids()
-            // provision()
         }
     }
 
@@ -126,6 +128,9 @@ class SoftApViewModel @Inject constructor(
         ssid: String = "nrf-wifiprov",
         passphraseConfiguration: PassphraseConfiguration = Open
     ) {
+        require(softApManager.isWifiEnabled) {
+            throw WifiNotEnabledException
+        }
         _state.value = _state.value.copy(connectionState = WizardStepState.CURRENT)
         softApManager.connect(ssid = ssid, passphraseConfiguration = passphraseConfiguration)
         _state.value = _state.value.copy(configureState = WizardStepState.COMPLETED)
@@ -133,6 +138,9 @@ class SoftApViewModel @Inject constructor(
     }
 
     private suspend fun discoverServices() {
+        require(softApManager.isWifiEnabled) {
+            throw WifiNotEnabledException
+        }
         _state.value = _state.value.copy(discoveringServicesState = WizardStepState.CURRENT)
         softApManager.discoverServices()
         _state.value = _state.value.copy(discoveringServicesState = WizardStepState.COMPLETED)
@@ -173,6 +181,7 @@ class SoftApViewModel @Inject constructor(
                     // provisioning due to timing constraints. In such cases, we can ignore the response
                     // and assume that the provisioning was successful.
                     Timber.log(Log.WARN, e, "Provisioning succeeded due to timeout")
+                    _state.value = _state.value.copy(error = e)
                 } catch (e: Exception) {
 
                 } finally {
@@ -196,6 +205,10 @@ class SoftApViewModel @Inject constructor(
         val wifiInfo = selectedChannel?.wifiInfo ?: channelFallback.wifiInfo
         return WifiConfigDomain(info = wifiInfo, passphrase = password)
     }
+
+    fun onSnackBarDismissed() {
+        _state.value = _state.value.copy(error = null)
+    }
 }
 
 data class SoftApScreenState(
@@ -208,4 +221,5 @@ data class SoftApScreenState(
     val providePasswordState: WizardStepState = WizardStepState.INACTIVE,
     val provisionState: WizardStepState = WizardStepState.INACTIVE,
     val verifyState: WizardStepState = WizardStepState.INACTIVE,
+    val error: Throwable? = null
 )

@@ -6,7 +6,10 @@ import okhttp3.tls.decodeCertificatePem
 /**
  * Host name configuration contains the hostname of the SoftAP provisioning service.
  *
- * @property hostName The hostname of the SoftAP provisioning service.
+ * @property serviceName Service name of the SoftAP provisioning service.
+ * @property hostName Hostname of the SoftAP provisioning service.
+ * @property certificate The certificate of the SoftAP provisioning service.
+ * @property handshakeCertificates The handshake certificates for the SoftAP provisioning service.
  */
 data class HostNameConfiguration(
     val serviceName: String = "wifiprov",
@@ -21,14 +24,20 @@ data class HostNameConfiguration(
 
 private const val CERTIFICATE = "" +
         "-----BEGIN CERTIFICATE-----\n" +
-        "MIIB1jCCAXugAwIBAgIUbOY1v8ubBZy6qIsZXelxvLy5l+QwCgYIKoZIzj0EAwIw\n" +
-        "YDELMAkGA1UEBhMCVVMxDTALBgNVBAgMBFRlc3QxDTALBgNVBAcMBFRlc3QxGjAY\n" +
-        "BgNVBAoMEVRlc3QgT3JnYW5pemF0aW9uMRcwFQYDVQQDDA53aWZpcHJvdi5sb2Nh\n" +
-        "bDAeFw0yNDAzMjYxMzI4MzNaFw0yNTAzMjYxMzI4MzNaMGAxCzAJBgNVBAYTAlVT\n" +
-        "MQ0wCwYDVQQIDARUZXN0MQ0wCwYDVQQHDARUZXN0MRowGAYDVQQKDBFUZXN0IE9y\n" +
-        "Z2FuaXphdGlvbjEXMBUGA1UEAwwOd2lmaXByb3YubG9jYWwwWTATBgcqhkjOPQIB\n" +
-        "BggqhkjOPQMBBwNCAAR6COfDiVYhNJkqCe3COkrN/Y9U8LPSDElE+mDk0ri7Ivb8\n" +
-        "LefdeYP3HgoTEEgem5eDNy10UZlf6+q6VUWyCH8toxMwETAPBgNVHRMBAf8EBTAD\n" +
-        "AQH/MAoGCCqGSM49BAMCA0kAMEYCIQDmEcPlg4GuPIAE9xvpW8t8LGit/+eDWCqE\n" +
-        "3ADi/H6f0QIhALUgBnN1+7awE7M1FvSnizX3b5ff7BfzltskPYnpjxqS\n" +
+        "MIICzTCCAnOgAwIBAgIUF3C1+U4KvWOYM85tZRg5/wmWMKIwCgYIKoZIzj0EAwIw\n" +
+        "gbAxCzAJBgNVBAYTAlVTMRIwEAYDVQQIDAlZb3VyU3RhdGUxETAPBgNVBAcMCFlv\n" +
+        "dXJDaXR5MRkwFwYDVQQKDBBZb3VyT3JnYW5pemF0aW9uMR8wHQYDVQQLDBZZb3Vy\n" +
+        "T3JnYW5pemF0aW9uYWxVbml0MSUwIwYJKoZIhvcNAQkBFhZ5b3VyLmVtYWlsQGV4\n" +
+        "YW1wbGUuY29tMRcwFQYDVQQDDA53aWZpcHJvdi5sb2NhbDAeFw0yNDA1MjIwODUx\n" +
+        "MTJaFw0zNDA1MjAwODUxMTJaMIGwMQswCQYDVQQGEwJVUzESMBAGA1UECAwJWW91\n" +
+        "clN0YXRlMREwDwYDVQQHDAhZb3VyQ2l0eTEZMBcGA1UECgwQWW91ck9yZ2FuaXph\n" +
+        "dGlvbjEfMB0GA1UECwwWWW91ck9yZ2FuaXphdGlvbmFsVW5pdDElMCMGCSqGSIb3\n" +
+        "DQEJARYWeW91ci5lbWFpbEBleGFtcGxlLmNvbTEXMBUGA1UEAwwOd2lmaXByb3Yu\n" +
+        "bG9jYWwwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQ7TywX0D1gDuNOB9QJxJtU\n" +
+        "g9wKnBsgiajKCcpEKQzNyoYVtF6i4He//Oi01BvAiN5Wh636dzoXKsoP9y0yzx/a\n" +
+        "o2kwZzArBgNVHREEJDAigg53aWZpcHJvdi5sb2NhbIIQKi53aWZpcHJvdi5sb2Nh\n" +
+        "bDAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBpjAdBgNVHQ4EFgQUMbOrGx0KVcEJ\n" +
+        "rEgRTGzoJOavreowCgYIKoZIzj0EAwIDSAAwRQIhAK1vHxEUMD/i3RzEnLPDxmqV\n" +
+        "jNCb+C26GeHMp1IqwzeuAiA6+H3OiqFpssvXsVjWEEQxicNpAKL8ZCqL384+rjix\n" +
+        "5Q==\n"                                                             +
         "-----END CERTIFICATE-----\n"
