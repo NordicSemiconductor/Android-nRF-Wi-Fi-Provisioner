@@ -5,16 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "no.nordicsemi.wifi.provisioner.domain"
+    namespace = "no.nordicsemi.kotlin.wifi.provisioner.domain"
 }
 
 dependencies{
     implementation(libs.androidx.core.ktx)
-    implementation(libs.nordic.ble.common)
-    implementation(libs.nordic.ble.ktx)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
 }
 
 wire {

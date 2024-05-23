@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
 -keep class no.nordicsemi.android.wifi.** { *; }
+-keep class no.nordicsemi.kotlin.wifi.** { *; }
