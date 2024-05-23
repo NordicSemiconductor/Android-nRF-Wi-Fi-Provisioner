@@ -19,7 +19,7 @@ import javax.inject.Inject
 /**
  * This class is responsible for creating the NDEF message for the WiFi data.
  */
-class WifiConfigNdefMessageBuilder @Inject constructor() {
+class NdefMessageBuilder @Inject constructor() {
 
     /**
      * Creates the NDEF message for the WiFi data.

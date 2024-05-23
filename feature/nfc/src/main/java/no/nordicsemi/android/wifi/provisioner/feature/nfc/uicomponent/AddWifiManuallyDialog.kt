@@ -1,8 +1,10 @@
-package no.nordicsemi.android.wifi.provisioner.feature.nfc.view
+package no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.material3.AlertDialog
@@ -13,7 +15,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,11 +38,13 @@ internal fun AddWifiManuallyDialog(
     onCancelClick: () -> Unit,
     onConfirmClick: (WifiData) -> Unit,
 ) {
-    var ssid by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var showPassword by remember { mutableStateOf(false) }
-    var authMode by remember { mutableStateOf("") }
-    var encryptionMode by remember { mutableStateOf("") }
+    var ssid by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var showPassword by rememberSaveable { mutableStateOf(false) }
+    var authMode by rememberSaveable { mutableStateOf("") }
+    var encryptionMode by rememberSaveable { mutableStateOf("") }
+
+    var isSsidEmpty by rememberSaveable { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = { },
@@ -58,6 +62,7 @@ internal fun AddWifiManuallyDialog(
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
                 val items = AuthModeDomain.entries.map { it.name }
                 // Show the authentication dropdown.
@@ -81,7 +86,11 @@ internal fun AddWifiManuallyDialog(
                     input = ssid,
                     label = stringResource(id = R.string.ssid_label),
                     placeholder = stringResource(id = R.string.ssid_placeholder),
-                    onUpdate = { ssid = it }
+                    errorState = isSsidEmpty && ssid.isEmpty(),
+                    onUpdate = {
+                        ssid = it
+                        isSsidEmpty = ssid.isEmpty()
+                    }
                 )
 
                 // Show the password field.
@@ -105,14 +114,19 @@ internal fun AddWifiManuallyDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onConfirmClick(
-                        WifiData(
-                            ssid = ssid,
-                            password = password,
-                            authType = authMode,
-                            encryptionMode = encryptionMode,
+                    if (ssid.isEmpty()) {
+                        isSsidEmpty = true
+                        return@TextButton
+                    } else {
+                        onConfirmClick(
+                            WifiData(
+                                ssid = ssid,
+                                password = password,
+                                authType = authMode,
+                                encryptionMode = encryptionMode,
+                            )
                         )
-                    )
+                    }
                 }
             ) { Text(text = stringResource(id = R.string.confirm)) }
         }

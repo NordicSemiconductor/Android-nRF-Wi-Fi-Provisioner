@@ -1,4 +1,4 @@
-package no.nordicsemi.android.wifi.provisioner.feature.nfc.view
+package no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

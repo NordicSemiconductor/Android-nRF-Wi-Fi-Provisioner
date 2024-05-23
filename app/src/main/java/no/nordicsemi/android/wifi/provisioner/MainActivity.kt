@@ -45,7 +45,7 @@ import no.nordicsemi.android.common.navigation.NavigationView
 import no.nordicsemi.android.common.theme.NordicActivity
 import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestinations
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.view.NfcProvisionerDestinations
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcProvisionerDestinations
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestinations
 
 @AndroidEntryPoint
