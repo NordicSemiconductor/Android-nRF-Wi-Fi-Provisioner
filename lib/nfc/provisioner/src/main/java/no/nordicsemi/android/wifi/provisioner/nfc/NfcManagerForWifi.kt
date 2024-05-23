@@ -6,6 +6,8 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.Ndef
 import android.nfc.tech.NdefFormatable
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,6 +28,11 @@ private val flags = setOf(
     NfcFlags.NFC_BARCODE
 ).fold(0) { acc, flag -> acc or flag.value }
 
+sealed interface NfcScanEvent
+data object Loading : NfcScanEvent
+data object Success : NfcScanEvent
+data class Error(val message: String) : NfcScanEvent
+
 /**
  * A class that manages the NFC adapter for the wifi provisioning.
  */
@@ -33,6 +40,8 @@ private val flags = setOf(
 class NfcManagerForWifi @Inject constructor(
     private val nfcAdapter: NfcAdapter?,
 ) {
+    private val _nfcScanEvent = MutableStateFlow<NfcScanEvent?>(null)
+    val nfcScanEvent = _nfcScanEvent.asStateFlow()
     private var ndefMessage: NdefMessage? = null
 
     /**
@@ -53,6 +62,7 @@ class NfcManagerForWifi @Inject constructor(
      * @param tag the discovered tag.
      */
     private fun onTagDiscovered(tag: Tag?) {
+        _nfcScanEvent.value = Loading
         try {
             tag?.let {
                 ndefMessage?.let {
@@ -63,7 +73,9 @@ class NfcManagerForWifi @Inject constructor(
                             ndef.connect()
                             ndef.writeNdefMessage(it)
                             ndef.close()
+                            _nfcScanEvent.value = Success
                         } catch (e: Exception) {
+                            _nfcScanEvent.value = Error(e.message ?: "Error writing Ndef message")
                             e.printStackTrace()
                         }
                     } else if (tag.techList.contains(NdefFormatable::class.java.name)) {
@@ -73,16 +85,20 @@ class NfcManagerForWifi @Inject constructor(
                             ndefFormatable.connect()
                             ndefFormatable.format(it)
                             ndefFormatable.close()
+                            _nfcScanEvent.value = Success
                         } catch (e: Exception) {
+                            _nfcScanEvent.value = Error(e.message ?: "Error formatting Ndef message")
                             e.printStackTrace()
                         }
                     } else {
                         // The tag does not support Ndef or NdefFormatable.
                         // Show an error message.
+                        _nfcScanEvent.value = Error("Tag does not support Ndef or NdefFormatable")
                     }
                 }
             }
         } catch (e: Exception) {
+            _nfcScanEvent.value = Error(e.message ?: "Unknown error occurred")
             e.printStackTrace()
         }
 
