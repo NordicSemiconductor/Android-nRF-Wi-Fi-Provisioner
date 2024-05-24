@@ -50,6 +50,7 @@ class NfcManagerForWifi @Inject constructor(
      * @param message the Ndef message.
      */
     fun onNfcTap(activity: Activity, message: NdefMessage) {
+        _nfcScanEvent.value = null
         ndefMessage = message
         nfcAdapter?.takeIf { it.isEnabled }?.let {
             val readerFlag = getReaderFlag()
@@ -75,7 +76,7 @@ class NfcManagerForWifi @Inject constructor(
                             ndef.close()
                             _nfcScanEvent.value = Success
                         } catch (e: Exception) {
-                            _nfcScanEvent.value = Error(e.message ?: "Error writing Ndef message")
+                            _nfcScanEvent.value = Error(e.message ?: "Error writing NDEF message.")
                             e.printStackTrace()
                         }
                     } else if (tag.techList.contains(NdefFormatable::class.java.name)) {
@@ -87,13 +88,13 @@ class NfcManagerForWifi @Inject constructor(
                             ndefFormatable.close()
                             _nfcScanEvent.value = Success
                         } catch (e: Exception) {
-                            _nfcScanEvent.value = Error(e.message ?: "Error formatting Ndef message")
+                            _nfcScanEvent.value = Error(e.message ?: "Error formatting NDEF message.")
                             e.printStackTrace()
                         }
                     } else {
                         // The tag does not support Ndef or NdefFormatable.
                         // Show an error message.
-                        _nfcScanEvent.value = Error("Tag does not support Ndef or NdefFormatable")
+                        _nfcScanEvent.value = Error("Tag does not support Ndef or NdefFormatable.")
                     }
                 }
             }

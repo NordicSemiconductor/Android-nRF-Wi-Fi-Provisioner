@@ -1,33 +1,38 @@
 package no.nordicsemi.android.wifi.provisioner.feature.nfc.view
 
 import android.app.Activity
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.permissions.nfc.RequireNfc
 import no.nordicsemi.android.common.theme.view.NordicAppBar
+import no.nordicsemi.android.common.theme.view.ProgressItem
+import no.nordicsemi.android.common.theme.view.ProgressItemStatus
+import no.nordicsemi.android.common.theme.view.WizardStepComponent
+import no.nordicsemi.android.common.theme.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.NfcTextRow
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.NfcManagerViewModel
 import no.nordicsemi.android.wifi.provisioner.nfc.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.Loading
@@ -39,7 +44,13 @@ internal fun NfcScreen() {
     val nfcManagerVm: NfcManagerViewModel = hiltViewModel()
     val context = LocalContext.current
     val nfcScanEvent by nfcManagerVm.nfcScanEvent.collectAsStateWithLifecycle()
+    val ndefMessage = nfcManagerVm.ndefMessage
+    val wifiData = nfcManagerVm.wifiData
 
+    // Handle back navigation.
+    BackHandler {
+        nfcManagerVm.onBackNavigation()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,60 +66,100 @@ internal fun NfcScreen() {
                 nfcManagerVm.onScan(context as Activity)
                 onDispose { nfcManagerVm.onPause(context) }
             }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-                modifier = Modifier.fillMaxSize()
+            OutlinedCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(8.dp)
             ) {
-                when (val e = nfcScanEvent) {
-                    is Error -> {
-                        Text(text = "Nfc scan error")
-                        Text(text = "Please try again")
-                        Text(text = e.message)
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                ) {
+                    // Show Ndef Record information.
+                    WizardStepComponent(
+                        icon = Icons.Default.Wifi,
+                        title = stringResource(id = R.string.wifi_record),
+                        state = WizardStepState.COMPLETED
+                    ) {
+                        NfcTextRow(
+                            title = stringResource(id = R.string.ssid_title),
+                            text = wifiData.ssid
+                        )
+                        NfcTextRow(
+                            title = stringResource(id = R.string.password_title),
+                            text = wifiData.password
+                        )
+                        NfcTextRow(
+                            title = stringResource(id = R.string.authentication_title),
+                            text = wifiData.authType
+                        )
+                        NfcTextRow(
+                            title = stringResource(id = R.string.encryption_title),
+                            text = wifiData.encryptionMode
+                        )
+                        NfcTextRow(
+                            title = stringResource(id = R.string.message_size),
+                            text = stringResource(
+                                id = R.string.message_size_in_bytes,
+                                ndefMessage.byteArrayLength
+                            )
+                        )
                     }
 
-                    Loading -> {
-                        // Show the loading indicator.
-                        Column {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.padding(16.dp)
+                    WizardStepComponent(
+                        icon = Icons.Default.Edit,
+                        title = "Discover tag",
+                        state = WizardStepState.CURRENT,
+                        showVerticalDivider = false,
+                    ) {
+                        when (val e = nfcScanEvent) {
+                            is Error -> {
+                                // Show the error message.
+                                ProgressItem(
+                                    text = stringResource(id = R.string.write_failed),
+                                    status = ProgressItemStatus.ERROR
+                                )
+                                Text(
+                                    text = if (e.message.length > 35) e.message.slice(0..35) else e.message,
+                                    modifier = Modifier
+                                        .alpha(0.7f)
+                                        .padding(start = 40.dp),
+                                    style = MaterialTheme.typography.bodySmall,
+                                )
+                            }
+
+                            Loading -> {
+                                // Show the loading indicator.
+                                ProgressItem(
+                                    text = stringResource(id = R.string.discovering_tag),
+                                    status = ProgressItemStatus.WORKING
+                                )
+                            }
+
+                            Success -> {
+                                ProgressItem(
+                                    text = stringResource(id = R.string.write_success),
+                                    status = ProgressItemStatus.SUCCESS
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.success_des),
+                                    modifier = Modifier
+                                        .alpha(0.7f)
+                                        .padding(start = 40.dp),
+                                    style = MaterialTheme.typography.bodySmall,
+                                )
+                            }
+
+                            null -> {
+                                ProgressItem(
+                                    text = stringResource(id = R.string.tap_nfc_tag),
+                                    status = ProgressItemStatus.WORKING
                                 )
                             }
                         }
                     }
-
-                    Success -> {
-                        Text(text = "Nfc scan success")
-                        Text(
-                            text = "It might take a few seconds to connect to wifi once the NFC tag is detected.",
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-
-                    null -> {
-                        Image(
-                            painter = painterResource(id = R.drawable.nfc_scanning),
-                            contentDescription = null,
-                            modifier = Modifier.size(100.dp),
-                            colorFilter = ColorFilter.tint(
-                                MaterialTheme.colorScheme.onBackground.copy(
-                                    alpha = 0.6f
-                                )
-                            ),
-                        )
-                        Text(
-                            text = "Hold the device near to the NFC tag to provision the WiFi network.",
-                            textAlign = TextAlign.Center,
-                        )
-                    }
                 }
-
             }
         }
     }

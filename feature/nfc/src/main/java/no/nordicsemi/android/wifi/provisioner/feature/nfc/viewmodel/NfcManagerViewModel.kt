@@ -21,8 +21,8 @@ internal class NfcManagerViewModel @Inject constructor(
     private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
 ) : SimpleNavigationViewModel(navigator, savedStateHandle) {
-    private val params = parameterOf(NfcDestinationId)
-    private val ndefMessage: NdefMessage = ndefMessageBuilder.createNdefMessage(params)
+    val wifiData = parameterOf(NfcDestinationId)
+    val ndefMessage: NdefMessage = ndefMessageBuilder.createNdefMessage(wifiData)
     val nfcScanEvent = nfcManagerForWifi.nfcScanEvent
 
     fun onScan(activity: Activity) {
