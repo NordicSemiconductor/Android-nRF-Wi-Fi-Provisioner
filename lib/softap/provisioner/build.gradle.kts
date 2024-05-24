@@ -10,17 +10,18 @@ android {
 
 dependencies {
     api(project(":lib:domain"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.annotation)
-    implementation(libs.nordic.core)
+
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.converter.scalars)
+    implementation(libs.retrofit.converter.wire)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
-    implementation(libs.retrofit.converter.wire)
     implementation("com.squareup.okhttp3:okhttp-tls:5.0.0-alpha.12")
-    implementation("org.slf4j:slf4j-api:1.7.36")
+    implementation("org.slf4j:slf4j-api:1.7.36") // TODO replace with libs
 }
 
 wire {

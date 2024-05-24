@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.repository
+package no.nordicsemi.android.wifi.provisioner.ble.repository
 
 import android.content.Context
 import dagger.Module
@@ -38,7 +38,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import no.nordicsemi.android.wifi.provisioner.ble.ProvisionerRepository
-import no.nordicsemi.android.wifi.provisioner.ble.repository.ProvisionerResourceRepository
 
 @Module
 @InstallIn(SingletonComponent::class)

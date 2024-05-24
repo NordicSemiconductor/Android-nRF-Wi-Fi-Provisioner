@@ -64,9 +64,9 @@ import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewMod
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.app.R
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ProvisionOverBleSection
-import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestination
+import no.nordicsemi.android.wifi.provisioner.ble.view.BleDestination
 import no.nordicsemi.android.wifi.provisioner.softap.view.ProvisionOverWifiSection
-import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestination
+import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -122,11 +122,11 @@ fun HomeScreen() {
             }*/
             item {
                 ProvisionOverBleSection {
-                    vm.navigateTo(BleProvisioningDestination)
+                    vm.navigateTo(BleDestination)
                 }
                 ProvisionOverWifiSection {
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        vm.navigateTo(SoftApProvisionerDestination)
+                        vm.navigateTo(SoftApDestination)
                     } else {
                         scope.launch {
                             snackbarHostState.showSnackbar(

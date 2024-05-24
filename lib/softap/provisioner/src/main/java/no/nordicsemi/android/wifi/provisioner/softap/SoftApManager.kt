@@ -13,7 +13,6 @@ import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSpecifier
 import android.os.Build
 import androidx.annotation.RequiresApi
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import no.nordicsemi.android.wifi.provisioner.softap.Open.passphrase
 import no.nordicsemi.android.wifi.provisioner.softap.domain.ScanResultsDomain
@@ -113,7 +112,6 @@ class SoftApManager(
      * @throws FailedToBindToNetwork if the device failed to bind to the connected wifi network.
      *                               Call [connect] to connect to the softap and bind to the network.
      */
-    @OptIn(InternalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.Q)
     @Throws(WifiNotEnabledException::class, FailedToBindToNetwork::class)
     suspend fun connect(

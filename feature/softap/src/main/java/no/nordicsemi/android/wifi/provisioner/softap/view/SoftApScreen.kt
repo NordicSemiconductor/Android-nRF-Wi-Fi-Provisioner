@@ -240,9 +240,7 @@ private fun ConnectToSoftAp(
             null
         } else WizardStepAction.Action(
             text = stringResource(id = R.string.start),
-            onClick = {
-                start()
-            }
+            onClick = start,
         ),
         showVerticalDivider = false,
     ) {

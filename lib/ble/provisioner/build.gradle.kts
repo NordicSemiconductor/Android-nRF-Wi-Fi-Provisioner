@@ -41,11 +41,8 @@ android {
 
 dependencies {
     api(project(":lib:domain"))
+
     implementation(libs.nordic.ble.ktx)
-    implementation(libs.nordic.ble.common)
-    implementation(libs.nordic.uilogger)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
 }
 
 wire {

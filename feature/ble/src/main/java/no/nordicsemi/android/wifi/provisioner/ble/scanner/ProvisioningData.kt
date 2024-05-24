@@ -32,7 +32,7 @@
 package no.nordicsemi.android.wifi.provisioner.ble.scanner
 
 import android.os.ParcelUuid
-import no.nordicsemi.android.common.core.DataByteArray
+import no.nordicsemi.android.kotlin.ble.core.data.util.DataByteArray
 import no.nordicsemi.android.kotlin.ble.core.scanner.BleScanResultData
 import no.nordicsemi.android.kotlin.ble.core.scanner.BleScanResults
 import java.util.UUID

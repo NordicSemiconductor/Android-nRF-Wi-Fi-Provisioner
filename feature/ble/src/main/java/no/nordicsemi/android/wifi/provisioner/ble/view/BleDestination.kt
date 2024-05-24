@@ -37,17 +37,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.navigation.createDestination
 import no.nordicsemi.android.common.navigation.createSimpleDestination
 import no.nordicsemi.android.common.navigation.defineDestination
+import no.nordicsemi.android.common.navigation.with
 import no.nordicsemi.android.wifi.provisioner.ble.scanner.BleScannerDestination
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.view.BleWifiScannerScreen
 import no.nordicsemi.android.wifi.provisioner.ble.wifi.viewmodel.BleWifiScannerViewModel
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 
+val BleDestination = createSimpleDestination("ble")
 val BleProvisioningDestination = createSimpleDestination("ble-provisioning-destination")
 val BleWifiScannerDestination = createDestination<Unit, WifiData>(
     name = "wifi-access-points-ble-destination"
 )
 
-val BleProvisioningDestinations = listOf(
+val BleProvisioningDestinations = BleDestination with listOf(
     defineDestination(BleProvisioningDestination) {
         BleProvisioningScreen()
     },

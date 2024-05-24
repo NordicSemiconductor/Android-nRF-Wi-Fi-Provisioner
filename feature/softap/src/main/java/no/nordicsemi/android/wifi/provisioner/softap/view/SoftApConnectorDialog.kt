@@ -85,9 +85,6 @@ internal fun SoftApConnectorDialog(
     )
 }
 
-
-
-
 @Composable
 internal fun EditSsidDialog(
     ssidName: String = "nrf-wifiprov",

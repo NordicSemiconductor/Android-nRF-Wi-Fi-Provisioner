@@ -50,6 +50,7 @@ import no.nordicsemi.android.common.navigation.NavigationResult
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.common.theme.view.WizardStepState
+import no.nordicsemi.android.log.LogSession
 import no.nordicsemi.android.log.timber.nRFLoggerTree
 import no.nordicsemi.android.wifi.provisioner.softap.Open
 import no.nordicsemi.android.wifi.provisioner.softap.PassphraseConfiguration
@@ -74,11 +75,9 @@ class SoftApViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     private var wifiConfigDomain: WifiConfigDomain? = null
-    private var logger: Timber.Tree? = null
-
+    private var logger: nRFLoggerTree? = null
 
     init {
-        Timber.plant(Timber.DebugTree())
         navigationManager.resultFrom(SoftApWifiScannerDestination)
             .mapNotNull { it as? NavigationResult.Success }
             .onEach {
@@ -99,10 +98,11 @@ class SoftApViewModel @Inject constructor(
             ?.let { launchIntent ->
                 context.startActivity(launchIntent)
             } ?: run {
-            LoggerLauncher.launch(context)
-        }
+                LoggerLauncher.launch(context, logger?.session as LogSession)
+            }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun start(
         context: Context,
         ssid: String = "nrf-wifiprov",
@@ -115,7 +115,7 @@ class SoftApViewModel @Inject constructor(
         Timber.plant(nRFLoggerTree(context, "SoftAP Manager", ssid).also {
             logger = it
         })
-        val handler = CoroutineExceptionHandler() { _, throwable ->
+        val handler = CoroutineExceptionHandler { _, throwable ->
             _state.value = _state.value.copy(error = throwable)
         }
         viewModelScope.launch(handler) {
@@ -124,6 +124,7 @@ class SoftApViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private suspend fun connect(
         ssid: String = "nrf-wifiprov",
         passphraseConfiguration: PassphraseConfiguration = Open

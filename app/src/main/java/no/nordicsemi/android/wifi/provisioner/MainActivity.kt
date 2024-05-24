@@ -31,7 +31,10 @@
 
 package no.nordicsemi.android.wifi.provisioner
 
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,14 +52,22 @@ class MainActivity : NordicActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT))
+
         setContent {
             NordicTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     NavigationView(
-                        destinations = HomeDestination +
-                                BleProvisioningDestinations +
-                                SoftApProvisionerDestinations
+                        destinations = (HomeDestination +
+                                BleProvisioningDestinations).run {
+                                    // Soft AP is available on Android 10 and newer.
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                        this + SoftApProvisionerDestinations
+                                    } else {
+                                        this
+                                    }
+                                }
                     )
                 }
             }

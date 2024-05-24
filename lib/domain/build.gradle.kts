@@ -8,10 +8,6 @@ android {
     namespace = "no.nordicsemi.kotlin.wifi.provisioner.domain"
 }
 
-dependencies{
-    implementation(libs.androidx.core.ktx)
-}
-
 wire {
     kotlin {}
 }
