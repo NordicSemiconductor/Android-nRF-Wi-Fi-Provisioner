@@ -177,7 +177,7 @@ class SoftApViewModel @Inject constructor(
                 try {
                     _state.value = _state.value.copy(provisionState = WizardStepState.CURRENT)
                     val response = softApManager.provision(it)
-                    if(response.isSuccessful) {
+                    if (response.isSuccessful) {
                         Timber.log(Log.INFO, "Provisioning succeeded: $response")
                     }
                 } catch (e: SocketTimeoutException) {
