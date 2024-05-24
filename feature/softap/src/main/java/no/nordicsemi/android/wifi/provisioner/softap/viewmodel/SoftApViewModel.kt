@@ -176,14 +176,17 @@ class SoftApViewModel @Inject constructor(
             wifiConfigDomain?.let {
                 try {
                     _state.value = _state.value.copy(provisionState = WizardStepState.CURRENT)
-                    softApManager.provision(it)
+                    val response = softApManager.provision(it)
+                    if(response.isSuccessful) {
+                        Timber.log(Log.INFO, "Provisioning succeeded: $response")
+                    }
                 } catch (e: SocketTimeoutException) {
                     // There is always chance that a socket timeout is thrown from the DK during
                     // provisioning due to timing constraints. In such cases, we can ignore the response
                     // and assume that the provisioning was successful.
                     Timber.log(Log.WARN, e, "Connection timed out, provisioning succeeded!")
                 } catch (e: Exception) {
-                    Timber.log(Log.WARN, e, "Error, provisioning succeeded!")
+                    Timber.log(Log.WARN, e, "Error occurred, provisioning may have succeeded!")
                     _state.value = _state.value.copy(error = e)
                 } finally {
                     _state.value = _state.value.copy(provisionState = WizardStepState.COMPLETED)
