@@ -156,7 +156,9 @@ class SoftApViewModel @Inject constructor(
         _state.value = _state.value.copy(
             selectedWifi = record,
             selectWifiState = WizardStepState.COMPLETED,
-            providePasswordState = WizardStepState.CURRENT
+            providePasswordState = if (record.authMode == AuthModeDomain.OPEN)
+                WizardStepState.COMPLETED
+            else WizardStepState.CURRENT
         )
     }
 
