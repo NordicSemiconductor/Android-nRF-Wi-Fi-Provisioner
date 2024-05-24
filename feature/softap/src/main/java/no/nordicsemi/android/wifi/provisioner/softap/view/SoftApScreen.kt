@@ -299,16 +299,14 @@ private fun SelectWifi(
         showVerticalDivider = true
     ) {
         if (wifiData != null && selectWifiState != WizardStepState.INACTIVE) {
+            Text(text = "SSID: ${wifiData.ssid}")
             Text(
-                text = "SSID: ${wifiData.ssid}, band: " +
-                        "${
-                            wifiData
-                                .let {
-                                    it.selectedChannel?.wifiInfo?.band?.toDisplayString()
-                                        ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
-                                }
-                        }"
-            )
+                text = "Band: ${
+                    wifiData.let {
+                        it.selectedChannel?.wifiInfo?.band?.toDisplayString()
+                            ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
+                    }
+                }")
         } else {
             Text(text = stringResource(R.string.select_wifi_rationale))
         }
