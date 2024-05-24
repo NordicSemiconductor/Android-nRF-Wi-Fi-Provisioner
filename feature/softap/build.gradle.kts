@@ -40,7 +40,7 @@ android {
 dependencies {
     implementation(project(":feature:common"))
     implementation(project(":feature:ui"))
-    implementation(project(":lib:softap:provisioner"))
+    implementation(project(":lib:softap"))
 
     implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)

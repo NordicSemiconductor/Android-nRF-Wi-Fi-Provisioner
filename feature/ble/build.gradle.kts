@@ -40,7 +40,7 @@ android {
 dependencies {
     implementation(project(":feature:common"))
     implementation(project(":feature:ui"))
-    implementation(project(":lib:ble:provisioner"))
+    implementation(project(":lib:ble"))
     implementation(project(":lib:domain"))
 
     implementation(libs.androidx.compose.material.iconsExtended)

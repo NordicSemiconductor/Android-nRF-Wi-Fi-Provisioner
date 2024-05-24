@@ -59,8 +59,8 @@ include(":feature:ble")
 include(":feature:softap")
 include(":feature:ui")
 include(":feature:common")
-include(":lib:ble:provisioner")
-include(":lib:softap:provisioner")
+include(":lib:ble")
+include(":lib:softap")
 include(":lib:domain")
 
 //if (file('../Android-Common-Libraries').exists()) {
