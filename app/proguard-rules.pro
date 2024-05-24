@@ -19,6 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
--keep class no.nordicsemi.android.wifi.** { *; }
--keep class no.nordicsemi.kotlin.wifi.** { *; }
