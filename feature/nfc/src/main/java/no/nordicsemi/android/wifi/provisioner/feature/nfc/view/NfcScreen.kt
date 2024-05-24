@@ -86,18 +86,25 @@ internal fun NfcScreen() {
                             title = stringResource(id = R.string.ssid_title),
                             text = wifiData.ssid
                         )
-                        NfcTextRow(
-                            title = stringResource(id = R.string.password_title),
-                            text = wifiData.password
-                        )
-                        NfcTextRow(
-                            title = stringResource(id = R.string.authentication_title),
-                            text = wifiData.authType
-                        )
-                        NfcTextRow(
-                            title = stringResource(id = R.string.encryption_title),
-                            text = wifiData.encryptionMode
-                        )
+                        // TODO: Change all if statements with if authType open, if yes then don't show password
+                        if (wifiData.password.isNotEmpty()) {
+                            NfcTextRow(
+                                title = stringResource(id = R.string.password_title),
+                                text = wifiData.password
+                            )
+                        }
+                        if (wifiData.authType.isNotEmpty()) {
+                            NfcTextRow(
+                                title = stringResource(id = R.string.authentication_title),
+                                text = wifiData.authType
+                            )
+                        }
+                        if (wifiData.encryptionMode.isNotEmpty()) {
+                            NfcTextRow(
+                                title = stringResource(id = R.string.encryption_title),
+                                text = wifiData.encryptionMode
+                            )
+                        }
                         NfcTextRow(
                             title = stringResource(id = R.string.message_size),
                             text = stringResource(
@@ -109,7 +116,7 @@ internal fun NfcScreen() {
 
                     WizardStepComponent(
                         icon = Icons.Default.Edit,
-                        title = "Discover tag",
+                        title = stringResource(id = R.string.discover_tag_title),
                         state = WizardStepState.CURRENT,
                         showVerticalDivider = false,
                     ) {

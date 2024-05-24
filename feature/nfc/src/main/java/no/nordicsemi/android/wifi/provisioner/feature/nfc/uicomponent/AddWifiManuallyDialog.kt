@@ -87,6 +87,7 @@ internal fun AddWifiManuallyDialog(
                     label = stringResource(id = R.string.ssid_label),
                     placeholder = stringResource(id = R.string.ssid_placeholder),
                     errorState = isSsidEmpty && ssid.isEmpty(),
+                    errorMessage = stringResource(id = R.string.ssid_error),
                     onUpdate = {
                         ssid = it
                         isSsidEmpty = ssid.isEmpty()

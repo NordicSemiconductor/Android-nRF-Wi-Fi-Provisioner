@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="wifi_provision_over_nfc_appbar">Wifi Provisioning over NFC</string>
+    <string name="wifi_provision_over_nfc_appbar">Wifi provisioning over NFC</string>
     <string name="enter_wifi_credentials">Enter Wi-Fi credentials</string>
     <string name="enter_wifi_credentials_des">Enter the Wi-Fi credentials manually.</string>
     <string name="search_for_wifi_networks">Search for Wi-Fi networks</string>
@@ -30,6 +30,7 @@
     <string name="authentication_placeholder">Select authentication</string>
     <string name="ssid_label">SSID</string>
     <string name="ssid_placeholder">Enter SSID</string>
+    <string name="ssid_error">SSID is required</string>
     <string name="encryption">Encryption</string>
     <string name="encryption_placeholder">Select encryption</string>
     <string name="password">Password</string>
