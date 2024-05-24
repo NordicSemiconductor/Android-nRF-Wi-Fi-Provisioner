@@ -22,7 +22,7 @@ object NfcAdapterModule {
 
     @Provides
     @Singleton
-    fun provideWifiConnectionManager(@ApplicationContext context: Context) =
+    fun provideNfcManagerForWifi(@ApplicationContext context: Context) =
         NfcManagerForWifi(
             nfcAdapter = provideNfcAdapter(context)!!
         )

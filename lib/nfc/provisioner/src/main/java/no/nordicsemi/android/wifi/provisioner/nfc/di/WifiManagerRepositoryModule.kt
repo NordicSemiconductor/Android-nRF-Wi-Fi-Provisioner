@@ -9,6 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import no.nordicsemi.android.wifi.provisioner.nfc.WifiManagerRepository
+import no.nordicsemi.android.wifi.provisioner.nfc.WifiManagerRepositoryImp
 import javax.inject.Singleton
 
 @Module
@@ -18,6 +19,6 @@ object WifiManagerRepositoryModule {
     @RequiresApi(Build.VERSION_CODES.M)
     @Provides
     @Singleton
-    fun provideWifiManagerRepositoryModule(@ApplicationContext context: Context) =
-        WifiManagerRepository(context = context)
+    fun provideWifiManagerRepositoryModule(@ApplicationContext context: Context): WifiManagerRepository =
+        WifiManagerRepositoryImp(context = context)
 }
