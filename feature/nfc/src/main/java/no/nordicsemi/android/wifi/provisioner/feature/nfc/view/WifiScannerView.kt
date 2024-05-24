@@ -3,6 +3,8 @@ package no.nordicsemi.android.wifi.provisioner.feature.nfc.view
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiSsid
 import android.os.Build
+import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +42,7 @@ import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireLoca
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireWifi
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.RssiIconView
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnNavigateUpClickEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnNetworkSelectEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnPasswordCancelEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnPasswordSetEvent
@@ -53,25 +56,32 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 /**
  * A composable function to display the list of available networks.
  */
+@RequiresApi(Build.VERSION_CODES.M)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WifiScannerView() {
     val wifiScannerViewModel = hiltViewModel<WifiScannerViewModel>()
     val onEvent: (WifiScannerViewEvent) -> Unit = { wifiScannerViewModel.onEvent(it) }
     val wifiScannerViewState by wifiScannerViewModel.viewState.collectAsStateWithLifecycle()
+
+    // Handle the back press.
+    BackHandler {
+        onEvent(OnNavigateUpClickEvent)
+    }
     // Show the scanning screen.
-    RequireWifi {
-        RequireLocationForWifi {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 56.dp)
-            ) {
-                NordicAppBar(
-                    text = stringResource(id = R.string.wifi_provision_over_nfc_appbar),
-                    showBackButton = true,
-                    onNavigationButtonClick = { }
-                )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 56.dp)
+    ) {
+        NordicAppBar(
+            text = stringResource(id = R.string.wifi_provision_over_nfc_appbar),
+            showBackButton = true,
+            onNavigationButtonClick = { onEvent(OnNavigateUpClickEvent) }
+        )
+
+        RequireWifi {
+            RequireLocationForWifi {
                 when (val scanningState = wifiScannerViewState.networks) {
                     is Error -> {
                         // Show the error message.

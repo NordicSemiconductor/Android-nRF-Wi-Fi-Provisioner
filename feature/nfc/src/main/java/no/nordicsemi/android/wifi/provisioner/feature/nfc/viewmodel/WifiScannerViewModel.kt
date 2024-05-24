@@ -1,6 +1,8 @@
 package no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel
 
 import android.net.wifi.ScanResult
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,6 +56,7 @@ data class WifiScannerViewState(
     val selectedNetwork: ScanResult? = null
 )
 
+@RequiresApi(Build.VERSION_CODES.M)
 @HiltViewModel
 internal class WifiScannerViewModel @Inject constructor(
     private val navigator: Navigator,
