@@ -28,6 +28,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.theme.view.NordicAppBar
@@ -63,7 +65,6 @@ import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
-import java.net.SocketTimeoutException
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -407,16 +408,18 @@ private fun Verify(
     verificationState: WizardStepState,
     verify: () -> Unit
 ) {
+    var isVerifyClicked by remember { mutableStateOf(false) }
     WizardStepComponent(
         icon = Icons.Default.Verified,
         title = stringResource(id = R.string.verify),
         state = verificationState,
-        decor = if (verificationState == WizardStepState.INACTIVE &&
-            provisioningState == WizardStepState.COMPLETED
-        ) {
+        decor = if (provisioningState == WizardStepState.COMPLETED && !isVerifyClicked && verificationState == WizardStepState.CURRENT) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.verify),
-                onClick = verify
+                onClick = {
+                    isVerifyClicked = true
+                    verify()
+                }
             )
         } else if (verificationState == WizardStepState.CURRENT) {
             WizardStepAction.ProgressIndicator
@@ -424,10 +427,11 @@ private fun Verify(
         showVerticalDivider = false
     ) {
         ProgressItem(
-            text = when (verificationState) {
-                WizardStepState.INACTIVE -> stringResource(R.string.optional_verification_rationale)
-                WizardStepState.CURRENT -> "Locating provisioned device..."
-                WizardStepState.COMPLETED -> "Verification completed."
+            text = when {
+                !isVerifyClicked -> stringResource(R.string.optional_verification_rationale)
+                verificationState == WizardStepState.CURRENT -> "Locating provisioned device..."
+                verificationState == WizardStepState.COMPLETED -> "Verification completed."
+                else -> {""}
             },
             status = when (verificationState) {
                 WizardStepState.CURRENT -> ProgressItemStatus.WORKING
@@ -436,6 +440,12 @@ private fun Verify(
             },
             iconRightPadding = 24.dp,
         )
+    }
+    LaunchedEffect(isVerifyClicked) {
+        if(isVerifyClicked) {
+            delay(5000L)
+            isVerifyClicked = false
+        }
     }
 }
 

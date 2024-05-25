@@ -45,6 +45,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import no.nordicsemi.android.common.logger.LoggerLauncher
 import no.nordicsemi.android.common.navigation.NavigationResult
 import no.nordicsemi.android.common.navigation.Navigator
@@ -58,6 +59,7 @@ import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
 import no.nordicsemi.android.wifi.provisioner.softap.WifiNotEnabledException
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApWifiScannerDestination
+import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import timber.log.Timber
 import java.net.SocketTimeoutException
@@ -160,6 +162,9 @@ class SoftApViewModel @Inject constructor(
                 WizardStepState.COMPLETED
             else WizardStepState.CURRENT
         )
+        if(record.authMode == AuthModeDomain.OPEN) {
+            onPasswordEntered("")
+        }
     }
 
     fun onPasswordEntered(password: String) {
@@ -192,6 +197,7 @@ class SoftApViewModel @Inject constructor(
                     _state.value = _state.value.copy(error = e)
                 } finally {
                     _state.value = _state.value.copy(provisionState = WizardStepState.COMPLETED)
+                    _state.value = _state.value.copy(verifyState = WizardStepState.CURRENT)
                 }
             }
         }
@@ -200,9 +206,14 @@ class SoftApViewModel @Inject constructor(
     fun verify() {
         viewModelScope.launch {
             _state.value = _state.value.copy(verifyState = WizardStepState.CURRENT)
-            val verified = softApManager.verify()
-            if (verified) {
-                _state.value = _state.value.copy(verifyState = WizardStepState.COMPLETED)
+            try {
+                withTimeout(5000L) {
+                    val verified = softApManager.verify()
+                    if (verified) {
+                        _state.value = _state.value.copy(verifyState = WizardStepState.COMPLETED)
+                    }
+                }
+            } catch (e: Exception) {
             }
         }
     }
@@ -219,7 +230,7 @@ class SoftApViewModel @Inject constructor(
 
 data class SoftApScreenState(
     val configureState: WizardStepState = WizardStepState.COMPLETED,
-    val connectionState: WizardStepState = WizardStepState.INACTIVE,
+    val connectionState: WizardStepState = WizardStepState.CURRENT,
     val discoveringServicesState: WizardStepState = WizardStepState.INACTIVE,
     val selectWifiState: WizardStepState = WizardStepState.INACTIVE,
     val selectedWifi: WifiData? = null,
