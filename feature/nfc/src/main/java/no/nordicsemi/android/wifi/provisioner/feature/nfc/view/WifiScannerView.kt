@@ -5,6 +5,7 @@ import android.net.wifi.WifiSsid
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,8 +16,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.Group
+import androidx.compose.material.icons.outlined.GroupRemove
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,9 +34,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -63,6 +74,8 @@ internal fun WifiScannerView() {
     val wifiScannerViewModel = hiltViewModel<WifiScannerViewModel>()
     val onEvent: (WifiScannerViewEvent) -> Unit = { wifiScannerViewModel.onEvent(it) }
     val wifiScannerViewState by wifiScannerViewModel.viewState.collectAsStateWithLifecycle()
+    var isGroupedBySsid by rememberSaveable { mutableStateOf(false) }
+    val groupIcon = if (isGroupedBySsid) Icons.Outlined.GroupRemove else Icons.Outlined.Group
 
     // Handle the back press.
     BackHandler {
@@ -75,9 +88,23 @@ internal fun WifiScannerView() {
             .padding(bottom = 56.dp)
     ) {
         NordicAppBar(
-            text = stringResource(id = R.string.wifi_provision_over_nfc_appbar),
+            text = stringResource(id = R.string.wifi_scanner_appbar),
             showBackButton = true,
-            onNavigationButtonClick = { onEvent(OnNavigateUpClickEvent) }
+            onNavigationButtonClick = { onEvent(OnNavigateUpClickEvent) },
+            actions = {
+                // Show the group icon to group by SSID.
+                Icon(
+                    imageVector = groupIcon,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .clickable {
+                            isGroupedBySsid = !isGroupedBySsid
+                        }
+                        .padding(8.dp)
+
+                )
+            }
         )
 
         RequireWifi {
@@ -119,7 +146,13 @@ internal fun WifiScannerView() {
                                 .verticalScroll(rememberScrollState()),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            WifiList(scanningState.data, onEvent)
+                            if (isGroupedBySsid) {
+                                // Group by SSID
+                                GroupBySsid(scanningState.data, onEvent)
+                            } else {
+                                // Show the list of available networks grouped by SSIDs.
+                                WifiList(scanningState.data, onEvent)
+                            }
                         }
                     }
                 }
@@ -158,67 +191,79 @@ internal fun WifiList(
     onEvent: (WifiScannerViewEvent) -> Unit
 ) {
     networks.forEach { network ->
-        val securityType = getScanResultSecurity(network)
-        val isProtected = securityType != OPEN
+        NetworkItem(
+            network = network,
+            modifier = Modifier.padding(8.dp),
+            onEvent = onEvent
+        )
+        HorizontalDivider()
+    }
+}
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .clickable {
-                    if (isProtected) {
-                        // Show the password dialog
-                        onEvent(OnNetworkSelectEvent(network))
-                    } else {
-                        // Password dialog is not required for open networks.
-                        val wifiData = WifiData(
-                            ssid = network.SSID,
-                            password = "", // Todo: Verify if its empty password or null.
-                            authType = OPEN,
-                        )
-                        onEvent(OnPasswordSetEvent(wifiData))
-                    }
-                },
-        ) {
-            RssiIconView(network.level)
-            Column(
-                modifier = Modifier.padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                // Display the SSID of the access point
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    Text(
-                        text = getSSid(network.wifiSsid),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+@Composable
+private fun NetworkItem(
+    network: ScanResult,
+    modifier: Modifier = Modifier,
+    onEvent: (WifiScannerViewEvent) -> Unit,
+) {
+    val securityType = getScanResultSecurity(network)
+    val isProtected = securityType != OPEN
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable {
+                if (isProtected) {
+                    // Show the password dialog
+                    onEvent(OnNetworkSelectEvent(network))
                 } else {
-                    Text(
-                        text = network.SSID,
-                        style = MaterialTheme.typography.bodyLarge
+                    // Password dialog is not required for open networks.
+                    val wifiData = WifiData(
+                        ssid = network.SSID,
+                        password = "", // Todo: Verify if its empty password or null.
+                        authType = OPEN,
                     )
+                    onEvent(OnPasswordSetEvent(wifiData))
                 }
-                // Display the address of the access point.
+            },
+    ) {
+        RssiIconView(network.level)
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            // Display the SSID of the access point
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 Text(
-                    text = network.BSSID.uppercase(),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.alpha(0.7f)
+                    text = getSSid(network.wifiSsid),
+                    style = MaterialTheme.typography.bodyLarge
                 )
-                // Display the security type of the access point.
+            } else {
                 Text(
-                    text = securityType,
-                    modifier = Modifier.alpha(0.7f)
+                    text = network.SSID,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
-            // TODO: Utilize the common code from no.nordicsemi.android.wifi.provisioner.ui.mapping
-            Icon(
-                imageVector = if (isProtected) Icons.Outlined.Lock else Icons.Outlined.Wifi,
-                contentDescription = null,
+            // Display the address of the access point.
+            Text(
+                text = network.BSSID.uppercase(),
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.alpha(0.7f)
+            )
+            // Display the security type of the access point.
+            Text(
+                text = securityType,
+                modifier = Modifier.alpha(0.7f)
             )
         }
-        HorizontalDivider()
+        Spacer(modifier = Modifier.weight(1f))
+        // TODO: Utilize the common code from no.nordicsemi.android.wifi.provisioner.ui.mapping
+        Icon(
+            imageVector = if (isProtected) Icons.Outlined.Lock else Icons.Outlined.Wifi,
+            contentDescription = null,
+        )
     }
 }
 
@@ -227,4 +272,63 @@ internal fun WifiList(
  */
 fun getSSid(wifiSsid: WifiSsid?): String {
     return wifiSsid.toString().replace("\"", "")
+}
+
+@Composable
+private fun GroupBySsid(
+    networks: List<ScanResult>,
+    onEvent: (WifiScannerViewEvent) -> Unit,
+) {
+    networks.groupBy { it.SSID }.forEach { (ssid, network) ->
+        var isExpanded by rememberSaveable { mutableStateOf(false) }
+        val expandIcon = if (isExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore
+
+        // Skip hidden networks.
+        if (ssid == null || ssid.isEmpty()) {
+            return@forEach
+        }
+        // Show the network.
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { isExpanded = !isExpanded }
+                .padding(8.dp)
+        ) {
+            Text(text = ssid)
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                imageVector = expandIcon,
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable { isExpanded = !isExpanded }
+                    .padding(8.dp)
+            )
+        }
+        // Show networks under the same SSID.
+        AnimatedVisibility(visible = isExpanded) {
+            Column {
+                HorizontalDivider()
+                network.forEach { scanResult ->
+                    NetworkItem(
+                        network = scanResult,
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            top = 8.dp,
+                            end = 16.dp,
+                            bottom = 8.dp
+                        ),
+                        onEvent = onEvent
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.padding(start = 16.dp),
+                        thickness = 0.5.dp
+                    )
+                }
+            }
+        }
+        HorizontalDivider()
+    }
 }
