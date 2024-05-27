@@ -1,5 +1,6 @@
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
+import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -12,12 +13,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.PermDataSetting
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material.icons.filled.WifiFind
 import androidx.compose.material.icons.filled.WifiPassword
+import androidx.compose.material.icons.outlined.NetworkCheck
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +29,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.theme.view.NordicAppBar
@@ -62,6 +62,7 @@ import no.nordicsemi.android.wifi.provisioner.softap.viewmodel.SoftApScreenState
 import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
+import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
@@ -69,6 +70,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoftApScreen(
+    context: Context,
     state: SoftApScreenState,
     onLoggerAppBarIconPressed: () -> Unit,
     start: (String, PassphraseConfiguration) -> Unit,
@@ -83,7 +85,12 @@ fun SoftApScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     if (state.error != null) {
-        showSnackBar(scope, snackbarHostState, state.error) {
+        showSnackBar(
+            context = context,
+            scope = scope,
+            snackbarHostState = snackbarHostState,
+            throwable = state.error
+        ) {
             resetError()
         }
     }
@@ -123,6 +130,7 @@ fun SoftApScreen(
                     ConnectToSoftAp(
                         connectionState = state.connectionState,
                         serviceDiscoveryState = state.discoveringServicesState,
+                        isConnectionRequested = state.isConnectionRequested,
                         ssidName = ssidName,
                         start = {
                             start(ssidName, Open)
@@ -138,17 +146,20 @@ fun SoftApScreen(
                     SetPassphrase(
                         provisioningState = state.provisionState,
                         providePasswordState = state.providePasswordState,
+                        wifiData = state.selectedWifi,
                         password = state.password,
                         onPasswordEntered = onPasswordEntered
                     )
                     Provisioning(
                         passwordState = state.providePasswordState,
                         provisioningState = state.provisionState,
+                        isProvisioningRequested = state.isProvisioningRequested,
                         onProvisionPressed = onProvisionPressed
                     )
                     Verify(
                         provisioningState = state.provisionState,
                         verificationState = state.verifyState,
+                        isVerificationRequested = state.isVerificationRequested,
                         verify = verify
                     )
                 }
@@ -158,6 +169,7 @@ fun SoftApScreen(
 }
 
 private fun showSnackBar(
+    context: Context,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
     throwable: Throwable,
@@ -165,20 +177,15 @@ private fun showSnackBar(
 ) {
     scope.launch {
         val message = when (throwable) {
-            is WifiNotEnabledException -> "Please enable Wi-Fi!"
+            is WifiNotEnabledException -> context.getString(R.string.please_enable_wi_fi)
             is FailedToBindToNetwork -> "Failed to bind to network!"
             is UnableToConnectToNetwork -> "Unable to connect to network!"
             is OnConnectionLost -> "Connection lost!"
+            is TimeoutCancellationException -> "Verification timed out, please retry!"
             else -> "${throwable::class.simpleName}: ${throwable.message}"
         }
         val result = snackbarHostState.showSnackbar(message = message)
-        when (result) {
-            SnackbarResult.Dismissed -> {
-                onDismissed()
-            }
-
-            SnackbarResult.ActionPerformed -> {}
-        }
+        if (result == SnackbarResult.Dismissed) onDismissed()
     }
 }
 
@@ -227,6 +234,7 @@ private fun ConfigureSoftAp(
 @Composable
 private fun ConnectToSoftAp(
     connectionState: WizardStepState,
+    isConnectionRequested: Boolean,
     serviceDiscoveryState: WizardStepState,
     ssidName: String,
     start: () -> Unit,
@@ -246,14 +254,17 @@ private fun ConnectToSoftAp(
         showVerticalDivider = false,
     ) {
         ProgressItem(
-            text = when (connectionState) {
-                WizardStepState.CURRENT -> stringResource(id = R.string.connecting)
-                WizardStepState.COMPLETED -> stringResource(id = R.string.connected)
+            text = when {
+                isConnectionRequested && connectionState == WizardStepState.CURRENT -> stringResource(
+                    id = R.string.connecting
+                )
+
+                connectionState == WizardStepState.COMPLETED -> stringResource(id = R.string.connected)
                 else -> stringResource(id = R.string.connect)
             },
-            status = when (connectionState) {
-                WizardStepState.CURRENT -> ProgressItemStatus.WORKING
-                WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
+            status = when {
+                isConnectionRequested && connectionState == WizardStepState.CURRENT -> ProgressItemStatus.WORKING
+                connectionState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
             iconRightPadding = 24.dp,
@@ -308,6 +319,7 @@ private fun SelectWifi(
                             ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
                     }
                 }")
+            Text(text = "Security: ${wifiData.authMode.toDisplayString()}")
         } else {
             Text(text = stringResource(R.string.select_wifi_rationale))
         }
@@ -318,12 +330,13 @@ private fun SelectWifi(
 private fun SetPassphrase(
     providePasswordState: WizardStepState,
     provisioningState: WizardStepState,
+    wifiData: WifiData?,
     password: String? = null,
     onPasswordEntered: (String) -> Unit,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
     WizardStepComponent(
-        icon = Icons.Default.WifiPassword,
+        icon = wifiData?.authMode?.toImageVector() ?: Icons.Default.WifiPassword,
         title = stringResource(id = R.string.set_passphrase),
         state = providePasswordState,
         decor = if (providePasswordState == WizardStepState.INACTIVE) {
@@ -364,21 +377,22 @@ private fun SetPassphrase(
 private fun Provisioning(
     passwordState: WizardStepState,
     provisioningState: WizardStepState,
+    isProvisioningRequested: Boolean,
     onProvisionPressed: () -> Unit
 ) {
     WizardStepComponent(
-        icon = Icons.Default.PermDataSetting,
+        icon = Icons.Outlined.NetworkCheck,
         title = stringResource(id = R.string.provision),
         state = provisioningState,
-        decor = if (passwordState == WizardStepState.COMPLETED &&
-            provisioningState == WizardStepState.INACTIVE
+        decor = if (isProvisioningRequested && provisioningState == WizardStepState.CURRENT) {
+            WizardStepAction.ProgressIndicator
+        } else if (passwordState == WizardStepState.COMPLETED &&
+            provisioningState == WizardStepState.CURRENT
         ) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.provision),
                 onClick = onProvisionPressed
             )
-        } else if (provisioningState == WizardStepState.CURRENT) {
-            WizardStepAction.ProgressIndicator
         } else if (passwordState == WizardStepState.COMPLETED &&
             provisioningState == WizardStepState.COMPLETED
         ) {
@@ -387,14 +401,15 @@ private fun Provisioning(
         showVerticalDivider = false
     ) {
         ProgressItem(
-            text = when (provisioningState) {
-                WizardStepState.INACTIVE -> stringResource(R.string.provisioning_rationale)
-                WizardStepState.CURRENT -> stringResource(R.string.provisioning_device_to_your_network)
-                WizardStepState.COMPLETED -> stringResource(R.string.provisioning_completed)
+            text = when {
+                isProvisioningRequested && provisioningState == WizardStepState.CURRENT -> stringResource(R.string.provisioning_device_to_your_network)
+                provisioningState == WizardStepState.COMPLETED -> stringResource(R.string.provisioning_completed)
+                provisioningState == WizardStepState.INACTIVE -> stringResource(R.string.provisioning_rationale)
+                else -> stringResource(R.string.provisioning_rationale)
             },
-            status = when (provisioningState) {
-                WizardStepState.CURRENT -> ProgressItemStatus.WORKING
-                WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
+            status = when {
+                isProvisioningRequested && provisioningState == WizardStepState.CURRENT -> ProgressItemStatus.WORKING
+                provisioningState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
             iconRightPadding = 24.dp,
@@ -406,18 +421,17 @@ private fun Provisioning(
 private fun Verify(
     provisioningState: WizardStepState,
     verificationState: WizardStepState,
+    isVerificationRequested: Boolean,
     verify: () -> Unit
 ) {
-    var isVerifyClicked by remember { mutableStateOf(false) }
     WizardStepComponent(
         icon = Icons.Default.Verified,
         title = stringResource(id = R.string.verify),
         state = verificationState,
-        decor = if (provisioningState == WizardStepState.COMPLETED && !isVerifyClicked && verificationState == WizardStepState.CURRENT) {
+        decor = if (provisioningState == WizardStepState.COMPLETED && !isVerificationRequested && verificationState == WizardStepState.CURRENT) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.verify),
                 onClick = {
-                    isVerifyClicked = true
                     verify()
                 }
             )
@@ -428,24 +442,20 @@ private fun Verify(
     ) {
         ProgressItem(
             text = when {
-                !isVerifyClicked -> stringResource(R.string.optional_verification_rationale)
-                verificationState == WizardStepState.CURRENT -> "Locating provisioned device..."
-                verificationState == WizardStepState.COMPLETED -> "Verification completed."
-                else -> {""}
+                isVerificationRequested && verificationState == WizardStepState.CURRENT ->
+                    stringResource(R.string.locating_provisioned_device)
+
+                verificationState == WizardStepState.CURRENT -> stringResource(R.string.optional_verification_rationale)
+                verificationState == WizardStepState.COMPLETED -> stringResource(R.string.verification_completed)
+                else -> stringResource(R.string.optional_verification_rationale)
             },
-            status = when (verificationState) {
-                WizardStepState.CURRENT -> ProgressItemStatus.WORKING
-                WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
+            status = when {
+                isVerificationRequested && verificationState == WizardStepState.CURRENT -> ProgressItemStatus.WORKING
+                verificationState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
             iconRightPadding = 24.dp,
         )
-    }
-    LaunchedEffect(isVerifyClicked) {
-        if(isVerifyClicked) {
-            delay(5000L)
-            isVerifyClicked = false
-        }
     }
 }
 

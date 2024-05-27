@@ -43,12 +43,15 @@
     <string name="select_wifi_rationale">Select a Wi-Fi Network to provision the nRF 700x device to</string>
     <string name="set_passphrase_rationale">Set the passphrase for the selected Wi-Fi Network</string>
     <string name="set_passphrase_value">Passphrase: %s</string>
-    <string name="provisioning_device_to_your_network">Provisioning device to your network…</string>
-    <string name="provisioning_completed">Provisioning completed.</string>
-    <string name="provisioning_rationale">Provides the Wi-Fi credentials to the device</string>
+    <string name="provisioning_device_to_your_network">Sending Wi-Fi credentials…</string>
+    <string name="provisioning_completed">Wi-Fi credentials sent</string>
+    <string name="provisioning_rationale">Send Wi-Fi credentials</string>
     <string name="optional_verification_rationale">Optionally verify provisioning state</string>
     <string name="provision_over_wifi_rationale">This mode uses temporary a Wi-Fi network (SoftAP)
         created by the provisionee to send Wi-Fi credentials. Communication is encrypted using TLS.
     </string>
+    <string name="locating_provisioned_device">Locating provisioned device…</string>
+    <string name="verification_completed">Verification completed</string>
+    <string name="please_enable_wi_fi">Please enable Wi-Fi!</string>
 
 </resources>

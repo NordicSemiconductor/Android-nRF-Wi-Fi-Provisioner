@@ -39,6 +39,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -56,6 +57,7 @@ import no.nordicsemi.android.log.timber.nRFLoggerTree
 import no.nordicsemi.android.wifi.provisioner.softap.Open
 import no.nordicsemi.android.wifi.provisioner.softap.PassphraseConfiguration
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
+import no.nordicsemi.android.wifi.provisioner.softap.UnableToConnectToNetwork
 import no.nordicsemi.android.wifi.provisioner.softap.WifiNotEnabledException
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApWifiScannerDestination
@@ -100,8 +102,8 @@ class SoftApViewModel @Inject constructor(
             ?.let { launchIntent ->
                 context.startActivity(launchIntent)
             } ?: run {
-                LoggerLauncher.launch(context, logger?.session as LogSession)
-            }
+            LoggerLauncher.launch(context, logger?.session as LogSession)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -118,6 +120,9 @@ class SoftApViewModel @Inject constructor(
             logger = it
         })
         val handler = CoroutineExceptionHandler { _, throwable ->
+            if (throwable is UnableToConnectToNetwork) {
+                _state.value = _state.value.copy(isConnectionRequested = false)
+            }
             _state.value = _state.value.copy(error = throwable)
         }
         viewModelScope.launch(handler) {
@@ -162,7 +167,7 @@ class SoftApViewModel @Inject constructor(
                 WizardStepState.COMPLETED
             else WizardStepState.CURRENT
         )
-        if(record.authMode == AuthModeDomain.OPEN) {
+        if (record.authMode == AuthModeDomain.OPEN) {
             onPasswordEntered("")
         }
     }
@@ -173,7 +178,8 @@ class SoftApViewModel @Inject constructor(
             wifiConfigDomain = wifiData.toConfig(password)
             _state.value = _state.value.copy(
                 providePasswordState = WizardStepState.COMPLETED,
-                password = password
+                password = password,
+                provisionState = WizardStepState.CURRENT
             )
         }
     }
@@ -182,7 +188,10 @@ class SoftApViewModel @Inject constructor(
         viewModelScope.launch {
             wifiConfigDomain?.let {
                 try {
-                    _state.value = _state.value.copy(provisionState = WizardStepState.CURRENT)
+                    _state.value = _state.value.copy(
+                        isProvisioningRequested = true,
+                        provisionState = WizardStepState.CURRENT
+                    )
                     val response = softApManager.provision(it)
                     if (response.isSuccessful) {
                         Timber.log(Log.INFO, "Provisioning succeeded: $response")
@@ -196,6 +205,7 @@ class SoftApViewModel @Inject constructor(
                     Timber.log(Log.WARN, e, "Error occurred, provisioning may have succeeded!")
                     _state.value = _state.value.copy(error = e)
                 } finally {
+                    softApManager.disconnect()
                     _state.value = _state.value.copy(provisionState = WizardStepState.COMPLETED)
                     _state.value = _state.value.copy(verifyState = WizardStepState.CURRENT)
                 }
@@ -205,15 +215,20 @@ class SoftApViewModel @Inject constructor(
 
     fun verify() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(verifyState = WizardStepState.CURRENT)
+            _state.value = _state.value.copy(isVerificationRequested = true)
             try {
-                withTimeout(5000L) {
+                withTimeout(10000L) {
                     val verified = softApManager.verify()
                     if (verified) {
                         _state.value = _state.value.copy(verifyState = WizardStepState.COMPLETED)
                     }
                 }
+            } catch (e: TimeoutCancellationException) {
+                Timber.log(Log.WARN, e, "Verification timed out!")
+                _state.value = _state.value.copy(error = e, isVerificationRequested = false)
             } catch (e: Exception) {
+                Timber.log(Log.WARN, e, "Unknown error occurred!")
+                _state.value = _state.value.copy(error = e, isVerificationRequested = false)
             }
         }
     }
@@ -231,12 +246,15 @@ class SoftApViewModel @Inject constructor(
 data class SoftApScreenState(
     val configureState: WizardStepState = WizardStepState.COMPLETED,
     val connectionState: WizardStepState = WizardStepState.CURRENT,
+    val isConnectionRequested: Boolean = false,
     val discoveringServicesState: WizardStepState = WizardStepState.INACTIVE,
     val selectWifiState: WizardStepState = WizardStepState.INACTIVE,
     val selectedWifi: WifiData? = null,
     val password: String? = null,
     val providePasswordState: WizardStepState = WizardStepState.INACTIVE,
     val provisionState: WizardStepState = WizardStepState.INACTIVE,
+    val isProvisioningRequested: Boolean = false,
     val verifyState: WizardStepState = WizardStepState.INACTIVE,
+    val isVerificationRequested: Boolean = false,
     val error: Throwable? = null
 )

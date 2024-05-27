@@ -279,7 +279,7 @@ class SoftApManager(
     } ?: false
 
 
-    companion object {
+    internal companion object {
         const val KEY_LINK_ADDR = "linkaddr"
     }
 }

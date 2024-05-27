@@ -28,6 +28,7 @@ private val softApProvisionerDestination = defineDestination(SoftApProvisionerDe
     val context = LocalContext.current
 
     SoftApScreen(
+        context = context,
         state = state,
         onLoggerAppBarIconPressed = {
             viewModel.onLoggerAppBarIconPressed(context)
