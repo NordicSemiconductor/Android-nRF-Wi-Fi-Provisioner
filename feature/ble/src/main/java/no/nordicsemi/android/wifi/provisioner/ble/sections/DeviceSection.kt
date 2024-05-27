@@ -29,27 +29,63 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ui.view.section
+package no.nordicsemi.android.wifi.provisioner.ble.sections
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Password
+import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
+import androidx.compose.ui.tooling.preview.Preview
+import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionNextDeviceEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectDeviceClickEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 
 @Composable
-fun PasswordSection(isEditable: Boolean = false, onEvent: (ProvisioningViewEvent) -> Unit) {
+fun BluetoothDevice(
+    name: String?,
+    address: String,
+    isEditable: Boolean = false,
+    onEvent: (ProvisioningViewEvent) -> Unit
+) {
     ClickableDataItem(
-        imageVector = Icons.Outlined.Password,
-        title = stringResource(id = R.string.password),
+        imageVector = Icons.Outlined.PhoneAndroid,
+        title = name ?: address,
         isEditable = isEditable,
-        description = stringResource(id = R.string.password_encoded),
-        onClick = {
-            onEvent(OnShowPasswordDialog)
-        },
+        description = address,
+        onClick = { onEvent(OnSelectDeviceClickEvent) },
         buttonText = stringResource(id = R.string.change)
     )
+}
+
+@Composable
+fun BluetoothDeviceNotSelected(onEvent: (ProvisioningViewEvent) -> Unit) {
+    DeviceNotSelectedSection(imageVector = Icons.Outlined.PhoneAndroid, onEvent = onEvent)
+}
+
+
+@Composable
+private fun DeviceNotSelectedSection(
+    imageVector: ImageVector = Icons.Outlined.PhoneAndroid,
+    onEvent: (ProvisioningViewEvent) -> Unit
+) {
+    ClickableDataItem(
+        imageVector = imageVector,
+        title = "Not selected",
+        isEditable = false,
+        description = "Please select a device to provision",
+        onClick = { onEvent(OnProvisionNextDeviceEvent) },
+        buttonText = stringResource(id = R.string.change)
+    )
+}
+
+@Preview
+@Composable
+private fun DeviceNotSelectedSectionPreview() {
+    NordicTheme {
+        DeviceNotSelectedSection {}
+    }
 }

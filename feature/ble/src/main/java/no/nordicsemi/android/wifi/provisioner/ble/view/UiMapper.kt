@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ui.view
+package no.nordicsemi.android.wifi.provisioner.ble.view
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SignalWifi4Bar

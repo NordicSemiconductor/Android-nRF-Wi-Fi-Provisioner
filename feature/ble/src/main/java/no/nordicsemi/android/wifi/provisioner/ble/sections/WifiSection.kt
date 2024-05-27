@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ui.view.section
+package no.nordicsemi.android.wifi.provisioner.ble.sections
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable

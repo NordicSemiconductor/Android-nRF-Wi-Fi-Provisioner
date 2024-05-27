@@ -46,8 +46,8 @@ import no.nordicsemi.android.wifi.provisioner.ui.DataItem
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
-import no.nordicsemi.android.wifi.provisioner.ui.view.toDisplayString
-import no.nordicsemi.android.wifi.provisioner.ui.view.toImageVector
+import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
+import no.nordicsemi.android.wifi.provisioner.ble.view.toImageVector
 import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading

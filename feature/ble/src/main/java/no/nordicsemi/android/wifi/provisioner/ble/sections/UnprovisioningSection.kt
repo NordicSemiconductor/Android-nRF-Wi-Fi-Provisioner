@@ -29,20 +29,48 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ui.view.section
+package no.nordicsemi.android.wifi.provisioner.ble.sections
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LinkOff
+import androidx.compose.material.icons.filled.SignalWifiStatusbar4Bar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
+import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
+import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
 import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 
 @Composable
-fun DisconnectedDeviceStatus() {
+fun UnprovisioningSection(status: Resource<Unit>) {
+    when (status) {
+        is Error -> ErrorItem(status.error)
+        is Loading -> LoadingItem(modifier = Modifier.padding(vertical = 8.dp))
+        is Success -> ProvisioningSection()
+    }
+}
+
+
+@Composable
+private fun ErrorItem(error: Throwable) {
+    ErrorDataItem(
+        iconRes = R.drawable.ic_upload_wifi,
+        title = stringResource(id = R.string.unprovision_status),
+        error = error
+    )
+}
+
+@Composable
+private fun ProvisioningSection() {
     DataItem(
-        imageVector = Icons.Outlined.LinkOff,
-        title = stringResource(id = R.string.device_info),
-        description = stringResource(id = R.string.disconnected)
+        imageVector = Icons.Default.SignalWifiStatusbar4Bar,
+        title = stringResource(id = R.string.unprovision_status),
+        description = stringResource(id = R.string.success)
     )
 }

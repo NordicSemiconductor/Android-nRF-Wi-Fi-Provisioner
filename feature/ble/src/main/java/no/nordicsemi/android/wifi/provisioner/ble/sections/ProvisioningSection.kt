@@ -29,7 +29,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.wifi.provisioner.ui.view.section
+package no.nordicsemi.android.wifi.provisioner.ble.sections
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +50,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
 import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
 import no.nordicsemi.android.wifi.provisioner.ui.R
-import no.nordicsemi.android.wifi.provisioner.ui.view.toDisplayString
+import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource

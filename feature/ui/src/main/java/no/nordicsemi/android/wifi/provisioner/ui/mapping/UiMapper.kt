@@ -20,6 +20,16 @@ fun AuthModeDomain?.toImageVector() = when (this) {
     null -> Icons.Outlined.SignalWifi4BarLock
 }
 
+fun AuthModeDomain.toDisplayString(): String = when(this){
+    AuthModeDomain.OPEN -> "Open"
+    AuthModeDomain.WEP -> "WEP"
+    AuthModeDomain.WPA_PSK -> "WPA PSK"
+    AuthModeDomain.WPA2_PSK -> "WPA2 PSK"
+    AuthModeDomain.WPA_WPA2_PSK -> "WPA/WPA2 PSK"
+    AuthModeDomain.WPA2_ENTERPRISE -> "WPA2 Enterprise"
+    AuthModeDomain.WPA3_PSK -> "WPA3 PSK"
+}
+
 @Composable
 fun BandDomain.toDisplayString() = when (this) {
     BandDomain.BAND_ANY -> R.string.any
