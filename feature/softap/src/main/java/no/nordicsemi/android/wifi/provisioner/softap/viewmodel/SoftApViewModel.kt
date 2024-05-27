@@ -69,7 +69,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class SoftApViewModel @Inject constructor(
+internal class SoftApViewModel @Inject constructor(
     private val softApManager: SoftApManager,
     navigationManager: Navigator,
     savedStateHandle: SavedStateHandle,
