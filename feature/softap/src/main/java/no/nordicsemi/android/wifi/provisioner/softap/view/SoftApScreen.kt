@@ -63,6 +63,7 @@ import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
+import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
@@ -359,7 +360,10 @@ private fun SetPassphrase(
         if (password == null) {
             Text(text = stringResource(R.string.set_passphrase_rationale))
         } else {
-            Text(text = stringResource(R.string.set_passphrase_value, password.toPassphrase()))
+            if (wifiData?.authMode == AuthModeDomain.OPEN) {
+                Text(text = stringResource(R.string.emptu_passwphrase_rationale))
+            } else
+                Text(text = stringResource(R.string.set_passphrase_value, password.toPassphrase()))
         }
         if (showDialog) {
             PasswordDialog(
@@ -402,7 +406,10 @@ private fun Provisioning(
     ) {
         ProgressItem(
             text = when {
-                isProvisioningRequested && provisioningState == WizardStepState.CURRENT -> stringResource(R.string.provisioning_device_to_your_network)
+                isProvisioningRequested && provisioningState == WizardStepState.CURRENT -> stringResource(
+                    R.string.provisioning_device_to_your_network
+                )
+
                 provisioningState == WizardStepState.COMPLETED -> stringResource(R.string.provisioning_completed)
                 provisioningState == WizardStepState.INACTIVE -> stringResource(R.string.provisioning_rationale)
                 else -> stringResource(R.string.provisioning_rationale)

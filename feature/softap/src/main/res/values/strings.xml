@@ -53,5 +53,6 @@
     <string name="locating_provisioned_device">Locating provisioned device…</string>
     <string name="verification_completed">Verification completed</string>
     <string name="please_enable_wi_fi">Please enable Wi-Fi!</string>
+    <string name="emptu_passwphrase_rationale">Passphrase not required</string>
 
 </resources>
