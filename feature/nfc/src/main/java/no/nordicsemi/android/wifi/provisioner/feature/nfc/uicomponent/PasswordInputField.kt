@@ -3,6 +3,7 @@ package no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.outlined.Visibility
@@ -22,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -63,6 +65,7 @@ fun PasswordInputField(
                 text = placeholder,
             )
         },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         supportingText = {
             Column {
                 if (isError) {
