@@ -3,6 +3,7 @@ package no.nordicsemi.android.wifi.provisioner.softap.view
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import no.nordicsemi.android.wifi.provisioner.ui.view.section.SectionTitle
 fun ProvisionOverWifiSection(onClick: () -> Unit) {
     OutlinedCard(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(all = 8.dp)
             .clickable(onClick = onClick)
     ) {
