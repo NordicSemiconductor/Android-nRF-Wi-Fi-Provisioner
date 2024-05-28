@@ -40,13 +40,15 @@ fun PasswordInputField(
     errorMessage: String = "",
     hint: String = "",
     showPassword: Boolean,
-    onShowPassChange : (Boolean) -> Unit = {},
+    onShowPassChange: (Boolean) -> Unit = {},
     onUpdate: (String) -> Unit,
 ) {
     var isShowPassword by remember { mutableStateOf(showPassword) }
     val textColor = MaterialTheme.colorScheme.onSurface.copy(
         alpha = if (input.isEmpty()) 0.5f else LocalContentColor.current.alpha
     )
+    val visibilityIcon =
+        if (isShowPassword) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff
     OutlinedTextField(
         value = input,
         onValueChange = { onUpdate(it) },
@@ -100,9 +102,7 @@ fun PasswordInputField(
                 onShowPassChange(isShowPassword)
             }) {
                 Icon(
-                    imageVector = if (!isShowPassword)
-                        Icons.Outlined.Visibility
-                    else Icons.Outlined.VisibilityOff,
+                    imageVector = visibilityIcon,
                     contentDescription = null
                 )
             }
