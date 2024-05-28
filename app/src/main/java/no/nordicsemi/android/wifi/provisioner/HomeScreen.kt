@@ -34,6 +34,7 @@ package no.nordicsemi.android.wifi.provisioner
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -55,6 +56,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -90,7 +92,7 @@ fun HomeScreen() {
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -100,30 +102,35 @@ fun HomeScreen() {
                         WindowInsetsSides.Horizontal,
                     ),
                 ),
-            verticalArrangement = Arrangement.SpaceEvenly
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
-                Row(
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.4f, true),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_nrf70),
+                    contentDescription = stringResource(id = R.string.ic_nrf70),
                     modifier = Modifier
-                        .fillMaxWidth()
-                    /*.weight(weight = 1f)*/,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_nrf70),
-                        contentDescription = stringResource(id = R.string.ic_nrf70),
-                        modifier = Modifier
-                            .widthIn(max = 200.dp)
-                            .padding(8.dp)
-                    )
-                }
+                        .widthIn(max = 200.dp)
+                        .padding(8.dp)
+                )
             }
-            item {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.4f, true),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 ProvisionOverBleSection {
                     vm.navigateTo(BleDestination)
                 }
                 ProvisionOverWifiSection {
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         vm.navigateTo(SoftApDestination)
                     } else {
                         scope.launch {
@@ -135,14 +142,17 @@ fun HomeScreen() {
                     }
                 }
             }
-            item {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) {
                 Text(
                     text = stringResource(
                         id = R.string.app_version,
                         BuildConfig.VERSION_NAME,
                         BuildConfig.VERSION_CODE
                     ),
-                    modifier = Modifier.fillMaxWidth().padding(end = 16.dp),
+                    modifier = Modifier.padding(bottom = 48.dp),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.labelMedium
                 )

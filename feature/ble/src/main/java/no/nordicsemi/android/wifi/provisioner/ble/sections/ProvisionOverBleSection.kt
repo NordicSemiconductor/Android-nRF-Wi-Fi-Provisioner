@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -21,7 +22,7 @@ import no.nordicsemi.android.wifi.provisioner.ui.view.section.SectionTitle
 fun ProvisionOverBleSection(onClick: () -> Unit) {
     OutlinedCard(
         modifier = Modifier
-            .fillMaxWidth()
+            .widthIn(max = 600.dp)
             .padding(all = 8.dp)
             .clickable(onClick = onClick)
     ) {

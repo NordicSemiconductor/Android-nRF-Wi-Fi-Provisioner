@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -117,12 +118,7 @@ fun SoftApScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(vertical = 16.dp, horizontal = 16.dp),
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                ) {
-                }
+                Spacer(modifier = Modifier.padding(16.dp))
                 ConfigureSoftAp(
                     configureState = state.configureState,
                     connectionState = state.connectionState,
@@ -179,10 +175,10 @@ private fun showSnackBar(
     scope.launch {
         val message = when (throwable) {
             is WifiNotEnabledException -> context.getString(R.string.please_enable_wi_fi)
-            is FailedToBindToNetwork -> "Failed to bind to network!"
-            is UnableToConnectToNetwork -> "Unable to connect to network!"
-            is OnConnectionLost -> "Connection lost!"
-            is TimeoutCancellationException -> "Verification timed out, please retry!"
+            is FailedToBindToNetwork -> context.getString(R.string.failed_to_bind_to_network)
+            is UnableToConnectToNetwork -> context.getString(R.string.unable_to_connect_to_network)
+            is OnConnectionLost -> context.getString(R.string.connection_lost)
+            is TimeoutCancellationException -> context.getString(R.string.verification_timed_out_please_retry)
             else -> "${throwable::class.simpleName}: ${throwable.message}"
         }
         val result = snackbarHostState.showSnackbar(message = message)
@@ -204,8 +200,7 @@ private fun ConfigureSoftAp(
         icon = Icons.Default.Settings,
         title = stringResource(R.string.configure),
         state = configureState,
-        decor = if ((connectionState == WizardStepState.CURRENT ||
-                    connectionState == WizardStepState.COMPLETED)
+        decor = if (connectionState == WizardStepState.COMPLETED
             && configureState == WizardStepState.COMPLETED
         ) {
             null
@@ -217,7 +212,7 @@ private fun ConfigureSoftAp(
         ) else null,
         showVerticalDivider = true
     ) {
-        Text(text = "SSID: $ssidName")
+        Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: $ssidName")
     }
     if (showDialog) {
         EditSsidDialog(
@@ -258,11 +253,12 @@ private fun ConnectToSoftAp(
     ) {
         ProgressItem(
             text = when {
-                isConnectionRequested && connectionState == WizardStepState.CURRENT -> stringResource(
-                    id = R.string.connecting
-                )
+                isConnectionRequested && connectionState == WizardStepState.CURRENT ->
+                    stringResource(id = R.string.connecting)
 
-                connectionState == WizardStepState.COMPLETED -> stringResource(id = R.string.connected)
+                connectionState == WizardStepState.COMPLETED ->
+                    stringResource(id = R.string.connected)
+
                 else -> stringResource(id = R.string.connect)
             },
             status = when {
@@ -315,17 +311,20 @@ private fun SelectWifi(
         showVerticalDivider = true
     ) {
         if (wifiData != null && selectWifiState != WizardStepState.INACTIVE) {
-            Text(text = "SSID: ${wifiData.ssid}")
-            Text(
+            Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: ${wifiData.ssid}")
+            Text(style = MaterialTheme.typography.bodyMedium,
                 text = "Band: ${
                     wifiData.let {
                         it.selectedChannel?.wifiInfo?.band?.toDisplayString()
                             ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
                     }
-                }")
-            Text(text = "Security: ${wifiData.authMode.toDisplayString()}")
+                }"
+            )
         } else {
-            Text(text = stringResource(R.string.select_wifi_rationale))
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                text = stringResource(R.string.select_wifi_rationale)
+            )
         }
     }
 }
@@ -361,13 +360,33 @@ private fun SetPassphrase(
         ),
         showVerticalDivider = true
     ) {
-        if (password == null) {
-            Text(text = stringResource(R.string.set_passphrase_rationale))
-        } else {
-            if (wifiData?.authMode == AuthModeDomain.OPEN) {
-                Text(text = stringResource(R.string.emptu_passwphrase_rationale))
+
+        if (wifiData != null) {
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                text = "Security: ${wifiData.authMode.toDisplayString()}"
+            )
+
+            if (wifiData.authMode == AuthModeDomain.OPEN) {
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = stringResource(R.string.emptu_passwphrase_rationale)
+                )
             } else
-                Text(text = stringResource(R.string.set_passphrase_value, password.toPassphrase()))
+                if (password != null) {
+                    Text(
+                        style = MaterialTheme.typography.bodyMedium,
+                        text = stringResource(
+                            R.string.set_passphrase_value,
+                            password.toPassphrase()
+                        )
+                    )
+                }
+        } else {
+            Text(
+                style = MaterialTheme.typography.bodyMedium,
+                text = stringResource(R.string.set_passphrase_rationale)
+            )
         }
         if (showDialog) {
             PasswordDialog(
