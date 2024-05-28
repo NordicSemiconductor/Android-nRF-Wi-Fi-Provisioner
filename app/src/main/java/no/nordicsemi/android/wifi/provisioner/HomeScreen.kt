@@ -47,9 +47,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -57,11 +59,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.common.theme.view.NordicAppBar
+import no.nordicsemi.android.wifi.provisioner.app.BuildConfig
 import no.nordicsemi.android.wifi.provisioner.app.R
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ProvisionOverBleSection
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleDestination
@@ -114,12 +118,6 @@ fun HomeScreen() {
                     )
                 }
             }
-            /*item {
-                NordicText(
-                    text = stringResource(id = R.string.app_info),
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }*/
             item {
                 ProvisionOverBleSection {
                     vm.navigateTo(BleDestination)
@@ -136,6 +134,18 @@ fun HomeScreen() {
                         }
                     }
                 }
+            }
+            item {
+                Text(
+                    text = stringResource(
+                        id = R.string.app_version,
+                        BuildConfig.VERSION_NAME,
+                        BuildConfig.VERSION_CODE
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(end = 16.dp),
+                    textAlign = TextAlign.End,
+                    style = MaterialTheme.typography.labelMedium
+                )
             }
         }
     }
