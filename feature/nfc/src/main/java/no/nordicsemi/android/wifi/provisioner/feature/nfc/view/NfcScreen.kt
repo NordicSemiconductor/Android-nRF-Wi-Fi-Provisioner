@@ -57,7 +57,7 @@ internal fun NfcScreen() {
             .padding(bottom = 56.dp)
     ) {
         NordicAppBar(
-            text = stringResource(id = R.string.wifi_provision_over_nfc_appbar),
+            text = stringResource(id = R.string.ndef_publish_appbar),
             showBackButton = true,
             onNavigationButtonClick = { nfcManagerVm.onBackNavigation() }
         )

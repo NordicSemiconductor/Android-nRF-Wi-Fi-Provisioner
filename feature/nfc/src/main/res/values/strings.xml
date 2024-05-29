@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="wifi_provision_over_nfc_appbar">Wifi provisioning over NFC</string>
+    <string name="wifi_provision_over_nfc_appbar">Provision over NFC</string>
+    <string name="wifi_scanner_appbar">Wi-Fi networks</string>
+    <string name="ndef_publish_appbar">Publish</string>
+    <string name="provision_over_nfc">Provision over NFC</string>
+    <string name="provision_over_nfc_rationale">This mode allows provisioning a nRF700x device to a
+        Wi-Fi network by providing the Wi-Fi credentials via NFC.
+    </string>
+
     <string name="enter_wifi_credentials">Enter Wi-Fi credentials</string>
     <string name="enter_wifi_credentials_des">Enter the Wi-Fi credentials manually.</string>
     <string name="search_for_wifi_networks">Search for Wi-Fi networks</string>
@@ -10,7 +17,7 @@
     <string name="location_permission_required">LOCATION PERMISSION REQUIRED</string>
     <string name="location_permission__required_des">Location permission is required to scan for Wi-Fi networks.</string>
 
-    <string name="wifi_permission_required">WIFI PERMISSION REQUIRED</string>
+    <string name="wifi_permission_required">WI-FI PERMISSION REQUIRED</string>
     <string name="wifi_permission_required_des">Wi-Fi permission is required to scan for Wi-Fi networks.</string>
     <string name="wifi_disabled">WI-FI DISABLED</string>
     <string name="wifi_disabled_des">Wi-Fi is disabled. Please enable Wi-Fi to scan for Wi-Fi networks.</string>
