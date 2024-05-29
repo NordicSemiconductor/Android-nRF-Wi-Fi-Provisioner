@@ -20,8 +20,7 @@ internal fun NfcTextRow(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(4.dp),
+            .fillMaxWidth(),
     ) {
         Text(
             text = title,
