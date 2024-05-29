@@ -4,8 +4,8 @@ import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -68,13 +68,15 @@ internal fun NfcScreen() {
             }
             OutlinedCard(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
-                    .padding(8.dp)
+                    .widthIn(max = 600.dp)
+                    .padding(16.dp)
+                    // Leave more space for the navigation bar.
+                    .padding(bottom = 16.dp)
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(16.dp)
                 ) {
                     // Show Ndef Record information.
                     WizardStepComponent(
