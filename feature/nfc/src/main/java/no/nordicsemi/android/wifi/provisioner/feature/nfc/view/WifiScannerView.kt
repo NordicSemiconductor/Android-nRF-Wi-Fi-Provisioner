@@ -57,12 +57,14 @@ import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnNavigateUp
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnNetworkSelectEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnPasswordCancelEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnPasswordSetEvent
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnSortOptionSelected
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewModel
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
+import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
 
 /**
  * A composable function to display the list of available networks.
@@ -73,7 +75,7 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 internal fun WifiScannerView() {
     val wifiScannerViewModel = hiltViewModel<WifiScannerViewModel>()
     val onEvent: (WifiScannerViewEvent) -> Unit = { wifiScannerViewModel.onEvent(it) }
-    val wifiScannerViewState by wifiScannerViewModel.viewState.collectAsStateWithLifecycle()
+    val viewState by wifiScannerViewModel.viewState.collectAsStateWithLifecycle()
     var isGroupedBySsid by rememberSaveable { mutableStateOf(false) }
     val groupIcon = if (isGroupedBySsid) Icons.Outlined.GroupRemove else Icons.Outlined.Group
 
@@ -109,7 +111,7 @@ internal fun WifiScannerView() {
 
         RequireWifi {
             RequireLocationForWifi {
-                when (val scanningState = wifiScannerViewState.networks) {
+                when (val scanningState = viewState.networks) {
                     is Error -> {
                         // Show the error message.
                         Column {
@@ -141,37 +143,42 @@ internal fun WifiScannerView() {
 
                     is Success -> {
                         // Show the list of available networks.
-                        Column(
-                            modifier = Modifier
-                                .verticalScroll(rememberScrollState()),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            if (isGroupedBySsid) {
-                                // Group by SSID
-                                GroupBySsid(scanningState.data, onEvent)
-                            } else {
-                                // Show the list of available networks grouped by SSIDs.
-                                WifiList(scanningState.data, onEvent)
+                        Column {
+                            WifiSortView(viewState.sortOption) {
+                                onEvent(OnSortOptionSelected(it))
+                            }
+                            Column(
+                                modifier = Modifier
+                                    .verticalScroll(rememberScrollState()),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                if (isGroupedBySsid) {
+                                    // Group by SSID
+                                    GroupBySsid(viewState.sortedItems, onEvent)
+                                } else {
+                                    // Show the list of available networks grouped by SSIDs.
+                                    WifiList(viewState.sortedItems, onEvent)
+                                }
                             }
                         }
                     }
                 }
-                when (val selectedNetwork = wifiScannerViewState.selectedNetwork) {
-                    null -> {
-                        // Do nothing
-                    }
+            }
+            when (val selectedNetwork = viewState.selectedNetwork) {
+                null -> {
+                    // Do nothing
+                }
 
-                    else -> {
-                        // Show the password dialog
-                        PasswordDialog(
-                            scanResult = selectedNetwork,
-                            onCancelClick = {
-                                // Dismiss the dialog
-                                // Set the selected network to null
-                                onEvent(OnPasswordCancelEvent)
-                            }) {
-                            onEvent(OnPasswordSetEvent(it))
-                        }
+                else -> {
+                    // Show the password dialog
+                    PasswordDialog(
+                        scanResult = selectedNetwork,
+                        onCancelClick = {
+                            // Dismiss the dialog
+                            // Set the selected network to null
+                            onEvent(OnPasswordCancelEvent)
+                        }) {
+                        onEvent(OnPasswordSetEvent(it))
                     }
                 }
             }
@@ -222,7 +229,7 @@ private fun NetworkItem(
                     // Password dialog is not required for open networks.
                     val wifiData = WifiData(
                         ssid = network.SSID,
-                        password = "", // Todo: Verify if its empty password or null.
+                        password = "", // Empty password for open networks
                         authType = OPEN,
                     )
                     onEvent(OnPasswordSetEvent(wifiData))
@@ -259,7 +266,6 @@ private fun NetworkItem(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        // TODO: Utilize the common code from no.nordicsemi.android.wifi.provisioner.ui.mapping
         Icon(
             imageVector = if (isProtected) Icons.Outlined.Lock else Icons.Outlined.Wifi,
             contentDescription = null,

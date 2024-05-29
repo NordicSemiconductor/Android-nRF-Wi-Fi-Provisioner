@@ -15,7 +15,9 @@ import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcDestinationId
 import no.nordicsemi.android.wifi.provisioner.nfc.WifiManagerRepository
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.NetworkState
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSortOption
 import javax.inject.Inject
 
 /**
@@ -48,13 +50,26 @@ data object OnPasswordCancelEvent : WifiScannerViewEvent
  */
 internal data object OnNavigateUpClickEvent : WifiScannerViewEvent
 
+internal data class OnSortOptionSelected(val sortOption: WifiSortOption) : WifiScannerViewEvent
+
 /**
  * A wrapper class to represent the view state of the Wi-Fi scanner screen.
+ *
+ * @param networks The state of the available Wi-Fi networks.
+ * @param selectedNetwork The selected Wi-Fi network.
+ * @param sortOption The selected sort option.
  */
 data class WifiScannerViewState(
     val networks: NetworkState<List<ScanResult>> = Loading(),
-    val selectedNetwork: ScanResult? = null
-)
+    val selectedNetwork: ScanResult? = null,
+    val sortOption: WifiSortOption = WifiSortOption.RSSI,
+) {
+    private val items = (networks as? Success)?.data ?: emptyList()
+    val sortedItems: List<ScanResult> = when (sortOption) {
+        WifiSortOption.NAME -> items.sortedBy { it.SSID }
+        WifiSortOption.RSSI -> items.sortedByDescending { it.level }
+    }
+}
 
 @RequiresApi(Build.VERSION_CODES.M)
 @HiltViewModel
@@ -103,6 +118,9 @@ internal class WifiScannerViewModel @Inject constructor(
 
             OnPasswordCancelEvent -> _viewState.value =
                 _viewState.value.copy(selectedNetwork = null)
+
+            is OnSortOptionSelected -> _viewState.value =
+                _viewState.value.copy(sortOption = event.sortOption)
         }
     }
 
