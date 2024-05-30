@@ -122,12 +122,12 @@ class NdefMessageBuilder @Inject constructor() {
         }
 
         return when {
-            auth.equals(WPA_PSK, ignoreCase = true) -> AUTH_TYPE_WPA_PSK
-            auth.equals(WPA_EAP, ignoreCase = true) -> AUTH_TYPE_WPA_EAP
-            auth.equals(WPA2_ENTERPRISE, ignoreCase = true) -> AUTH_TYPE_WPA2_EAP
-            auth.equals(WPA2_PSK, ignoreCase = true) -> AUTH_TYPE_WPA2_PSK
-            auth.equals(WPA_WPA2_PSK, ignoreCase = true) -> AUTH_TYPE_WPA_WPA2_PSK
-            auth.equals(WEP, ignoreCase = true) -> AUTH_TYPE_SHARED
+            auth.startsWith(WPA_PSK, ignoreCase = true) -> AUTH_TYPE_WPA_PSK
+            auth.startsWith(WPA_EAP, ignoreCase = true) -> AUTH_TYPE_WPA_EAP
+            auth.startsWith(WPA2_ENTERPRISE, ignoreCase = true) -> AUTH_TYPE_WPA2_EAP
+            auth.startsWith(WPA2_PSK, ignoreCase = true) -> AUTH_TYPE_WPA2_PSK
+            auth.startsWith(WPA_WPA2_PSK, ignoreCase = true) -> AUTH_TYPE_WPA_WPA2_PSK
+            auth.startsWith(WEP, ignoreCase = true) -> AUTH_TYPE_SHARED
             else -> AUTH_TYPE_OPEN
         }
     }
