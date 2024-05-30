@@ -15,8 +15,9 @@ object WifiAuthType {
     private const val WPA2_PSK = "WPA2-PSK"
     private const val WPA_WPA2_PSK = "WPA/WPA2-PSK"
     private const val WPA2_EAP = "WPA2-EAP"
+    private const val WPA3_PSK = "WPA3-PSK"
 
-    private val securityTypes = listOf(OPEN, WEP, WPA_PSK, WPA2_PSK, WPA_WPA2_PSK, WPA2_EAP)
+    private val securityTypes = listOf(OPEN, WEP, WPA_PSK, WPA2_PSK, WPA_WPA2_PSK, WPA2_EAP, WPA3_PSK)
 
     /**
      * @return The security of a given [ScanResult].

@@ -2,6 +2,7 @@ package no.nordicsemi.android.wifi.provisioner.nfc
 
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_OPEN
@@ -13,7 +14,11 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AU
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_WPA_WPA2_PSK
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.CREDENTIAL_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_AES
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_AES_TKIP
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_FIELD_ID
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_NONE
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_TKIP
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_WEP
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.MAX_MAC_ADDRESS_SIZE_BYTES
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.NETWORK_KEY_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.NFC_TOKEN_MIME_TYPE
@@ -74,6 +79,8 @@ class NdefMessageBuilder @Inject constructor() {
         val networkKey: String = wifiNetwork.password
         val networkKeySize = networkKey.toByteArray().size.toShort()
 
+        val encType = getEncByte(wifiNetwork.encryptionMode)
+
         val macAddress = ByteArray(MAX_MAC_ADDRESS_SIZE_BYTES)
         for (i in 0 until MAX_MAC_ADDRESS_SIZE_BYTES) {
             macAddress[i] = 0xff.toByte()
@@ -100,7 +107,7 @@ class NdefMessageBuilder @Inject constructor() {
         // Add encryption type
         buffer.putShort(ENC_TYPE_FIELD_ID)
         buffer.putShort(2.toShort())
-        buffer.putShort(ENC_TYPE_AES)
+        buffer.putShort(encType)
 
         // Add network key / password
         buffer.putShort(NETWORK_KEY_FIELD_ID)
@@ -108,6 +115,26 @@ class NdefMessageBuilder @Inject constructor() {
         buffer.put(networkKey.toByteArray())
 
         return buffer.array()
+    }
+
+    /**
+     * Returns the encryption type in bytes.
+     *
+     * @param enc the encryption type.
+     */
+    private fun getEncByte(enc: String): Short {
+
+        // If Empty, default to AES
+        if (enc.isEmpty()) {
+            return ENC_TYPE_AES
+        }
+        return when (enc) {
+            EncryptionMode.WEP.name -> ENC_TYPE_WEP
+            EncryptionMode.TKIP.name -> ENC_TYPE_TKIP
+            EncryptionMode.AES.name -> ENC_TYPE_AES
+            EncryptionMode.AES_TKIP.name, "AES/TKIP" -> ENC_TYPE_AES_TKIP
+            else -> ENC_TYPE_NONE
+        }
     }
 
     /**

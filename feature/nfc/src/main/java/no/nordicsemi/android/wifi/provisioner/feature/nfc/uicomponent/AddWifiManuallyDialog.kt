@@ -75,7 +75,7 @@ internal fun AddWifiManuallyDialog(
 
                 // Show the encryption dropdown.
                 DropdownView(
-                    items = EncryptionMode.entries.map { it.name },
+                    items = EncryptionMode.getEncryptionList(),
                     label = stringResource(id = R.string.encryption),
                     placeholder = stringResource(id = R.string.encryption_placeholder),
                     defaultSelectedItem = encryptionMode

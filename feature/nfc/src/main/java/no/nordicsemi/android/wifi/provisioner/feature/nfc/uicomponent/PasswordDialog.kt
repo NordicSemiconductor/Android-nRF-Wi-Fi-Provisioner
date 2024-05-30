@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.WifiAuthType
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 
 /**
@@ -41,6 +42,7 @@ internal fun PasswordDialog(
     var password by rememberSaveable { mutableStateOf("") }
     var isPasswordEmpty by rememberSaveable { mutableStateOf(false) }
     val authMode = WifiAuthType.getSecurityTypes(scanResult)
+    val encryptionMode = EncryptionMode.getEncryption(scanResult)
 
     AlertDialog(
         onDismissRequest = { },
@@ -102,7 +104,7 @@ internal fun PasswordDialog(
                                 ssid = scanResult.SSID,
                                 password = password,
                                 authType = authMode,
-                                encryptionMode = "NONE" // FIXME: use it from the scanResult.
+                                encryptionMode = encryptionMode // FIXME: use it from the scanResult.
                             )
                         )
                     }
