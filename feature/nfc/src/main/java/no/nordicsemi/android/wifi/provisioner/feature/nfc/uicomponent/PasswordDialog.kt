@@ -104,7 +104,7 @@ internal fun PasswordDialog(
                                 ssid = scanResult.SSID,
                                 password = password,
                                 authType = authMode,
-                                encryptionMode = encryptionMode // FIXME: use it from the scanResult.
+                                encryptionMode = encryptionMode
                             )
                         )
                     }

@@ -89,7 +89,6 @@ internal fun NfcScreen() {
                             title = stringResource(id = R.string.ssid_title),
                             text = wifiData.ssid
                         )
-                        // TODO: Change all if statements with if authType open, if yes then don't show password
                         if (wifiData.password.isNotEmpty()) {
                             NfcPasswordRow(title = stringResource(id = R.string.password_title))
                         }
