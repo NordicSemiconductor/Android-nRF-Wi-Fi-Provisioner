@@ -47,6 +47,8 @@ internal object WifiHandoverDataType {
     const val AUTH_TYPE_WPA_EAP: Short = 0x0008
     const val AUTH_TYPE_WPA2_EAP: Short = 0x0010
     const val AUTH_TYPE_WPA2_PSK: Short = 0x0020
+    const val AUTH_TYPE_WPA_WPA2_PSK: Short = 0x0022
+    const val AUTH_TYPE_SHARED: Short = 0x0004 // deprecated "WEP" type
 
     /**
      * The Network key (wifi password) field ID.
@@ -59,4 +61,12 @@ internal object WifiHandoverDataType {
      */
     const val MAC_ADDRESS_FIELD_ID: Short = 0x1020
     const val MAX_MAC_ADDRESS_SIZE_BYTES = 6
+
+    // Constants for the authentication types.
+    const val WPA_PSK = "WPA-Personal"
+    const val WPA_EAP = "WPA-Enterprise"
+    const val WPA2_PSK = "WPA2-Personal"
+    const val WPA2_ENTERPRISE = "WPA2-Enterprise"
+    const val WPA_WPA2_PSK = "WPA/WPA2-Personal"
+    const val WEP = "Shared"
 }

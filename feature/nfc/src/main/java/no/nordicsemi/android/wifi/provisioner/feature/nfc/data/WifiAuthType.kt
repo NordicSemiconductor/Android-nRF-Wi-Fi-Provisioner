@@ -2,22 +2,129 @@ package no.nordicsemi.android.wifi.provisioner.feature.nfc.data
 
 import android.net.wifi.ScanResult
 import android.os.Build
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthMode
+
+object WifiAuthType {
+    /**
+     * Constants for security types.
+     *
+     * Note: This is for Build version sdk S and below.
+     */
+    private const val OPEN = "Open"
+    private const val WEP = "WEP"
+    private const val WPA_PSK = "WPA-PSK"
+    private const val WPA2_PSK = "WPA2-PSK"
+    private const val WPA_WPA2_PSK = "WPA/WPA2-PSK"
+    private const val WPA2_EAP = "WPA2-EAP"
+
+    private val securityTypes = listOf(OPEN, WEP, WPA_PSK, WPA2_PSK, WPA_WPA2_PSK, WPA2_EAP)
+
+    /**
+     * @return The security of a given [ScanResult].
+     */
+    fun getSecurityTypes(scanResult: ScanResult): String {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return AuthMode.getMatchedAuthMode(scanResult.securityTypes)
+        } else {
+            val cap = scanResult.capabilities
+            val securityModes = securityTypes
+            for (i in securityModes.indices.reversed()) {
+                if (cap.contains(securityModes[i])) {
+                    return mapToUi(securityModes[i])
+                }
+            }
+            return mapToUi(AuthMode.OPEN.name)
+        }
+    }
+
+    /**
+     * Maps the security type to a user friendly string.
+     *
+     * Note: This is for Build version sdk S and below.
+     */
+    private fun mapToUi(mode: String): String {
+        return when (mode) {
+            "WPA-PSK", "WPA_PSK" -> "WPA-Personal"
+            "WPA2-PSK", "WPA2_PSK" -> "WPA2-Personal"
+            "WPA/WPA2-PSK", "WPA_WPA2_PSK" -> "WPA/WPA2-Personal"
+            "WPA2-EAP", "WPA2_EAP" -> "WPA2-Enterprise"
+            "WPA3-PSK", "WPA3_PSK" -> "WPA3-Personal"
+            "WEP" -> "Shared"
+            else -> "Open"
+        }
+    }
+
+    /**
+     * @return The list of security types.
+     */
+    fun authList(): List<String> {
+        return securityTypes.map { mapToUi(it) }
+    }
+}
 
 /**
- * @return The security of a given [ScanResult].
+ * Enum class that represents the authentication mode of a wifi network.
+ *
+ * Note: This is for Build version sdk Tiramisu (API 31) and above.
  */
-fun getScanResultSecurity(scanResult: ScanResult): String {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        return AuthMode.getMatchedAuthMode(scanResult.securityTypes)
-    } else {
-        val cap = scanResult.capabilities
-        val securityModes = AuthMode.getListOfAuthModes()
-        for (i in securityModes.indices.reversed()) {
-            if (cap.contains(securityModes[i])) {
-                return securityModes[i]
+enum class AuthMode(val id: Int) {
+    UNKNOWN(-1),
+    OPEN(0),
+    WEP(1),
+    WPA_PSK(2),
+    WPA2_EAP(3),
+    WPA3_PSK(4), // WPA3-Personal (SAE) password)
+    EAP_WPA3_ENTERPRISE_192_BIT(5),
+    OWE(6), // Opportunistic Wireless Encryption
+    WAPI_PSK(7), // WAPI pre-shared key (PSK)
+    WAPI_CERT(8), // WAPI certificate to be specified.
+    EAP_WPA3_ENTERPRISE(9),
+    OSEN(10), // Hotspot 2.
+    PASSPOINT_R1_R2(11),
+    PASSPOINT_R3(12),
+    DPP(13); // Security type for Easy Connect (DPP) network
+
+    companion object {
+        private val stringMappings = mapOf(
+            UNKNOWN to "Unknown",
+            OPEN to "Open",
+            WEP to "WEP",
+            WPA_PSK to "WPA-Personal",
+            WPA2_EAP to "WPA2-Enterprise",
+            WPA3_PSK to "WPA3-Personal",
+            EAP_WPA3_ENTERPRISE_192_BIT to "EAP-WPA3-ENTERPRISE-192-BIT",
+            OWE to "OWE",
+            WAPI_PSK to "WAPI-Personal",
+            WAPI_CERT to "WAPI-CERT",
+            EAP_WPA3_ENTERPRISE to "EAP-WPA3-ENTERPRISE",
+            OSEN to "OSEN",
+            PASSPOINT_R1_R2 to "PASSPOINT-R1-R2",
+            PASSPOINT_R3 to "PASSPOINT-R3",
+            DPP to "DPP"
+        )
+
+        /**
+         * Get the authentication mode of a given security type.
+         * @param securityTypes The security type of the wifi network.
+         * @return The authentication mode of the wifi network.
+         */
+        fun getMatchedAuthMode(securityTypes: IntArray): String {
+            val matchedType = mutableListOf<String>()
+            securityTypes.forEach { type ->
+                val authMode = AuthMode.entries.find { it.id == type }
+                if (authMode != null) {
+                    matchedType.add(authModeTOString(authMode))
+                }
             }
+            return matchedType.joinToString(", ")
         }
-        return AuthMode.OPEN.name
+
+        /**
+         * Maps the authentication mode to a user friendly string.
+         *
+         * Note: This is for Build version sdk Tiramisu (API 31) and above.
+         */
+        private fun authModeTOString(authMode: AuthMode): String {
+            return stringMappings[authMode] ?: "Unknown"
+        }
     }
 }

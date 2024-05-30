@@ -47,7 +47,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.getScanResultSecurity
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.AuthMode
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.WifiAuthType
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireLocationForWifi
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireWifi
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.PasswordDialog
@@ -59,7 +60,6 @@ import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnPasswordSe
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnSortOptionSelected
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewModel
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
@@ -213,7 +213,7 @@ private fun NetworkItem(
     modifier: Modifier = Modifier,
     onEvent: (WifiScannerViewEvent) -> Unit,
 ) {
-    val securityType = getScanResultSecurity(network)
+    val securityType = WifiAuthType.getSecurityTypes(network)
     val isProtected = securityType != AuthMode.OPEN.name
 
     Row(

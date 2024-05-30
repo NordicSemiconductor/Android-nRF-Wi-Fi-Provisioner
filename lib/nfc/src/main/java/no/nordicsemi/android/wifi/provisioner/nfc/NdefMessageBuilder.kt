@@ -4,7 +4,13 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_FIELD_ID
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_OPEN
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_SHARED
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_WPA2_EAP
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_WPA2_PSK
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_WPA_EAP
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_WPA_PSK
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_WPA_WPA2_PSK
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.CREDENTIAL_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_AES
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_FIELD_ID
@@ -12,6 +18,12 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.MA
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.NETWORK_KEY_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.NFC_TOKEN_MIME_TYPE
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.SSID_FIELD_ID
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WEP
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA2_ENTERPRISE
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA2_PSK
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA_EAP
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA_PSK
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA_WPA2_PSK
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import javax.inject.Inject
@@ -58,7 +70,7 @@ class NdefMessageBuilder @Inject constructor() {
     private fun generateNdefPayload(wifiNetwork: WifiData): ByteArray {
         val ssid: String = wifiNetwork.ssid
         val ssidSize = ssid.toByteArray().size.toShort()
-        val authType: Short = AUTH_TYPE_WPA2_PSK
+        val authType: Short = getAuthBytes(wifiNetwork.authType)
         val networkKey: String = wifiNetwork.password
         val networkKeySize = networkKey.toByteArray().size.toShort()
 
@@ -98,4 +110,25 @@ class NdefMessageBuilder @Inject constructor() {
         return buffer.array()
     }
 
+    /**
+     * Returns the authentication type in bytes.
+     *
+     * @param auth the authentication type.
+     */
+    private fun getAuthBytes(auth: String): Short {
+        // If Empty, default to WPA2-Personal
+        if (auth.isEmpty()) {
+            return AUTH_TYPE_WPA2_PSK
+        }
+
+        return when {
+            auth.equals(WPA_PSK, ignoreCase = true) -> AUTH_TYPE_WPA_PSK
+            auth.equals(WPA_EAP, ignoreCase = true) -> AUTH_TYPE_WPA_EAP
+            auth.equals(WPA2_ENTERPRISE, ignoreCase = true) -> AUTH_TYPE_WPA2_EAP
+            auth.equals(WPA2_PSK, ignoreCase = true) -> AUTH_TYPE_WPA2_PSK
+            auth.equals(WPA_WPA2_PSK, ignoreCase = true) -> AUTH_TYPE_WPA_WPA2_PSK
+            auth.equals(WEP, ignoreCase = true) -> AUTH_TYPE_SHARED
+            else -> AUTH_TYPE_OPEN
+        }
+    }
 }
