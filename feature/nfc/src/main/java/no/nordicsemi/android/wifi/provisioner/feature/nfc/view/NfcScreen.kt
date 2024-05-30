@@ -119,49 +119,53 @@ internal fun NfcScreen() {
                         state = WizardStepState.CURRENT,
                         showVerticalDivider = false,
                     ) {
-                        when (val e = nfcScanEvent) {
-                            is Error -> {
-                                // Show the error message.
-                                ProgressItem(
-                                    text = stringResource(id = R.string.write_failed),
-                                    status = ProgressItemStatus.ERROR
-                                )
-                                Text(
-                                    text = if (e.message.length > 35) e.message.slice(0..35) else e.message,
-                                    modifier = Modifier
-                                        .alpha(0.7f)
-                                        .padding(start = 40.dp),
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                            }
+                        Column(
+                            modifier = Modifier.padding(start = 8.dp)
+                        ) {
+                            when (val e = nfcScanEvent) {
+                                is Error -> {
+                                    // Show the error message.
+                                    ProgressItem(
+                                        text = stringResource(id = R.string.write_failed),
+                                        status = ProgressItemStatus.ERROR
+                                    )
+                                    Text(
+                                        text = if (e.message.length > 35) e.message.slice(0..35) else e.message,
+                                        modifier = Modifier
+                                            .alpha(0.7f)
+                                            .padding(start = 40.dp),
+                                        style = MaterialTheme.typography.bodySmall,
+                                    )
+                                }
 
-                            Loading -> {
-                                // Show the loading indicator.
-                                ProgressItem(
-                                    text = stringResource(id = R.string.discovering_tag),
-                                    status = ProgressItemStatus.WORKING
-                                )
-                            }
+                                Loading -> {
+                                    // Show the loading indicator.
+                                    ProgressItem(
+                                        text = stringResource(id = R.string.discovering_tag),
+                                        status = ProgressItemStatus.WORKING
+                                    )
+                                }
 
-                            Success -> {
-                                ProgressItem(
-                                    text = stringResource(id = R.string.write_success),
-                                    status = ProgressItemStatus.SUCCESS
-                                )
-                                Text(
-                                    text = stringResource(id = R.string.success_des),
-                                    modifier = Modifier
-                                        .alpha(0.7f)
-                                        .padding(start = 40.dp),
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                            }
+                                Success -> {
+                                    ProgressItem(
+                                        text = stringResource(id = R.string.write_success),
+                                        status = ProgressItemStatus.SUCCESS
+                                    )
+                                    Text(
+                                        text = stringResource(id = R.string.success_des),
+                                        modifier = Modifier
+                                            .alpha(0.7f)
+                                            .padding(start = 40.dp),
+                                        style = MaterialTheme.typography.bodySmall,
+                                    )
+                                }
 
-                            null -> {
-                                ProgressItem(
-                                    text = stringResource(id = R.string.tap_nfc_tag),
-                                    status = ProgressItemStatus.WORKING
-                                )
+                                null -> {
+                                    ProgressItem(
+                                        text = stringResource(id = R.string.tap_nfc_tag),
+                                        status = ProgressItemStatus.WORKING
+                                    )
+                                }
                             }
                         }
                     }
