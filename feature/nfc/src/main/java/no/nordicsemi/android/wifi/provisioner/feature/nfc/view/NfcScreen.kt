@@ -32,6 +32,7 @@ import no.nordicsemi.android.common.theme.view.ProgressItemStatus
 import no.nordicsemi.android.common.theme.view.WizardStepComponent
 import no.nordicsemi.android.common.theme.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.NfcPasswordRow
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.NfcTextRow
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.NfcManagerViewModel
 import no.nordicsemi.android.wifi.provisioner.nfc.Error
@@ -90,10 +91,7 @@ internal fun NfcScreen() {
                         )
                         // TODO: Change all if statements with if authType open, if yes then don't show password
                         if (wifiData.password.isNotEmpty()) {
-                            NfcTextRow(
-                                title = stringResource(id = R.string.password_title),
-                                text = wifiData.password
-                            )
+                            NfcPasswordRow(title = stringResource(id = R.string.password_title))
                         }
                         if (wifiData.authType.isNotEmpty()) {
                             NfcTextRow(
