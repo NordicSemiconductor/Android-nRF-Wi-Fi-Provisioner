@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="provision_over_wifi">Provision over Wi-Fi</string>
     <string name="soft_ap">Connect to Device</string>
     <string name="softap_rationale">Enter the SSID of the SoftAP you want to connect to.
     \n\nNote: Make sure the nRF 700x device is powered on and in range.
