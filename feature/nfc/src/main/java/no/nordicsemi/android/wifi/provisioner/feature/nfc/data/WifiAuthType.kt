@@ -17,7 +17,8 @@ object WifiAuthType {
     private const val WPA2_EAP = "WPA2-EAP"
     private const val WPA3_PSK = "WPA3-PSK"
 
-    private val securityTypes = listOf(OPEN, WEP, WPA_PSK, WPA2_PSK, WPA_WPA2_PSK, WPA2_EAP, WPA3_PSK)
+    private val securityTypes =
+        listOf(OPEN, WEP, WPA_PSK, WPA2_PSK, WPA_WPA2_PSK, WPA2_EAP, WPA3_PSK)
 
     /**
      * @return The security of a given [ScanResult].
@@ -70,7 +71,7 @@ object WifiAuthType {
 enum class AuthMode(val id: Int) {
     UNKNOWN(-1),
     OPEN(0),
-    WEP(1),
+    WEP(1), // Shared
     WPA_PSK(2),
     WPA2_EAP(3),
     WPA3_PSK(4), // WPA3-Personal (SAE) password)
@@ -84,24 +85,27 @@ enum class AuthMode(val id: Int) {
     PASSPOINT_R3(12),
     DPP(13); // Security type for Easy Connect (DPP) network
 
+    override fun toString(): String {
+        return when (this) {
+            UNKNOWN -> "Unknown"
+            OPEN -> "Open"
+            WEP -> "WEP"
+            WPA_PSK -> "WPA-Personal"
+            WPA2_EAP -> "WPA2-Enterprise"
+            WPA3_PSK -> "WPA3-Personal"
+            EAP_WPA3_ENTERPRISE_192_BIT -> "EAP-WPA3-ENTERPRISE-192-BIT"
+            OWE -> "OWE"
+            WAPI_PSK -> "WAPI-Personal"
+            WAPI_CERT -> "WAPI-CERT"
+            EAP_WPA3_ENTERPRISE -> "EAP-WPA3-ENTERPRISE"
+            OSEN -> "OSEN"
+            PASSPOINT_R1_R2 -> "PASSPOINT-R1-R2"
+            PASSPOINT_R3 -> "PASSPOINT-R3"
+            DPP -> "DPP"
+        }
+    }
+
     companion object {
-        private val stringMappings = mapOf(
-            UNKNOWN to "Unknown",
-            OPEN to "Open",
-            WEP to "WEP",
-            WPA_PSK to "WPA-Personal",
-            WPA2_EAP to "WPA2-Enterprise",
-            WPA3_PSK to "WPA3-Personal",
-            EAP_WPA3_ENTERPRISE_192_BIT to "EAP-WPA3-ENTERPRISE-192-BIT",
-            OWE to "OWE",
-            WAPI_PSK to "WAPI-Personal",
-            WAPI_CERT to "WAPI-CERT",
-            EAP_WPA3_ENTERPRISE to "EAP-WPA3-ENTERPRISE",
-            OSEN to "OSEN",
-            PASSPOINT_R1_R2 to "PASSPOINT-R1-R2",
-            PASSPOINT_R3 to "PASSPOINT-R3",
-            DPP to "DPP"
-        )
 
         /**
          * Get the authentication mode of a given security type.
@@ -125,7 +129,7 @@ enum class AuthMode(val id: Int) {
          * Note: This is for Build version sdk Tiramisu (API 31) and above.
          */
         private fun authModeTOString(authMode: AuthMode): String {
-            return stringMappings[authMode] ?: "Unknown"
+            return authMode.toString()
         }
     }
 }

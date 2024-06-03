@@ -12,11 +12,26 @@ enum class EncryptionMode {
     AES,
     AES_TKIP;
 
+    override fun toString() = when (this) {
+        NONE -> "NONE"
+        WEP -> "WEP"
+        TKIP -> "TKIP"
+        AES -> "AES"
+        AES_TKIP -> "AES/TKIP"
+
+    }
+
     companion object {
 
         /**
          * Returns the encryption mode of the given scan result.
          *
+         * Examples of capabilities:
+         * 1. `[WPA2-PSK-CCMP][ESS]`
+         * 2. `[WPA2-PSK-CCMP+TKIP][ESS]`
+         * 3. `[WPA-PSK-CCMP+TKIP][WPA2-PSK-CCMP+TKIP][ESS]`
+         * [see more](https://stackoverflow.com/questions/11956874/scanresult-capabilities-interpretation), [here](https://security.stackexchange.com/questions/229986/does-wpa2-use-tkip-or-not),
+         * [here](https://developer.android.com/reference/kotlin/android/net/wifi/ScanResult#capabilities)
          * @param result the scan result.
          * @return the encryption mode.
          */
@@ -27,32 +42,19 @@ enum class EncryptionMode {
                 .toTypedArray()
             val auth = capabilities[0] + "-" + capabilities[1]
             val encryptionMode = when {
-                auth.contains("WPA2-PSK") -> AES
+                auth.contains("WPA2-PSK") ||
+                        auth.contains("WPA3-PSK") ||
+                        auth.contains("WPA2-EAP") -> AES
+
                 auth.contains("WPA-PSK") -> TKIP
-                auth.contains("WPA2-EAP") -> AES
-                auth.contains("WPA-EAP") -> AES_TKIP // TODO: Verify this.
-                auth.contains("WPA/WPA2-PSK") -> AES_TKIP
+                auth.contains("WPA-EAP") ||
+                        auth.contains("WPA/WPA2-PSK") -> AES_TKIP
+
                 auth.contains("WEP") -> WEP
-                auth.contains("Open") -> NONE
-                auth.contains("WPA3-PSK") -> AES
                 else -> NONE
             }
 
-            return encryptionMode.name
-        }
-
-        // Encryption modes to be displayed in the UI
-        private val encryptionModesToUi = mapOf(
-            "NONE" to NONE,
-            "WEP" to WEP,
-            "TKIP" to TKIP,
-            "AES" to AES,
-            "AES/TKIP" to AES_TKIP
-        )
-
-        /** Returns the list of encryption modes to be displayed in the UI. */
-        fun getEncryptionList(): List<String> {
-            return encryptionModesToUi.keys.toList()
+            return encryptionMode.toString()
         }
     }
 }

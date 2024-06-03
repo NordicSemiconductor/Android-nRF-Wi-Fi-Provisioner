@@ -41,8 +41,8 @@ internal fun AddWifiManuallyDialog(
     var ssid by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
-    var authMode by rememberSaveable { mutableStateOf("") }
-    var encryptionMode by rememberSaveable { mutableStateOf("") }
+    var authMode by rememberSaveable { mutableStateOf("WPA2-Personal") } // default to WPA2-Personal.
+    var encryptionMode by rememberSaveable { mutableStateOf(EncryptionMode.AES.toString()) } // default to AES.
 
     var isSsidEmpty by rememberSaveable { mutableStateOf(false) }
 
@@ -75,7 +75,7 @@ internal fun AddWifiManuallyDialog(
 
                 // Show the encryption dropdown.
                 DropdownView(
-                    items = EncryptionMode.getEncryptionList(),
+                    items = EncryptionMode.entries.map { it.toString() },
                     label = stringResource(id = R.string.encryption),
                     placeholder = stringResource(id = R.string.encryption_placeholder),
                     defaultSelectedItem = encryptionMode

@@ -129,10 +129,10 @@ class NdefMessageBuilder @Inject constructor() {
             return ENC_TYPE_AES
         }
         return when (enc) {
-            EncryptionMode.WEP.name -> ENC_TYPE_WEP
-            EncryptionMode.TKIP.name -> ENC_TYPE_TKIP
-            EncryptionMode.AES.name -> ENC_TYPE_AES
-            EncryptionMode.AES_TKIP.name, "AES/TKIP" -> ENC_TYPE_AES_TKIP
+            EncryptionMode.WEP.toString() -> ENC_TYPE_WEP
+            EncryptionMode.TKIP.toString() -> ENC_TYPE_TKIP
+            EncryptionMode.AES.toString() -> ENC_TYPE_AES
+            EncryptionMode.AES_TKIP.toString() -> ENC_TYPE_AES_TKIP
             else -> ENC_TYPE_NONE
         }
     }
