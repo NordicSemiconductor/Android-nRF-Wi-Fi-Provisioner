@@ -33,11 +33,13 @@
     <string name="connecting">Connecting…</string>
     <string name="connected">Connected</string>
     <string name="change">Change</string>
+    <string name="wifi_network">Wi-Fi Network</string>
     <string name="select_wifi">Select Wi-Fi</string>
     <string name="start">Start</string>
     <string name="edit_ssid">Edit SSID</string>
     <string name="select">Select</string>
-    <string name="set_passphrase">Set Passphrase</string>
+    <string name="security">Security</string>
+    <string name="se_wifi_passphrase">Set Wi-Fi passphrase</string>
     <string name="set">Set</string>
     <string name="configure">Configure</string>
     <string name="select_wifi_rationale">Select a Wi-Fi Network to provision the nRF 700x device to</string>
@@ -53,7 +55,7 @@
     <string name="locating_provisioned_device">Locating provisioned device…</string>
     <string name="verification_completed">Verification completed</string>
     <string name="please_enable_wi_fi">Please enable Wi-Fi!</string>
-    <string name="emptu_passwphrase_rationale">Passphrase not required</string>
+    <string name="empty_passphrase_rationale">Passphrase not required</string>
     <string name="failed_to_bind_to_network">Failed to bind to network!</string>
     <string name="unable_to_connect_to_network">Unable to connect to network!</string>
     <string name="connection_lost">Connection lost!</string>
