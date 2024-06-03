@@ -12,8 +12,6 @@
     <string name="wifi_access_points_title">Wi-Fi Access Points</string>
     <string name="wifi_scanning">Scanning error</string>
 
-    <string name="ip_4">IPv4: %s</string>
-    <string name="ssid">SSID: %s</string>
     <string name="bssid">BSSID: %s</string>
     <string name="band">Band: %s</string>
     <string name="band_and_channel">Band: %s, Channel: %s</string>
@@ -22,17 +20,13 @@
     <string name="band_5">5 GHz</string>
     <string name="any">Any</string>
 
-    <string name="cd_wifi_icon">Icon indicating wifi and it\'s authentication method.</string>
+    <string name="cd_wifi_icon">Icon indicating wifi and it\'s authentication method.</string>=
 
-    <string name="section_device">Device status</string>
-    <string name="section_provisioning">Provisioning data</string>
-    <string name="section_status">Upload status</string>
     <string name="provision">Provision</string>
     <string name="verify">Verify</string>
     <string name="connect">Connect</string>
     <string name="connecting">Connecting…</string>
     <string name="connected">Connected</string>
-    <string name="change">Change</string>
     <string name="wifi_network">Wi-Fi Network</string>
     <string name="select_wifi">Select Wi-Fi</string>
     <string name="start">Start</string>
@@ -42,8 +36,6 @@
     <string name="se_wifi_passphrase">Set Wi-Fi passphrase</string>
     <string name="set">Set</string>
     <string name="configure">Configure</string>
-    <string name="select_wifi_rationale">Select a Wi-Fi Network to provision the nRF 700x device to</string>
-    <string name="set_passphrase_rationale">Set the passphrase for the selected Wi-Fi Network</string>
     <string name="set_passphrase_value">Passphrase: %s</string>
     <string name="provisioning_device_to_your_network">Sending Wi-Fi credentials…</string>
     <string name="provisioning_completed">Wi-Fi credentials sent</string>
