@@ -119,4 +119,17 @@
     <string name="sorting_rssi">RSSI</string>
     <string name="error_softap_not_supported">This feature requires an Android device running Android 10 or above.</string>
     <string name="app_version">Version: %s (%s)</string>
+
+    <string name="provision_over_ble">Provision over Bluetooth LE</string>
+    <string name="provision_over_ble_rationale">This mode uses secure Bluetooth LE link to transfer
+        Wi-Fi credentials to the provisionee and verify provisioning status.
+    </string>
+    <string name="provision_over_wifi">"Provision over Wi-Fi"</string>
+    <string name="provision_over_wifi_rationale">This mode uses temporary a Wi-Fi network (SoftAP)
+        created by the provisionee to send Wi-Fi credentials. Communication is encrypted using TLS.
+    </string>
+    <string name="provision_over_nfc">Provision over NFC</string>
+    <string name="provision_over_nfc_rationale">This mode allows provisioning a nRF700x device to a
+        Wi-Fi network by providing the Wi-Fi credentials via NFC.
+    </string>
 </resources>

@@ -3,10 +3,6 @@
     <string name="wifi_provision_over_nfc_appbar">Provision over NFC</string>
     <string name="wifi_scanner_appbar">Wi-Fi networks</string>
     <string name="ndef_publish_appbar">Publish</string>
-    <string name="provision_over_nfc">Provision over NFC</string>
-    <string name="provision_over_nfc_rationale">This mode allows provisioning a nRF700x device to a
-        Wi-Fi network by providing the Wi-Fi credentials via NFC.
-    </string>
 
     <string name="enter_wifi_credentials">Enter Wi-Fi credentials</string>
     <string name="enter_wifi_credentials_des">Enter the Wi-Fi credentials manually.</string>
@@ -44,7 +40,7 @@
     <string name="password_placeholder">Enter password</string>
 
     <!--    Nfc strings-->
-    <string name="wifi_record">Wi-fi record</string>
+    <string name="wifi_record">Wi-fi Record</string>
     <string name="ssid_title">SSID</string>
     <string name="password_title">Password</string>
     <string name="encryption_title">Encryption</string>

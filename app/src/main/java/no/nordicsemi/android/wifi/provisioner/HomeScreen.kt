@@ -46,7 +46,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -69,10 +70,10 @@ import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewMod
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.app.BuildConfig
 import no.nordicsemi.android.wifi.provisioner.app.R
-import no.nordicsemi.android.wifi.provisioner.ble.sections.ProvisionOverBleSection
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleDestination
-import no.nordicsemi.android.wifi.provisioner.softap.view.ProvisionOverWifiSection
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcProvisionerDestinationId
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApDestination
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.ProvisionSection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,6 +97,7 @@ fun HomeScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
                 .consumeWindowInsets(innerPadding)
                 .windowInsetsPadding(
                     WindowInsets.safeDrawing.only(
@@ -107,7 +109,7 @@ fun HomeScreen() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.4f, true),
+                    .weight(1f, true),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -122,14 +124,21 @@ fun HomeScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.4f, true),
+                    .padding(bottom = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                ProvisionOverBleSection {
+                ProvisionSection(
+                    sectionTitle = stringResource(R.string.provision_over_ble),
+                    sectionRational = stringResource(R.string.provision_over_ble_rationale)
+                ) {
                     vm.navigateTo(BleDestination)
                 }
-                ProvisionOverWifiSection {
+
+                ProvisionSection(
+                    sectionTitle = stringResource(R.string.provision_over_wifi),
+                    sectionRational = stringResource(R.string.provision_over_wifi_rationale)
+                ) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         vm.navigateTo(SoftApDestination)
                     } else {
@@ -141,9 +150,17 @@ fun HomeScreen() {
                         }
                     }
                 }
+                ProvisionSection(
+                    sectionTitle = stringResource(R.string.provision_over_nfc),
+                    sectionRational = stringResource(R.string.provision_over_nfc_rationale)
+                ) {
+                    vm.navigateTo(NfcProvisionerDestinationId)
+                }
             }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Text(

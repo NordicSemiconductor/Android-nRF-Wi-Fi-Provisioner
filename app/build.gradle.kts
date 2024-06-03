@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":feature:ui"))
     implementation(project(":lib:ble"))
     implementation(project(":lib:softap"))
+    implementation(project(":feature:ui"))
 
     implementation(libs.androidx.compose.ui)
 
