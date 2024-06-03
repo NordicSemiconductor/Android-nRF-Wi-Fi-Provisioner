@@ -119,21 +119,20 @@ internal fun NfcScreen() {
                         state = WizardStepState.CURRENT,
                         showVerticalDivider = false,
                     ) {
-                        Column(
-                            modifier = Modifier.padding(start = 8.dp)
-                        ) {
+                        Column {
                             when (val e = nfcScanEvent) {
                                 is Error -> {
                                     // Show the error message.
                                     ProgressItem(
                                         text = stringResource(id = R.string.write_failed),
-                                        status = ProgressItemStatus.ERROR
+                                        status = ProgressItemStatus.ERROR,
+                                        iconRightPadding = 24.dp,
                                     )
                                     Text(
                                         text = if (e.message.length > 35) e.message.slice(0..35) else e.message,
                                         modifier = Modifier
                                             .alpha(0.7f)
-                                            .padding(start = 40.dp),
+                                            .padding(start = 48.dp),
                                         style = MaterialTheme.typography.bodySmall,
                                     )
                                 }
@@ -142,20 +141,22 @@ internal fun NfcScreen() {
                                     // Show the loading indicator.
                                     ProgressItem(
                                         text = stringResource(id = R.string.discovering_tag),
-                                        status = ProgressItemStatus.WORKING
+                                        status = ProgressItemStatus.WORKING,
+                                        iconRightPadding = 24.dp,
                                     )
                                 }
 
                                 Success -> {
                                     ProgressItem(
                                         text = stringResource(id = R.string.write_success),
-                                        status = ProgressItemStatus.SUCCESS
+                                        status = ProgressItemStatus.SUCCESS,
+                                        iconRightPadding = 24.dp,
                                     )
                                     Text(
                                         text = stringResource(id = R.string.success_des),
                                         modifier = Modifier
                                             .alpha(0.7f)
-                                            .padding(start = 40.dp),
+                                            .padding(start = 48.dp),
                                         style = MaterialTheme.typography.bodySmall,
                                     )
                                 }
@@ -163,7 +164,8 @@ internal fun NfcScreen() {
                                 null -> {
                                     ProgressItem(
                                         text = stringResource(id = R.string.tap_nfc_tag),
-                                        status = ProgressItemStatus.WORKING
+                                        status = ProgressItemStatus.WORKING,
+                                        iconRightPadding = 24.dp,
                                     )
                                 }
                             }

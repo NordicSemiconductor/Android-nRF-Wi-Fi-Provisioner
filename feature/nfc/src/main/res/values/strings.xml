@@ -40,7 +40,7 @@
     <string name="password_placeholder">Enter password</string>
 
     <!--    Nfc strings-->
-    <string name="wifi_record">Wi-fi Record</string>
+    <string name="wifi_record">Wi-Fi record</string>
     <string name="ssid_title">SSID</string>
     <string name="password_title">Password</string>
     <string name="encryption_title">Encryption</string>
