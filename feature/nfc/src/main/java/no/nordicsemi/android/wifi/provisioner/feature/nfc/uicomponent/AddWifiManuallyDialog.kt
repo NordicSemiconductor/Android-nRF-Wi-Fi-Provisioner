@@ -41,9 +41,9 @@ internal fun AddWifiManuallyDialog(
     var ssid by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var showPassword by rememberSaveable { mutableStateOf(false) }
+    var isPasswordEmpty by rememberSaveable { mutableStateOf(false) }
     var authMode by rememberSaveable { mutableStateOf("WPA2-Personal") } // default to WPA2-Personal.
     var encryptionMode by rememberSaveable { mutableStateOf(EncryptionMode.AES.toString()) } // default to AES.
-
     var isSsidEmpty by rememberSaveable { mutableStateOf(false) }
 
     AlertDialog(
@@ -86,23 +86,30 @@ internal fun AddWifiManuallyDialog(
                     input = ssid,
                     label = stringResource(id = R.string.ssid_label),
                     placeholder = stringResource(id = R.string.ssid_placeholder),
-                    errorState = isSsidEmpty && ssid.isEmpty(),
+                    errorState = isSsidEmpty && ssid.trim().isEmpty(),
                     errorMessage = stringResource(id = R.string.ssid_error),
                     onUpdate = {
                         ssid = it
                         isSsidEmpty = ssid.isEmpty()
                     }
                 )
-
-                // Show the password field.
-                PasswordInputField(
-                    input = password,
-                    label = stringResource(id = R.string.password),
-                    placeholder = stringResource(id = R.string.password_placeholder),
-                    showPassword = showPassword,
-                    onShowPassChange = { showPassword = !showPassword },
-                    onUpdate = { password = it },
-                )
+                // Show the password field only if the authentication mode is not open.
+                if (authMode.lowercase() != "open") {
+                    // Show the password field.
+                    PasswordInputField(
+                        input = password,
+                        label = stringResource(id = R.string.password),
+                        placeholder = stringResource(id = R.string.password_placeholder),
+                        isError = isPasswordEmpty && password.trim().isEmpty(),
+                        errorMessage = stringResource(id = R.string.password_error),
+                        showPassword = showPassword,
+                        onShowPassChange = { showPassword = !showPassword },
+                        onUpdate = { password = it },
+                    )
+                } else {
+                    // Clear the password if the authentication mode is open.
+                    password = ""
+                }
             }
         },
         dismissButton = {
@@ -115,11 +122,14 @@ internal fun AddWifiManuallyDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    if (ssid.isEmpty()) {
-                        isSsidEmpty = true
-                        return@TextButton
-                    } else {
-                        onConfirmClick(
+                    // Validate the fields.
+                    when {
+                        ssid.trim().isEmpty() -> isSsidEmpty = true
+
+                        authMode.lowercase() != "open" && password.trim()
+                            .isEmpty() -> isPasswordEmpty = true
+
+                        else -> onConfirmClick(
                             WifiData(
                                 ssid = ssid,
                                 password = password,

@@ -38,6 +38,7 @@
     <string name="encryption_placeholder">Select encryption</string>
     <string name="password">Password</string>
     <string name="password_placeholder">Enter password</string>
+    <string name="password_error">Password is required</string>
 
     <!--    Nfc strings-->
     <string name="wifi_record">Wi-Fi record</string>

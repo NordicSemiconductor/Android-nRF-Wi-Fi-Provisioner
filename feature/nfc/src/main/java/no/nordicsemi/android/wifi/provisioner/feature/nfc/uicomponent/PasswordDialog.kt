@@ -76,12 +76,12 @@ internal fun PasswordDialog(
                     label = stringResource(id = R.string.password),
                     placeholder = stringResource(id = R.string.password_placeholder),
                     showPassword = showPassword,
-                    isError = isPasswordEmpty && password.isEmpty(),
-                    errorMessage = "Password cannot be empty.",
+                    isError = isPasswordEmpty && password.trim().isEmpty(),
+                    errorMessage = stringResource(id = R.string.password_error),
                     onShowPassChange = { showPassword = !showPassword },
                     onUpdate = {
                         password = it
-                        isPasswordEmpty = password.isEmpty()
+                        isPasswordEmpty = password.trim().isEmpty()
                     },
                 )
             }
