@@ -32,8 +32,6 @@ fun ProvisionSection(
     OutlinedCard(
         modifier = Modifier
             .widthIn(max = 600.dp)
-            .fillMaxWidth()
-            .padding(8.dp)
             .clickable { onClick() }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
