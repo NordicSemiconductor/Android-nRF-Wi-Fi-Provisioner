@@ -145,7 +145,7 @@ fun HomeScreen() {
                         scope.launch {
                             snackbarHostState.showSnackbar(
                                 message = context.getString(R.string.error_softap_not_supported),
-                                actionLabel = context.getString(R.string.dismiss)
+                                actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
                             )
                         }
                     }

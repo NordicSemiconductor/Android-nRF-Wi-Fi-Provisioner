@@ -36,7 +36,7 @@ import androidx.compose.material.icons.outlined.LinkOff
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
-import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
 @Composable
 fun DisconnectedDeviceStatus() {

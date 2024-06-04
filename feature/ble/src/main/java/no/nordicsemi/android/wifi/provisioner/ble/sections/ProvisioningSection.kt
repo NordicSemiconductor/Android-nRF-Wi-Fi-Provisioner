@@ -49,7 +49,7 @@ import no.nordicsemi.android.common.theme.view.ProgressItemStatus
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
 import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
-import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading

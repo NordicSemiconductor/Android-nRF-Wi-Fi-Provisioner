@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.ui.DataItem
 import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.LoadingItem
-import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
@@ -56,11 +56,10 @@ fun UnprovisioningSection(status: Resource<Unit>) {
     }
 }
 
-
 @Composable
 private fun ErrorItem(error: Throwable) {
     ErrorDataItem(
-        iconRes = R.drawable.ic_upload_wifi,
+        iconRes = no.nordicsemi.android.wifi.provisioner.ui.R.drawable.ic_upload_wifi,
         title = stringResource(id = R.string.unprovision_status),
         error = error
     )

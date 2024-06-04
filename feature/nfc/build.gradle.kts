@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(project(":feature:common"))
+    implementation(project(":feature:ui"))
     api(project(":lib:nfc"))
     api(project(":lib:domain")) // TODD: Remove this once feature:common is utilized in this module.
     implementation(libs.nordic.permissions.nfc)

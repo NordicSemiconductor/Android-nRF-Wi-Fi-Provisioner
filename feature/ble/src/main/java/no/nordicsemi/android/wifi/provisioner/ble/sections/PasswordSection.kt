@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
-import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
 @Composable
 fun PasswordSection(isEditable: Boolean = false, onEvent: (ProvisioningViewEvent) -> Unit) {
