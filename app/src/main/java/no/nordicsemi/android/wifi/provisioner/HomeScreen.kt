@@ -154,7 +154,16 @@ fun HomeScreen() {
                     sectionTitle = stringResource(R.string.provision_over_nfc),
                     sectionRational = stringResource(R.string.provision_over_nfc_rationale)
                 ) {
-                    vm.navigateTo(NfcDestination)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        vm.navigateTo(NfcDestination)
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = context.getString(R.string.error_nfc_not_supported),
+                                actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
+                            )
+                        }
+                    }
                 }
             }
             Row(

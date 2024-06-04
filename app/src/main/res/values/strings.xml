@@ -49,4 +49,5 @@
     <string name="provision_over_nfc_rationale">This mode allows provisioning a nRF700x device to a
         Wi-Fi network by providing the Wi-Fi credentials via NFC.
     </string>
+    <string name="error_nfc_not_supported">This feature requires an Android device running Android 6.0 or above.</string>
 </resources>

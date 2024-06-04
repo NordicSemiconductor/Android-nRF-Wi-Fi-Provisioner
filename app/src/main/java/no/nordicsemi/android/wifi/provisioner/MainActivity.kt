@@ -37,7 +37,6 @@ import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
@@ -52,7 +51,6 @@ import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDesti
 @AndroidEntryPoint
 class MainActivity : NordicActivity() {
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,15 +61,21 @@ class MainActivity : NordicActivity() {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     NavigationView(
                         destinations = (HomeDestination +
-                                BleProvisioningDestinations +
-                                NfcProvisionerDestinations).run {
-                                    // Soft AP is available on Android 10 and newer.
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                        this + SoftApProvisionerDestinations
-                                    } else {
-                                        this
-                                    }
-                                }
+                                BleProvisioningDestinations).run {
+                            // Soft AP is available on Android 10 and newer.
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                this + SoftApProvisionerDestinations
+                            } else {
+                                this
+                            }
+                        }.run {
+                            // NFC is available on Android 6.0 and newer.
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                this + NfcProvisionerDestinations
+                            } else {
+                                this
+                            }
+                        }
                     )
                 }
             }
