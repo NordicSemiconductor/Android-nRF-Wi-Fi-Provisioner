@@ -12,7 +12,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcPublishDestination
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.AuthMode
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.WifiAuthType
 import no.nordicsemi.android.wifi.provisioner.nfc.WifiManagerRepository
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.NetworkState
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
@@ -105,7 +108,21 @@ internal class WifiScannerViewModel @Inject constructor(
     fun onEvent(event: WifiScannerViewEvent) {
         when (event) {
             is OnNetworkSelectEvent -> {
-                _viewState.value = _viewState.value.copy(selectedNetwork = event.network)
+                val isProtected = WifiAuthType.getSecurityTypes(event.network) != AuthMode.OPEN.toString()
+                // If the network is open, navigate to the NFC screen
+                if (!isProtected) {
+                    navigateToNfcScan(
+                        WifiData(
+                            ssid = event.network.SSID,
+                            password = "", // Empty password for open network.
+                            authType = AuthMode.OPEN.toString(),
+                            encryptionMode = EncryptionMode.NONE.toString() // No encryption for open network.
+                        )
+                    )
+                } else {
+                    // Show the dialog to enter the password for the selected network.
+                    _viewState.value = _viewState.value.copy(selectedNetwork = event.network)
+                }
             }
 
             OnNavigateUpClickEvent -> onBackClick()
