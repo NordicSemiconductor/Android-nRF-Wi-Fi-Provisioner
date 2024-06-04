@@ -1,177 +1,138 @@
 package no.nordicsemi.android.wifi.provisioner.feature.nfc.view
 
-import android.app.Activity
-import androidx.activity.compose.BackHandler
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Wifi
+import androidx.compose.material.icons.filled.WifiFind
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import no.nordicsemi.android.common.permissions.nfc.RequireNfc
 import no.nordicsemi.android.common.theme.view.NordicAppBar
-import no.nordicsemi.android.common.theme.view.ProgressItem
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
-import no.nordicsemi.android.common.theme.view.WizardStepComponent
-import no.nordicsemi.android.common.theme.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.NfcPasswordRow
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.NfcTextRow
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.NfcManagerViewModel
-import no.nordicsemi.android.wifi.provisioner.nfc.Error
-import no.nordicsemi.android.wifi.provisioner.nfc.Loading
-import no.nordicsemi.android.wifi.provisioner.nfc.Success
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.AddWifiManuallyDialog
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.OutlinedCardItem
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.NfcProvisioningViewEvent
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.NfcProvisioningViewModel
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnAddWifiNetworkClickEvent
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnBackClickEvent
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnScanClickEvent
 
+@RequiresApi(Build.VERSION_CODES.M)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun NfcScreen() {
-    val nfcManagerVm: NfcManagerViewModel = hiltViewModel()
-    val context = LocalContext.current
-    val nfcScanEvent by nfcManagerVm.nfcScanEvent.collectAsStateWithLifecycle()
-    val ndefMessage = nfcManagerVm.ndefMessage
-    val wifiData = nfcManagerVm.wifiData
+    val viewModel: NfcProvisioningViewModel = hiltViewModel()
+    val onEvent: (NfcProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    // Handle back navigation.
-    BackHandler {
-        nfcManagerVm.onBackNavigation()
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 56.dp)
-    ) {
-        NordicAppBar(
-            text = stringResource(id = R.string.ndef_publish_appbar),
-            showBackButton = true,
-            onNavigationButtonClick = { nfcManagerVm.onBackNavigation() }
-        )
-        RequireNfc {
-            DisposableEffect(key1 = nfcManagerVm) {
-                nfcManagerVm.onScan(context as Activity)
-                onDispose { nfcManagerVm.onPause(context) }
-            }
-            OutlinedCard(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .widthIn(max = 600.dp)
-                    .padding(16.dp)
-                    // Leave more space for the navigation bar.
-                    .padding(bottom = 16.dp)
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
+            NordicAppBar(
+                text = stringResource(id = R.string.wifi_provision_over_nfc_appbar),
+                showBackButton = true,
+                onNavigationButtonClick = { onEvent(OnBackClickEvent) }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            // Show the home screen.
+            var isDialogOpen by rememberSaveable { mutableStateOf(false) }
+
+            // Show an option to enter the WiFi credentials manually.
+            OutlinedCardItem(
+                headline = stringResource(id = R.string.enter_wifi_credentials),
+                description = {
+                    Text(
+                        text = stringResource(id = R.string.enter_wifi_credentials_des),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                },
+                icon = Icons.Default.Wifi,
+                onCardClick = { isDialogOpen = true }
             ) {
-                Column(
+                Spacer(Modifier.weight(1f))
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
                     modifier = Modifier
-                        .padding(16.dp)
-                ) {
-                    // Show Ndef Record information.
-                    WizardStepComponent(
-                        icon = Icons.Default.Wifi,
-                        title = stringResource(id = R.string.wifi_record),
-                        state = WizardStepState.COMPLETED
-                    ) {
-                        NfcTextRow(
-                            title = stringResource(id = R.string.ssid_title),
-                            text = wifiData.ssid
-                        )
-                        if (wifiData.password.isNotEmpty()) {
-                            NfcPasswordRow(title = stringResource(id = R.string.password_title))
+                        .clip(CircleShape)
+                        .clickable {
+                            isDialogOpen = true
                         }
-                        if (wifiData.authType.isNotEmpty()) {
-                            NfcTextRow(
-                                title = stringResource(id = R.string.authentication_title),
-                                text = wifiData.authType
-                            )
-                        }
-                        if (wifiData.encryptionMode.isNotEmpty()) {
-                            NfcTextRow(
-                                title = stringResource(id = R.string.encryption_title),
-                                text = wifiData.encryptionMode
-                            )
-                        }
-                        NfcTextRow(
-                            title = stringResource(id = R.string.message_size),
-                            text = stringResource(
-                                id = R.string.message_size_in_bytes,
-                                ndefMessage.byteArrayLength
-                            )
-                        )
-                    }
+                        .padding(8.dp)
+                )
+            }
 
-                    WizardStepComponent(
-                        icon = Icons.Default.Edit,
-                        title = stringResource(id = R.string.discover_tag_title),
-                        state = WizardStepState.CURRENT,
-                        showVerticalDivider = false,
-                    ) {
-                        Column {
-                            when (val e = nfcScanEvent) {
-                                is Error -> {
-                                    // Show the error message.
-                                    ProgressItem(
-                                        text = stringResource(id = R.string.write_failed),
-                                        status = ProgressItemStatus.ERROR,
-                                        iconRightPadding = 24.dp,
-                                    )
-                                    Text(
-                                        text = if (e.message.length > 35) e.message.slice(0..35) else e.message,
-                                        modifier = Modifier
-                                            .alpha(0.7f)
-                                            .padding(start = 48.dp),
-                                        style = MaterialTheme.typography.bodySmall,
-                                    )
-                                }
+            // Show an option to search for a WiFi network.
+            OutlinedCardItem(
+                headline = stringResource(id = R.string.search_for_wifi_networks),
+                description = {
+                    Text(
+                        text = stringResource(id = R.string.search_for_wifi_networks_des),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                },
+                icon = Icons.Default.WifiFind,
+                onCardClick = { onEvent(OnScanClickEvent) }
+            ) {
+                Spacer(Modifier.weight(1f))
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable { onEvent(OnScanClickEvent) }
+                        .padding(8.dp)
+                )
+            }
 
-                                Loading -> {
-                                    // Show the loading indicator.
-                                    ProgressItem(
-                                        text = stringResource(id = R.string.discovering_tag),
-                                        status = ProgressItemStatus.WORKING,
-                                        iconRightPadding = 24.dp,
-                                    )
-                                }
-
-                                Success -> {
-                                    ProgressItem(
-                                        text = stringResource(id = R.string.write_success),
-                                        status = ProgressItemStatus.SUCCESS,
-                                        iconRightPadding = 24.dp,
-                                    )
-                                    Text(
-                                        text = stringResource(id = R.string.success_des),
-                                        modifier = Modifier
-                                            .alpha(0.7f)
-                                            .padding(start = 48.dp),
-                                        style = MaterialTheme.typography.bodySmall,
-                                    )
-                                }
-
-                                null -> {
-                                    ProgressItem(
-                                        text = stringResource(id = R.string.tap_nfc_tag),
-                                        status = ProgressItemStatus.WORKING,
-                                        iconRightPadding = 24.dp,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+            if (isDialogOpen) {
+                // Open a dialog to enter the WiFi credentials manually.
+                AddWifiManuallyDialog(
+                    onCancelClick = {
+                        isDialogOpen = false
+                    },
+                    onConfirmClick = {
+                        isDialogOpen = false
+                        onEvent(OnAddWifiNetworkClickEvent(it))
+                    },
+                )
             }
         }
     }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,10 +32,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -78,107 +83,118 @@ internal fun WifiScannerScreen() {
     val viewState by wifiScannerViewModel.viewState.collectAsStateWithLifecycle()
     var isGroupedBySsid by rememberSaveable { mutableStateOf(false) }
     val groupIcon = if (isGroupedBySsid) Icons.Outlined.GroupRemove else Icons.Outlined.Group
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // Handle the back press.
     BackHandler {
         onEvent(OnNavigateUpClickEvent)
     }
     // Show the scanning screen.
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 56.dp)
-    ) {
-        NordicAppBar(
-            text = stringResource(id = R.string.wifi_scanner_appbar),
-            showBackButton = true,
-            onNavigationButtonClick = { onEvent(OnNavigateUpClickEvent) },
-            actions = {
-                // Show the group icon to group by SSID.
-                Icon(
-                    imageVector = groupIcon,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable {
-                            isGroupedBySsid = !isGroupedBySsid
-                        }
-                        .padding(8.dp)
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
+            NordicAppBar(
+                text = stringResource(id = R.string.wifi_scanner_appbar),
+                showBackButton = true,
+                onNavigationButtonClick = { onEvent(OnNavigateUpClickEvent) },
+                actions = {
+                    // Show the group icon to group by SSID.
+                    Icon(
+                        imageVector = groupIcon,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable {
+                                isGroupedBySsid = !isGroupedBySsid
+                            }
+                            .padding(8.dp)
 
-                )
-            }
-        )
-
-        RequireWifi {
-            RequireLocationForWifi {
-                when (val scanningState = viewState.networks) {
-                    is Error -> {
-                        // Show the error message.
-                        Column {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(text = stringResource(id = R.string.error_while_scanning))
-                                Text(text = scanningState.t.message ?: "Unknown error occurred.")
+                    )
+                }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+        ) {
+            RequireWifi {
+                RequireLocationForWifi {
+                    when (val scanningState = viewState.networks) {
+                        is Error -> {
+                            // Show the error message.
+                            Column {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(text = stringResource(id = R.string.error_while_scanning))
+                                    Text(
+                                        text = scanningState.t.message ?: "Unknown error occurred."
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    is Loading -> {
-                        // Show the loading indicator.
-                        Column {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.padding(16.dp)
-                                )
+                        is Loading -> {
+                            // Show the loading indicator.
+                            Column {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.padding(16.dp)
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    is Success -> {
-                        // Show the list of available networks.
-                        Column {
-                            WifiSortView(viewState.sortOption) {
-                                onEvent(OnSortOptionSelected(it))
-                            }
-                            Column(
-                                modifier = Modifier
-                                    .verticalScroll(rememberScrollState()),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                if (isGroupedBySsid) {
-                                    // Group by SSID
-                                    GroupBySsid(viewState.sortedItems, onEvent)
-                                } else {
-                                    // Show the list of available networks grouped by SSIDs.
-                                    WifiList(viewState.sortedItems, onEvent)
+                        is Success -> {
+                            // Show the list of available networks.
+                            Column {
+                                WifiSortView(viewState.sortOption) {
+                                    onEvent(OnSortOptionSelected(it))
+                                }
+                                Column(
+                                    modifier = Modifier
+                                        .verticalScroll(rememberScrollState()),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                ) {
+                                    if (isGroupedBySsid) {
+                                        // Group by SSID
+                                        GroupBySsid(viewState.sortedItems, onEvent)
+                                    } else {
+                                        // Show the list of available networks grouped by SSIDs.
+                                        WifiList(viewState.sortedItems, onEvent)
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            when (val selectedNetwork = viewState.selectedNetwork) {
-                null -> {
-                    // Do nothing
-                }
+                when (val selectedNetwork = viewState.selectedNetwork) {
+                    null -> {
+                        // Do nothing
+                    }
 
-                else -> {
-                    // Show the password dialog
-                    PasswordDialog(
-                        scanResult = selectedNetwork,
-                        onCancelClick = {
-                            // Dismiss the dialog
-                            // Set the selected network to null
-                            onEvent(OnPasswordCancelEvent)
-                        }) {
-                        onEvent(OnPasswordSetEvent(it))
+                    else -> {
+                        // Show the password dialog
+                        PasswordDialog(
+                            scanResult = selectedNetwork,
+                            onCancelClick = {
+                                // Dismiss the dialog
+                                // Set the selected network to null
+                                onEvent(OnPasswordCancelEvent)
+                            }) {
+                            onEvent(OnPasswordSetEvent(it))
+                        }
                     }
                 }
             }
@@ -287,7 +303,8 @@ private fun GroupBySsid(
 ) {
     networks.groupBy { it.SSID }.forEach { (ssid, network) ->
         var isExpanded by rememberSaveable { mutableStateOf(false) }
-        val expandIcon = if (isExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore
+        val expandIcon =
+            if (isExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore
 
         // Skip hidden networks.
         if (ssid == null || ssid.isEmpty()) {
