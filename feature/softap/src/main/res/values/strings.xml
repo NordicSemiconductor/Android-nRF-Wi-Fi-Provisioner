@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="provision_over_wifi">"Provision over Wi-Fi"</string>
+    <string name="soft_ap">Connect to Device</string>
+    <string name="softap_rationale">Enter the SSID of the SoftAP you want to connect to.
+    \n\nNote: Make sure the nRF 700x device is powered on and in range.
+    </string>
+    <string name="discover_services">Discover services</string>
+    <string name="discovered_services">Services discovered</string>
+    <string name="discovering_services">Discovering services</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="wifi_access_points_title">Wi-Fi Access Points</string>
+    <string name="wifi_scanning">Scanning error</string>
+
+    <string name="bssid">BSSID: %s</string>
+    <string name="band">Band: %s</string>
+    <string name="band_and_channel">Band: %s, Channel: %s</string>
+    <string name="channel">Channel: %s</string>
+    <string name="band_2_4">2.4 GHz</string>
+    <string name="band_5">5 GHz</string>
+    <string name="any">Any</string>
+
+    <string name="cd_wifi_icon">Icon indicating wifi and it\'s authentication method.</string>=
+
+    <string name="provision">Provision</string>
+    <string name="verify">Verify</string>
+    <string name="connect">Connect</string>
+    <string name="connecting">Connecting…</string>
+    <string name="connected">Connected</string>
+    <string name="wifi_network">Wi-Fi Network</string>
+    <string name="select_wifi">Select Wi-Fi</string>
+    <string name="start">Start</string>
+    <string name="edit_ssid">Edit SSID</string>
+    <string name="select">Select</string>
+    <string name="security">Security</string>
+    <string name="se_wifi_passphrase">Set Wi-Fi passphrase</string>
+    <string name="set">Set</string>
+    <string name="configure">Configure</string>
+    <string name="set_passphrase_value">Passphrase: %s</string>
+    <string name="provisioning_device_to_your_network">Sending Wi-Fi credentials…</string>
+    <string name="provisioning_completed">Wi-Fi credentials sent</string>
+    <string name="provisioning_rationale">Send Wi-Fi credentials</string>
+    <string name="optional_verification_rationale">Optionally verify provisioning state</string>
+    <string name="provision_over_wifi_rationale">This mode uses temporary a Wi-Fi network (SoftAP)
+        created by the provisionee to send Wi-Fi credentials. Communication is encrypted using TLS.
+    </string>
+    <string name="locating_provisioned_device">Locating provisioned device…</string>
+    <string name="verification_completed">Verification completed</string>
+    <string name="please_enable_wi_fi">Please enable Wi-Fi!</string>
+    <string name="empty_passphrase_rationale">Passphrase not required</string>
+    <string name="failed_to_bind_to_network">Failed to bind to network!</string>
+    <string name="unable_to_connect_to_network">Unable to connect to network!</string>
+    <string name="connection_lost">Connection lost!</string>
+    <string name="verification_timed_out_please_retry">Verification timed out, please retry!</string>
+
+</resources>

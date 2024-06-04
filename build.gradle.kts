@@ -35,7 +35,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.nordic.kotlin) apply false
     alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.protobuf) apply false
+    alias(libs.plugins.wire) apply false
     alias(libs.plugins.nordic.application) apply false
     alias(libs.plugins.nordic.application.compose) apply false
     alias(libs.plugins.nordic.library) apply false
@@ -43,4 +43,5 @@ plugins {
     alias(libs.plugins.nordic.hilt) apply false
     alias(libs.plugins.nordic.feature) apply false
     alias(libs.plugins.kotlin.android) apply false
+    id("org.jetbrains.kotlin.jvm") version "1.9.21" apply false
 }
