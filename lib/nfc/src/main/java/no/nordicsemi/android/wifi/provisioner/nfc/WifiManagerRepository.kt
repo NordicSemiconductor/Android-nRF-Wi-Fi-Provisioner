@@ -8,6 +8,7 @@ import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
@@ -31,6 +32,7 @@ class WifiManagerRepository(
      */
     private val wifiScanReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.M)
+        @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
         override fun onReceive(context: Context, intent: Intent) {
             try {
                 val success =
