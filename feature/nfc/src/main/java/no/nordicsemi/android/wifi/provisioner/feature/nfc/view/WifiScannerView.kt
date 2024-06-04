@@ -72,7 +72,7 @@ import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
 @RequiresApi(Build.VERSION_CODES.M)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun WifiScannerView() {
+internal fun WifiScannerScreen() {
     val wifiScannerViewModel = hiltViewModel<WifiScannerViewModel>()
     val onEvent: (WifiScannerViewEvent) -> Unit = { wifiScannerViewModel.onEvent(it) }
     val viewState by wifiScannerViewModel.viewState.collectAsStateWithLifecycle()

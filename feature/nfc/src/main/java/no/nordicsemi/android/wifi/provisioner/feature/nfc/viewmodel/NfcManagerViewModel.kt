@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcDestinationId
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcPublishDestination
 import no.nordicsemi.android.wifi.provisioner.nfc.NdefMessageBuilder
 import no.nordicsemi.android.wifi.provisioner.nfc.NfcManagerForWifi
 import javax.inject.Inject
@@ -21,7 +21,7 @@ internal class NfcManagerViewModel @Inject constructor(
     private val navigator: Navigator,
     savedStateHandle: SavedStateHandle,
 ) : SimpleNavigationViewModel(navigator, savedStateHandle) {
-    val wifiData = parameterOf(NfcDestinationId)
+    val wifiData = parameterOf(NfcPublishDestination)
     val ndefMessage: NdefMessage = ndefMessageBuilder.createNdefMessage(wifiData)
     val nfcScanEvent = nfcManagerForWifi.nfcScanEvent
 

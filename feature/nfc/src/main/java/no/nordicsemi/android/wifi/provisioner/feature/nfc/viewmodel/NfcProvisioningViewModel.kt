@@ -5,8 +5,8 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import no.nordicsemi.android.common.navigation.Navigator
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcDestinationId
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.WifiScannerDestinationId
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcPublishDestination
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.WifiScannerDestination
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.M)
@@ -20,13 +20,13 @@ internal class NfcProvisioningViewModel @Inject constructor(
     fun onEvent(event: NfcProvisioningViewEvent) {
         when (event) {
             is OnScanClickEvent -> {
-                navigator.navigateTo(WifiScannerDestinationId)
+                navigator.navigateTo(WifiScannerDestination)
             }
 
             OnBackClickEvent -> navigator.navigateUp()
             is OnAddWifiNetworkClickEvent -> {
                 // Navigate to the NFC screen with the Wi-Fi data.
-                navigator.navigateTo(NfcDestinationId, event.wifiData)
+                navigator.navigateTo(NfcPublishDestination, event.wifiData)
             }
         }
     }

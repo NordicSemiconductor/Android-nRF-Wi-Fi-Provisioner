@@ -71,7 +71,7 @@ import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.app.BuildConfig
 import no.nordicsemi.android.wifi.provisioner.app.R
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleDestination
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcProvisionerDestinationId
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcDestination
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApDestination
 import no.nordicsemi.android.wifi.provisioner.ui.view.section.ProvisionSection
 
@@ -154,7 +154,7 @@ fun HomeScreen() {
                     sectionTitle = stringResource(R.string.provision_over_nfc),
                     sectionRational = stringResource(R.string.provision_over_nfc_rationale)
                 ) {
-                    vm.navigateTo(NfcProvisionerDestinationId)
+                    vm.navigateTo(NfcDestination)
                 }
             }
             Row(
