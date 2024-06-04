@@ -31,12 +31,11 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WP
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA_WPA2_PSK
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
-import javax.inject.Inject
 
 /**
  * This class is responsible for creating the NDEF message for the WiFi data.
  */
-class NdefMessageBuilder @Inject constructor() {
+class NdefMessageBuilder {
 
     /**
      * Creates the NDEF message for the WiFi data.

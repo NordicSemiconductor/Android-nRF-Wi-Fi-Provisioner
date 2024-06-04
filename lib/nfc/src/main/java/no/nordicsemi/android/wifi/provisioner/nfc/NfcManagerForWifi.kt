@@ -8,8 +8,6 @@ import android.nfc.tech.Ndef
 import android.nfc.tech.NdefFormatable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
-import javax.inject.Singleton
 
 enum class NfcFlags(val value: Int) {
     NFC_A(NfcAdapter.FLAG_READER_NFC_A),
@@ -36,8 +34,7 @@ data class Error(val message: String) : NfcScanEvent
 /**
  * A class that manages the NFC adapter for the wifi provisioning.
  */
-@Singleton
-class NfcManagerForWifi @Inject constructor(
+class NfcManagerForWifi(
     private val nfcAdapter: NfcAdapter?,
 ) {
     private val _nfcScanEvent = MutableStateFlow<NfcScanEvent?>(null)

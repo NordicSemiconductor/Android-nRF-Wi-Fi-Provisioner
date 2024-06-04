@@ -1,4 +1,4 @@
-package no.nordicsemi.android.wifi.provisioner.nfc.di
+package no.nordicsemi.android.wifi.provisioner.feature.nfc.di
 
 import android.content.Context
 import android.nfc.NfcAdapter
