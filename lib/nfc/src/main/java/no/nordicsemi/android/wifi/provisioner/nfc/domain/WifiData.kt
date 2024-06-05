@@ -14,6 +14,6 @@ import kotlinx.parcelize.Parcelize
 data class WifiData(
     val ssid: String,
     val password: String,
-    val authType: String = "",
+    val authType: AuthenticationMode,
     val encryptionMode: String = "",
 ) : Parcelable

@@ -61,12 +61,4 @@ internal object WifiHandoverDataType {
      */
     const val MAC_ADDRESS_FIELD_ID: Short = 0x1020
     const val MAX_MAC_ADDRESS_SIZE_BYTES = 6
-
-    // Constants for the authentication types.
-    const val WPA_PSK = "WPA-Personal"
-    const val WPA_EAP = "WPA-Enterprise"
-    const val WPA2_PSK = "WPA2-Personal"
-    const val WPA2_ENTERPRISE = "WPA2-Enterprise"
-    const val WPA_WPA2_PSK = "WPA/WPA2-Personal"
-    const val WEP = "Shared"
 }

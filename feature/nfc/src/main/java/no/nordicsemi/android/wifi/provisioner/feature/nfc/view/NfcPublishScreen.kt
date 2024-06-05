@@ -36,6 +36,7 @@ import no.nordicsemi.android.common.theme.view.ProgressItemStatus
 import no.nordicsemi.android.common.theme.view.WizardStepComponent
 import no.nordicsemi.android.common.theme.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.NfcPasswordRow
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.NfcTextRow
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.NfcManagerViewModel
@@ -102,12 +103,10 @@ internal fun NfcPublishScreen() {
                             if (wifiData.password.isNotEmpty()) {
                                 NfcPasswordRow(title = stringResource(id = R.string.password_title))
                             }
-                            if (wifiData.authType.isNotEmpty()) {
-                                NfcTextRow(
-                                    title = stringResource(id = R.string.authentication_title),
-                                    text = wifiData.authType
-                                )
-                            }
+                            NfcTextRow(
+                                title = stringResource(id = R.string.authentication_title),
+                                text = wifiData.authType.toDisplayString()
+                            )
                             if (wifiData.encryptionMode.isNotEmpty()) {
                                 NfcTextRow(
                                     title = stringResource(id = R.string.encryption_title),

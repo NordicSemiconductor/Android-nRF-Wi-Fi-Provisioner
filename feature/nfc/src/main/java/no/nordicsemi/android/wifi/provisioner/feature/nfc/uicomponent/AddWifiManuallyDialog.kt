@@ -23,7 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.WifiAuthType
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.authListToDisplay
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toAuthenticationMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 
@@ -64,7 +65,7 @@ internal fun AddWifiManuallyDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                val items = WifiAuthType.authList()
+                val items = authListToDisplay()
                 // Show the authentication dropdown.
                 DropdownView(
                     items = items,
@@ -133,7 +134,7 @@ internal fun AddWifiManuallyDialog(
                             WifiData(
                                 ssid = ssid,
                                 password = password,
-                                authType = authMode,
+                                authType = authMode.toAuthenticationMode(),
                                 encryptionMode = encryptionMode,
                             )
                         )

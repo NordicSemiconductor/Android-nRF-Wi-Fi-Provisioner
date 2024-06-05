@@ -13,13 +13,14 @@ import kotlinx.coroutines.flow.onEach
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcPublishDestination
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.WifiScannerDestination
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.AuthMode
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.WifiAuthType
 import no.nordicsemi.android.wifi.provisioner.nfc.WifiManagerRepository
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthenticationMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.NetworkState
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSortOption
 import javax.inject.Inject
@@ -109,14 +110,16 @@ internal class WifiScannerViewModel @Inject constructor(
     fun onEvent(event: WifiScannerViewEvent) {
         when (event) {
             is OnNetworkSelectEvent -> {
-                val isProtected = WifiAuthType.getSecurityTypes(event.network) != AuthMode.OPEN.toString()
+                val isOpen = AuthenticationMode.get(event.network)
+                    .contains(WifiAuthTypeBelowTiramisu.OPEN) or AuthenticationMode.get(event.network)
+                    .contains(WifiAuthTypeTiramisuOrAbove.OPEN)
                 // If the network is open, navigate to the NFC screen
-                if (!isProtected) {
+                if (isOpen) {
                     navigateToNfcScan(
                         WifiData(
                             ssid = event.network.SSID,
                             password = "", // Empty password for open network.
-                            authType = AuthMode.OPEN.toString(),
+                            authType = WifiAuthTypeBelowTiramisu.OPEN,
                             encryptionMode = EncryptionMode.NONE.toString() // No encryption for open network.
                         )
                     )

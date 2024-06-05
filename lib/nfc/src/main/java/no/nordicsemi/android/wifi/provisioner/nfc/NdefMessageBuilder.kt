@@ -2,7 +2,10 @@ package no.nordicsemi.android.wifi.provisioner.nfc
 
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthenticationMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_OPEN
@@ -23,12 +26,6 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.MA
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.NETWORK_KEY_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.NFC_TOKEN_MIME_TYPE
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.SSID_FIELD_ID
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WEP
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA2_ENTERPRISE
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA2_PSK
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA_EAP
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA_PSK
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.WPA_WPA2_PSK
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 
@@ -141,19 +138,14 @@ class NdefMessageBuilder {
      *
      * @param auth the authentication type.
      */
-    private fun getAuthBytes(auth: String): Short {
-        // If Empty, default to WPA2-Personal
-        if (auth.isEmpty()) {
-            return AUTH_TYPE_WPA2_PSK
-        }
-
-        return when {
-            auth.startsWith(WPA_PSK, ignoreCase = true) -> AUTH_TYPE_WPA_PSK
-            auth.startsWith(WPA_EAP, ignoreCase = true) -> AUTH_TYPE_WPA_EAP
-            auth.startsWith(WPA2_ENTERPRISE, ignoreCase = true) -> AUTH_TYPE_WPA2_EAP
-            auth.startsWith(WPA2_PSK, ignoreCase = true) -> AUTH_TYPE_WPA2_PSK
-            auth.startsWith(WPA_WPA2_PSK, ignoreCase = true) -> AUTH_TYPE_WPA_WPA2_PSK
-            auth.startsWith(WEP, ignoreCase = true) -> AUTH_TYPE_SHARED
+    private fun getAuthBytes(auth: AuthenticationMode): Short {
+        return when (auth) {
+            WifiAuthTypeBelowTiramisu.WEP, WifiAuthTypeTiramisuOrAbove.WEP -> AUTH_TYPE_SHARED
+            WifiAuthTypeBelowTiramisu.WPA_PSK, WifiAuthTypeTiramisuOrAbove.WPA_PSK -> AUTH_TYPE_WPA_PSK
+            WifiAuthTypeBelowTiramisu.WPA_EAP -> AUTH_TYPE_WPA_EAP
+            WifiAuthTypeBelowTiramisu.WPA2_PSK -> AUTH_TYPE_WPA2_PSK
+            WifiAuthTypeBelowTiramisu.WPA_WPA2_PSK -> AUTH_TYPE_WPA_WPA2_PSK
+            WifiAuthTypeBelowTiramisu.WPA2_EAP, WifiAuthTypeTiramisuOrAbove.WPA2_EAP -> AUTH_TYPE_WPA2_EAP
             else -> AUTH_TYPE_OPEN
         }
     }

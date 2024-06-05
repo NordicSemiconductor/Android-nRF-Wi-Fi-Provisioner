@@ -52,8 +52,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.AuthMode
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.WifiAuthType
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireLocationForWifi
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireWifi
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.PasswordDialog
@@ -65,9 +64,11 @@ import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnPasswordSe
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnSortOptionSelected
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewModel
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthenticationMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
 
@@ -229,8 +230,8 @@ private fun NetworkItem(
     modifier: Modifier = Modifier,
     onEvent: (WifiScannerViewEvent) -> Unit,
 ) {
-    val securityType = WifiAuthType.getSecurityTypes(network)
-    val isProtected = securityType != AuthMode.OPEN.name
+    val securityType = AuthenticationMode.get(network)
+    val isProtected = securityType.contains(WifiAuthTypeBelowTiramisu.OPEN).not()
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -246,7 +247,7 @@ private fun NetworkItem(
                     val wifiData = WifiData(
                         ssid = network.SSID,
                         password = "", // Empty password for open networks
-                        authType = AuthMode.OPEN.name,
+                        authType = WifiAuthTypeBelowTiramisu.OPEN,
                     )
                     onEvent(OnPasswordSetEvent(wifiData))
                 }
@@ -277,7 +278,7 @@ private fun NetworkItem(
             )
             // Display the security type of the access point.
             Text(
-                text = securityType,
+                text = securityType.joinToString(", ") { it.toDisplayString() },
                 modifier = Modifier.alpha(0.7f)
             )
         }
