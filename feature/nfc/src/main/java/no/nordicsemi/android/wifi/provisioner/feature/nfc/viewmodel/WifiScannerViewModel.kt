@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcPublishDestination
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.WifiScannerDestination
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.AuthMode
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.data.WifiAuthType
 import no.nordicsemi.android.wifi.provisioner.nfc.WifiManagerRepository
@@ -148,8 +149,12 @@ internal class WifiScannerViewModel @Inject constructor(
      */
     private fun navigateToNfcScan(wifiData: WifiData) {
         navigator.navigateTo(
-            NfcPublishDestination,
-            wifiData
-        )
+            to = NfcPublishDestination,
+            args = wifiData
+        ) {
+            popUpTo(WifiScannerDestination.toString()) {
+                inclusive = true
+            }
+        }
     }
 }
