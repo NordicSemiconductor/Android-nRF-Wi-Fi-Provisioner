@@ -26,7 +26,6 @@ import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.GroupRemove
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Wifi
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -283,10 +282,13 @@ private fun NetworkItem(
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        Icon(
-            imageVector = if (isProtected) Icons.Outlined.Lock else Icons.Outlined.Wifi,
-            contentDescription = null,
-        )
+        if (isProtected) {
+            // Show the lock icon for protected networks.
+            Icon(
+                imageVector = Icons.Outlined.Lock,
+                contentDescription = null,
+            )
+        }
     }
 }
 
