@@ -85,14 +85,10 @@ internal class WifiScannerViewModel @Inject constructor(
     private val _viewState = MutableStateFlow(WifiScannerViewState())
     val viewState = _viewState.asStateFlow()
 
-    init {
-        scanAvailableWifiNetworks()
-    }
-
     /**
      * Scans for available Wi-Fi networks.
      */
-    private fun scanAvailableWifiNetworks() {
+    fun scanAvailableWifiNetworks() {
         try {
             wifiManager.onScan()
             wifiManager.networkState.onEach { scanResults ->
