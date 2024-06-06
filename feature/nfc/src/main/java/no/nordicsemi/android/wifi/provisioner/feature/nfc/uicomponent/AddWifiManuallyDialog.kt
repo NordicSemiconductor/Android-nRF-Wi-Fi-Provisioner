@@ -126,16 +126,34 @@ internal fun AddWifiManuallyDialog(
                     label = stringResource(id = R.string.authentication),
                     placeholder = stringResource(id = R.string.authentication_placeholder),
                     defaultSelectedItem = authMode
-                ) { authMode = it }
+                ) {
+                    authMode = it
+                    if (authMode.lowercase() == "open") {
+                        // Clear the password if the authentication mode is open.
+                        encryptionMode = EncryptionMode.NONE.toDisplayString()
+                    }
+                }
 
                 // Show the encryption dropdown.
-                DropdownView(
-                    items = EncryptionMode.entries.map { it.toDisplayString() },
-                    label = stringResource(id = R.string.encryption),
-                    placeholder = stringResource(id = R.string.encryption_placeholder),
-                    defaultSelectedItem = encryptionMode
-                ) { encryptionMode = it }
-
+                if (authMode.lowercase() == "open") {
+                    // Disable the encryption dropdown if the authentication mode is open.
+                    DropdownView(
+                        items = EncryptionMode.entries.map { it.toDisplayString() },
+                        label = stringResource(id = R.string.encryption),
+                        placeholder = stringResource(id = R.string.encryption_placeholder),
+                        defaultSelectedItem = EncryptionMode.NONE.toDisplayString(),
+                        isEnabled = false
+                    ) {
+                    }
+                } else {
+                    // Show the encryption dropdown.
+                    DropdownView(
+                        items = EncryptionMode.entries.map { it.toDisplayString() },
+                        label = stringResource(id = R.string.encryption),
+                        placeholder = stringResource(id = R.string.encryption_placeholder),
+                        defaultSelectedItem = encryptionMode,
+                    ) { encryptionMode = it }
+                }
             }
         },
         dismissButton = {

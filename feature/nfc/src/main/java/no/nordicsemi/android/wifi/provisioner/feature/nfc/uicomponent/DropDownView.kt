@@ -41,6 +41,7 @@ internal inline fun <reified T> DropdownView(
     label: String,
     placeholder: String,
     defaultSelectedItem: T? = null,
+    isEnabled: Boolean = true,
     crossinline onItemSelected: (T) -> Unit,
 ) {
     NfcDropdownMenu(
@@ -48,6 +49,7 @@ internal inline fun <reified T> DropdownView(
         label = label,
         defaultSelectedItem = defaultSelectedItem,
         placeholder = placeholder,
+        isEnabled = isEnabled,
         onItemSelected = { onItemSelected(it) }
     )
 }
@@ -59,6 +61,7 @@ private fun <T> NfcDropdownMenu(
     label: String,
     defaultSelectedItem: T? = null,
     placeholder: String,
+    isEnabled: Boolean,
     onItemSelected: (T) -> Unit
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
@@ -72,7 +75,7 @@ private fun <T> NfcDropdownMenu(
             ExposedDropdownMenuBox(
                 expanded = expanded,
                 onExpandedChange = {
-                    expanded = !expanded
+                    if (isEnabled) expanded = !expanded
                 }
             ) {
                 OutlinedTextField(
