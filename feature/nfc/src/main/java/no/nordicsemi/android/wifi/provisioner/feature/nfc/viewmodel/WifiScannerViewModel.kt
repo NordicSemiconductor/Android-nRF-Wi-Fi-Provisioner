@@ -118,6 +118,7 @@ internal class WifiScannerViewModel @Inject constructor(
                     navigateToNfcScan(
                         WifiData(
                             ssid = event.network.SSID,
+                            macAddress = event.network.BSSID,
                             password = "", // Empty password for open network.
                             authType = WifiAuthTypeBelowTiramisu.OPEN,
                             encryptionMode = EncryptionMode.NONE.toString() // No encryption for open network.

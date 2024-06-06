@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,66 @@ internal fun TextInputField(
         onValueChange = { onUpdate(it) },
         visualTransformation = if (input.isEmpty())
             PlaceholderTransformation(placeholder)  else VisualTransformation.None,
+
+        modifier = modifier
+            .fillMaxWidth(),
+        label = { Text(text = label) },
+        placeholder = {
+            Text(
+                text = placeholder,
+            )
+        },
+        supportingText = {
+            Column {
+                if (errorState) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Error,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.error,
+                        )
+                        Text(
+                            text = errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.alpha(1f)
+                        )
+                    }
+                }
+                if (hint.isNotEmpty() && !errorState) {
+                    Text(
+                        text = hint,
+                        modifier = Modifier.alpha(0.38f)
+                    )
+                }
+            }
+        },
+        colors = OutlinedTextFieldDefaults.colors(textColor),
+        isError = errorState,
+    )
+}
+
+@Composable
+fun TextInputField(
+    modifier: Modifier = Modifier,
+    input: TextFieldValue,
+    label: String,
+    hint: String = "",
+    placeholder: String = "",
+    errorMessage: String = "",
+    errorState: Boolean = false,
+    onUpdate: (TextFieldValue) -> Unit
+) {
+    val textColor = MaterialTheme.colorScheme.onSurface.copy(
+        alpha = if (input.text.isEmpty()) 0.5f else LocalContentColor.current.alpha
+    )
+    OutlinedTextField(
+        value = input,
+        onValueChange = { onUpdate(it) },
+        visualTransformation = if (input.text.isEmpty())
+            PlaceholderTransformation(placeholder) else VisualTransformation.None,
 
         modifier = modifier
             .fillMaxWidth(),

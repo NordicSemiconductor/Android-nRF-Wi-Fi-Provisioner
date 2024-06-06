@@ -103,6 +103,12 @@ internal fun NfcPublishScreen() {
                             if (wifiData.password.isNotEmpty()) {
                                 NfcPasswordRow(title = stringResource(id = R.string.password_title))
                             }
+                            if (wifiData.macAddress.isNotEmpty()) {
+                                NfcTextRow(
+                                    title = stringResource(id = R.string.mac_address_label),
+                                    text = wifiData.macAddress.uppercase()
+                                )
+                            }
                             NfcTextRow(
                                 title = stringResource(id = R.string.authentication_title),
                                 text = wifiData.authType.toDisplayString()

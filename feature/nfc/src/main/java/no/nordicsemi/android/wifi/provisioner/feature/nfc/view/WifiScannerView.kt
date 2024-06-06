@@ -245,6 +245,7 @@ private fun NetworkItem(
                     // Password dialog is not required for open networks.
                     val wifiData = WifiData(
                         ssid = network.SSID,
+                        macAddress = network.BSSID,
                         password = "", // Empty password for open networks
                         authType = WifiAuthTypeBelowTiramisu.OPEN,
                     )

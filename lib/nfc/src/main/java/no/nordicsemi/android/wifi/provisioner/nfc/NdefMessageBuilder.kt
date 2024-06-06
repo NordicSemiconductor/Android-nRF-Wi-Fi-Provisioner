@@ -22,6 +22,7 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.EN
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_NONE
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_TKIP
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.ENC_TYPE_WEP
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.MAC_ADDRESS_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.MAX_MAC_ADDRESS_SIZE_BYTES
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.NETWORK_KEY_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.NFC_TOKEN_MIME_TYPE
@@ -74,16 +75,12 @@ class NdefMessageBuilder {
         val authType: Short = getAuthBytes(wifiNetwork.authType)
         val networkKey: String = wifiNetwork.password
         val networkKeySize = networkKey.toByteArray().size.toShort()
-
         val encType = getEncByte(wifiNetwork.encryptionMode)
 
-        val macAddress = ByteArray(MAX_MAC_ADDRESS_SIZE_BYTES)
-        for (i in 0 until MAX_MAC_ADDRESS_SIZE_BYTES) {
-            macAddress[i] = 0xff.toByte()
-        }
-
+        val macAddressBufferSize = if (wifiNetwork.macAddress.isNotEmpty()) 10 else 0
         /* Fill buffer */
-        val bufferSize = 24 + ssidSize + networkKeySize // size of required credential attributes
+        // size of required credential attributes
+        val bufferSize = 24 + ssidSize + networkKeySize + macAddressBufferSize
 
         // Create a buffer with the required size
         val buffer = ByteBuffer.allocate(bufferSize)
@@ -109,6 +106,19 @@ class NdefMessageBuilder {
         buffer.putShort(NETWORK_KEY_FIELD_ID)
         buffer.putShort(networkKeySize)
         buffer.put(networkKey.toByteArray())
+
+        // Add MAC address if available
+        if (wifiNetwork.macAddress.isNotEmpty()) {
+            // Convert the MAC address string to a ByteArray
+            val macAddress = wifiNetwork.macAddress.split(":")
+                .map { it.toInt(16).toByte() }
+                .toByteArray()
+
+            // Add the MAC address
+            buffer.putShort(MAC_ADDRESS_FIELD_ID)
+            buffer.putShort(MAX_MAC_ADDRESS_SIZE_BYTES)
+            buffer.put(macAddress)
+        }
 
         return buffer.array()
     }

@@ -102,6 +102,7 @@ internal fun PasswordDialog(
                         onConfirmClick(
                             WifiData(
                                 ssid = scanResult.SSID,
+                                macAddress = scanResult.BSSID,
                                 password = password,
                                 authType = authMode.first(),
                                 encryptionMode = encryptionMode

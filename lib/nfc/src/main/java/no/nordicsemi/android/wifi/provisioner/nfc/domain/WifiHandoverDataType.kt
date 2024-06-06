@@ -60,5 +60,5 @@ internal object WifiHandoverDataType {
      * The MAC Address field ID.
      */
     const val MAC_ADDRESS_FIELD_ID: Short = 0x1020
-    const val MAX_MAC_ADDRESS_SIZE_BYTES = 6
+    const val MAX_MAC_ADDRESS_SIZE_BYTES: Short = 6
 }
