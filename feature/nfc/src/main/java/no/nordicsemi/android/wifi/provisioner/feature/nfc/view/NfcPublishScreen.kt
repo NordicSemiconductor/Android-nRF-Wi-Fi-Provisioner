@@ -113,12 +113,10 @@ internal fun NfcPublishScreen() {
                                 title = stringResource(id = R.string.authentication_title),
                                 text = wifiData.authType.toDisplayString()
                             )
-                            if (wifiData.encryptionMode.isNotEmpty()) {
-                                NfcTextRow(
-                                    title = stringResource(id = R.string.encryption_title),
-                                    text = wifiData.encryptionMode
-                                )
-                            }
+                            NfcTextRow(
+                                title = stringResource(id = R.string.encryption_title),
+                                text = wifiData.encryptionMode.toDisplayString()
+                            )
                             NfcTextRow(
                                 title = stringResource(id = R.string.message_size),
                                 text = stringResource(

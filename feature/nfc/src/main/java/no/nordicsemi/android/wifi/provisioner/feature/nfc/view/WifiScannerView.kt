@@ -65,6 +65,7 @@ import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnSortOption
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewModel
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthenticationMode
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
@@ -250,6 +251,7 @@ private fun NetworkItem(
                         macAddress = network.BSSID,
                         password = "", // Empty password for open networks
                         authType = WifiAuthTypeBelowTiramisu.OPEN,
+                        encryptionMode = EncryptionMode.NONE
                     )
                     onEvent(OnPasswordSetEvent(wifiData))
                 }

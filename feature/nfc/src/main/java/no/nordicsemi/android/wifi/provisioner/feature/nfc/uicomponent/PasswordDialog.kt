@@ -42,7 +42,7 @@ internal fun PasswordDialog(
     var password by rememberSaveable { mutableStateOf("") }
     var isPasswordEmpty by rememberSaveable { mutableStateOf(false) }
     val authMode = AuthenticationMode.get(scanResult)
-    val encryptionMode = EncryptionMode.getEncryption(scanResult)
+    val encryptionMode = EncryptionMode.get(scanResult)
 
     AlertDialog(
         onDismissRequest = { },

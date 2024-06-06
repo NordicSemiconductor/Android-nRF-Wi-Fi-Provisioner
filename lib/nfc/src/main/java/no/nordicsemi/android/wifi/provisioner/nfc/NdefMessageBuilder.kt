@@ -7,6 +7,7 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_EXPECTED_SIZE
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_FIELD_ID
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_OPEN
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_SHARED
@@ -94,7 +95,7 @@ class NdefMessageBuilder {
 
         // Add authentication type
         buffer.putShort(AUTH_TYPE_FIELD_ID)
-        buffer.putShort(2.toShort())
+        buffer.putShort(AUTH_TYPE_EXPECTED_SIZE)
         buffer.putShort(authType)
 
         // Add encryption type
@@ -128,18 +129,13 @@ class NdefMessageBuilder {
      *
      * @param enc the encryption type.
      */
-    private fun getEncByte(enc: String): Short {
-
-        // If Empty, default to AES
-        if (enc.isEmpty()) {
-            return ENC_TYPE_AES
-        }
+    private fun getEncByte(enc: EncryptionMode): Short {
         return when (enc) {
-            EncryptionMode.WEP.toString() -> ENC_TYPE_WEP
-            EncryptionMode.TKIP.toString() -> ENC_TYPE_TKIP
-            EncryptionMode.AES.toString() -> ENC_TYPE_AES
-            EncryptionMode.AES_TKIP.toString() -> ENC_TYPE_AES_TKIP
-            else -> ENC_TYPE_NONE
+            EncryptionMode.NONE -> ENC_TYPE_NONE
+            EncryptionMode.WEP -> ENC_TYPE_WEP
+            EncryptionMode.TKIP -> ENC_TYPE_TKIP
+            EncryptionMode.AES -> ENC_TYPE_AES
+            EncryptionMode.AES_TKIP -> ENC_TYPE_AES_TKIP
         }
     }
 

@@ -16,5 +16,5 @@ data class WifiData(
     val password: String,
     val macAddress: String,
     val authType: AuthenticationMode,
-    val encryptionMode: String = "",
+    val encryptionMode: EncryptionMode,
 ) : Parcelable

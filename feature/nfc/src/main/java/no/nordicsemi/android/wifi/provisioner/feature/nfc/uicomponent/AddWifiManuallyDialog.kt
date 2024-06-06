@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.authListToDisplay
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toAuthenticationMode
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toDisplayString
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toEncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 
@@ -47,7 +49,7 @@ internal fun AddWifiManuallyDialog(
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var isPasswordEmpty by rememberSaveable { mutableStateOf(false) }
     var authMode by rememberSaveable { mutableStateOf("WPA2-Personal") } // default to WPA2-Personal.
-    var encryptionMode by rememberSaveable { mutableStateOf(EncryptionMode.AES.toString()) } // default to AES.
+    var encryptionMode by rememberSaveable { mutableStateOf(EncryptionMode.AES.toDisplayString()) } // default to AES.
     var isSsidEmpty by rememberSaveable { mutableStateOf(false) }
     var macAddress by remember { mutableStateOf(TextFieldValue(text = "")) }
     var isMacAddressError by rememberSaveable { mutableStateOf(false) }
@@ -128,7 +130,7 @@ internal fun AddWifiManuallyDialog(
 
                 // Show the encryption dropdown.
                 DropdownView(
-                    items = EncryptionMode.entries.map { it.toString() },
+                    items = EncryptionMode.entries.map { it.toDisplayString() },
                     label = stringResource(id = R.string.encryption),
                     placeholder = stringResource(id = R.string.encryption_placeholder),
                     defaultSelectedItem = encryptionMode
@@ -162,7 +164,7 @@ internal fun AddWifiManuallyDialog(
                                 macAddress = macAddress.text,
                                 password = password,
                                 authType = authMode.toAuthenticationMode(),
-                                encryptionMode = encryptionMode,
+                                encryptionMode = encryptionMode.toEncryptionMode(),
                             )
                         )
                     }

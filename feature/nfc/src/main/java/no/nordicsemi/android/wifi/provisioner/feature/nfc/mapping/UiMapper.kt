@@ -1,6 +1,7 @@
 package no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping
 
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthenticationMode
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 
@@ -50,4 +51,30 @@ fun String.toAuthenticationMode(): AuthenticationMode = when (this) {
     "WPA2-Enterprise" -> WifiAuthTypeBelowTiramisu.WPA2_EAP
     "WPA3-Personal" -> WifiAuthTypeBelowTiramisu.WPA3_PSK
     else -> WifiAuthTypeBelowTiramisu.OPEN
+}
+
+/**
+ * Converts the [EncryptionMode] to a display string.
+ *
+ * @return The display string.
+ */
+fun EncryptionMode.toDisplayString(): String = when (this) {
+    EncryptionMode.NONE -> "None"
+    EncryptionMode.WEP -> "WEP"
+    EncryptionMode.TKIP -> "TKIP"
+    EncryptionMode.AES -> "AES"
+    EncryptionMode.AES_TKIP -> "AES/TKIP"
+}
+
+/**
+ * Converts the display string to [EncryptionMode].
+ *
+ * @return The [EncryptionMode].
+ */
+fun String.toEncryptionMode(): EncryptionMode = when (this) {
+    "WEP" -> EncryptionMode.WEP
+    "TKIP" -> EncryptionMode.TKIP
+    "AES" -> EncryptionMode.AES
+    "AES/TKIP" -> EncryptionMode.AES_TKIP
+    else -> EncryptionMode.NONE
 }
