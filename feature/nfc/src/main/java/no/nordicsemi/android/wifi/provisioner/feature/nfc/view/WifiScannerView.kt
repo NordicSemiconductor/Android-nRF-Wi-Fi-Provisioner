@@ -51,6 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.Frequency
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireLocationForWifi
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.RequireWifi
@@ -164,7 +165,8 @@ internal fun WifiScannerScreen() {
                                 }
                                 Column(
                                     modifier = Modifier
-                                        .verticalScroll(rememberScrollState()),
+                                        .verticalScroll(rememberScrollState())
+                                        .padding(bottom = 32.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                 ) {
                                     if (isGroupedBySsid) {
@@ -255,7 +257,9 @@ private fun NetworkItem(
     ) {
         RssiIconView(network.level)
         Column(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier
+                .padding(8.dp)
+                .weight(1f),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             // Display the SSID of the access point
@@ -273,16 +277,25 @@ private fun NetworkItem(
             // Display the address of the access point.
             Text(
                 text = network.BSSID.uppercase(),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.alpha(0.7f)
             )
             // Display the security type of the access point.
             Text(
                 text = securityType.joinToString(", ") { it.toDisplayString() },
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.alpha(0.7f)
             )
+            Text(
+                text = stringResource(
+                    id = R.string.channel_number,
+                    Frequency.toChannelNumber(network.frequency),
+                    Frequency.get(network.frequency)
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.alpha(0.7f),
+            )
         }
-        Spacer(modifier = Modifier.weight(1f))
         if (isProtected) {
             // Show the lock icon for protected networks.
             Icon(
