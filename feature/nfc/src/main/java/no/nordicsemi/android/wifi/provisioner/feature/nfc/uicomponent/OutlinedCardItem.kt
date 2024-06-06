@@ -61,7 +61,7 @@ fun OutlinedCardItem(
                 modifier = Modifier.size(28.dp)
             )
             Column(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp).weight(1f)
             ) {
                 Text(
                     text = headline,

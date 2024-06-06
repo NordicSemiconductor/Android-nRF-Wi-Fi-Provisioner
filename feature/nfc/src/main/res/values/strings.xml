@@ -6,8 +6,8 @@
 
     <string name="enter_wifi_credentials">Enter Wi-Fi credentials</string>
     <string name="enter_wifi_credentials_des">Enter the Wi-Fi credentials manually.</string>
-    <string name="search_for_wifi_networks">Search for Wi-Fi networks</string>
-    <string name="search_for_wifi_networks_des">Search for Wi-Fi networks.</string>
+    <string name="search_for_wifi_networks">Search Wi-Fi networks</string>
+    <string name="search_for_wifi_networks_des">Scans for nearby Wi-Fi networks.</string>
 
     <!--    Wifi permission strings-->
     <string name="location_permission_required">LOCATION PERMISSION REQUIRED</string>

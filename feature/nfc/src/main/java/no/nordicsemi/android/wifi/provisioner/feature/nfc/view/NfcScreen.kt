@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -86,7 +85,6 @@ internal fun NfcScreen() {
                 icon = Icons.Default.Wifi,
                 onCardClick = { isDialogOpen = true }
             ) {
-                Spacer(Modifier.weight(1f))
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null,
@@ -111,7 +109,6 @@ internal fun NfcScreen() {
                 icon = Icons.Default.WifiFind,
                 onCardClick = { onEvent(OnScanClickEvent) }
             ) {
-                Spacer(Modifier.weight(1f))
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = null,
