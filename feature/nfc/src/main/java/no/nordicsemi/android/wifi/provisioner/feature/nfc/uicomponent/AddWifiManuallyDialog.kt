@@ -126,27 +126,10 @@ internal fun AddWifiManuallyDialog(
                     label = stringResource(id = R.string.authentication),
                     placeholder = stringResource(id = R.string.authentication_placeholder),
                     defaultSelectedItem = authMode
-                ) {
-                    authMode = it
-                    if (authMode.lowercase() == "open") {
-                        // Clear the password if the authentication mode is open.
-                        encryptionMode = EncryptionMode.NONE.toDisplayString()
-                    }
-                }
+                ) { authMode = it }
 
-                // Show the encryption dropdown.
-                if (authMode.lowercase() == "open") {
-                    // Disable the encryption dropdown if the authentication mode is open.
-                    DropdownView(
-                        items = EncryptionMode.entries.map { it.toDisplayString() },
-                        label = stringResource(id = R.string.encryption),
-                        placeholder = stringResource(id = R.string.encryption_placeholder),
-                        defaultSelectedItem = EncryptionMode.NONE.toDisplayString(),
-                        isEnabled = false
-                    ) {
-                    }
-                } else {
-                    // Show the encryption dropdown.
+                // Show the encryption dropdown, only for protected network.
+                if (authMode.lowercase() != "open") {
                     DropdownView(
                         items = EncryptionMode.entries.map { it.toDisplayString() },
                         label = stringResource(id = R.string.encryption),
@@ -182,7 +165,8 @@ internal fun AddWifiManuallyDialog(
                                 macAddress = macAddress.text,
                                 password = password,
                                 authType = authMode.toAuthenticationMode(),
-                                encryptionMode = encryptionMode.toEncryptionMode(),
+                                encryptionMode = if (authMode.lowercase() == "open")
+                                    EncryptionMode.NONE else encryptionMode.toEncryptionMode(),
                             )
                         )
                     }
