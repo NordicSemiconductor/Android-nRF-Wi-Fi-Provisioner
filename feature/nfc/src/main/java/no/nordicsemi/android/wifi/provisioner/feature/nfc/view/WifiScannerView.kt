@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -111,7 +110,7 @@ internal fun WifiScannerScreen() {
                             .clickable {
                                 isGroupedBySsid = !isGroupedBySsid
                             }
-                            .padding(8.dp)
+                            .padding(8.dp, 8.dp, 16.dp, 8.dp)
 
                     )
                 }
@@ -228,7 +227,7 @@ internal fun WifiList(
     networks.forEach { network ->
         NetworkItem(
             network = network,
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
             onEvent = onEvent
         )
         HorizontalDivider()
@@ -345,17 +344,14 @@ private fun GroupBySsid(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { isExpanded = !isExpanded }
-                .padding(8.dp)
+                .padding(start = 16.dp, 8.dp)
         ) {
             Text(text = ssid)
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 imageVector = expandIcon,
                 contentDescription = null,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable { isExpanded = !isExpanded }
-                    .padding(8.dp)
+                modifier = Modifier.padding(8.dp, 8.dp, 16.dp, 8.dp)
             )
         }
         // Show networks under the same SSID.
