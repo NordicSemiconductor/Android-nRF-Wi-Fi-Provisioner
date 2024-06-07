@@ -13,6 +13,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +42,6 @@ internal inline fun <reified T> DropdownView(
     label: String,
     placeholder: String,
     defaultSelectedItem: T? = null,
-    isEnabled: Boolean = true,
     crossinline onItemSelected: (T) -> Unit,
 ) {
     NfcDropdownMenu(
@@ -49,7 +49,6 @@ internal inline fun <reified T> DropdownView(
         label = label,
         defaultSelectedItem = defaultSelectedItem,
         placeholder = placeholder,
-        isEnabled = isEnabled,
         onItemSelected = { onItemSelected(it) }
     )
 }
@@ -61,7 +60,6 @@ private fun <T> NfcDropdownMenu(
     label: String,
     defaultSelectedItem: T? = null,
     placeholder: String,
-    isEnabled: Boolean,
     onItemSelected: (T) -> Unit
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
@@ -74,9 +72,7 @@ private fun <T> NfcDropdownMenu(
         Box {
             ExposedDropdownMenuBox(
                 expanded = expanded,
-                onExpandedChange = {
-                    if (isEnabled) expanded = !expanded
-                }
+                onExpandedChange = { expanded = it }
             ) {
                 OutlinedTextField(
                     value = selectedText?.toString() ?: placeholder,
@@ -84,7 +80,7 @@ private fun <T> NfcDropdownMenu(
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     modifier = Modifier
-                        .menuAnchor()
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                         .fillMaxWidth(),
                     placeholder = {
                         Text(text = placeholder)
