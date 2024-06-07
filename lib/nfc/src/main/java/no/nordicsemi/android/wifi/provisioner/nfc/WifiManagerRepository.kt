@@ -35,13 +35,8 @@ class WifiManagerRepository(
         @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
         override fun onReceive(context: Context, intent: Intent) {
             try {
-                val success =
-                    intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
-                if (!success) {
-                    wifiManager.startScan()
-                }
-                val results = wifiManager.scanResults
-                _networkState.value = Success(results)
+                intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+                _networkState.value = Success(wifiManager.scanResults)
             } catch (e: Exception) {
                 e.printStackTrace()
                 _networkState.value = Error(e)
