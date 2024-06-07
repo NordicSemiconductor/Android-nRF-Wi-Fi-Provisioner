@@ -100,7 +100,7 @@ internal class WifiScannerViewModel @Inject constructor(
                 _viewState.value = _viewState.value.copy(networks = scanResults)
             }.launchIn(viewModelScope)
             viewModelScope.launch {
-                delay(2.seconds)
+                delay(5.seconds)
                 _viewState.value = _viewState.value.copy(isRefreshing = false)
             }
         } catch (e: Exception) {
