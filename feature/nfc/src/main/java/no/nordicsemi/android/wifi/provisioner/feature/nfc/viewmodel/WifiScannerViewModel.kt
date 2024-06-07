@@ -75,7 +75,7 @@ data class WifiScannerViewState(
 ) {
     private val items = (networks as? Success)?.data ?: emptyList()
     val sortedItems: List<ScanResult> = when (sortOption) {
-        WifiSortOption.NAME -> items.sortedBy { it.SSID }
+        WifiSortOption.NAME -> items.sortedBy { it.SSID.lowercase() }
         WifiSortOption.RSSI -> items.sortedByDescending { it.level }
     }
 }
