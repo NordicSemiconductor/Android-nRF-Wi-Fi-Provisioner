@@ -35,6 +35,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -120,10 +121,8 @@ internal fun WifiScannerScreen() {
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+        Box(
+            modifier = Modifier.padding(innerPadding)
         ) {
             RequireWifi {
                 RequireLocationForWifi {
@@ -150,16 +149,14 @@ internal fun WifiScannerScreen() {
 
                         is Loading -> {
                             // Show the loading indicator.
-                            Column {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.padding(16.dp)
-                                    )
-                                }
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.padding(16.dp)
+                                )
                             }
                         }
 
@@ -169,39 +166,46 @@ internal fun WifiScannerScreen() {
                                 WifiSortView(viewState.sortOption) {
                                     onEvent(OnSortOptionSelected(it))
                                 }
-                                Column(
-                                    modifier = Modifier
-                                        .verticalScroll(rememberScrollState())
-                                        .padding(bottom = 32.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                PullToRefreshBox(
+                                    isRefreshing = viewState.isRefreshing,
+                                    onRefresh = { // Refreshing
+                                        wifiScannerViewModel.scanAvailableWifiNetworks()
+                                    },
                                 ) {
-                                    if (isGroupedBySsid) {
-                                        // Group by SSID
-                                        GroupBySsid(viewState.sortedItems, onEvent)
-                                    } else {
-                                        // Show the list of available networks grouped by SSIDs.
-                                        WifiList(viewState.sortedItems, onEvent)
+                                    Column(
+                                        modifier = Modifier
+                                            .verticalScroll(rememberScrollState())
+                                            .padding(bottom = 32.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                    ) {
+                                        if (isGroupedBySsid) {
+                                            // Group by SSID
+                                            GroupBySsid(viewState.sortedItems, onEvent)
+                                        } else {
+                                            // Show the list of available networks grouped by SSIDs.
+                                            WifiList(viewState.sortedItems, onEvent)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-                when (val selectedNetwork = viewState.selectedNetwork) {
-                    null -> {
-                        // Do nothing
-                    }
+                    when (val selectedNetwork = viewState.selectedNetwork) {
+                        null -> {
+                            // Do nothing
+                        }
 
-                    else -> {
-                        // Show the password dialog
-                        PasswordDialog(
-                            scanResult = selectedNetwork,
-                            onCancelClick = {
-                                // Dismiss the dialog
-                                // Set the selected network to null
-                                onEvent(OnPasswordCancelEvent)
-                            }) {
-                            onEvent(OnPasswordSetEvent(it))
+                        else -> {
+                            // Show the password dialog
+                            PasswordDialog(
+                                scanResult = selectedNetwork,
+                                onCancelClick = {
+                                    // Dismiss the dialog
+                                    // Set the selected network to null
+                                    onEvent(OnPasswordCancelEvent)
+                                }) {
+                                onEvent(OnPasswordSetEvent(it))
+                            }
                         }
                     }
                 }

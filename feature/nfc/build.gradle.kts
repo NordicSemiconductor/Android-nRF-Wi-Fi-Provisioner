@@ -18,6 +18,6 @@ dependencies {
     implementation(project(":feature:common"))
     implementation(project(":feature:ui"))
     api(project(":lib:nfc"))
-    api(project(":lib:domain")) // TODD: Remove this once feature:common is utilized in this module.
     implementation(libs.nordic.permissions.nfc)
+    implementation("androidx.compose.material3:material3:1.3.0-beta02")
 }
