@@ -91,12 +91,20 @@ internal fun SoftApWifiScannerScreen(
             onNavigationButtonClick = { onEvent(NavigateUpEvent) }
         )
 
-        if (viewEntity.isLoading) {
-            LoadingItem()
-        } else if (viewEntity.error != null) {
-            ErrorItem(viewEntity.error!!)
-        } else {
-            WifiList(viewEntity, onEvent)
+        Column {
+            WifiSortView(
+                sortOption = viewEntity.sortOption,
+                enabled = !viewEntity.isLoading && viewEntity.error == null,
+            ) {
+                onEvent(OnSortOptionSelected(it))
+            }
+            if (viewEntity.isLoading) {
+                LoadingItem()
+            } else if (viewEntity.error != null) {
+                ErrorItem(viewEntity.error!!)
+            } else {
+                WifiList(viewEntity, onEvent)
+            }
         }
     }
 }
@@ -107,7 +115,7 @@ private fun LoadingItem() {
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(16.dp)
     ) {
-        repeat(6) {
+        repeat(5) {
             item { WifiLoadingItem() }
         }
     }
@@ -126,18 +134,12 @@ private fun ErrorItem(error: Throwable) {
 
 @Composable
 private fun WifiList(viewEntity: WifiScannerViewEntity, onEvent: (WifiScannerViewEvent) -> Unit) {
-    Column {
-        WifiSortView(viewEntity.sortOption) {
-            onEvent(OnSortOptionSelected(it))
-        }
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(8.dp)
-        ) {
-            viewEntity.sortedItems.forEach {
-                item { WifiItem(records = it, onEvent = onEvent) }
-            }
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(8.dp)
+    ) {
+        viewEntity.sortedItems.forEach {
+            item { WifiItem(records = it, onEvent = onEvent) }
         }
     }
 }
