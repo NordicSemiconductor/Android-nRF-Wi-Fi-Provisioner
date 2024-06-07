@@ -85,6 +85,14 @@ internal fun AddWifiManuallyDialog(
                     }
                 )
 
+                // Show the authentication dropdown.
+                DropdownView(
+                    items = authListToDisplay(),
+                    label = stringResource(id = R.string.authentication),
+                    placeholder = stringResource(id = R.string.authentication_placeholder),
+                    defaultSelectedItem = authMode
+                ) { authMode = it }
+
                 // Show the password field only if the authentication mode is not open.
                 if (authMode.lowercase() != "open") {
                     // Show the password field.
@@ -119,14 +127,6 @@ internal fun AddWifiManuallyDialog(
                         isMacAddressError = !isValidMacAddress(value)
                     }
                 )
-
-                // Show the authentication dropdown.
-                DropdownView(
-                    items = authListToDisplay(),
-                    label = stringResource(id = R.string.authentication),
-                    placeholder = stringResource(id = R.string.authentication_placeholder),
-                    defaultSelectedItem = authMode
-                ) { authMode = it }
 
                 // Show the encryption dropdown, only for protected network.
                 if (authMode.lowercase() != "open") {

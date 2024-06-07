@@ -105,7 +105,7 @@ internal fun NfcPublishScreen() {
                             }
                             if (wifiData.macAddress.isNotEmpty()) {
                                 NfcTextRow(
-                                    title = stringResource(id = R.string.mac_address_label),
+                                    title = stringResource(id = R.string.mac_address),
                                     text = wifiData.macAddress.uppercase()
                                 )
                             }

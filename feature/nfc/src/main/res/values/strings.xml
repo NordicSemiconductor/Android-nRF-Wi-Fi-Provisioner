@@ -34,7 +34,8 @@
     <string name="ssid_label">SSID</string>
     <string name="ssid_placeholder">Enter SSID</string>
     <string name="ssid_error">SSID is required</string>
-    <string name="mac_address_label">MAC address</string>
+    <string name="mac_address">MAC address</string>
+    <string name="mac_address_label">MAC address (optional)</string>
     <string name="mac_address_placeholder">Enter MAC address</string>
     <string name="mac_address_error">The MAC address consists of hexadecimal digits in the format XX:XX:XX:XX:XX:XX.</string>
     <string name="encryption">Encryption</string>
