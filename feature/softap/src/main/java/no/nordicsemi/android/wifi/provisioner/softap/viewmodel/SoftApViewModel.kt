@@ -184,6 +184,7 @@ internal class SoftApViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun onProvisionPressed() {
         viewModelScope.launch {
             wifiConfigDomain?.let {
