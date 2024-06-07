@@ -52,6 +52,7 @@ data class OnPasswordSetEvent(
 ) : WifiScannerViewEvent
 
 data object OnPasswordCancelEvent : WifiScannerViewEvent
+data object RefreshWiFiNetworksEvent : WifiScannerViewEvent
 
 /**
  * Event triggered when the back button is clicked.
@@ -135,13 +136,14 @@ internal class WifiScannerViewModel @Inject constructor(
                 }
             }
 
-            OnNavigateUpClickEvent -> onBackClick()
+            is OnNavigateUpClickEvent -> onBackClick()
             is OnPasswordSetEvent -> {
                 // Close the dialog and navigate to the NFC screen.
                 // Needed to clear the selected network, otherwise the dialog will be shown on back press.
                 _viewState.value = _viewState.value.copy(selectedNetwork = null)
                 navigateToNfcScan(event.wifiData)
             }
+            is RefreshWiFiNetworksEvent -> scanAvailableWifiNetworks()
 
             OnPasswordCancelEvent -> _viewState.value =
                 _viewState.value.copy(selectedNetwork = null)
