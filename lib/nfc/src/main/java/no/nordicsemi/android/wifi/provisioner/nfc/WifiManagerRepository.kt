@@ -1,5 +1,6 @@
 package no.nordicsemi.android.wifi.provisioner.nfc
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -32,7 +33,12 @@ class WifiManagerRepository(
      */
     private val wifiScanReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.M)
-        @RequiresPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+        @RequiresPermission(
+            allOf = [
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_WIFI_STATE,
+            ]
+        )
         override fun onReceive(context: Context, intent: Intent) {
             try {
                 intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
