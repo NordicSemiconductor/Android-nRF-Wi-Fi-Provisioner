@@ -39,7 +39,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEv
 import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.android.wifi.provisioner.ui.ClickableDataItem
-import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 
 @Composable

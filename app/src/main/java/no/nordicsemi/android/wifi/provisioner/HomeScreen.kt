@@ -31,11 +31,15 @@
 
 package no.nordicsemi.android.wifi.provisioner
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -44,9 +48,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -58,21 +64,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import no.nordicsemi.android.common.navigation.DestinationId
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.app.BuildConfig
 import no.nordicsemi.android.wifi.provisioner.app.R
-import no.nordicsemi.android.wifi.provisioner.ble.sections.ProvisionOverBleSection
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleDestination
-import no.nordicsemi.android.wifi.provisioner.softap.view.ProvisionOverWifiSection
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcDestination
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApDestination
+import no.nordicsemi.android.wifi.provisioner.ui.view.section.ProvisionSection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,6 +90,10 @@ fun HomeScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val isLargeScreen =
+        LocalConfiguration.current.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
+    val isLandscape =
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
@@ -92,59 +105,199 @@ fun HomeScreen() {
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .consumeWindowInsets(innerPadding)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(
-                        WindowInsetsSides.Horizontal,
-                    ),
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.4f, true),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_nrf70),
-                    contentDescription = stringResource(id = R.string.ic_nrf70),
-                    modifier = Modifier
-                        .widthIn(max = 200.dp)
-                        .padding(8.dp)
+
+        when {
+            !isLargeScreen && isLandscape -> {
+                SmallScreenLandscapeContent(
+                    context = context,
+                    scope = scope,
+                    snackbarHostState = snackbarHostState,
+                    innerPadding = innerPadding,
+                    navigateTo = vm::navigateTo
                 )
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.4f, true),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                ProvisionOverBleSection {
-                    vm.navigateTo(BleDestination)
-                }
-                ProvisionOverWifiSection {
+
+            else -> {
+                PortraitContent(
+                    context = context,
+                    scope = scope,
+                    snackbarHostState = snackbarHostState,
+                    innerPadding = innerPadding,
+                    navigateTo = vm::navigateTo
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PortraitContent(
+    context: Context,
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
+    innerPadding: PaddingValues,
+    navigateTo: (DestinationId<Unit, *>) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(state = rememberScrollState())
+            .padding(innerPadding)
+            .padding(bottom = 56.dp)
+            .consumeWindowInsets(innerPadding)
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing.only(
+                    WindowInsetsSides.Horizontal,
+                ),
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_nrf70),
+            contentDescription = stringResource(id = R.string.ic_nrf70),
+            modifier = Modifier
+                .widthIn(max = 200.dp)
+                .weight(0.5f, fill = true)
+                .padding(8.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Spacer(modifier = Modifier.size(16.dp))
+            ProvisionSection(
+                sectionTitle = stringResource(R.string.provision_over_ble),
+                sectionRational = stringResource(R.string.provision_over_ble_rationale),
+                onClick = { navigateTo(BleDestination) }
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            ProvisionSection(
+                sectionTitle = stringResource(R.string.provision_over_wifi),
+                sectionRational = stringResource(R.string.provision_over_wifi_rationale),
+                onClick = {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        vm.navigateTo(SoftApDestination)
+                        navigateTo(SoftApDestination)
                     } else {
                         scope.launch {
                             snackbarHostState.showSnackbar(
                                 message = context.getString(R.string.error_softap_not_supported),
-                                actionLabel = context.getString(R.string.dismiss)
+                                actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
                             )
                         }
                     }
                 }
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            ProvisionSection(
+                sectionTitle = stringResource(R.string.provision_over_nfc),
+                sectionRational = stringResource(R.string.provision_over_nfc_rationale)
+            ) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    navigateTo(NfcDestination)
+                } else {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.error_nfc_not_supported),
+                            actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
+                        )
+                    }
+                }
             }
+        }
+        Text(
+            text = stringResource(
+                id = R.string.app_version,
+                BuildConfig.VERSION_NAME,
+                BuildConfig.VERSION_CODE
+            ),
+            textAlign = TextAlign.End,
+            style = MaterialTheme.typography.labelMedium
+        )
+    }
+}
+
+@Composable
+private fun SmallScreenLandscapeContent(
+    context: Context,
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
+    innerPadding: PaddingValues,
+    navigateTo: (DestinationId<Unit, *>) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+            .padding(horizontal = 16.dp)
+            .consumeWindowInsets(innerPadding)
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing.only(
+                    WindowInsetsSides.Horizontal,
+                ),
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column {
+            Image(
+                modifier = Modifier.padding(horizontal = 56.dp),
+                painter = painterResource(id = R.drawable.ic_nrf70),
+                contentDescription = stringResource(id = R.string.ic_nrf70),
+            )
+        }
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(state = rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.size(16.dp))
+            ProvisionSection(
+                sectionTitle = stringResource(R.string.provision_over_ble),
+                sectionRational = stringResource(R.string.provision_over_ble_rationale),
+                onClick = { navigateTo(BleDestination) }
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            ProvisionSection(
+                sectionTitle = stringResource(R.string.provision_over_wifi),
+                sectionRational = stringResource(R.string.provision_over_wifi_rationale),
+                onClick = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        navigateTo(SoftApDestination)
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = context.getString(R.string.error_softap_not_supported),
+                                actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
+                            )
+                        }
+                    }
+                }
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            ProvisionSection(
+                sectionTitle = stringResource(R.string.provision_over_nfc),
+                sectionRational = stringResource(R.string.provision_over_nfc_rationale)
+            ) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    navigateTo(NfcDestination)
+                } else {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.error_nfc_not_supported),
+                            actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.size(16.dp))
             Row(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 8.dp),
+                horizontalArrangement = Arrangement.End,
             ) {
                 Text(
                     text = stringResource(

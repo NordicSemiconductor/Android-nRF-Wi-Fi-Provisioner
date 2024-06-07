@@ -41,7 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionFailureReasonDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
-import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
 @Composable
 fun WifiConnectionStateDomain?.toImageVector() = when (this) {

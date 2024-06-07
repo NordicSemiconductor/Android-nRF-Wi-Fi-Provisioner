@@ -45,6 +45,7 @@ import no.nordicsemi.android.common.navigation.NavigationView
 import no.nordicsemi.android.common.theme.NordicActivity
 import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleProvisioningDestinations
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcProvisionerDestinations
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApProvisionerDestinations
 
 @AndroidEntryPoint
@@ -61,13 +62,20 @@ class MainActivity : NordicActivity() {
                     NavigationView(
                         destinations = (HomeDestination +
                                 BleProvisioningDestinations).run {
-                                    // Soft AP is available on Android 10 and newer.
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                        this + SoftApProvisionerDestinations
-                                    } else {
-                                        this
-                                    }
-                                }
+                            // Soft AP is available on Android 10 and newer.
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                this + SoftApProvisionerDestinations
+                            } else {
+                                this
+                            }
+                        }.run {
+                            // NFC is available on Android 6.0 and newer.
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                this + NfcProvisionerDestinations
+                            } else {
+                                this
+                            }
+                        }
                     )
                 }
             }

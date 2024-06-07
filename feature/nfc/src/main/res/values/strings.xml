@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wifi_provision_over_nfc_appbar">Provision over NFC</string>
+    <string name="wifi_scanner_appbar">Wi-Fi networks</string>
+    <string name="ndef_publish_appbar">Publish</string>
+
+    <string name="enter_wifi_credentials">Enter Wi-Fi credentials</string>
+    <string name="enter_wifi_credentials_des">Enter the Wi-Fi credentials manually.</string>
+    <string name="search_for_wifi_networks">Search Wi-Fi networks</string>
+    <string name="search_for_wifi_networks_des">Scans for nearby Wi-Fi networks.</string>
+
+    <!--    Wifi permission strings-->
+    <string name="location_permission_required">LOCATION PERMISSION REQUIRED</string>
+    <string name="location_permission__required_des">Location permission is required to scan for Wi-Fi networks.</string>
+
+    <string name="wifi_permission_required">WI-FI PERMISSION REQUIRED</string>
+    <string name="wifi_permission_required_des">Wi-Fi permission is required to scan for Wi-Fi networks.</string>
+    <string name="wifi_disabled">WI-FI DISABLED</string>
+    <string name="wifi_disabled_des">Wi-Fi is disabled. Please enable Wi-Fi to scan for Wi-Fi networks.</string>
+    <string name="enable_wifi">Enable Wi-Fi</string>
+    <string name="wifi_not_available">WI-FI NOT AVAILABLE</string>
+    <string name="wifi_not_available_des">Wi-Fi is not available on this device. We won\'t be able to provision the device.</string>
+
+    <string name="grant_permission">Grant Permission</string>
+    <string name="settings">Settings</string>
+
+    <string name="error_while_scanning">Error occurred while scanning Wi-Fi networks.</string>
+    <string name="unknown_error">Unknown error occurred.</string>
+
+    <!--    Password Dialog strings-->
+    <string name="setup_wifi_title">Setup Wi-Fi</string>
+    <string name="authentication">Authentication</string>
+    <string name="authentication_placeholder">Select authentication</string>
+    <string name="ssid_label">SSID</string>
+    <string name="ssid_placeholder">Enter SSID</string>
+    <string name="ssid_error">SSID is required</string>
+    <string name="mac_address">MAC address</string>
+    <string name="mac_address_label">MAC address (optional)</string>
+    <string name="mac_address_placeholder">Enter MAC address</string>
+    <string name="mac_address_error">The MAC address consists of hexadecimal digits in the format XX:XX:XX:XX:XX:XX.</string>
+    <string name="encryption">Encryption</string>
+    <string name="encryption_placeholder">Select encryption</string>
+    <string name="password">Password</string>
+    <string name="password_placeholder">Enter password</string>
+    <string name="password_error">Password is required</string>
+    <string name="channel_number">Channel number: %d - %s</string>
+
+    <!--    Nfc strings-->
+    <string name="wifi_record">Wi-Fi record</string>
+    <string name="ssid_title">SSID</string>
+    <string name="password_title">Password</string>
+    <string name="encryption_title">Encryption</string>
+    <string name="authentication_title">Authentication</string>
+    <string name="message_size">Message size</string>
+    <string name="message_size_in_bytes">%d bytes</string>
+    <string name="discover_tag_title">Discover tag</string>
+    <string name="tap_nfc_tag">Tap an NFC tag</string>
+    <string name="write_success">Tag written successfully</string>
+    <string name="success_des">The device may take a few seconds to connect to Wi-Fi.</string>
+    <string name="discovering_tag">Discovering tag…</string>
+    <string name="write_failed">Failed to write to the NFC tag</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+</resources>
