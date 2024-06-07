@@ -126,6 +126,7 @@ internal class SoftApViewModel @Inject constructor(
             _state.value = _state.value.copy(error = throwable)
         }
         viewModelScope.launch(handler) {
+            _state.value = _state.value.copy(isConnectionRequested = true)
             connect(ssid, passphraseConfiguration)
             discoverServices()
         }
@@ -141,7 +142,6 @@ internal class SoftApViewModel @Inject constructor(
         }
         _state.value = _state.value.copy(connectionState = WizardStepState.CURRENT)
         softApManager.connect(ssid = ssid, passphraseConfiguration = passphraseConfiguration)
-        _state.value = _state.value.copy(configureState = WizardStepState.COMPLETED)
         _state.value = _state.value.copy(connectionState = WizardStepState.COMPLETED)
     }
 
