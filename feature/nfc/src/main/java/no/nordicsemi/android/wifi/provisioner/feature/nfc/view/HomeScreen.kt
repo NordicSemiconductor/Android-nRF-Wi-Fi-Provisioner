@@ -45,7 +45,7 @@ import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnScanClickE
 @RequiresApi(Build.VERSION_CODES.M)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun NfcScreen() {
+internal fun HomeScreen() {
     val viewModel: NfcProvisioningViewModel = hiltViewModel()
     val onEvent: (NfcProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
     val snackbarHostState = remember { SnackbarHostState() }

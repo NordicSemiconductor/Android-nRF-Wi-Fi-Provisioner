@@ -6,7 +6,7 @@ import no.nordicsemi.android.common.navigation.createDestination
 import no.nordicsemi.android.common.navigation.createSimpleDestination
 import no.nordicsemi.android.common.navigation.defineDestination
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.view.NfcPublishScreen
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.view.NfcScreen
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.view.HomeScreen
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.view.WifiScannerScreen
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 
@@ -23,7 +23,7 @@ val NfcPublishDestination =
 @RequiresApi(Build.VERSION_CODES.M)
 val NfcProvisionerDestinations = listOf(
     defineDestination(NfcDestination) {
-        NfcScreen()
+        HomeScreen()
     },
     defineDestination(WifiScannerDestination) {
         WifiScannerScreen()
