@@ -1,18 +1,12 @@
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
 import android.content.Context
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material.icons.filled.Wifi
@@ -20,7 +14,6 @@ import androidx.compose.material.icons.filled.WifiFind
 import androidx.compose.material.icons.filled.WifiPassword
 import androidx.compose.material.icons.outlined.NetworkCheck
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -35,9 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +41,6 @@ import no.nordicsemi.android.common.theme.view.ProgressItemStatus
 import no.nordicsemi.android.common.theme.view.WizardStepAction
 import no.nordicsemi.android.common.theme.view.WizardStepComponent
 import no.nordicsemi.android.common.theme.view.WizardStepState
-import no.nordicsemi.android.common.theme.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 import no.nordicsemi.android.wifi.provisioner.softap.FailedToBindToNetwork
 import no.nordicsemi.android.wifi.provisioner.softap.OnConnectionLost
@@ -60,12 +50,9 @@ import no.nordicsemi.android.wifi.provisioner.softap.UnableToConnectToNetwork
 import no.nordicsemi.android.wifi.provisioner.softap.WifiNotEnabledException
 import no.nordicsemi.android.wifi.provisioner.softap.viewmodel.SoftApScreenState
 import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
-import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 import no.nordicsemi.kotlin.wifi.provisioner.domain.AuthModeDomain
-import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 
 @OptIn(ExperimentalMaterial3Api::class)
