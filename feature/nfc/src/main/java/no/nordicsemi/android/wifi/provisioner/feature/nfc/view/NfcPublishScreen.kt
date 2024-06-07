@@ -142,7 +142,7 @@ internal fun NfcPublishScreen() {
                                             iconRightPadding = 24.dp,
                                         )
                                         Text(
-                                            text = if (e.message.length > 35) e.message.slice(0..35) else e.message,
+                                            text = e.message,
                                             modifier = Modifier
                                                 .alpha(0.7f)
                                                 .padding(start = 48.dp),
