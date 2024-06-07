@@ -27,7 +27,7 @@ internal fun WifiNotAvailableView() {
 
 @Preview
 @Composable
-private fun BluetoothNotAvailableView_Preview() {
+private fun WifiNotAvailableView_Preview() {
     NordicTheme {
         WifiNotAvailableView()
     }

@@ -1,11 +1,11 @@
 package no.nordicsemi.android.wifi.provisioner.feature.nfc.permission.wifi
 
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.wifi.WifiManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.RECEIVER_EXPORTED
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -30,15 +30,15 @@ class WifiStateManager @Inject constructor(
 
     @SuppressLint("WrongConstant")
     fun wifiState() = callbackFlow {
-        trySend(getBluetoothPermissionState())
+        trySend(getWifiPermissionState())
 
         val wifiStateChangeHandler = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                trySend(getBluetoothPermissionState())
+                trySend(getWifiPermissionState())
             }
         }
         val filter = IntentFilter().apply {
-            addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+            addAction(WifiManager.WIFI_STATE_CHANGED_ACTION)
             addAction(REFRESH_PERMISSIONS)
         }
 
@@ -67,7 +67,7 @@ class WifiStateManager @Inject constructor(
         return utils.isWifiPermissionDeniedForever(context)
     }
 
-    private fun getBluetoothPermissionState() = when {
+    private fun getWifiPermissionState() = when {
         !utils.isWifiAvailable -> WifiPermissionState.NotAvailable(
             WifiPermissionNotAvailableReason.NOT_AVAILABLE
         )

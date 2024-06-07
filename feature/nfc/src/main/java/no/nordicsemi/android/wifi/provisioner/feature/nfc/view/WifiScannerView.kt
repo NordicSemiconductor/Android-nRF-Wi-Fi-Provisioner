@@ -71,6 +71,7 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
+import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
 
@@ -241,7 +242,8 @@ private fun NetworkItem(
     onEvent: (WifiScannerViewEvent) -> Unit,
 ) {
     val securityType = AuthenticationMode.get(network)
-    val isProtected = securityType.contains(WifiAuthTypeBelowTiramisu.OPEN).not()
+    val isOpen = securityType.contains(WifiAuthTypeBelowTiramisu.OPEN) or
+            securityType.contains(WifiAuthTypeTiramisuOrAbove.OPEN)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -249,10 +251,7 @@ private fun NetworkItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable {
-                if (isProtected) {
-                    // Show the password dialog
-                    onEvent(OnNetworkSelectEvent(network))
-                } else {
+                if (isOpen) {
                     // Password dialog is not required for open networks.
                     val wifiData = WifiData(
                         ssid = network.SSID,
@@ -262,6 +261,9 @@ private fun NetworkItem(
                         encryptionMode = EncryptionMode.NONE
                     )
                     onEvent(OnPasswordSetEvent(wifiData))
+                } else {
+                    // Show the password dialog
+                    onEvent(OnNetworkSelectEvent(network))
                 }
             },
     ) {
@@ -306,7 +308,7 @@ private fun NetworkItem(
                 modifier = Modifier.alpha(0.7f),
             )
         }
-        if (isProtected) {
+        if (!isOpen) {
             // Show the lock icon for protected networks.
             Icon(
                 imageVector = Icons.Outlined.Lock,
