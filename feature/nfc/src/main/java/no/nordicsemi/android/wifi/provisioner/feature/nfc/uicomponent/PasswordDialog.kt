@@ -100,7 +100,7 @@ internal fun PasswordDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    if (password.trim().isEmpty()) {
+                    if (password.isEmpty()) {
                         isPasswordEmpty = true
                     } else {
                         onConfirmClick(
