@@ -96,11 +96,12 @@ fun PasswordInputField(
             }
         },
         trailingIcon = {
-            IconButton(onClick = {
-
-                isShowPassword = !isShowPassword
-                onShowPassChange(isShowPassword)
-            }) {
+            IconButton(
+                onClick = {
+                    isShowPassword = !isShowPassword
+                    onShowPassChange(isShowPassword)
+                }
+            ) {
                 Icon(
                     imageVector = visibilityIcon,
                     contentDescription = null

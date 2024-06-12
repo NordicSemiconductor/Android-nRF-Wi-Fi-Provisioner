@@ -91,7 +91,9 @@ internal fun PasswordDialog(
                 onClick = {
                     onCancelClick()
                 }
-            ) { Text(text = stringResource(id = R.string.cancel)) }
+            ) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
         },
         confirmButton = {
             TextButton(
@@ -110,7 +112,9 @@ internal fun PasswordDialog(
                         )
                     }
                 }
-            ) { Text(text = stringResource(id = R.string.confirm)) }
+            ) {
+                Text(text = stringResource(id = R.string.confirm))
+            }
         }
     )
 }
