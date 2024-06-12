@@ -261,7 +261,7 @@ private fun NetworkItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .clickable {
                 if (isOpen) {
@@ -278,7 +278,8 @@ private fun NetworkItem(
                     // Show the password dialog
                     onEvent(OnNetworkSelectEvent(network))
                 }
-            },
+            }
+            .then(modifier),
     ) {
         RssiIconView(network.level)
         Column(
