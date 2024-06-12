@@ -49,5 +49,7 @@ dependencies {
     implementation(libs.nordic.navigation)
     implementation(libs.nordic.logger)
     implementation(libs.nordic.permissions.ble)
-    implementation(libs.nordic.blek.uiscanner)
+    // implementation(libs.nordic.blek.uiscanner)
+    implementation("no.nordicsemi.android.kotlin.ble:uiscanner:1.0.19")
+    implementation("androidx.compose.material3:material3:1.3.0-beta02")
 }
