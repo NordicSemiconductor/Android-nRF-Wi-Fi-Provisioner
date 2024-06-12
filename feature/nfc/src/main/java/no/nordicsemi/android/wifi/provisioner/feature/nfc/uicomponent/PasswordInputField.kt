@@ -1,7 +1,6 @@
 package no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -51,21 +50,13 @@ fun PasswordInputField(
     OutlinedTextField(
         value = input,
         onValueChange = { onUpdate(it) },
-        visualTransformation = if (input.isEmpty()) {
-            PlaceholderTransformation(placeholder)
-        } else {
-            if (isShowPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            }
+        visualTransformation = when {
+            input.isEmpty() -> PlaceholderTransformation(placeholder)
+            isShowPassword -> VisualTransformation.None
+            else -> PasswordVisualTransformation()
         },
         label = { Text(text = label) },
-        placeholder = {
-            Text(
-                text = placeholder,
-            )
-        },
+        placeholder = { Text(text = placeholder) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         supportingText = {
             error?.let { errorMessage ->

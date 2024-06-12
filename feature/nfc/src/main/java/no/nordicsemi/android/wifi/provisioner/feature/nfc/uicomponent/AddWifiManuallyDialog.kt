@@ -155,11 +155,11 @@ internal fun AddWifiManuallyDialog(
                     when {
                         ssid.trim().isEmpty() -> isSsidEmpty = true
 
-                        authMode.lowercase() != "open" && password.trim()
-                            .isEmpty() -> isPasswordEmpty = true
+                        authMode.lowercase() != "open" && password?.isEmpty() ?: true ->
+                            isPasswordEmpty = true
 
-                        macAddress.text.isNotEmpty() && !isValidMacAddress(macAddress.text) -> isMacAddressError =
-                            true
+                        macAddress.text.isNotEmpty() && !isValidMacAddress(macAddress.text) ->
+                            isMacAddressError = true
 
                         else -> onConfirmClick(
                             WifiData(
