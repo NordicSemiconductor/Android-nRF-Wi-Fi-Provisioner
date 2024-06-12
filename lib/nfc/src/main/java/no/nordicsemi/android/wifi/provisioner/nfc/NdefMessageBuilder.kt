@@ -32,24 +32,24 @@ import java.nio.ByteBuffer
 import java.nio.charset.Charset
 
 /**
- * This class is responsible for creating the NDEF message for the WiFi data.
+ * This class is responsible for creating the NDEF message for a Wi-Fi data.
  */
 class NdefMessageBuilder {
 
     /**
-     * Creates the NDEF message for the WiFi data.
+     * Creates the NDEF message for the given Wi-Fi data.
      *
-     * @param wifiNetwork the WiFi data to be written to the NDEF message.
-     * @return the NDEF message for the WiFi data.
+     * @param wifiNetwork the Wi-Fi data to be written to the NDEF message.
+     * @return the NDEF message for the Wi-Fi data.
      */
     fun createNdefMessage(wifiNetwork: WifiData): NdefMessage {
         return generateNdefMessage(wifiNetwork)
     }
 
     /**
-     * Generates the NDEF message for the given WiFi network.
+     * Generates the NDEF message for the given Wi-Fi network.
      *
-     * @param wifiNetwork the WiFi network to be written to the NDEF message.
+     * @param wifiNetwork the Wi-Fi network to be written to the NDEF message.
      */
     private fun generateNdefMessage(wifiNetwork: WifiData): NdefMessage {
         val payload: ByteArray = generateNdefPayload(wifiNetwork)
@@ -66,9 +66,9 @@ class NdefMessageBuilder {
     }
 
     /**
-     * Generates the NDEF payload for the given WiFi network.
+     * Generates the NDEF payload for the given Wi-Fi network.
      *
-     * @param wifiNetwork the WiFi network to be written to the NDEF message.
+     * @param wifiNetwork the Wi-Fi network to be written to the NDEF message.
      */
     private fun generateNdefPayload(wifiNetwork: WifiData): ByteArray {
         val ssid: String = wifiNetwork.ssid
