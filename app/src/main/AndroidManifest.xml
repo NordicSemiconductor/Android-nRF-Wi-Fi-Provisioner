@@ -35,7 +35,7 @@
 
     <application
         android:name="no.nordicsemi.android.wifi.provisioner.WifiProvisionerApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/label_ble_provisioner"

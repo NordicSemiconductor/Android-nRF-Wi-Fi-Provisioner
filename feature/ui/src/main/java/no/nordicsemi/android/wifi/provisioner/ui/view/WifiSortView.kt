@@ -59,6 +59,7 @@ import no.nordicsemi.android.common.theme.R as themeR
 @Composable
 fun WifiSortView(
     sortOption: WifiSortOption,
+    enabled: Boolean = true,
     onChanged: (WifiSortOption) -> Unit,
 ) {
     Row(
@@ -80,6 +81,7 @@ fun WifiSortView(
         val isRssiSortSelected = sortOption == WifiSortOption.RSSI
         ElevatedFilterChip(
             selected = isRssiSortSelected,
+            enabled = enabled,
             onClick = { onChanged(WifiSortOption.RSSI) },
             label = { Text(text = stringResource(id = R.string.sorting_rssi),) },
             leadingIcon = {
@@ -96,6 +98,7 @@ fun WifiSortView(
         val isNameSortSelected = sortOption == WifiSortOption.NAME
         ElevatedFilterChip(
             selected = isNameSortSelected,
+            enabled = enabled,
             onClick = { onChanged(WifiSortOption.NAME) },
             label = { Text(text = stringResource(id = R.string.sorting_name),) },
             leadingIcon = {

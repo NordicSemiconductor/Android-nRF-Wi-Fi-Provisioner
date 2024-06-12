@@ -36,7 +36,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -98,11 +98,10 @@ private fun ActionButton(text: String, onClick: () -> Unit) {
             .padding(all = 16.dp),
         horizontalArrangement = Arrangement.Center
     ) {
-        ElevatedButton(
+        Button(
             onClick = onClick,
             modifier = Modifier
                 .padding(all = 16.dp)
-                //.align(Alignment.Center)
                 .widthIn(min = 100.dp)
         ) {
             Text(text = text)

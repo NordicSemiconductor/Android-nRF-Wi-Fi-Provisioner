@@ -1,7 +1,6 @@
 package no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -36,9 +35,8 @@ fun PasswordInputField(
     input: String,
     label: String,
     placeholder: String,
-    isError: Boolean = false,
-    errorMessage: String = "",
-    hint: String = "",
+    error: String? = null,
+    hint: String? = null,
     showPassword: Boolean,
     onShowPassChange: (Boolean) -> Unit = {},
     onUpdate: (String) -> Unit,
@@ -52,42 +50,33 @@ fun PasswordInputField(
     OutlinedTextField(
         value = input,
         onValueChange = { onUpdate(it) },
-        visualTransformation = if (input.isEmpty()) {
-            PlaceholderTransformation(placeholder)
-        } else {
-            if (isShowPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            }
+        visualTransformation = when {
+            input.isEmpty() -> PlaceholderTransformation(placeholder)
+            isShowPassword -> VisualTransformation.None
+            else -> PasswordVisualTransformation()
         },
         label = { Text(text = label) },
-        placeholder = {
-            Text(
-                text = placeholder,
-            )
-        },
+        placeholder = { Text(text = placeholder) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         supportingText = {
-            Column {
-                if (isError) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Error,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error,
-                        )
-                        Text(
-                            text = errorMessage,
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.alpha(1f)
-                        )
-                    }
+            error?.let { errorMessage ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Error,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                    )
+                    Text(
+                        text = errorMessage,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.alpha(1f)
+                    )
                 }
-                if (hint.isNotEmpty() && !isError) {
+            } ?: run {
+                if (hint != null) {
                     Text(
                         text = hint,
                         modifier = Modifier.alpha(0.38f)
@@ -96,11 +85,12 @@ fun PasswordInputField(
             }
         },
         trailingIcon = {
-            IconButton(onClick = {
-
-                isShowPassword = !isShowPassword
-                onShowPassChange(isShowPassword)
-            }) {
+            IconButton(
+                onClick = {
+                    isShowPassword = !isShowPassword
+                    onShowPassChange(isShowPassword)
+                }
+            ) {
                 Icon(
                     imageVector = visibilityIcon,
                     contentDescription = null
@@ -108,6 +98,6 @@ fun PasswordInputField(
             }
         },
         colors = OutlinedTextFieldDefaults.colors(textColor),
-        isError = isError,
+        isError = error != null,
     )
 }

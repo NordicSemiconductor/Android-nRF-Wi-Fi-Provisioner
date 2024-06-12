@@ -6,12 +6,10 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.NfcPublishDestination
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.WifiScannerDestination
@@ -26,7 +24,6 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrA
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSortOption
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * A sealed class to represent the events that can be triggered from the UI.
@@ -52,6 +49,7 @@ data class OnPasswordSetEvent(
 ) : WifiScannerViewEvent
 
 data object OnPasswordCancelEvent : WifiScannerViewEvent
+data object RefreshWiFiNetworksEvent : WifiScannerViewEvent
 
 /**
  * Event triggered when the back button is clicked.
@@ -68,10 +66,9 @@ internal data class OnSortOptionSelected(val sortOption: WifiSortOption) : WifiS
  * @param sortOption The selected sort option.
  */
 data class WifiScannerViewState(
-    val networks: NetworkState<List<ScanResult>> = Loading(),
+    val networks: NetworkState = Loading,
     val selectedNetwork: ScanResult? = null,
     val sortOption: WifiSortOption = WifiSortOption.RSSI,
-    val isRefreshing: Boolean = false,
 ) {
     private val items = (networks as? Success)?.data ?: emptyList()
     val sortedItems: List<ScanResult> = when (sortOption) {
@@ -89,23 +86,19 @@ internal class WifiScannerViewModel @Inject constructor(
     private val _viewState = MutableStateFlow(WifiScannerViewState())
     val viewState = _viewState.asStateFlow()
 
+    init {
+        wifiManager.networkState
+            .onEach {
+                _viewState.value = _viewState.value.copy(networks = it)
+            }
+            .launchIn(viewModelScope)
+    }
+
     /**
      * Scans for available Wi-Fi networks.
      */
     fun scanAvailableWifiNetworks() {
-        try {
-            _viewState.value = _viewState.value.copy(isRefreshing = true)
-            wifiManager.onScan()
-            wifiManager.networkState.onEach { scanResults ->
-                _viewState.value = _viewState.value.copy(networks = scanResults)
-            }.launchIn(viewModelScope)
-            viewModelScope.launch {
-                delay(5.seconds)
-                _viewState.value = _viewState.value.copy(isRefreshing = false)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        wifiManager.onScan()
     }
 
     private fun onBackClick() {
@@ -124,7 +117,7 @@ internal class WifiScannerViewModel @Inject constructor(
                         WifiData(
                             ssid = event.network.SSID,
                             macAddress = event.network.BSSID,
-                            password = "", // Empty password for open network.
+                            password = null, // Empty password for open network.
                             authType = WifiAuthTypeBelowTiramisu.OPEN,
                             encryptionMode = EncryptionMode.NONE // No encryption for open network.
                         )
@@ -135,13 +128,14 @@ internal class WifiScannerViewModel @Inject constructor(
                 }
             }
 
-            OnNavigateUpClickEvent -> onBackClick()
+            is OnNavigateUpClickEvent -> onBackClick()
             is OnPasswordSetEvent -> {
                 // Close the dialog and navigate to the NFC screen.
                 // Needed to clear the selected network, otherwise the dialog will be shown on back press.
                 _viewState.value = _viewState.value.copy(selectedNetwork = null)
                 navigateToNfcScan(event.wifiData)
             }
+            is RefreshWiFiNetworksEvent -> scanAvailableWifiNetworks()
 
             OnPasswordCancelEvent -> _viewState.value =
                 _viewState.value.copy(selectedNetwork = null)

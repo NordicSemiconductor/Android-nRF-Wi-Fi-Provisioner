@@ -6,7 +6,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 /**
- * Interface that represents the authentication mode of a wifi network.
+ * Interface that represents the authentication mode of a Wi-Fi network.
  */
 @Parcelize
 sealed interface AuthenticationMode : Parcelable {

@@ -6,6 +6,10 @@ import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,10 +24,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
+import androidx.compose.material.icons.automirrored.filled.Segment
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
-import androidx.compose.material.icons.outlined.Group
-import androidx.compose.material.icons.outlined.GroupRemove
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,10 +52,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.common.theme.view.NordicAppBar
+import no.nordicsemi.android.common.theme.view.WarningView
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.Frequency
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toDisplayString
@@ -64,8 +72,10 @@ import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnNetworkSel
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnPasswordCancelEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnPasswordSetEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnSortOptionSelected
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.RefreshWiFiNetworksEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewEvent
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewModel
+import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.WifiScannerViewState
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthenticationMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
@@ -87,7 +97,7 @@ internal fun WifiScannerScreen() {
     val onEvent: (WifiScannerViewEvent) -> Unit = { wifiScannerViewModel.onEvent(it) }
     val viewState by wifiScannerViewModel.viewState.collectAsStateWithLifecycle()
     var isGroupedBySsid by rememberSaveable { mutableStateOf(false) }
-    val groupIcon = if (isGroupedBySsid) Icons.Outlined.GroupRemove else Icons.Outlined.Group
+    val groupIcon = if (isGroupedBySsid) Icons.AutoMirrored.Default.FormatListBulleted else Icons.AutoMirrored.Default.Segment
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Handle the back press.
@@ -131,82 +141,80 @@ internal fun WifiScannerScreen() {
                         wifiScannerViewModel.scanAvailableWifiNetworks()
                     }
 
-                    when (val scanningState = viewState.networks) {
-                        is Error -> {
-                            // Show the error message.
-                            Column {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(text = stringResource(id = R.string.error_while_scanning))
-                                    Text(
-                                        text = scanningState.t.message ?: "Unknown error occurred."
-                                    )
-                                }
-                            }
-                        }
-
-                        is Loading -> {
-                            // Show the loading indicator.
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.padding(16.dp)
-                                )
-                            }
-                        }
-
-                        is Success -> {
-                            // Show the list of available networks.
-                            Column {
-                                WifiSortView(viewState.sortOption) {
-                                    onEvent(OnSortOptionSelected(it))
-                                }
-                                PullToRefreshBox(
-                                    isRefreshing = viewState.isRefreshing,
-                                    onRefresh = { // Refreshing
-                                        wifiScannerViewModel.scanAvailableWifiNetworks()
-                                    },
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .verticalScroll(rememberScrollState())
-                                            .padding(bottom = 32.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                    ) {
-                                        if (isGroupedBySsid) {
-                                            // Group by SSID
-                                            GroupBySsid(viewState.sortedItems, onEvent)
-                                        } else {
-                                            // Show the list of available networks grouped by SSIDs.
-                                            WifiList(viewState.sortedItems, onEvent)
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    WiFiScannerContent(
+                        state = viewState,
+                        isGroupedBySsid = isGroupedBySsid,
+                        onEvent = onEvent
+                    )
+                    viewState.selectedNetwork?.let { scanResult ->
+                        // Show the password dialog
+                        PasswordDialog(
+                            scanResult = scanResult,
+                            onCancelClick = { onEvent(OnPasswordCancelEvent) },
+                            onConfirmClick = {wifiData -> onEvent(OnPasswordSetEvent(wifiData)) }
+                        )
                     }
-                    when (val selectedNetwork = viewState.selectedNetwork) {
-                        null -> {
-                            // Do nothing
-                        }
+                }
+            }
+        }
+    }
+}
 
-                        else -> {
-                            // Show the password dialog
-                            PasswordDialog(
-                                scanResult = selectedNetwork,
-                                onCancelClick = {
-                                    // Dismiss the dialog
-                                    // Set the selected network to null
-                                    onEvent(OnPasswordCancelEvent)
-                                }) {
-                                onEvent(OnPasswordSetEvent(it))
-                            }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun WiFiScannerContent(
+    state: WifiScannerViewState,
+    isGroupedBySsid: Boolean,
+    onEvent: (WifiScannerViewEvent) -> Unit,
+) {
+    Column {
+        WifiSortView(
+            sortOption = state.sortOption,
+            enabled = state.networks is Success,
+            onChanged = { option -> onEvent(OnSortOptionSelected(option)) }
+        )
+        when (val scanningState = state.networks) {
+            is Error -> {
+                WarningView(
+                    imageVector = Icons.Default.Warning,
+                    title = stringResource(id = R.string.error_while_scanning),
+                    hint = scanningState.t.message ?: "Unknown error occurred."
+                )
+            }
+
+            is Loading -> {
+                // Show the loading indicator.
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+
+            is Success -> {
+                // Show the list of available networks.
+                PullToRefreshBox(
+                    isRefreshing = state.networks == Loading,
+                    onRefresh = { // Refreshing
+                        onEvent(RefreshWiFiNetworksEvent)
+                    },
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                            .padding(bottom = 32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        if (isGroupedBySsid) {
+                            // Group by SSID
+                            GroupBySsid(state.sortedItems, onEvent)
+                        } else {
+                            // Show the list of available networks grouped by SSIDs.
+                            WifiList(state.sortedItems, onEvent)
                         }
                     }
                 }
@@ -227,12 +235,15 @@ internal fun WifiList(
     onEvent: (WifiScannerViewEvent) -> Unit
 ) {
     networks.forEach { network ->
-        NetworkItem(
-            network = network,
-            modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
-            onEvent = onEvent
-        )
-        HorizontalDivider()
+        // Skip hidden networks.
+        if (network.SSID.isNotEmpty()) {
+            NetworkItem(
+                network = network,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                onEvent = onEvent
+            )
+            HorizontalDivider()
+        }
     }
 }
 
@@ -246,10 +257,11 @@ private fun NetworkItem(
     val isOpen = securityType.contains(WifiAuthTypeBelowTiramisu.OPEN) or
             securityType.contains(WifiAuthTypeTiramisuOrAbove.OPEN)
 
+    // Show the network.
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .clickable {
                 if (isOpen) {
@@ -257,7 +269,7 @@ private fun NetworkItem(
                     val wifiData = WifiData(
                         ssid = network.SSID,
                         macAddress = network.BSSID,
-                        password = "", // Empty password for open networks
+                        password = null,
                         authType = WifiAuthTypeBelowTiramisu.OPEN,
                         encryptionMode = EncryptionMode.NONE
                     )
@@ -266,7 +278,8 @@ private fun NetworkItem(
                     // Show the password dialog
                     onEvent(OnNetworkSelectEvent(network))
                 }
-            },
+            }
+            .then(modifier),
     ) {
         RssiIconView(network.level)
         Column(
@@ -287,15 +300,18 @@ private fun NetworkItem(
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
-            // Display the address of the access point.
-            Text(
-                text = network.BSSID.uppercase(),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.alpha(0.7f)
-            )
             // Display the security type of the access point.
             Text(
                 text = securityType.joinToString(", ") { it.toDisplayString() },
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.alpha(0.7f)
+            )
+            // Display the address of the access point.
+            Text(
+                text = stringResource(
+                    id = R.string.bssid,
+                    network.BSSID.uppercase(),
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.alpha(0.7f)
             )
@@ -358,8 +374,14 @@ private fun GroupBySsid(
             )
         }
         // Show networks under the same SSID.
-        AnimatedVisibility(visible = isExpanded) {
-            Column {
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = expandIn(expandFrom = Alignment.TopCenter) + fadeIn(),
+            exit = shrinkOut(shrinkTowards = Alignment.TopCenter) + fadeOut()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 HorizontalDivider()
                 VerticalBlueBar {
                     network.forEach { scanResult ->
@@ -379,5 +401,49 @@ private fun GroupBySsid(
             }
         }
         HorizontalDivider()
+    }
+}
+
+@Preview
+@Composable
+fun WiFiScannerContentLoading() {
+    NordicTheme {
+        WiFiScannerContent(
+            state = WifiScannerViewState(),
+            isGroupedBySsid = false,
+            onEvent = {}
+        )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.R)
+@Preview
+@Composable
+fun WiFiScannerContentNetworks() {
+    NordicTheme {
+        WiFiScannerContent(
+            state = WifiScannerViewState(
+                networks = Success(
+                    listOf(
+                        ScanResult().apply {
+                            SSID = "Network 1"
+                            BSSID = "00:11:22:33:44:55"
+                            level = -50
+                            frequency = 2437
+                            capabilities = "[WPA2-PSK-CCMP][ESS]"
+                        },
+                        ScanResult().apply {
+                            SSID = "Network 2"
+                            BSSID = "00:11:22:33:44:56"
+                            level = -60
+                            frequency = 2437
+                            capabilities = "[WPA2-PSK-CCMP][ESS]"
+                        }
+                    )
+                )
+            ),
+            isGroupedBySsid = false,
+            onEvent = {}
+        )
     }
 }

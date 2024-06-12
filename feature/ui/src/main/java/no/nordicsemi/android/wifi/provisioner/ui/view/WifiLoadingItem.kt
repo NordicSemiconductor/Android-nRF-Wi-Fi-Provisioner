@@ -92,18 +92,6 @@ fun WifiLoadingItem() {
                     .applyPlaceholder()
             )
 
-            Spacer(modifier = Modifier.size(8.dp))
-
-            Box(
-                modifier = Modifier
-                    .padding(end = 32.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(MaterialTheme.colorScheme.outline)
-                    .fillMaxWidth()
-                    .height(14.dp)
-                    .applyPlaceholder()
-            )
-
             Spacer(modifier = Modifier.size(2.dp))
         }
     }

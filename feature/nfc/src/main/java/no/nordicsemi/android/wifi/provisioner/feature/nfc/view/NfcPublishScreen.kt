@@ -100,13 +100,13 @@ internal fun NfcPublishScreen() {
                                 title = stringResource(id = R.string.ssid_title),
                                 text = wifiData.ssid
                             )
-                            if (wifiData.password.isNotEmpty()) {
+                            if (wifiData.password != null) {
                                 NfcPasswordRow(title = stringResource(id = R.string.password_title))
                             }
-                            if (wifiData.macAddress.isNotEmpty()) {
+                            wifiData.macAddress?.let { address ->
                                 NfcTextRow(
                                     title = stringResource(id = R.string.mac_address),
-                                    text = wifiData.macAddress.uppercase()
+                                    text = address.uppercase()
                                 )
                             }
                             NfcTextRow(
@@ -142,7 +142,7 @@ internal fun NfcPublishScreen() {
                                             iconRightPadding = 24.dp,
                                         )
                                         Text(
-                                            text = if (e.message.length > 35) e.message.slice(0..35) else e.message,
+                                            text = e.message,
                                             modifier = Modifier
                                                 .alpha(0.7f)
                                                 .padding(start = 48.dp),

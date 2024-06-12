@@ -76,8 +76,10 @@ internal fun PasswordDialog(
                     label = stringResource(id = R.string.password),
                     placeholder = stringResource(id = R.string.password_placeholder),
                     showPassword = showPassword,
-                    isError = isPasswordEmpty && password.trim().isEmpty(),
-                    errorMessage = stringResource(id = R.string.password_error),
+                    error = if (isPasswordEmpty)
+                        stringResource(id = R.string.password_error)
+                    else
+                        null,
                     onShowPassChange = { showPassword = !showPassword },
                     onUpdate = {
                         password = it
@@ -91,12 +93,14 @@ internal fun PasswordDialog(
                 onClick = {
                     onCancelClick()
                 }
-            ) { Text(text = stringResource(id = R.string.cancel)) }
+            ) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    if (password.trim().isEmpty()) {
+                    if (password.isEmpty()) {
                         isPasswordEmpty = true
                     } else {
                         onConfirmClick(
@@ -110,7 +114,9 @@ internal fun PasswordDialog(
                         )
                     }
                 }
-            ) { Text(text = stringResource(id = R.string.confirm)) }
+            ) {
+                Text(text = stringResource(id = R.string.confirm))
+            }
         }
     )
 }
