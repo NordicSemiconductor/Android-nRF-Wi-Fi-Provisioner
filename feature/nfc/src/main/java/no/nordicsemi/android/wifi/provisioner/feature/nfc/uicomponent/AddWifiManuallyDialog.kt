@@ -45,7 +45,7 @@ internal fun AddWifiManuallyDialog(
     onConfirmClick: (WifiData) -> Unit,
 ) {
     var ssid by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf<String?>(null) }
     var showPassword by rememberSaveable { mutableStateOf(false) }
     var isPasswordEmpty by rememberSaveable { mutableStateOf(false) }
     var authMode by rememberSaveable { mutableStateOf("WPA2-Personal") } // default to WPA2-Personal.
@@ -97,7 +97,7 @@ internal fun AddWifiManuallyDialog(
                 if (authMode.lowercase() != "open") {
                     // Show the password field.
                     PasswordInputField(
-                        input = password,
+                        input = password ?: "",
                         label = stringResource(id = R.string.password),
                         placeholder = stringResource(id = R.string.password_placeholder),
                         isError = isPasswordEmpty && password.trim().isEmpty(),
@@ -108,7 +108,7 @@ internal fun AddWifiManuallyDialog(
                     )
                 } else {
                     // Clear the password if the authentication mode is open.
-                    password = ""
+                    password = null
                 }
 
                 // Show the MAC address field.
@@ -162,7 +162,7 @@ internal fun AddWifiManuallyDialog(
                         else -> onConfirmClick(
                             WifiData(
                                 ssid = ssid,
-                                macAddress = macAddress.text,
+                                macAddress = macAddress.text.ifBlank { null },
                                 password = password,
                                 authType = authMode.toAuthenticationMode(),
                                 encryptionMode = if (authMode.lowercase() == "open")

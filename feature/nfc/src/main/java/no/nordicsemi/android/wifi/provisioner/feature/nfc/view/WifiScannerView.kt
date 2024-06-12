@@ -269,7 +269,7 @@ private fun NetworkItem(
                     val wifiData = WifiData(
                         ssid = network.SSID,
                         macAddress = network.BSSID,
-                        password = "", // Empty password for open networks
+                        password = null,
                         authType = WifiAuthTypeBelowTiramisu.OPEN,
                         encryptionMode = EncryptionMode.NONE
                     )

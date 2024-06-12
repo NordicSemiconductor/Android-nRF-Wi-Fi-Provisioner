@@ -74,11 +74,11 @@ class NdefMessageBuilder {
         val ssid: String = wifiNetwork.ssid
         val ssidSize = ssid.toByteArray().size.toShort()
         val authType: Short = getAuthBytes(wifiNetwork.authType)
-        val networkKey: String = wifiNetwork.password
+        val networkKey: String = wifiNetwork.password ?: ""
         val networkKeySize = networkKey.toByteArray().size.toShort()
         val encType = getEncByte(wifiNetwork.encryptionMode)
 
-        val macAddressBufferSize = if (wifiNetwork.macAddress.isNotEmpty()) 10 else 0
+        val macAddressBufferSize = if (wifiNetwork.macAddress != null) 10 else 0
         /* Fill buffer */
         // size of required credential attributes
         val bufferSize = 24 + ssidSize + networkKeySize + macAddressBufferSize
@@ -109,9 +109,9 @@ class NdefMessageBuilder {
         buffer.put(networkKey.toByteArray())
 
         // Add MAC address if available
-        if (wifiNetwork.macAddress.isNotEmpty()) {
+        wifiNetwork.macAddress?.let { address ->
             // Convert the MAC address string to a ByteArray
-            val macAddress = wifiNetwork.macAddress.split(":")
+            val macAddress = address.split(":")
                 .map { it.toInt(16).toByte() }
                 .toByteArray()
 

@@ -125,7 +125,7 @@ internal class WifiScannerViewModel @Inject constructor(
                         WifiData(
                             ssid = event.network.SSID,
                             macAddress = event.network.BSSID,
-                            password = "", // Empty password for open network.
+                            password = null, // Empty password for open network.
                             authType = WifiAuthTypeBelowTiramisu.OPEN,
                             encryptionMode = EncryptionMode.NONE // No encryption for open network.
                         )
