@@ -65,6 +65,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.common.theme.NordicTheme
 
 @Composable
 fun ErrorDataItem(
@@ -251,14 +252,27 @@ private fun ExpandedIcon(isExpanded: Boolean) {
     Icon(imageVector = icon, contentDescription = "")
 }
 
-@Preview
+@Preview(heightDp = 200)
 @Composable
 private fun DataItemPreview() {
-    DataItem(imageVector = Icons.Outlined.Code, title = "Title", description = "Description") { }
+    NordicTheme {
+        DataItem(
+            imageVector = Icons.Outlined.Code,
+            title = "Title",
+            description = "Description"
+        ) { }
+    }
 }
 
-@Preview
+@Preview(heightDp = 200)
 @Composable
 private fun DataItemExpandedPreview() {
-    DataItem(imageVector = Icons.Outlined.Code, title = "Title", description = "Description") { }
+    NordicTheme {
+        DataItem(
+            imageVector = Icons.Outlined.Code,
+            title = "Title",
+            description = "Description",
+            isInitiallyExpanded = true
+        ) { }
+    }
 }
