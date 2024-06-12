@@ -43,6 +43,5 @@ plugins {
     alias(libs.plugins.nordic.hilt) apply false
     alias(libs.plugins.nordic.feature) apply false
     alias(libs.plugins.kotlin.android) apply false
-    id("org.jetbrains.kotlin.jvm") version "1.9.21" apply false
     alias(libs.plugins.kotlin.parcelize) apply false
 }
