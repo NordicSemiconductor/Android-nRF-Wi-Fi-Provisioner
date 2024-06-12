@@ -61,6 +61,7 @@ class WifiManagerRepository(
      * This method is used to start the wifi scan.
      */
     fun onScan() {
+        _networkState.value = Loading
         wifiManager.startScan()
     }
 }

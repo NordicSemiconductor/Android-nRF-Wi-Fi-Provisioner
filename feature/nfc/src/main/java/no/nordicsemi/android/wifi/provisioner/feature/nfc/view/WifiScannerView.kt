@@ -198,7 +198,7 @@ private fun WiFiScannerContent(
             is Success -> {
                 // Show the list of available networks.
                 PullToRefreshBox(
-                    isRefreshing = state.isRefreshing,
+                    isRefreshing = state.networks == Loading,
                     onRefresh = { // Refreshing
                         onEvent(RefreshWiFiNetworksEvent)
                     },
