@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.wifi.ScanResult
 import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -25,7 +24,8 @@ class WifiManagerRepository(
 ) {
     private var wifiManager: WifiManager =
         context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-    private val _networkState = MutableStateFlow<NetworkState<List<ScanResult>>>(Loading())
+
+    private val _networkState = MutableStateFlow<NetworkState>(Success(emptyList()))
     val networkState = _networkState.asStateFlow()
 
     /**

@@ -69,7 +69,7 @@ internal data class OnSortOptionSelected(val sortOption: WifiSortOption) : WifiS
  * @param sortOption The selected sort option.
  */
 data class WifiScannerViewState(
-    val networks: NetworkState<List<ScanResult>> = Loading(),
+    val networks: NetworkState = Loading,
     val selectedNetwork: ScanResult? = null,
     val sortOption: WifiSortOption = WifiSortOption.RSSI,
     val isRefreshing: Boolean = false,
