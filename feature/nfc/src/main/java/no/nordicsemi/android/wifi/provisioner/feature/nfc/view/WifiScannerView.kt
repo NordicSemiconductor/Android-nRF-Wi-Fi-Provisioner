@@ -254,6 +254,11 @@ private fun NetworkItem(
     val isOpen = securityType.contains(WifiAuthTypeBelowTiramisu.OPEN) or
             securityType.contains(WifiAuthTypeTiramisuOrAbove.OPEN)
 
+    // Skip hidden networks.
+    if (network.SSID.isEmpty()) {
+        return
+    }
+    // Show the network.
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
