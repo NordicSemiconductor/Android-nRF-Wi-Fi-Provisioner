@@ -33,35 +33,26 @@ internal fun NfcTextRow(
     }
 }
 
-@Preview
-@Composable
-private fun NfcTextRowPreview() {
-    NordicTheme {
-        NfcTextRow(
-            title = "Language",
-            text = "en",
-        )
-    }
-}
-
 @Composable
 internal fun NfcPasswordRow(
     title: String,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-    ) {
-        Text(
-            text = title,
-            modifier = Modifier,
-            style = MaterialTheme.typography.titleMedium
-        )
-        Text(
-            text = "********", // Hide the password with asterisks.
-            modifier = Modifier.alpha(0.7f),
-            style = MaterialTheme.typography.bodySmall,
+    // Hide the password with asterisks.
+    NfcTextRow(
+        title = title,
+        text = "********",
+        modifier = modifier,
+    )
+}
+
+@Preview
+@Composable
+private fun NfcTextRowPreview() {
+    NordicTheme {
+        NfcTextRow(
+            title = "Title",
+            text = "Value",
         )
     }
 }
