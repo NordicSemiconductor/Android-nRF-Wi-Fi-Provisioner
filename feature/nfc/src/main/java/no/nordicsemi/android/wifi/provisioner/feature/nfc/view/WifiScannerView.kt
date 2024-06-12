@@ -235,12 +235,15 @@ internal fun WifiList(
     onEvent: (WifiScannerViewEvent) -> Unit
 ) {
     networks.forEach { network ->
-        NetworkItem(
-            network = network,
-            modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
-            onEvent = onEvent
-        )
-        HorizontalDivider()
+        // Skip hidden networks.
+        if (network.SSID.isNotEmpty()) {
+            NetworkItem(
+                network = network,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                onEvent = onEvent
+            )
+            HorizontalDivider()
+        }
     }
 }
 
@@ -254,10 +257,6 @@ private fun NetworkItem(
     val isOpen = securityType.contains(WifiAuthTypeBelowTiramisu.OPEN) or
             securityType.contains(WifiAuthTypeTiramisuOrAbove.OPEN)
 
-    // Skip hidden networks.
-    if (network.SSID.isEmpty()) {
-        return
-    }
     // Show the network.
     Row(
         verticalAlignment = Alignment.CenterVertically,
