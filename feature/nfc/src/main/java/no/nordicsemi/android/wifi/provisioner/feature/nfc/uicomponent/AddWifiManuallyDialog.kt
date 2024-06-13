@@ -106,7 +106,10 @@ internal fun AddWifiManuallyDialog(
                             null,
                         showPassword = showPassword,
                         onShowPassChange = { showPassword = !showPassword },
-                        onUpdate = { password = it },
+                        onUpdate = {
+                            password = it
+                            isPasswordEmpty = password?.isEmpty() == true
+                        },
                     )
                 } else {
                     // Clear the password if the authentication mode is open.
