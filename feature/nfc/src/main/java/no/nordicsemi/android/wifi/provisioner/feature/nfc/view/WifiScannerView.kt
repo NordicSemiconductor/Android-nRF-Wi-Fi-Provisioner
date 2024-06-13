@@ -205,6 +205,7 @@ private fun WiFiScannerContent(
                 ) {
                     Column(
                         modifier = Modifier
+                            .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                             .padding(bottom = 32.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
