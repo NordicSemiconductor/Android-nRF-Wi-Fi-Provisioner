@@ -98,7 +98,7 @@ fun HomeScreen() {
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             NordicAppBar(
-                text = stringResource(id = R.string.label_ble_provisioner)
+                text = stringResource(id = R.string.app_name)
             )
         },
         snackbarHost = {
