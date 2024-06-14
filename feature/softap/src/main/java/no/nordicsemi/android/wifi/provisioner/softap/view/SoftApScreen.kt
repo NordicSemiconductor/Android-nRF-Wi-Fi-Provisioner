@@ -1,6 +1,7 @@
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
 import android.content.Context
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
@@ -35,6 +36,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
+import no.nordicsemi.android.common.permissions.wifi.RequireWifi
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.ProgressItem
 import no.nordicsemi.android.common.theme.view.ProgressItemStatus
@@ -98,52 +100,60 @@ fun SoftApScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            OutlinedCard(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(vertical = 16.dp, horizontal = 16.dp),
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    ConfigureSoftAp(
-                        configureState = state.configureState,
-                        connectionState = state.connectionState,
-                        isConnectionRequested = state.isConnectionRequested,
-                        ssidName = ssidName,
-                        onSsidChange = { ssidName = it }
-                    )
-                    ConnectToSoftAp(
-                        connectionState = state.connectionState,
-                        serviceDiscoveryState = state.discoveringServicesState,
-                        isConnectionRequested = state.isConnectionRequested,
-                        start = {
-                            start(ssidName, Open)
-                        }
-                    )
-                    SelectWifi(
-                        provisioningState = state.provisionState,
-                        selectWifiState = state.selectWifiState,
-                        providePasswordState = state.providePasswordState,
-                        wifiData = state.selectedWifi,
-                        onSelectWifiPressed = onSelectWifiPressed,
-                    )
-                    SetPassphrase(
-                        provisioningState = state.provisionState,
-                        providePasswordState = state.providePasswordState,
-                        wifiData = state.selectedWifi,
-                        password = state.password,
-                        onPasswordEntered = onPasswordEntered
-                    )
-                    Provisioning(
-                        provisioningState = state.provisionState,
-                        isProvisioningRequested = state.isProvisioningRequested,
-                        onProvisionPressed = onProvisionPressed
-                    )
-                    Verify(
-                        verificationState = state.verifyState,
-                        isVerificationRequested = state.isVerificationRequested,
-                        verify = verify
-                    )
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
+        ) {
+            RequireWifi {
+                OutlinedCard(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(vertical = 16.dp),
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        ConfigureSoftAp(
+                            configureState = state.configureState,
+                            connectionState = state.connectionState,
+                            isConnectionRequested = state.isConnectionRequested,
+                            ssidName = ssidName,
+                            onSsidChange = { ssidName = it }
+                        )
+                        ConnectToSoftAp(
+                            connectionState = state.connectionState,
+                            serviceDiscoveryState = state.discoveringServicesState,
+                            isConnectionRequested = state.isConnectionRequested,
+                            start = {
+                                start(ssidName, Open)
+                            }
+                        )
+                        SelectWifi(
+                            provisioningState = state.provisionState,
+                            isProvisioningRequested = state.isProvisioningRequested,
+                            selectWifiState = state.selectWifiState,
+                            providePasswordState = state.providePasswordState,
+                            wifiData = state.selectedWifi,
+                            onSelectWifiPressed = onSelectWifiPressed,
+                        )
+                        SetPassphrase(
+                            provisioningState = state.provisionState,
+                            providePasswordState = state.providePasswordState,
+                            isProvisioningRequested = state.isProvisioningRequested,
+                            wifiData = state.selectedWifi,
+                            password = state.password,
+                            onPasswordEntered = onPasswordEntered
+                        )
+                        Provisioning(
+                            provisioningState = state.provisionState,
+                            isProvisioningRequested = state.isProvisioningRequested,
+                            onProvisionPressed = onProvisionPressed
+                        )
+                        Verify(
+                            verificationState = state.verifyState,
+                            isVerificationRequested = state.isVerificationRequested,
+                            verify = verify
+                        )
+                    }
                 }
             }
         }
@@ -171,7 +181,6 @@ private fun showSnackBar(
     }
 }
 
-
 @Composable
 private fun ConfigureSoftAp(
     configureState: WizardStepState,
@@ -183,16 +192,13 @@ private fun ConfigureSoftAp(
     var showDialog by rememberSaveable { mutableStateOf(false) }
     WizardStepComponent(
         icon = Icons.Default.Settings,
-        title = stringResource(R.string.configure),
+        title = stringResource(R.string.section_configure),
         state = configureState,
-        decor = if (connectionState != WizardStepState.COMPLETED && !isConnectionRequested) {
-            WizardStepAction.Action(
-                text = stringResource(id = R.string.edit_ssid),
-                onClick = {
-                    showDialog = true
-                }
-            )
-        } else null,
+        decor = WizardStepAction.Action(
+            text = stringResource(id = R.string.edit_ssid),
+            onClick = { showDialog = true },
+            enabled = connectionState != WizardStepState.COMPLETED && !isConnectionRequested
+        ),
         showVerticalDivider = true
     ) {
         Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: $ssidName")
@@ -220,16 +226,15 @@ private fun ConnectToSoftAp(
 ) {
     WizardStepComponent(
         icon = Icons.Default.Wifi,
-        title = stringResource(id = R.string.connect),
+        title = stringResource(id = R.string.section_connect),
         state = connectionState,
-        decor = if (connectionState == WizardStepState.CURRENT && !isConnectionRequested) {
-            WizardStepAction.Action(
-                text = stringResource(id = R.string.start),
-                onClick = start,
-            )
-        } else if (isConnectionRequested && serviceDiscoveryState != WizardStepState.COMPLETED) {
+        decor = if (isConnectionRequested && serviceDiscoveryState != WizardStepState.COMPLETED) {
             WizardStepAction.ProgressIndicator
-        } else null,
+        } else WizardStepAction.Action(
+            text = stringResource(id = R.string.action_start),
+            onClick = start,
+            enabled = connectionState == WizardStepState.CURRENT && !isConnectionRequested
+        ),
         showVerticalDivider = false,
     ) {
         ProgressItem(
@@ -266,6 +271,7 @@ private fun ConnectToSoftAp(
 @Composable
 private fun SelectWifi(
     provisioningState: WizardStepState,
+    isProvisioningRequested: Boolean,
     selectWifiState: WizardStepState,
     providePasswordState: WizardStepState,
     wifiData: WifiData?,
@@ -273,14 +279,16 @@ private fun SelectWifi(
 ) {
     WizardStepComponent(
         icon = Icons.Default.WifiFind,
-        title = stringResource(id = R.string.wifi_network),
+        title = stringResource(id = R.string.section_network),
         state = selectWifiState,
-        decor = if (provisioningState == WizardStepState.CURRENT ||
-                    selectWifiState == WizardStepState.CURRENT ||
-                    providePasswordState == WizardStepState.CURRENT) {
+        decor = if (selectWifiState == WizardStepState.CURRENT
+                 || providePasswordState == WizardStepState.CURRENT
+                 || provisioningState == WizardStepState.CURRENT
+                 || providePasswordState == WizardStepState.COMPLETED) {
             WizardStepAction.Action(
-                text = stringResource(id = R.string.select),
-                onClick = onSelectWifiPressed
+                text = stringResource(id = R.string.action_select),
+                onClick = onSelectWifiPressed,
+                enabled = !isProvisioningRequested,
             )
         } else null,
         showVerticalDivider = true
@@ -308,6 +316,7 @@ private fun SelectWifi(
 private fun SetPassphrase(
     providePasswordState: WizardStepState,
     provisioningState: WizardStepState,
+    isProvisioningRequested: Boolean,
     wifiData: WifiData?,
     password: String? = null,
     onPasswordEntered: (String) -> Unit,
@@ -315,12 +324,15 @@ private fun SetPassphrase(
     var showDialog by rememberSaveable { mutableStateOf(false) }
     WizardStepComponent(
         icon = wifiData?.authMode?.toImageVector() ?: Icons.Default.WifiPassword,
-        title = stringResource(id = R.string.security),
+        title = stringResource(id = R.string.section_security),
         state = providePasswordState,
-        decor = if (provisioningState == WizardStepState.CURRENT || providePasswordState == WizardStepState.CURRENT) {
+        decor = if (providePasswordState == WizardStepState.CURRENT
+                 || provisioningState == WizardStepState.CURRENT
+                 || provisioningState == WizardStepState.COMPLETED) {
             WizardStepAction.Action(
-                text = stringResource(id = R.string.set),
-                onClick = { showDialog = true }
+                text = stringResource(id = R.string.action_set_password),
+                onClick = { showDialog = true },
+                enabled = wifiData?.authMode != AuthModeDomain.OPEN && !isProvisioningRequested
             )
         } else null,
         showVerticalDivider = true
@@ -331,25 +343,16 @@ private fun SetPassphrase(
                 text = "Security: ${wifiData.authMode.toDisplayString()}"
             )
 
-            if (wifiData.authMode == AuthModeDomain.OPEN) {
+            if (wifiData.authMode != AuthModeDomain.OPEN && password != null) {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(R.string.empty_passphrase_rationale)
+                    text = stringResource(R.string.set_passphrase_value)
                 )
-            } else
-                if (password != null) {
-                    Text(
-                        style = MaterialTheme.typography.bodyMedium,
-                        text = stringResource(
-                            R.string.set_passphrase_value,
-                            password.toPassphrase()
-                        )
-                    )
-                }
+            }
         } else {
             Text(
                 style = MaterialTheme.typography.bodyMedium,
-                text = stringResource(R.string.se_wifi_passphrase)
+                text = stringResource(R.string.set_wifi_passphrase)
             )
         }
         if (showDialog) {
@@ -372,14 +375,16 @@ private fun Provisioning(
 ) {
     WizardStepComponent(
         icon = Icons.Outlined.NetworkCheck,
-        title = stringResource(id = R.string.provision),
+        title = stringResource(id = R.string.section_provision),
         state = provisioningState,
         decor = if (isProvisioningRequested && provisioningState == WizardStepState.CURRENT) {
             WizardStepAction.ProgressIndicator
-        } else if (provisioningState == WizardStepState.CURRENT) {
+        } else if (provisioningState == WizardStepState.CURRENT
+                || provisioningState == WizardStepState.COMPLETED) {
             WizardStepAction.Action(
-                text = stringResource(id = R.string.provision),
-                onClick = onProvisionPressed
+                text = stringResource(id = R.string.action_provision),
+                onClick = onProvisionPressed,
+                enabled = !isProvisioningRequested
             )
         } else null,
         showVerticalDivider = false
@@ -411,15 +416,16 @@ private fun Verify(
 ) {
     WizardStepComponent(
         icon = Icons.Default.Verified,
-        title = stringResource(id = R.string.verify),
+        title = stringResource(id = R.string.section_verify),
         state = verificationState,
-        decor = if (verificationState == WizardStepState.CURRENT) {
-            if (isVerificationRequested) {
+        decor = if (verificationState == WizardStepState.CURRENT || verificationState == WizardStepState.COMPLETED) {
+            if (isVerificationRequested && verificationState == WizardStepState.CURRENT) {
                 WizardStepAction.ProgressIndicator
             } else {
                 WizardStepAction.Action(
-                    text = stringResource(id = R.string.verify),
-                    onClick = verify
+                    text = stringResource(id = R.string.action_verify),
+                    onClick = verify,
+                    enabled = !isVerificationRequested,
                 )
             }
         } else null,
@@ -441,8 +447,4 @@ private fun Verify(
             iconRightPadding = 24.dp,
         )
     }
-}
-
-private fun String.toPassphrase(): String {
-    return "*".repeat(length)
 }

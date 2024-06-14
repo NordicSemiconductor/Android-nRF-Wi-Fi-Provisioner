@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
     implementation(libs.nordic.logger)
+    implementation(libs.nordic.permissions.wifi)
 
     implementation(libs.androidx.compose.material.iconsExtended)
 
