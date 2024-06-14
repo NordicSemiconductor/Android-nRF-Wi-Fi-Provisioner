@@ -114,7 +114,6 @@ fun PasswordDialog(onEvent: (PasswordDialogEvent) -> Unit) {
     )
 }
 
-
 @Composable
 fun PasswordDialog(
     onConfirmPressed: (String) -> Unit,

@@ -30,53 +30,52 @@
   -->
 
 <resources>
-    <string name="label_ble_provisioner">Provision over Bluetooth LE</string>
+    <string name="provision_over_ble">Provision over Bluetooth LE</string>
 
-    <string name="change">Change</string>
-    <string name="ic_nrf70">An icon of nRF70 Series</string>
+    <string name="action_select">Select</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_change">Change</string>
+    <string name="action_set_password">Set password</string>
+    <string name="action_provision">Provision</string>
+    <string name="action_unprovision">Unprovision</string>
 
-    <string name="section_device">Device status</string>
-    <string name="section_provisioning">Provisioning data</string>
-    <string name="section_status">Upload status</string>
+    <string name="section_device">Device</string>
+    <string name="section_connect">Connect</string>
+    <string name="section_network">Wi-Fi Network</string>
+    <string name="select_wifi">Select Access Point</string>
+    <string name="status_info">Status: %s</string>
+    <string name="section_security">Security</string>
+    <string name="security">Security: %s</string>
+    <string name="set_password">Set Wi-Fi password</string>
+    <string name="password_encoded">Password: ********</string>
+    <string name="section_provision">Provision</string>
 
     <string name="unknown_error">Unknown error</string>
 
-    <string name="start">Start</string>
-    <string name="next_device">Next device</string>
-    <string name="finish">Finish</string>
-    <string name="set_password">Set password</string>
-    <string name="password">Password</string>
-    <string name="password_encoded">**** ****</string>
     <string name="dismiss">Dismiss</string>
     <string name="accept">Accept</string>
     <string name="clear">Clear</string>
 
-    <string name="device_info">Device status</string>
-    <string name="disconnected">Disconnected</string>
-    <string name="status_info">Wi-Fi status</string>
-    <string name="selected_wifi">Selected Wi-Fi</string>
-    <string name="start_provisioning">Start provisioning</string>
-    <string name="dk_version">Version</string>
-    <string name="wifi_scanning">Scanning error</string>
-    <string name="unprovision">Unprovision</string>
-    <string name="password_select">Select password</string>
-    <string name="provision">Provision</string>
-    <string name="provision_status">Provisioning status</string>
-    <string name="unprovision_status">Unrovisioning status</string>
-    <string name="success">Success</string>
-
     <string name="cd_data_item_icon">Icon representing data available in the section.</string>
 
-    <string name="wifi_status_authentication">Authentication</string>
-    <string name="wifi_status_association">Association</string>
+    <string name="wifi_status_authenticate">Authenticate</string>
+    <string name="wifi_status_authenticating">Authenticating…</string>
+    <string name="wifi_status_authenticated">Authenticated</string>
+    <string name="wifi_status_associate">Associate</string>
+    <string name="wifi_status_associating">Associating…</string>
+    <string name="wifi_status_associated">Associated</string>
+    <string name="wifi_status_obtain_ip">Obtain IP</string>
     <string name="wifi_status_obtaining_ip">Obtaining IP</string>
+    <string name="wifi_status_obtained_ip">Obtained IP</string>
+    <string name="wifi_status_connect">Connect</string>
+    <string name="wifi_status_connecting">Connecting…</string>
     <string name="wifi_status_connected">Connected</string>
     <string name="wifi_status_disconnected">Disconnected</string>
     <string name="wifi_status_unprovisioned">Unprovisioned</string>
     <string name="wifi_status_error">Error occurred during provisioning.</string>
     <string name="cd_wifi_icon">Icon indicating wifi and it\'s authentication method.</string>
 
-    <string name="wifi_title">Wi-Fi</string>
+    <string name="wifi_title">Select Wi-Fi</string>
 
     <string name="ip_4">IPv4: %s</string>
     <string name="ssid">SSID: %s</string>
@@ -97,6 +96,7 @@
     <string name="connection_info">Connection info</string>
     <string name="status_title">Wi-Fi info</string>
 
+    <string name="error_scanning_title">Scanning error</string>
     <string name="scan_param_title">Scan params</string>
     <string name="scan_param_passive">Passive: %s</string>
     <string name="scan_param_period_ms">Period: %s [ms]</string>
@@ -105,17 +105,7 @@
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
 
-    <string name="state_authentication">Authentication</string>
-    <string name="state_association">Association</string>
-    <string name="state_obtaining_ip">Obtaining IP</string>
-    <string name="result_state">Result</string>
-    <string name="state_connected">Connected</string>
-    <string name="state_connection_failed">Connection failed</string>
-
     <string name="version">V %d</string>
-    <string name="select_wifi">Select Wi-Fi</string>
 
     <string name="persistent_storage">Persistent storage</string>
-
-
 </resources>

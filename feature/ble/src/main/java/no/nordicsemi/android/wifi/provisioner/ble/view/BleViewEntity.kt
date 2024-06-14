@@ -38,6 +38,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
 import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.view.ViewEntity
 
@@ -51,20 +52,8 @@ data class BleViewEntity(
     override val showPasswordDialog: Boolean? = null,
     override val provisioningStatus: Resource<WifiConnectionStateDomain>? = null,
     val unprovisioningStatus: Resource<Unit>? = null,
-    override val isConnected: Boolean = true
+    override val isConnected: Boolean = false
 ) : ViewEntity {
-
-    fun isStatusSuccess(): Boolean {
-        return device != null && version is Success && status is Success
-    }
-
-    fun isUnprovisioning(): Boolean {
-        return device != null
-                && version is Success
-                && status is Success
-                && status.data.wifiInfo != null
-                && unprovisioningStatus !is Success
-    }
 
     fun isRunning(): Boolean {
         return device != null && version == null
@@ -77,16 +66,32 @@ data class BleViewEntity(
     override fun hasFinished(): Boolean {
         val status = (provisioningStatus as? Success)?.data
         return !isConnected
-                || status == WifiConnectionStateDomain.CONNECTED
-                || status == WifiConnectionStateDomain.CONNECTION_FAILED
+                || status is WifiConnectionStateDomain.Connected
+                || status is WifiConnectionStateDomain.ConnectionFailed
                 || unprovisioningStatus is Success
     }
 
-    override fun hasFinishedWithSuccess(): Boolean {
-        val status = (provisioningStatus as? Success)?.data
+    override fun isProvisioningAvailable(): Boolean {
         return isConnected
-                && (status == WifiConnectionStateDomain.CONNECTED
-                || status == WifiConnectionStateDomain.CONNECTION_FAILED
-                || unprovisioningStatus is Success)
+                && network != null
+                && provisioningStatus == null
+                && (password != null || !network.isPasswordRequired())
+    }
+
+    override fun isProvisioningInProgress(): Boolean {
+        return isConnected
+                && provisioningStatus != null
+                && !isProvisioningComplete()
+                && !hasProvisioningFailed()
+    }
+
+    override fun isProvisioningComplete(): Boolean {
+        val status = (provisioningStatus as? Success)?.data
+        return isConnected && (status is WifiConnectionStateDomain.Connected
+                || status is WifiConnectionStateDomain.ConnectionFailed)
+    }
+
+    override fun hasProvisioningFailed(): Boolean {
+        return provisioningStatus is Error
     }
 }

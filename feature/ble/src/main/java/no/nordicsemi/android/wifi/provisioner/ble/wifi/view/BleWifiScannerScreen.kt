@@ -48,6 +48,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -62,9 +63,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.NordicAppBar
+import no.nordicsemi.android.common.theme.view.WarningView
 import no.nordicsemi.android.common.theme.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ui.ErrorDataItem
 import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
@@ -122,13 +123,11 @@ private fun LoadingItem() {
 
 @Composable
 private fun ErrorItem(error: Throwable) {
-    Box(modifier = Modifier.padding(16.dp)) {
-        ErrorDataItem(
-            iconRes = R.drawable.ic_error,
-            title = stringResource(id = R.string.wifi_scanning),
-            error = error
-        )
-    }
+    WarningView(
+        imageVector = Icons.Default.Warning,
+        title = stringResource(id = R.string.error_scanning_title),
+        hint = error.message ?: stringResource(id = R.string.unknown_error),
+    ) {}
 }
 
 @Composable
@@ -222,14 +221,14 @@ private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent
         val displayRssi = scanRecord?.rssi ?: records.biggestRssi
 
         Row(modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .clickable { showSelectChannelDialog.value = true }
-            .border(
-                1.dp,
-                MaterialTheme.colorScheme.onSurface,
-                RoundedCornerShape(10.dp)
-            )
-            .padding(9.dp),
+                .clip(RoundedCornerShape(10.dp))
+                .clickable { showSelectChannelDialog.value = true }
+                .border(
+                    1.dp,
+                    MaterialTheme.colorScheme.onSurface,
+                    RoundedCornerShape(10.dp)
+                )
+                .padding(9.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(getWiFiRes(displayRssi), contentDescription = "")

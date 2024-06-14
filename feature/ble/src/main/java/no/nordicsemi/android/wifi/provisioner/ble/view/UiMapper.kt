@@ -31,39 +31,41 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.view
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SignalWifi4Bar
-import androidx.compose.material.icons.filled.SignalWifiOff
-import androidx.compose.material.icons.filled.SignalWifiStatusbarConnectedNoInternet4
-import androidx.compose.material.icons.filled.WifiFind
-import androidx.compose.material.icons.outlined.SignalWifiStatusbarConnectedNoInternet4
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import no.nordicsemi.android.common.theme.view.ProgressItemStatus
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionFailureReasonDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
-import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+
 
 @Composable
-fun WifiConnectionStateDomain?.toImageVector() = when (this) {
-    WifiConnectionStateDomain.DISCONNECTED -> Icons.Outlined.SignalWifiStatusbarConnectedNoInternet4
-    WifiConnectionStateDomain.AUTHENTICATION,
-    WifiConnectionStateDomain.ASSOCIATION,
-    WifiConnectionStateDomain.OBTAINING_IP -> Icons.Default.WifiFind
-    WifiConnectionStateDomain.CONNECTED -> Icons.Default.SignalWifi4Bar
-    WifiConnectionStateDomain.CONNECTION_FAILED -> Icons.Default.SignalWifiStatusbarConnectedNoInternet4
-    null -> Icons.Default.SignalWifiOff
-}
-
-@Composable
-fun WifiConnectionStateDomain?.toDisplayString() = when (this) {
-    WifiConnectionStateDomain.DISCONNECTED -> R.string.wifi_status_disconnected
-    WifiConnectionStateDomain.AUTHENTICATION -> R.string.wifi_status_authentication
-    WifiConnectionStateDomain.ASSOCIATION -> R.string.wifi_status_association
-    WifiConnectionStateDomain.OBTAINING_IP -> R.string.wifi_status_obtaining_ip
-    WifiConnectionStateDomain.CONNECTED -> R.string.wifi_status_connected
-    WifiConnectionStateDomain.CONNECTION_FAILED -> R.string.wifi_status_error
-    null -> R.string.wifi_status_unprovisioned
-}.let { stringResource(id = it) }
+fun WifiConnectionStateDomain?.toDisplayString(
+    state: ProgressItemStatus = ProgressItemStatus.SUCCESS
+) = when (this) {
+        WifiConnectionStateDomain.Authentication -> when (state) {
+            ProgressItemStatus.WORKING -> R.string.wifi_status_authenticating
+            ProgressItemStatus.SUCCESS -> R.string.wifi_status_authenticated
+            else -> R.string.wifi_status_authenticate
+        }
+        WifiConnectionStateDomain.Association -> when (state) {
+            ProgressItemStatus.WORKING -> R.string.wifi_status_associating
+            ProgressItemStatus.SUCCESS -> R.string.wifi_status_associated
+            else -> R.string.wifi_status_associate
+        }
+        WifiConnectionStateDomain.ObtainingIp -> when (state) {
+            ProgressItemStatus.WORKING -> R.string.wifi_status_obtaining_ip
+            ProgressItemStatus.SUCCESS -> R.string.wifi_status_obtained_ip
+            else -> R.string.wifi_status_obtain_ip
+        }
+        WifiConnectionStateDomain.Connected -> when (state) {
+            ProgressItemStatus.WORKING -> R.string.wifi_status_connecting
+            ProgressItemStatus.SUCCESS -> R.string.wifi_status_connected
+            else -> R.string.wifi_status_connect
+        }
+        WifiConnectionStateDomain.Disconnected -> R.string.wifi_status_disconnected
+        else -> R.string.wifi_status_unprovisioned
+    }.let { stringResource(id = it) }
 
 @Composable
 fun WifiConnectionFailureReasonDomain.toDisplayString() = when (this) {

@@ -105,7 +105,6 @@ fun HomeScreen() {
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
-
         when {
             !isLargeScreen && isLandscape -> {
                 SmallScreenLandscapeContent(
