@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="wifi_provision_over_nfc_appbar">Provision over NFC</string>
-    <string name="wifi_scanner_appbar">Wi-Fi networks</string>
+    <string name="wifi_scanner_appbar">Wi-Fi Access Points</string>
     <string name="ndef_publish_appbar">Publish</string>
 
     <string name="enter_wifi_credentials">Enter Wi-Fi credentials</string>
