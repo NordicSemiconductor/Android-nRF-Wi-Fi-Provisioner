@@ -25,4 +25,5 @@
     <string name="set_password">Set password</string>
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
+    <string name="password_empty">Password cannot be empty.</string>
 </resources>
