@@ -17,6 +17,7 @@ import no.nordicsemi.android.kotlin.ble.core.MockServerDevice
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
@@ -49,10 +50,10 @@ fun ConnectionSection(
             showVerticalDivider = false,
         ) {
             val pairingText = when {
-                state.device == null -> "Connect"
-                state.version is Loading -> "Pairing..."
-                !state.isConnected -> "Disconnected"
-                else -> "Connected"
+                state.device == null -> stringResource(id = R.string.connect)
+                state.version is Loading -> stringResource(id = R.string.connecting)
+                !state.isConnected -> stringResource(id = R.string.disconnected)
+                else -> stringResource(id = R.string.connected)
             }
             ProgressItem(
                 text = pairingText,
@@ -65,10 +66,10 @@ fun ConnectionSection(
                 iconRightPadding = 24.dp
             )
             val readingText = when {
-                !state.isConnected || state.version == null -> "Read version"
-                state.version is Error -> "Error: ${state.version.error.message ?: stringResource(id = R.string.unknown_error)}"
-                state.version is Success -> "Version: ${state.version.data.value}"
-                else -> "Reading version..."
+                !state.isConnected || state.version == null -> stringResource(id = R.string.read_version)
+                state.version is Error -> stringResource(id = RUI.string.error, state.version.error.message ?: stringResource(id = RUI.string.unknown_error))
+                state.version is Success -> stringResource(id = R.string.version, state.version.data.value)
+                else -> stringResource(id = R.string.reading_version)
             }
             ProgressItem(
                 text = readingText,

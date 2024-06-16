@@ -13,6 +13,7 @@ import no.nordicsemi.android.common.theme.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
@@ -108,7 +109,7 @@ private fun Resource<WifiConnectionStateDomain>?.getText(state: WifiConnectionSt
             }
         }
         is Error -> when (state) {
-            WifiConnectionStateDomain.Connected -> error.message ?: stringResource(id = R.string.unknown_error)
+            WifiConnectionStateDomain.Connected -> error.message ?: stringResource(id = RUI.string.unknown_error)
             else -> state.toDisplayString(status)
         }
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="unknown_error">Unknown error</string>
+    <string name="error">Error: %s</string>
 
     <string name="accept">Accept</string>
     <string name="dismiss">Dismiss</string>

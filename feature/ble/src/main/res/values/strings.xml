@@ -42,21 +42,21 @@
     <string name="section_device">Device</string>
     <string name="section_connect">Connect</string>
     <string name="section_network">Wi-Fi Network</string>
+    <string name="section_security">Security</string>
+    <string name="section_provision">Provision</string>
+
+    <string name="connect">Connect</string>
+    <string name="connecting">Pairing…</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="read_version">Read version</string>
+    <string name="reading_version">Reading version…</string>
+    <string name="version">Version: %d</string>
     <string name="select_wifi">Select Access Point</string>
     <string name="status_info">Status: %s</string>
-    <string name="section_security">Security</string>
     <string name="security">Security: %s</string>
     <string name="set_password">Set Wi-Fi password</string>
     <string name="password_encoded">Password: ********</string>
-    <string name="section_provision">Provision</string>
-
-    <string name="unknown_error">Unknown error</string>
-
-    <string name="dismiss">Dismiss</string>
-    <string name="accept">Accept</string>
-    <string name="clear">Clear</string>
-
-    <string name="cd_data_item_icon">Icon representing data available in the section.</string>
 
     <string name="wifi_status_authenticate">Authenticate</string>
     <string name="wifi_status_authenticating">Authenticating…</string>
@@ -72,20 +72,10 @@
     <string name="wifi_status_connected">Connected</string>
     <string name="wifi_status_disconnected">Disconnected</string>
     <string name="wifi_status_unprovisioned">Unprovisioned</string>
-    <string name="wifi_status_error">Error occurred during provisioning.</string>
-    <string name="cd_wifi_icon">Icon indicating wifi and it\'s authentication method.</string>
 
-    <string name="wifi_title">Select Wi-Fi</string>
-
-    <string name="ip_4">IPv4: %s</string>
-    <string name="ssid">SSID: %s</string>
-    <string name="bssid">BSSID: %s</string>
-    <string name="band">Band: %s</string>
-    <string name="band_and_channel">Band: %s, Channel: %s</string>
-    <string name="channel">Channel: %s</string>
-    <string name="band_2_4">2.4 GHz</string>
-    <string name="band_5">5 GHz</string>
-    <string name="any">Any</string>
+    <string name="wifi_access_points_title">Wi-Fi Access Points</string>
+    <string name="v">V %d</string>
+    <string name="error_scanning_title">Scanning error</string>
 
     <string name="error_auth">Authentication error.</string>
     <string name="error_network_not_found">The specified network could not be find.</string>
@@ -96,16 +86,10 @@
     <string name="connection_info">Connection info</string>
     <string name="status_title">Wi-Fi info</string>
 
-    <string name="error_scanning_title">Scanning error</string>
     <string name="scan_param_title">Scan params</string>
     <string name="scan_param_passive">Passive: %s</string>
     <string name="scan_param_period_ms">Period: %s [ms]</string>
     <string name="scan_param_group_channels">Group channels: %s</string>
-
-    <string name="hide_password">Hide password</string>
-    <string name="show_password">Show password</string>
-
-    <string name="version">V %d</string>
 
     <string name="persistent_storage">Persistent storage</string>
 </resources>

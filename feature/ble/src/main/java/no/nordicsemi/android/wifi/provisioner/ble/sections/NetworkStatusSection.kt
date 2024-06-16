@@ -26,6 +26,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnUnprovisionEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
@@ -99,7 +100,7 @@ fun NetworkStatusSection(
                 state.unprovisioningStatus is Error ->
                     ProgressItem(
                         text = state.unprovisioningStatus.error.message
-                            ?: stringResource(id = R.string.unknown_error),
+                            ?: stringResource(id = RUI.string.unknown_error),
                         status = ProgressItemStatus.ERROR,
                         iconRightPadding = 24.dp,
                     )
@@ -124,7 +125,7 @@ fun NetworkStatusSection(
                 state.status is Error ->
                     ProgressItem(
                         text = state.status.error.message
-                            ?: stringResource(id = R.string.unknown_error),
+                            ?: stringResource(id = RUI.string.unknown_error),
                         status = ProgressItemStatus.ERROR,
                         iconRightPadding = 24.dp,
                     )
@@ -163,12 +164,12 @@ private fun DeviceNetworkStatus(status: DeviceStatusDomain) {
             modifier = Modifier.padding(start = 8.dp, end = 16.dp)
         ) {
             status.wifiInfo?.let {
-                Text(text = stringResource(id = R.string.ssid, it.ssid))
-                Text(text = stringResource(id = R.string.bssid, it.macAddress))
+                Text(text = stringResource(id = RUI.string.ssid, it.ssid))
+                Text(text = stringResource(id = RUI.string.bssid, it.macAddress))
                 it.band?.toDisplayString()?.let {
-                    Text(text = stringResource(id = R.string.band, it))
+                    Text(text = stringResource(id = RUI.string.band, it))
                 }
-                Text(text = stringResource(id = R.string.channel, it.channel.toString()))
+                Text(text = stringResource(id = RUI.string.channel, it.channel.toString()))
             }
 
             status.connectionInfo?.let {
@@ -180,7 +181,7 @@ private fun DeviceNetworkStatus(status: DeviceStatusDomain) {
                     text = stringResource(id = R.string.connection_info),
                     style = MaterialTheme.typography.labelLarge
                 )
-                Text(text = stringResource(id = R.string.ip_4, it.ipv4Address))
+                Text(text = stringResource(id = RUI.string.ip_4, it.ipv4Address))
             }
 
             status.scanParams?.let {
@@ -192,7 +193,7 @@ private fun DeviceNetworkStatus(status: DeviceStatusDomain) {
                     text = stringResource(id = R.string.scan_param_title),
                     style = MaterialTheme.typography.labelLarge
                 )
-                Text(text = stringResource(id = R.string.band, it.band.toDisplayString()))
+                Text(text = stringResource(id = RUI.string.band, it.band.toDisplayString()))
                 Text(text = stringResource(id = R.string.scan_param_passive, it.passive.toString()))
                 Text(text = stringResource(id = R.string.scan_param_period_ms, it.periodMs.toString()))
                 Text(text = stringResource(id = R.string.scan_param_group_channels, it.groupChannels.toString()))
@@ -214,13 +215,13 @@ private fun NetworkStatus(network: WifiData) {
         Column(
             modifier = Modifier.padding(start = 8.dp, end = 16.dp)
         ) {
-            Text(text = stringResource(id = R.string.ssid, network.ssid))
+            Text(text = stringResource(id = RUI.string.ssid, network.ssid))
             network.selectedChannel?.wifiInfo?.let { selectedAccessPoint ->
-                Text(text = stringResource(id = R.string.bssid, selectedAccessPoint.macAddress))
+                Text(text = stringResource(id = RUI.string.bssid, selectedAccessPoint.macAddress))
                 selectedAccessPoint.band?.toDisplayString()?.let {
-                    Text(text = stringResource(id = R.string.band, it))
+                    Text(text = stringResource(id = RUI.string.band, it))
                 }
-                Text(text = stringResource(id = R.string.channel, selectedAccessPoint.channel.toString()))
+                Text(text = stringResource(id = RUI.string.channel, selectedAccessPoint.channel.toString()))
             }
         }
     }

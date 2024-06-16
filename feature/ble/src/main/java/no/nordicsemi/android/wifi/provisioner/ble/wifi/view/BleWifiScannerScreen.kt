@@ -35,7 +35,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -66,18 +65,19 @@ import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.WarningView
 import no.nordicsemi.android.common.theme.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
+import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
-import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
+import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiLoadingItem
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.ScanRecordsForSsid
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiScannerViewEntity
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSelectedEvent
-import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -87,7 +87,7 @@ internal fun BleWifiScannerScreen(
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         NordicAppBar(
-            text = stringResource(id = R.string.wifi_title),
+            text = stringResource(id = R.string.wifi_access_points_title),
             onNavigationButtonClick = { onEvent(NavigateUpEvent) }
         )
 
@@ -126,7 +126,7 @@ private fun ErrorItem(error: Throwable) {
     WarningView(
         imageVector = Icons.Default.Warning,
         title = stringResource(id = R.string.error_scanning_title),
-        hint = error.message ?: stringResource(id = R.string.unknown_error),
+        hint = error.message ?: stringResource(id = RUI.string.unknown_error),
     ) {}
 }
 
@@ -171,11 +171,12 @@ private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent
     ) {
         Icon(
             imageVector = wifiData.authMode.toImageVector(),
-            contentDescription = stringResource(id = R.string.cd_wifi_icon),
+            contentDescription = null,
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.secondary, shape = CircleShape
+                    color = MaterialTheme.colorScheme.secondary,
+                    shape = CircleShape,
                 )
                 .padding(8.dp)
         )
@@ -184,13 +185,14 @@ private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = wifiData.ssid, style = MaterialTheme.typography.labelLarge
+                text = wifiData.ssid,
+                style = MaterialTheme.typography.labelLarge,
             )
 
             if (wifi != null) {
                 if (wifi.macAddress.isNotEmpty()) {
                     Text(
-                        text = stringResource(id = R.string.bssid, wifi.macAddress),
+                        text = stringResource(id = RUI.string.bssid, wifi.macAddress),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -198,7 +200,7 @@ private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent
                 if (wifi.band != null) {
                     Text(
                         text = stringResource(
-                            id = R.string.band_and_channel,
+                            id = RUI.string.band_and_channel,
                             wifi.band!!.toDisplayString(),
                             wifi.channel.toString()
                         ),
@@ -206,13 +208,13 @@ private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent
                     )
                 } else {
                     Text(
-                        text = stringResource(id = R.string.channel, wifi.channel.toString()),
+                        text = stringResource(id = RUI.string.channel, wifi.channel.toString()),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
             } else {
                 Text(
-                    text = stringResource(id = R.string.channel, stringResource(id = R.string.any)),
+                    text = stringResource(id = RUI.string.channel, stringResource(id = RUI.string.any)),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -224,9 +226,9 @@ private fun WifiItem(records: ScanRecordsForSsid, onEvent: (WifiScannerViewEvent
                 .clip(RoundedCornerShape(10.dp))
                 .clickable { showSelectChannelDialog.value = true }
                 .border(
-                    1.dp,
-                    MaterialTheme.colorScheme.onSurface,
-                    RoundedCornerShape(10.dp)
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    shape = RoundedCornerShape(10.dp)
                 )
                 .padding(9.dp),
             verticalAlignment = Alignment.CenterVertically

@@ -195,7 +195,7 @@ private fun ConfigureSoftAp(
         title = stringResource(R.string.section_configure),
         state = configureState,
         decor = WizardStepAction.Action(
-            text = stringResource(id = R.string.edit_ssid),
+            text = stringResource(id = R.string.action_edit_ssid),
             onClick = { showDialog = true },
             enabled = connectionState != WizardStepState.COMPLETED && !isConnectionRequested
         ),
