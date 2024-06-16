@@ -167,7 +167,10 @@ class SoftApManager(
 
         // Invoked if the coroutine calling this suspend function is cancelled.
         continuation.invokeOnCancellation {
-            connectivityManager.unregisterNetworkCallback(networkCallback!!)
+            networkCallback?.let {
+                connectivityManager.unregisterNetworkCallback(it)
+                networkCallback = null
+            }
         }
     }
 
@@ -255,6 +258,7 @@ class SoftApManager(
 
         networkCallback?.let {
             connectivityManager.unregisterNetworkCallback(it)
+            networkCallback = null
         }
     }
 
