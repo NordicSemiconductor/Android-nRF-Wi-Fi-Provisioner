@@ -15,9 +15,10 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    // Permissions
+    implementation(libs.nordic.permissions.nfc)
+    implementation(libs.nordic.permissions.wifi)
     implementation(project(":feature:common"))
     implementation(project(":feature:ui"))
     api(project(":lib:nfc"))
-    implementation(libs.nordic.permissions.nfc)
-    implementation("androidx.compose.material3:material3:1.3.0-beta02")
 }

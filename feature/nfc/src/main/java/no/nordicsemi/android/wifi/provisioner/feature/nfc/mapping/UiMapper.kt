@@ -35,7 +35,15 @@ fun AuthenticationMode.toDisplayString(): String = when (this) {
  * @return The list of security types supported to display in the dropdown.
  */
 fun authListToDisplay(): List<String> {
-    return WifiAuthTypeBelowTiramisu.entries.map { it.toDisplayString() }
+    // Removed the security types that are not supported (such as WPA-Enterprise).
+    return listOf(
+        "Open",
+        "Shared",
+        "WPA-Personal",
+        "WPA2-Personal",
+        "WPA/WPA2-Personal",
+        "WPA3-Personal"
+    )
 }
 
 /**
