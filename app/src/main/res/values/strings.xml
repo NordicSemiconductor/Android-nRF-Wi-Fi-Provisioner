@@ -36,7 +36,7 @@
 
     <string name="app_version">Version: %s (%s)</string>
 
-    <string name="provision_over_ble">Provision over Bluetooth LE</string>
+    <string name="provision_over_ble">Provision over Bluetooth&#xA0;LE</string>
     <string name="provision_over_ble_rationale">This mode uses secure Bluetooth LE link to transfer
         Wi-Fi credentials to the provisionee and verify provisioning status.
     </string>
