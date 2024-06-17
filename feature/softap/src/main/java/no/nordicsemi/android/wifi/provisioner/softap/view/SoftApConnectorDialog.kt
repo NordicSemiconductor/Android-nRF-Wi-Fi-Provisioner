@@ -28,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,7 +45,14 @@ internal fun EditSsidDialog(
     onSsidChange: (String) -> Unit,
     dismiss: () -> Unit,
 ) {
-    var ssid by rememberSaveable { mutableStateOf(ssidName) }
+    var ssid by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue(
+                text = ssidName,
+                selection = TextRange(index = ssidName.length)
+            )
+        )
+    }
 
     AlertDialog(
         onDismissRequest = dismiss,
@@ -59,7 +68,12 @@ internal fun EditSsidDialog(
         text = {
             SoftApConnectorContent(
                 ssid = ssid,
-                onSsidChange = { ssid = it },
+                onSsidChange = {
+                    ssid = TextFieldValue(
+                        text = it,
+                        selection = TextRange(it.length)
+                    )
+                },
             )
         },
         dismissButton = {
@@ -69,8 +83,8 @@ internal fun EditSsidDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = { onSsidChange(ssid) },
-                enabled = ssid.isNotEmpty(),
+                onClick = { onSsidChange(ssid.text) },
+                enabled = ssid.text.isNotEmpty(),
             ) {
                 Text(text = stringResource(id = RUI.string.accept))
             }
@@ -80,7 +94,7 @@ internal fun EditSsidDialog(
 
 @Composable
 private fun SoftApConnectorContent(
-    ssid: String,
+    ssid: TextFieldValue,
     onSsidChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -99,18 +113,18 @@ private fun SoftApConnectorContent(
             OutlinedTextField(
                 value = ssid,
                 onValueChange = { newValue ->
-                    onSsidChange(newValue)
+                    onSsidChange(newValue.text)
                 },
                 singleLine = true,
                 modifier = Modifier
                     .weight(1.0f)
                     .focusRequester(focusRequester),
                 supportingText = {
-                    if (ssid.isEmpty()) {
+                    if (ssid.text.isEmpty()) {
                         Text(text = stringResource(id = R.string.softap_ssid_empty))
                     }
                 },
-                isError = ssid.isEmpty(),
+                isError = ssid.text.isEmpty(),
                 trailingIcon = {
                     IconButton(onClick = { onSsidChange("") }) {
                         Icon(
@@ -142,10 +156,10 @@ private fun SoftApConnectorContent(
 @Composable
 private fun SoftApConnectorContentPreview() {
     NordicTheme {
-        var ssid by rememberSaveable { mutableStateOf("value") }
+        var ssid by rememberSaveable { mutableStateOf(TextFieldValue("value")) }
         SoftApConnectorContent(
             ssid = ssid,
-            onSsidChange = { ssid = it },
+            onSsidChange = { ssid = TextFieldValue(it) },
         )
     }
 }
