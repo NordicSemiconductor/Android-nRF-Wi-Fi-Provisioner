@@ -50,6 +50,7 @@ import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.ktx.asValidResponseFlow
 import no.nordicsemi.android.ble.ktx.suspend
 import no.nordicsemi.android.ble.ktx.suspendForValidResponse
+import no.nordicsemi.android.wifi.provisioner.ble.proto.ConnectionState
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Result
 import no.nordicsemi.android.wifi.provisioner.ble.proto.DeviceStatus
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Info
@@ -58,6 +59,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.proto.Request
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Response
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Status
 import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiConfig
+import okio.ByteString.Companion.encodeUtf8
 import java.util.*
 
 val PROVISIONING_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")
@@ -253,6 +255,8 @@ internal class ProvisionerBleManager(
             .suspendForValidResponse<ByteArrayReadResponse>()
 
         verifyResponseSuccess(response.value)
+        // To confirm the provisioning, send Disconnected state.
+        trySend(Result(state = ConnectionState.DISCONNECTED))
 
         awaitClose {
             removeNotificationCallback(dataOutCharacteristic)
@@ -276,6 +280,7 @@ internal class ProvisionerBleManager(
 
     private fun verifyResponseSuccess(bytes: ByteArray): Response =
         Response.ADAPTER.decode(bytes).also {
+            log(Log.INFO, "Response received: $it")
             if (it.status != Status.SUCCESS) {
                 throw createResponseError(it.status)
             }

@@ -44,6 +44,7 @@
     <string name="section_network">Wi-Fi</string>
     <string name="section_security">Security</string>
     <string name="section_provision">Provision</string>
+    <string name="section_status">Verify</string>
 
     <string name="connect">Connect</string>
     <string name="connecting">Pairing…</string>
@@ -58,6 +59,9 @@
     <string name="set_password">Set Wi-Fi password</string>
     <string name="password_encoded">Password: ********</string>
 
+    <string name="wifi_status_provision">Send Wi-Fi credentials</string>
+    <string name="wifi_status_provisioning">Sending Wi-Fi credentials…</string>
+    <string name="wifi_status_provisioned">Wi-Fi credentials sent</string>
     <string name="wifi_status_authenticate">Authenticate</string>
     <string name="wifi_status_authenticating">Authenticating…</string>
     <string name="wifi_status_authenticated">Authenticated</string>

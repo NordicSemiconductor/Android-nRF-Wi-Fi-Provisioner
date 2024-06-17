@@ -58,12 +58,9 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.BleWifiScannerDestination
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnUnprovisionEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnVolatileMemoryChangedEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OpenLoggerEvent
-import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
-import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnFinishedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionClickEvent

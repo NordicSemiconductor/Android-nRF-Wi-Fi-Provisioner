@@ -43,6 +43,11 @@ import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 fun WifiConnectionStateDomain?.toDisplayString(
     state: ProgressItemStatus = ProgressItemStatus.SUCCESS
 ) = when (this) {
+        WifiConnectionStateDomain.Disconnected -> when (state) {
+            ProgressItemStatus.WORKING -> R.string.wifi_status_provisioning
+            ProgressItemStatus.SUCCESS -> R.string.wifi_status_provisioned
+            else -> R.string.wifi_status_provision
+        }
         WifiConnectionStateDomain.Authentication -> when (state) {
             ProgressItemStatus.WORKING -> R.string.wifi_status_authenticating
             ProgressItemStatus.SUCCESS -> R.string.wifi_status_authenticated
