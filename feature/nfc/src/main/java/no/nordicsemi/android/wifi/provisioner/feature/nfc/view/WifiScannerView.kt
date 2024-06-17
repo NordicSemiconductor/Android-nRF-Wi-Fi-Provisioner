@@ -109,7 +109,7 @@ internal fun WifiScannerScreen() {
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             NordicAppBar(
-                text = stringResource(id = R.string.wifi_scanner_appbar),
+                title = { Text(text = stringResource(id = R.string.wifi_scanner_appbar)) },
                 showBackButton = true,
                 onNavigationButtonClick = { onEvent(OnNavigateUpClickEvent) },
                 actions = {

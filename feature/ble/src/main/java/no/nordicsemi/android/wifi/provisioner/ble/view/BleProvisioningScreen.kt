@@ -41,6 +41,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -82,7 +83,7 @@ fun BleProvisioningScreen() {
         topBar = {
             if (isLandscape || isLargeScreen) {
                 NordicAppBar(
-                    text = stringResource(id = R.string.provision_over_ble),
+                    title = { Text(text = stringResource(id = R.string.provision_over_ble)) },
                     actions = {
                         LoggerAppBarIcon(
                             onClick = { viewModel.onEvent(OpenLoggerEvent) }
@@ -93,7 +94,7 @@ fun BleProvisioningScreen() {
                 )
             } else {
                 NordicMediumAppBar(
-                    text = stringResource(id = R.string.provision_over_ble),
+                    title = { Text(text = stringResource(id = R.string.provision_over_ble)) },
                     actions = {
                         LoggerAppBarIcon(
                             onClick = { viewModel.onEvent(OpenLoggerEvent) }

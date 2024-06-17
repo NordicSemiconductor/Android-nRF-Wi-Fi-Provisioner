@@ -88,7 +88,7 @@ fun SoftApScreen(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             NordicAppBar(
-                text = stringResource(id = R.string.provision_over_wifi),
+                title = { Text(text = stringResource(id = R.string.provision_over_wifi)) },
                 actions = {
                     LoggerAppBarIcon(onClick = onLoggerAppBarIconPressed)
                 },

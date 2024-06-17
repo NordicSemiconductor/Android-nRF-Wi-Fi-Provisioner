@@ -87,7 +87,7 @@ internal fun BleWifiScannerScreen(
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         NordicAppBar(
-            text = stringResource(id = R.string.wifi_access_points_title),
+            title = { Text(text = stringResource(id = R.string.wifi_access_points_title)) },
             onNavigationButtonClick = { onEvent(NavigateUpEvent) }
         )
 

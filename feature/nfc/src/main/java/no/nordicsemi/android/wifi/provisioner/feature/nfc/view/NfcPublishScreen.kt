@@ -62,7 +62,7 @@ internal fun NfcPublishScreen() {
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             NordicAppBar(
-                text = stringResource(id = R.string.ndef_publish_appbar),
+                title = { Text(text = stringResource(id = R.string.ndef_publish_appbar)) },
                 showBackButton = true,
                 onNavigationButtonClick = { nfcManagerVm.onBackNavigation() }
             )

@@ -54,7 +54,7 @@ internal fun HomeScreen() {
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             NordicAppBar(
-                text = stringResource(id = R.string.wifi_provision_over_nfc_appbar),
+                title = { Text(text = stringResource(id = R.string.wifi_provision_over_nfc_appbar)) },
                 showBackButton = true,
                 onNavigationButtonClick = { onEvent(OnBackClickEvent) }
             )
