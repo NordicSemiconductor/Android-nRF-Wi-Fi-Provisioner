@@ -101,12 +101,16 @@ class BleViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    override fun onCleared() {
+        release()
+        super.onCleared()
+    }
+
     fun onEvent(event: ProvisioningViewEvent) {
         if (event != OpenLoggerEvent) {
             cancelPendingJobs()
         }
         when (event) {
-            OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
             OnSelectDeviceClickEvent -> requestBluetoothDevice()
             OnReconnectClickEvent -> (_state.value.device as? RealServerDevice)?.let { installBluetoothDevice(it) }
@@ -160,19 +164,8 @@ class BleViewModel @Inject constructor(
         _state.value = _state.value.copy(showPasswordDialog = false)
     }
 
-    private fun finish() {
-        viewModelScope.launch {
-            release()
-            _state.value = BleViewEntity()
-        }
-    }
-
-    private suspend fun release() {
-        try {
-            repository.release()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    private fun release() {
+        repository.release()
     }
 
     private fun requestBluetoothDevice() {

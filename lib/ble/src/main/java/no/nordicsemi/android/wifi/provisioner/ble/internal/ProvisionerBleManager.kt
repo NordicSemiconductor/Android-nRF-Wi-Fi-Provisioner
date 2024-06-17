@@ -108,9 +108,9 @@ internal class ProvisionerBleManager(
     }
 
     @SuppressLint("MissingPermission")
-    suspend fun release() {
-        removeBond().suspend()
-        disconnect().suspend()
+    fun release() {
+        removeBond().enqueue()
+        disconnect().enqueue()
     }
 
     @SuppressLint("WrongConstant")

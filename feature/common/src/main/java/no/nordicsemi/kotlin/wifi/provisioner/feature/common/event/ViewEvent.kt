@@ -36,8 +36,6 @@ data object OnReconnectClickEvent : ProvisioningViewEvent
 
 data object OnSelectDeviceClickEvent : ProvisioningViewEvent
 
-data object OnFinishedEvent : ProvisioningViewEvent
-
 data object OnProvisionNextDeviceEvent : ProvisioningViewEvent
 
 data object OnSelectWifiEvent : ProvisioningViewEvent

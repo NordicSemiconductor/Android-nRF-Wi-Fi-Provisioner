@@ -90,7 +90,7 @@ class ProvisionerResourceRepository(
         return runTask { repository.forgetConfig() }
     }
 
-    suspend fun release() {
+    fun release() {
         repository.release()
     }
 
