@@ -22,7 +22,7 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
 class WifiManagerRepository(
     context: Context,
 ) {
-    private var wifiManager: WifiManager =
+    private val wifiManager: WifiManager =
         context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     private val _networkState = MutableStateFlow<NetworkState>(Success(emptyList()))
