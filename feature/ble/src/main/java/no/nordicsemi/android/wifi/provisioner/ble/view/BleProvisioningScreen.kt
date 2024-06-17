@@ -31,9 +31,7 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.view
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -75,7 +73,6 @@ fun BleProvisioningScreen() {
     val onEvent: (ProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
 
     Scaffold(
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             NordicAppBar(
                 title = {

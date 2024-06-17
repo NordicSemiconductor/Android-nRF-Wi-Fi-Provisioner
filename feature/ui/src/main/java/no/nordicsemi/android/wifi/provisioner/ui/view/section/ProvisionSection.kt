@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -29,9 +28,7 @@ fun ProvisionSection(
     onClick: () -> Unit
 ) {
     OutlinedCard(
-        modifier = Modifier
-            .widthIn(max = 600.dp)
-            .clickable { onClick() }
+        modifier = Modifier.clickable { onClick() }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             SectionTitle(text = sectionTitle)

@@ -1,9 +1,7 @@
 package no.nordicsemi.android.wifi.provisioner.softap.view
 
 import android.content.Context
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -88,7 +86,6 @@ fun SoftApScreen(
         }
     }
     Scaffold(
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             NordicAppBar(
                 title = { Text(text = stringResource(id = R.string.provision_over_wifi)) },
