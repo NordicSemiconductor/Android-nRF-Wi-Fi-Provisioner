@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun PasswordInputField(
+    modifier: Modifier = Modifier,
     input: String,
     label: String,
     placeholder: String,
@@ -48,6 +49,7 @@ fun PasswordInputField(
     val visibilityIcon =
         if (isShowPassword) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff
     OutlinedTextField(
+        modifier = modifier,
         value = input,
         onValueChange = { onUpdate(it) },
         visualTransformation = when {

@@ -59,12 +59,14 @@ internal fun PasswordDialog(
         },
         text = {
             Column(
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 var showPassword by rememberSaveable { mutableStateOf(false) }
 
                 // Show the SSID of the selected network. The SSID is read-only.
                 OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
                     value = scanResult.SSID,
                     readOnly = true,
                     label = { Text(text = stringResource(id = R.string.ssid_label)) },
@@ -72,6 +74,7 @@ internal fun PasswordDialog(
                 )
                 // Show the password field.
                 PasswordInputField(
+                    modifier = Modifier.fillMaxWidth(),
                     input = password,
                     label = stringResource(id = R.string.password),
                     placeholder = stringResource(id = R.string.password_placeholder),

@@ -97,6 +97,7 @@ internal fun AddWifiManuallyDialog(
                 if (authMode.lowercase() != "open") {
                     // Show the password field.
                     PasswordInputField(
+                        modifier = Modifier.fillMaxWidth(),
                         input = password ?: "",
                         label = stringResource(id = R.string.password),
                         placeholder = stringResource(id = R.string.password_placeholder),
