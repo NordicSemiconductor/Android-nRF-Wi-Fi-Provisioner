@@ -34,7 +34,6 @@
 
     <string name="ic_nrf70">An icon of nRF70 Series</string>
 
-    <string name="error_softap_not_supported">This feature requires an Android device running Android 10 or above.</string>
     <string name="app_version">Version: %s (%s)</string>
 
     <string name="provision_over_ble">Provision over Bluetooth LE</string>
@@ -49,5 +48,8 @@
     <string name="provision_over_nfc_rationale">This mode allows provisioning a nRF700x device to a
         Wi-Fi network by providing the Wi-Fi credentials via NFC.
     </string>
-    <string name="error_nfc_not_supported">This feature requires an Android device running Android 6.0 or above.</string>
+
+    <string name="error_android_10_required">Android 10 or newer is required.</string>
+    <string name="error_android_6_required">Android 6 or newer is required.</string>
+    <string name="error_nfc_not_supported">NFC is not supported on this device.</string>
 </resources>

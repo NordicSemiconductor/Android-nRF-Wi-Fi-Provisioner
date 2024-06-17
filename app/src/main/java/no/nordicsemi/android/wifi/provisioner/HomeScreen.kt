@@ -32,6 +32,7 @@
 package no.nordicsemi.android.wifi.provisioner
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.foundation.Image
@@ -183,7 +184,7 @@ private fun PortraitContent(
                     } else {
                         scope.launch {
                             snackbarHostState.showSnackbar(
-                                message = context.getString(R.string.error_softap_not_supported),
+                                message = context.getString(R.string.error_android_10_required),
                                 actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
                             )
                         }
@@ -196,11 +197,20 @@ private fun PortraitContent(
                 sectionRational = stringResource(R.string.provision_over_nfc_rationale)
             ) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    navigateTo(NfcDestination)
+                    if (isNfcSupported(context)) {
+                        navigateTo(NfcDestination)
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = context.getString(R.string.error_nfc_not_supported),
+                                actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
+                            )
+                        }
+                    }
                 } else {
                     scope.launch {
                         snackbarHostState.showSnackbar(
-                            message = context.getString(R.string.error_nfc_not_supported),
+                            message = context.getString(R.string.error_android_6_required),
                             actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
                         )
                     }
@@ -268,7 +278,7 @@ private fun SmallScreenLandscapeContent(
                     } else {
                         scope.launch {
                             snackbarHostState.showSnackbar(
-                                message = context.getString(R.string.error_softap_not_supported),
+                                message = context.getString(R.string.error_android_10_required),
                                 actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
                             )
                         }
@@ -281,11 +291,20 @@ private fun SmallScreenLandscapeContent(
                 sectionRational = stringResource(R.string.provision_over_nfc_rationale)
             ) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    navigateTo(NfcDestination)
+                    if (isNfcSupported(context)) {
+                        navigateTo(NfcDestination)
+                    } else {
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = context.getString(R.string.error_nfc_not_supported),
+                                actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
+                            )
+                        }
+                    }
                 } else {
                     scope.launch {
                         snackbarHostState.showSnackbar(
-                            message = context.getString(R.string.error_nfc_not_supported),
+                            message = context.getString(R.string.error_android_6_required),
                             actionLabel = context.getString(no.nordicsemi.android.wifi.provisioner.ui.R.string.dismiss)
                         )
                     }
@@ -311,4 +330,8 @@ private fun SmallScreenLandscapeContent(
             }
         }
     }
+}
+
+private fun isNfcSupported(context: Context): Boolean {
+    return context.packageManager.hasSystemFeature(PackageManager.FEATURE_NFC)
 }
