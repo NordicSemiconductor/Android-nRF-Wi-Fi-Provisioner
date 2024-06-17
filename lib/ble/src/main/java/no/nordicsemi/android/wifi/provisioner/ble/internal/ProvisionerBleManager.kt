@@ -60,6 +60,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.proto.Response
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Status
 import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiConfig
 import okio.ByteString.Companion.encodeUtf8
+import org.slf4j.LoggerFactory
 import java.util.*
 
 val PROVISIONING_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")
@@ -73,6 +74,7 @@ private const val TIMEOUT_MILLIS = 60_000L
 internal class ProvisionerBleManager(
     context: Context,
 ) : BleManager(context) {
+    private val logger = LoggerFactory.getLogger(ProvisionerBleManager::class.java)
 
     private var versionCharacteristic: BluetoothGattCharacteristic? = null
     private var controlPointCharacteristic: BluetoothGattCharacteristic? = null
@@ -87,7 +89,12 @@ internal class ProvisionerBleManager(
     }
 
     override fun log(priority: Int, message: String) {
-        //logger.log(priority, message)
+        when (priority) {
+            Log.VERBOSE, Log.DEBUG -> return
+            Log.INFO -> logger.info(message)
+            Log.WARN -> logger.warn(message)
+            Log.ERROR, Log.ASSERT -> logger.error(message)
+        }
     }
 
     override fun getMinLogPriority(): Int {
@@ -111,6 +118,7 @@ internal class ProvisionerBleManager(
 
     @SuppressLint("MissingPermission")
     fun release() {
+        log(Log.VERBOSE, "Disconnecting")
         removeBond().enqueue()
         disconnect().enqueue()
     }
@@ -164,6 +172,7 @@ internal class ProvisionerBleManager(
     suspend fun getStatus(): DeviceStatus = withTimeout(TIMEOUT_MILLIS) {
         val request = Request(op_code = OpCode.GET_STATUS)
 
+        log(Log.INFO, "Sending request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -195,6 +204,7 @@ internal class ProvisionerBleManager(
             }
             .launchIn(this)
 
+        log(Log.INFO, "Sending request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -214,6 +224,8 @@ internal class ProvisionerBleManager(
 
     suspend fun stopScan() {
         val request = Request(op_code = OpCode.STOP_SCAN)
+
+        log(Log.INFO, "Sending request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -241,9 +253,14 @@ internal class ProvisionerBleManager(
                 timeoutJob.cancel()
 
                 val result = Result.ADAPTER.decode(it.value)
+                log(Log.INFO, "State changed: $result")
                 trySend(result)
             }.launchIn(this)
 
+        val obscure = request.copy(
+            config = request.config?.copy(passphrase = "***".encodeUtf8())
+        )
+        log(Log.INFO, "Sending request: $obscure")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -265,6 +282,8 @@ internal class ProvisionerBleManager(
 
     suspend fun forgetWifi() {
         val request = Request(op_code = OpCode.FORGET_CONFIG)
+
+        log(Log.INFO, "Sending request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
