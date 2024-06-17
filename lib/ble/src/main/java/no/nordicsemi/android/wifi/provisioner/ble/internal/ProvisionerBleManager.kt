@@ -194,7 +194,7 @@ internal class ProvisionerBleManager(
             throw NotificationTimeoutException()
         }
 
-        setNotificationCallback(dataOutCharacteristic)
+        val job = setNotificationCallback(dataOutCharacteristic)
             .asValidResponseFlow<ByteArrayReadResponse>()
             .onEach {
                 timeoutJob.cancel()
@@ -218,6 +218,7 @@ internal class ProvisionerBleManager(
         verifyResponseSuccess(response.value)
 
         awaitClose {
+            job.cancel()
             removeNotificationCallback(dataOutCharacteristic)
         }
     }
@@ -247,7 +248,7 @@ internal class ProvisionerBleManager(
             throw NotificationTimeoutException()
         }
 
-        setNotificationCallback(dataOutCharacteristic)
+        val job = setNotificationCallback(dataOutCharacteristic)
             .asValidResponseFlow<ByteArrayReadResponse>()
             .onEach {
                 timeoutJob.cancel()
@@ -255,7 +256,8 @@ internal class ProvisionerBleManager(
                 val result = Result.ADAPTER.decode(it.value)
                 log(Log.INFO, "State changed: $result")
                 trySend(result)
-            }.launchIn(this)
+            }
+            .launchIn(this)
 
         val obscure = request.copy(
             config = request.config?.copy(passphrase = "***".encodeUtf8())
@@ -276,6 +278,7 @@ internal class ProvisionerBleManager(
         trySend(Result(state = ConnectionState.DISCONNECTED))
 
         awaitClose {
+            job.cancel()
             removeNotificationCallback(dataOutCharacteristic)
         }
     }
