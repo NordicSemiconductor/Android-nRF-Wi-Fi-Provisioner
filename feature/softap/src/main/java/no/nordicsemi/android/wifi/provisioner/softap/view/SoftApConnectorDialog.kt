@@ -60,10 +60,7 @@ internal fun EditSsidDialog(
         text = {
             SoftApConnectorContent(
                 ssid = ssid,
-                password = password,
                 onSsidChange = { ssid = it },
-                onPasswordChange = { password = it },
-                onShowPassword = {}
             )
         },
         dismissButton = {
@@ -85,10 +82,7 @@ internal fun EditSsidDialog(
 @Composable
 private fun SoftApConnectorContent(
     ssid: String,
-    password: String,
     onSsidChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onShowPassword: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -152,10 +146,7 @@ private fun SoftApConnectorContentPreview() {
         var ssid by rememberSaveable { mutableStateOf("value") }
         SoftApConnectorContent(
             ssid = ssid,
-            password = "",
             onSsidChange = { ssid = it },
-            onPasswordChange = {},
-            onShowPassword = {},
         )
     }
 }
