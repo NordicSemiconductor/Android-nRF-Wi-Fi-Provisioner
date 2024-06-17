@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -27,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -66,70 +68,74 @@ internal fun HomeScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Show the home screen.
-            var isDialogOpen by rememberSaveable { mutableStateOf(false) }
-
-            // Show an option to enter the WiFi credentials manually.
-            OutlinedCardItem(
-                headline = stringResource(id = R.string.enter_wifi_credentials),
-                description = {
-                    Text(
-                        text = stringResource(id = R.string.enter_wifi_credentials_des),
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
-                },
-                icon = Icons.Default.Wifi,
-                onCardClick = { isDialogOpen = true }
+            Column(
+                modifier = Modifier
+                    .widthIn(max = 600.dp)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable {
-                            isDialogOpen = true
-                        }
-                        .padding(8.dp)
-                )
-            }
+                // Show the home screen.
+                var isDialogOpen by rememberSaveable { mutableStateOf(false) }
 
-            // Show an option to search for a WiFi network.
-            OutlinedCardItem(
-                headline = stringResource(id = R.string.search_for_wifi_networks),
-                description = {
-                    Text(
-                        text = stringResource(id = R.string.search_for_wifi_networks_des),
-                        style = MaterialTheme.typography.bodyMedium,
+                // Show an option to enter the WiFi credentials manually.
+                OutlinedCardItem(
+                    headline = stringResource(id = R.string.enter_wifi_credentials),
+                    description = {
+                        Text(
+                            text = stringResource(id = R.string.enter_wifi_credentials_des),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    },
+                    icon = Icons.Default.Wifi,
+                    onCardClick = { isDialogOpen = true }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable { isDialogOpen = true }
+                            .padding(8.dp)
                     )
-                },
-                icon = Icons.Default.WifiFind,
-                onCardClick = { onEvent(OnScanClickEvent) }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable { onEvent(OnScanClickEvent) }
-                        .padding(8.dp)
-                )
-            }
+                }
 
-            if (isDialogOpen) {
-                // Open a dialog to enter the WiFi credentials manually.
-                AddWifiManuallyDialog(
-                    onCancelClick = {
-                        isDialogOpen = false
+                // Show an option to search for a WiFi network.
+                OutlinedCardItem(
+                    headline = stringResource(id = R.string.search_for_wifi_networks),
+                    description = {
+                        Text(
+                            text = stringResource(id = R.string.search_for_wifi_networks_des),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
                     },
-                    onConfirmClick = {
-                        isDialogOpen = false
-                        onEvent(OnAddWifiNetworkClickEvent(it))
-                    },
-                )
+                    icon = Icons.Default.WifiFind,
+                    onCardClick = { onEvent(OnScanClickEvent) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable { onEvent(OnScanClickEvent) }
+                            .padding(8.dp)
+                    )
+                }
+
+                if (isDialogOpen) {
+                    // Open a dialog to enter the WiFi credentials manually.
+                    AddWifiManuallyDialog(
+                        onCancelClick = {
+                            isDialogOpen = false
+                        },
+                        onConfirmClick = {
+                            isDialogOpen = false
+                            onEvent(OnAddWifiNetworkClickEvent(it))
+                        },
+                    )
+                }
             }
         }
     }

@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -29,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -100,14 +103,17 @@ fun SoftApScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
-        Box(
+        Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             RequireWifi {
                 OutlinedCard(
                     modifier = Modifier
+                        .widthIn(max = 600.dp)
                         .verticalScroll(rememberScrollState())
                         .padding(vertical = 16.dp),
                 ) {
