@@ -53,8 +53,8 @@ import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.permissions.ble.RequireBluetooth
 import no.nordicsemi.android.common.theme.view.NordicAppBar
 import no.nordicsemi.android.common.theme.view.NordicMediumAppBar
-import no.nordicsemi.android.wifi.provisioner.ble.sections.DeviceSelectionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ConnectionSection
+import no.nordicsemi.android.wifi.provisioner.ble.sections.DeviceSelectionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.NetworkStatusSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ProvisioningSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.SecuritySection
@@ -63,7 +63,6 @@ import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordSetDialogEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -130,11 +129,9 @@ fun BleProvisioningScreen() {
     }
 
     if (state.showPasswordDialog == true) {
-        PasswordDialog { event ->
-            (event as? PasswordSetDialogEvent)?.let {
-                onEvent(OnPasswordSelectedEvent(it.password))
-            }
-            onEvent(OnHidePasswordDialog)
-        }
+        PasswordDialog(
+            onConfirmPressed = { onEvent(OnPasswordSelectedEvent(it)) },
+            onDismiss = { onEvent(OnHidePasswordDialog) }
+        )
     }
 }

@@ -44,7 +44,6 @@ internal fun EditSsidDialog(
     dismiss: () -> Unit,
 ) {
     var ssid by rememberSaveable { mutableStateOf(ssidName) }
-    var password by rememberSaveable { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = dismiss,

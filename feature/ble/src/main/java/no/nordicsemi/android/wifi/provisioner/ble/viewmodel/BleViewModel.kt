@@ -228,6 +228,7 @@ class BleViewModel @Inject constructor(
 
     private fun onPasswordSelected(password: String) {
         _state.value = _state.value.copy(password = password, provisioningStatus = null)
+        hidePasswordDialog()
     }
 
     private fun provision() {
