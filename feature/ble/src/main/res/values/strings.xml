@@ -35,13 +35,13 @@
     <string name="action_select">Select</string>
     <string name="action_retry">Retry</string>
     <string name="action_change">Change</string>
-    <string name="action_set_password">Set password</string>
-    <string name="action_provision">Provision</string>
-    <string name="action_unprovision">Unprovision</string>
+    <string name="action_set_password">Set</string>
+    <string name="action_provision">Start</string>
+    <string name="action_unprovision">Reset</string>
 
     <string name="section_device">Device</string>
     <string name="section_connect">Connect</string>
-    <string name="section_network">Wi-Fi Network</string>
+    <string name="section_network">Wi-Fi</string>
     <string name="section_security">Security</string>
     <string name="section_provision">Provision</string>
 

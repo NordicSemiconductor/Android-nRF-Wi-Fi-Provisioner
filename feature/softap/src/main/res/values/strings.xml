@@ -12,10 +12,10 @@
     <string name="action_edit_ssid">Edit SSID</string>
     <string name="action_restore">Restore default</string>
     <string name="action_clear">Restore default</string>
-    <string name="action_set_password">Set password</string>
+    <string name="action_set_password">Set</string>
     <string name="action_start">Start</string>
     <string name="action_select">Select</string>
-    <string name="action_provision">Provision</string>
+    <string name="action_provision">Start</string>
     <string name="action_verify">Verify</string>
 
     <string name="section_configure">Configure</string>
