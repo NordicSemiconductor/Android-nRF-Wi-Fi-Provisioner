@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="unknown_error">Unknown error</string>
-    <string name="cd_data_item_icon">Icon representing data available in the section.</string>
+    <string name="error">Error: %s</string>
 
     <string name="accept">Accept</string>
     <string name="dismiss">Dismiss</string>
@@ -26,4 +26,5 @@
     <string name="set_password">Set password</string>
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
+    <string name="password_empty">Password cannot be empty.</string>
 </resources>

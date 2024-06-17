@@ -34,13 +34,15 @@ package no.nordicsemi.android.wifi.provisioner.ble.scanner
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SignalWifiBad
+import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.view.RssiIcon
@@ -49,11 +51,10 @@ import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 @Composable
 internal fun ProvisioningSection(data: ProvisioningData) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         Text(
-            text = stringResource(id = R.string.version, data.version),
+            text = stringResource(id = R.string.v, data.version),
             style = MaterialTheme.typography.labelMedium
         )
 
@@ -63,12 +64,12 @@ internal fun ProvisioningSection(data: ProvisioningData) {
             RssiIcon(rssi = data.rssi)
         } else if (data.isProvisioned) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_wifi_error),
+                imageVector = Icons.Default.SignalWifiBad,
                 contentDescription = null,
             )
         } else {
             Icon(
-                painter = painterResource(id = R.drawable.ic_no_wifi),
+                imageVector = Icons.Default.WifiOff,
                 contentDescription = null,
             )
         }

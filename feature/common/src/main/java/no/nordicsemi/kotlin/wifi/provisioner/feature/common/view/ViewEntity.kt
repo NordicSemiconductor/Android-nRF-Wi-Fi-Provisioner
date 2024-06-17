@@ -21,8 +21,14 @@ interface ViewEntity {
 
     fun hasFinished(): Boolean
 
+    fun isProvisioningAvailable(): Boolean
+
+    fun isProvisioningInProgress(): Boolean
+
     /**
      * Check if the provisioning has finished successfully.
      */
-    fun hasFinishedWithSuccess(): Boolean
+    fun isProvisioningComplete(): Boolean
+
+    fun hasProvisioningFailed(): Boolean
 }

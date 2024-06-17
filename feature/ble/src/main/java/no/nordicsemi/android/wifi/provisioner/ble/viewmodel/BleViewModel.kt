@@ -39,6 +39,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
@@ -57,6 +58,8 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.BleWifiScannerDestination
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnUnprovisionEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnVolatileMemoryChangedEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OpenLoggerEvent
+import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
@@ -65,6 +68,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePassword
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionClickEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionNextDeviceEvent
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnReconnectClickEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectDeviceClickEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
@@ -105,6 +109,7 @@ class BleViewModel @Inject constructor(
             OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
             OnSelectDeviceClickEvent -> requestBluetoothDevice()
+            OnReconnectClickEvent -> (_state.value.device as? RealServerDevice)?.let { installBluetoothDevice(it) }
             OnSelectWifiEvent -> navigationManager.navigateTo(BleWifiScannerDestination)
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
@@ -135,9 +140,11 @@ class BleViewModel @Inject constructor(
     }
 
     private fun cancelConfig() {
-        repository.forgetConfig().onEach {
-            _state.value = _state.value.copy(unprovisioningStatus = it)
-        }.launchIn(viewModelScope)
+        repository.forgetConfig()
+            .onEach {
+                _state.value = _state.value.copy(unprovisioningStatus = it)
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun cancelPendingJobs() {
@@ -202,11 +209,10 @@ class BleViewModel @Inject constructor(
             .cancellable()
             .onEach {
                 _state.value = _state.value.copy(version = it)
-
-                (_state.value.version as? Success)?.let {
-                    loadStatus()
-                }
-            }.launchIn(viewModelScope)
+            }
+            .filterIsInstance(Success::class)
+            .onEach { loadStatus() }
+            .launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
     }
 
@@ -215,12 +221,14 @@ class BleViewModel @Inject constructor(
             .cancellable()
             .onEach {
                 _state.value = _state.value.copy(status = it)
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
     }
 
     private fun onPasswordSelected(password: String) {
         _state.value = _state.value.copy(password = password, provisioningStatus = null)
+        hidePasswordDialog()
     }
 
     private fun provision() {
@@ -229,7 +237,8 @@ class BleViewModel @Inject constructor(
             .cancellable()
             .onEach {
                 _state.value = _state.value.copy(provisioningStatus = it)
-            }.launchIn(viewModelScope)
+            }
+            .launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
     }
 

@@ -37,6 +37,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.proto.ConnectionFailureReason
 import no.nordicsemi.android.wifi.provisioner.ble.proto.ConnectionInfo
 import no.nordicsemi.android.wifi.provisioner.ble.proto.ConnectionState
 import no.nordicsemi.android.wifi.provisioner.ble.proto.DeviceStatus
+import no.nordicsemi.android.wifi.provisioner.ble.proto.Result
 import no.nordicsemi.android.wifi.provisioner.ble.proto.ScanParams
 import no.nordicsemi.android.wifi.provisioner.ble.proto.ScanRecord
 import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiInfo
@@ -68,14 +69,18 @@ internal fun ScanParams.toDomain() = ScanParamsDomain(
 internal fun ConnectionInfo.toDomain() =
     ConnectionInfoDomain(ip4_addr!!.toIp())
 
-internal fun ConnectionState.toDomain() = when (this) {
-    ConnectionState.DISCONNECTED -> WifiConnectionStateDomain.DISCONNECTED
-    ConnectionState.AUTHENTICATION -> WifiConnectionStateDomain.AUTHENTICATION
-    ConnectionState.ASSOCIATION -> WifiConnectionStateDomain.ASSOCIATION
-    ConnectionState.OBTAINING_IP -> WifiConnectionStateDomain.OBTAINING_IP
-    ConnectionState.CONNECTED -> WifiConnectionStateDomain.CONNECTED
-    ConnectionState.CONNECTION_FAILED -> WifiConnectionStateDomain.CONNECTION_FAILED
+internal fun ConnectionState.toDomain(
+    reason: WifiConnectionFailureReasonDomain? = null
+) = when (this) {
+    ConnectionState.DISCONNECTED -> WifiConnectionStateDomain.Disconnected
+    ConnectionState.AUTHENTICATION -> WifiConnectionStateDomain.Authentication
+    ConnectionState.ASSOCIATION -> WifiConnectionStateDomain.Association
+    ConnectionState.OBTAINING_IP -> WifiConnectionStateDomain.ObtainingIp
+    ConnectionState.CONNECTED -> WifiConnectionStateDomain.Connected
+    ConnectionState.CONNECTION_FAILED -> WifiConnectionStateDomain.ConnectionFailed(reason)
 }
+
+internal fun Result.toDomain() = state?.toDomain(reason.toDomain()) ?: WifiConnectionStateDomain.Disconnected
 
 internal fun AuthMode.toDomain() = when (this) {
     AuthMode.OPEN -> AuthModeDomain.OPEN
@@ -93,13 +98,13 @@ internal fun Band.toDomain() = when (this) {
     Band.BAND_5_GH -> BandDomain.BAND_5_GH
 }
 
-@Suppress("unused")
-internal fun ConnectionFailureReason.toDomain() = when (this) {
+internal fun ConnectionFailureReason?.toDomain() = when (this) {
     ConnectionFailureReason.AUTH_ERROR -> WifiConnectionFailureReasonDomain.AUTH_ERROR
     ConnectionFailureReason.NETWORK_NOT_FOUND -> WifiConnectionFailureReasonDomain.NETWORK_NOT_FOUND
     ConnectionFailureReason.TIMEOUT -> WifiConnectionFailureReasonDomain.TIMEOUT
     ConnectionFailureReason.FAIL_IP -> WifiConnectionFailureReasonDomain.FAIL_IP
     ConnectionFailureReason.FAIL_CONN -> WifiConnectionFailureReasonDomain.FAIL_CONN
+    else -> null
 }
 
 internal fun WifiInfo.toDomain() = WifiInfoDomain(

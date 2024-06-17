@@ -32,6 +32,8 @@
 package no.nordicsemi.kotlin.wifi.provisioner.feature.common.event
 interface ProvisioningViewEvent
 
+data object OnReconnectClickEvent : ProvisioningViewEvent
+
 data object OnSelectDeviceClickEvent : ProvisioningViewEvent
 
 data object OnFinishedEvent : ProvisioningViewEvent

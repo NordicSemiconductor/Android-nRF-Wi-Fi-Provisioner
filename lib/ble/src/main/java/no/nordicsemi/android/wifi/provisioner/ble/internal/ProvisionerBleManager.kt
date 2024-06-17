@@ -241,7 +241,7 @@ internal class ProvisionerBleManager(
                 timeoutJob.cancel()
 
                 val result = Result.ADAPTER.decode(it.value)
-                trySend(result.state!!)
+                trySend(result)
             }.launchIn(this)
 
         val response = waitForIndication(controlPointCharacteristic)

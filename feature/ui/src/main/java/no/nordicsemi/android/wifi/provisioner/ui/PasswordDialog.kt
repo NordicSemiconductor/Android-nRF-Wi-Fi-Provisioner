@@ -41,101 +41,38 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.DismissEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordDialogEvent
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.PasswordSetDialogEvent
-
-@Composable
-fun PasswordDialog(onEvent: (PasswordDialogEvent) -> Unit) {
-    val passwordField = rememberSaveable { mutableStateOf("") }
-    val isError = rememberSaveable { mutableStateOf(false) }
-    val passwordVisible = rememberSaveable { mutableStateOf(false) }
-
-    val visualTransformation = if (passwordVisible.value) {
-        VisualTransformation.None
-    } else {
-        PasswordVisualTransformation()
-    }
-
-    val image = if (passwordVisible.value) {
-        Icons.Filled.Visibility
-    } else {
-        Icons.Filled.VisibilityOff
-    }
-
-    val description = if (passwordVisible.value) {
-        stringResource(id = R.string.hide_password)
-    } else {
-        stringResource(id = R.string.show_password)
-    }
-
-    AlertDialog(
-        onDismissRequest = { onEvent(DismissEvent) },
-        title = { Text(stringResource(id = R.string.set_password)) },
-        text = {
-            OutlinedTextField(
-                value = passwordField.value,
-                label = { Text(text = stringResource(id = R.string.password)) },
-                visualTransformation = visualTransformation,
-                onValueChange = {
-                    passwordField.value = it
-                    isError.value = false
-                },
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
-                        Icon(imageVector = image, description)
-                    }
-                }
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = {
-                passwordField.value.let {
-                    if (it.isBlank()) {
-                        isError.value = true
-                    } else {
-                        onEvent(PasswordSetDialogEvent(it))
-                    }
-                }
-            }) {
-                Text(stringResource(id = R.string.accept))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = { onEvent(DismissEvent) }) {
-                Text(stringResource(id = R.string.dismiss))
-            }
-        }
-    )
-}
-
+import androidx.compose.ui.tooling.preview.Preview
+import no.nordicsemi.android.common.theme.NordicTheme
 
 @Composable
 fun PasswordDialog(
     onConfirmPressed: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val passwordField = rememberSaveable { mutableStateOf("") }
-    val passwordVisible = rememberSaveable { mutableStateOf(false) }
+    var modified by rememberSaveable { mutableStateOf(false) }
+    var passwordField by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
-    val visualTransformation = if (passwordVisible.value) {
+    val visualTransformation = if (passwordVisible) {
         VisualTransformation.None
     } else {
         PasswordVisualTransformation()
     }
 
-    val image = if (passwordVisible.value) {
+    val image = if (passwordVisible) {
         Icons.Filled.Visibility
     } else {
         Icons.Filled.VisibilityOff
     }
 
-    val description = if (passwordVisible.value) {
+    val description = if (passwordVisible) {
         stringResource(id = R.string.hide_password)
     } else {
         stringResource(id = R.string.show_password)
@@ -146,25 +83,29 @@ fun PasswordDialog(
         title = { Text(stringResource(id = R.string.set_password)) },
         text = {
             OutlinedTextField(
-                value = passwordField.value,
+                value = passwordField,
                 label = { Text(text = stringResource(id = R.string.password)) },
                 visualTransformation = visualTransformation,
                 onValueChange = {
-                    passwordField.value = it
+                    modified = true
+                    passwordField= it
                 },
+                supportingText = {
+                    Text(text = stringResource(id = R.string.password_empty))
+                },
+                isError = modified && passwordField.isEmpty(),
                 trailingIcon = {
-                    IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(imageVector = image, description)
                     }
                 }
             )
         },
         confirmButton = {
-            TextButton(onClick = {
-                passwordField.value.let {
-                    onConfirmPressed(passwordField.value)
-                }
-            }) {
+            TextButton(
+                onClick = { onConfirmPressed(passwordField) },
+                enabled = passwordField.isNotEmpty(),
+            ) {
                 Text(stringResource(id = R.string.accept))
             }
         },
@@ -174,4 +115,15 @@ fun PasswordDialog(
             }
         }
     )
+}
+
+@Preview
+@Composable
+fun PasswordDialogPreview() {
+    NordicTheme {
+        PasswordDialog(
+            onConfirmPressed = {},
+            onDismiss = {},
+        )
+    }
 }

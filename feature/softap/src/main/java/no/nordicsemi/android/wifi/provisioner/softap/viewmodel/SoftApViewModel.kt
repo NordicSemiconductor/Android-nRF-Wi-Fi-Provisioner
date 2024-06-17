@@ -120,7 +120,7 @@ internal class SoftApViewModel @Inject constructor(
             logger = it
         })
         val handler = CoroutineExceptionHandler { _, throwable ->
-            if (throwable is UnableToConnectToNetwork) {
+            if (throwable is UnableToConnectToNetwork || throwable is WifiNotEnabledException) {
                 _state.value = _state.value.copy(isConnectionRequested = false)
             }
             _state.value = _state.value.copy(error = throwable)

@@ -31,11 +31,11 @@
 
 package no.nordicsemi.kotlin.wifi.provisioner.domain
 
-enum class WifiConnectionStateDomain(val id: Int) {
-    DISCONNECTED(0),
-    AUTHENTICATION(1),
-    ASSOCIATION(2),
-    OBTAINING_IP(3),
-    CONNECTED(4),
-    CONNECTION_FAILED(5)
+sealed class WifiConnectionStateDomain(val id: Int) {
+    data object Disconnected: WifiConnectionStateDomain(0)
+    data object Authentication: WifiConnectionStateDomain(1)
+    data object Association: WifiConnectionStateDomain(2)
+    data object ObtainingIp: WifiConnectionStateDomain(3)
+    data object Connected: WifiConnectionStateDomain(4)
+    data class ConnectionFailed(val reason: WifiConnectionFailureReasonDomain?): WifiConnectionStateDomain(5)
 }

@@ -64,7 +64,6 @@ import no.nordicsemi.android.common.theme.view.WarningView
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.Frequency
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toDisplayString
-import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.RssiIconView
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.VerticalBlueBar
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.viewmodel.OnNavigateUpClickEvent
@@ -84,6 +83,7 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
+import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
 
 /**
@@ -109,7 +109,7 @@ internal fun WifiScannerScreen() {
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             NordicAppBar(
-                text = stringResource(id = R.string.wifi_scanner_appbar),
+                title = { Text(text = stringResource(id = R.string.wifi_scanner_appbar)) },
                 showBackButton = true,
                 onNavigationButtonClick = { onEvent(OnNavigateUpClickEvent) },
                 actions = {
@@ -149,9 +149,17 @@ internal fun WifiScannerScreen() {
                     viewState.selectedNetwork?.let { scanResult ->
                         // Show the password dialog
                         PasswordDialog(
-                            scanResult = scanResult,
-                            onCancelClick = { onEvent(OnPasswordCancelEvent) },
-                            onConfirmClick = {wifiData -> onEvent(OnPasswordSetEvent(wifiData)) }
+                            onDismiss = { onEvent(OnPasswordCancelEvent) },
+                            onConfirmPressed = { password ->
+                                val wifiData = WifiData(
+                                    ssid = scanResult.SSID,
+                                    macAddress = scanResult.BSSID,
+                                    password = password,
+                                    authType = AuthenticationMode.get(scanResult).first(),
+                                    encryptionMode = EncryptionMode.get(scanResult)
+                                )
+                                onEvent(OnPasswordSetEvent(wifiData))
+                            },
                         )
                     }
                 }

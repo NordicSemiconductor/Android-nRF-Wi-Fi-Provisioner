@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_set_password">Set password</string>
+    <string name="action_unprovision">Unprovision</string>
+    <string name="action_provision">Provision</string>
+
+    <string name="section_network">Wi-Fi Network</string>
+</resources>

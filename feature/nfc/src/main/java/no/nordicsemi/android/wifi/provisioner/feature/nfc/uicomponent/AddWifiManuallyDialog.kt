@@ -25,6 +25,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.authListToDisplay
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toAuthenticationMode
@@ -97,6 +98,7 @@ internal fun AddWifiManuallyDialog(
                 if (authMode.lowercase() != "open") {
                     // Show the password field.
                     PasswordInputField(
+                        modifier = Modifier.fillMaxWidth(),
                         input = password ?: "",
                         label = stringResource(id = R.string.password),
                         placeholder = stringResource(id = R.string.password_placeholder),
@@ -184,10 +186,12 @@ internal fun AddWifiManuallyDialog(
 @Preview
 @Composable
 private fun OpenAddWifiManuallyDialogPreview() {
-    AddWifiManuallyDialog(
-        onCancelClick = {},
-        onConfirmClick = {}
-    )
+    NordicTheme {
+        AddWifiManuallyDialog(
+            onCancelClick = {},
+            onConfirmClick = {}
+        )
+    }
 }
 
 /** Adds colon to the MAC address. */
