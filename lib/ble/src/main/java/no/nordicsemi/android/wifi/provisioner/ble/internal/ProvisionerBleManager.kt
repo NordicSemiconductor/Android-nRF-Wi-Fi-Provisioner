@@ -153,10 +153,10 @@ internal class ProvisionerBleManager(
     }
 
     suspend fun getVersion(): Info = withTimeout(TIMEOUT_MILLIS) {
-        val response =
-            readCharacteristic(versionCharacteristic).suspendForValidResponse<ByteArrayReadResponse>().value
+        val response = readCharacteristic(versionCharacteristic)
+            .suspendForValidResponse<ByteArrayReadResponse>()
 
-        Info.ADAPTER.decode(response)
+        Info.ADAPTER.decode(response.value)
     }
 
     suspend fun getStatus(): DeviceStatus = withTimeout(TIMEOUT_MILLIS) {
@@ -172,9 +172,7 @@ internal class ProvisionerBleManager(
             )
             .suspendForValidResponse<ByteArrayReadResponse>()
 
-        verifyResponseSuccess(response.value)
-
-        Response.ADAPTER.decode(response.value).device_status!!
+        verifyResponseSuccess(response.value).device_status!!
     }
 
     fun startScan() = callbackFlow {
@@ -276,12 +274,12 @@ internal class ProvisionerBleManager(
         verifyResponseSuccess(response.value)
     }
 
-    private fun verifyResponseSuccess(response: ByteArray) {
-        val status = Response.ADAPTER.decode(response).status
-        if (status != Status.SUCCESS) {
-            throw createResponseError(status)
+    private fun verifyResponseSuccess(bytes: ByteArray): Response =
+        Response.ADAPTER.decode(bytes).also {
+            if (it.status != Status.SUCCESS) {
+                throw createResponseError(it.status)
+            }
         }
-    }
 
     private fun createResponseError(status: Status?): Exception {
         val errorCode = when (status) {
