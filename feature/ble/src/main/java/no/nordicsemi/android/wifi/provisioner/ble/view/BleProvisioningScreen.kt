@@ -58,6 +58,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.sections.DeviceSelectionSectio
 import no.nordicsemi.android.wifi.provisioner.ble.sections.NetworkStatusSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ProvisioningSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.SecuritySection
+import no.nordicsemi.android.wifi.provisioner.ble.sections.StatusSection
 import no.nordicsemi.android.wifi.provisioner.ble.viewmodel.BleViewModel
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
@@ -112,6 +113,7 @@ fun BleProvisioningScreen() {
                         NetworkStatusSection(state = state, onEvent = onEvent)
                         SecuritySection(state = state, onEvent = onEvent)
                         ProvisioningSection(state = state, onEvent = onEvent)
+                        StatusSection(state = state, onEvent = onEvent)
                     }
                 }
             }

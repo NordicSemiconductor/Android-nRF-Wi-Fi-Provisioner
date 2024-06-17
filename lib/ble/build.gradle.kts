@@ -42,6 +42,7 @@ android {
 dependencies {
     api(project(":lib:domain"))
 
+    implementation(libs.slf4j)
     implementation(libs.nordic.ble.ktx)
 }
 

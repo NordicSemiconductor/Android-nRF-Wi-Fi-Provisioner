@@ -124,7 +124,7 @@ interface ProvisionerRepository {
     /**
      * Closes connection with the DK.
      */
-    suspend fun release()
+    fun release()
 
     companion object {
         @SuppressLint("StaticFieldLeak")

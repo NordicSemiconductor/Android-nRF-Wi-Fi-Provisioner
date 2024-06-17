@@ -50,6 +50,7 @@ import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.ktx.asValidResponseFlow
 import no.nordicsemi.android.ble.ktx.suspend
 import no.nordicsemi.android.ble.ktx.suspendForValidResponse
+import no.nordicsemi.android.wifi.provisioner.ble.proto.ConnectionState
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Result
 import no.nordicsemi.android.wifi.provisioner.ble.proto.DeviceStatus
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Info
@@ -58,6 +59,8 @@ import no.nordicsemi.android.wifi.provisioner.ble.proto.Request
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Response
 import no.nordicsemi.android.wifi.provisioner.ble.proto.Status
 import no.nordicsemi.android.wifi.provisioner.ble.proto.WifiConfig
+import okio.ByteString.Companion.encodeUtf8
+import org.slf4j.LoggerFactory
 import java.util.*
 
 val PROVISIONING_SERVICE_UUID: UUID = UUID.fromString("14387800-130c-49e7-b877-2881c89cb258")
@@ -71,6 +74,7 @@ private const val TIMEOUT_MILLIS = 60_000L
 internal class ProvisionerBleManager(
     context: Context,
 ) : BleManager(context) {
+    private val logger = LoggerFactory.getLogger(ProvisionerBleManager::class.java)
 
     private var versionCharacteristic: BluetoothGattCharacteristic? = null
     private var controlPointCharacteristic: BluetoothGattCharacteristic? = null
@@ -85,7 +89,12 @@ internal class ProvisionerBleManager(
     }
 
     override fun log(priority: Int, message: String) {
-        //logger.log(priority, message)
+        when (priority) {
+            Log.VERBOSE, Log.DEBUG -> return
+            Log.INFO -> logger.info(message)
+            Log.WARN -> logger.warn(message)
+            Log.ERROR, Log.ASSERT -> logger.error(message)
+        }
     }
 
     override fun getMinLogPriority(): Int {
@@ -108,9 +117,10 @@ internal class ProvisionerBleManager(
     }
 
     @SuppressLint("MissingPermission")
-    suspend fun release() {
-        removeBond().suspend()
-        disconnect().suspend()
+    fun release() {
+        log(Log.VERBOSE, "Disconnecting")
+        removeBond().enqueue()
+        disconnect().enqueue()
     }
 
     @SuppressLint("WrongConstant")
@@ -153,15 +163,16 @@ internal class ProvisionerBleManager(
     }
 
     suspend fun getVersion(): Info = withTimeout(TIMEOUT_MILLIS) {
-        val response =
-            readCharacteristic(versionCharacteristic).suspendForValidResponse<ByteArrayReadResponse>().value
+        val response = readCharacteristic(versionCharacteristic)
+            .suspendForValidResponse<ByteArrayReadResponse>()
 
-        Info.ADAPTER.decode(response)
+        Info.ADAPTER.decode(response.value)
     }
 
     suspend fun getStatus(): DeviceStatus = withTimeout(TIMEOUT_MILLIS) {
         val request = Request(op_code = OpCode.GET_STATUS)
 
+        log(Log.INFO, "Sending request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -172,9 +183,7 @@ internal class ProvisionerBleManager(
             )
             .suspendForValidResponse<ByteArrayReadResponse>()
 
-        verifyResponseSuccess(response.value)
-
-        Response.ADAPTER.decode(response.value).device_status!!
+        verifyResponseSuccess(response.value).device_status!!
     }
 
     fun startScan() = callbackFlow {
@@ -195,6 +204,7 @@ internal class ProvisionerBleManager(
             }
             .launchIn(this)
 
+        log(Log.INFO, "Sending request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -214,6 +224,8 @@ internal class ProvisionerBleManager(
 
     suspend fun stopScan() {
         val request = Request(op_code = OpCode.STOP_SCAN)
+
+        log(Log.INFO, "Sending request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -241,9 +253,14 @@ internal class ProvisionerBleManager(
                 timeoutJob.cancel()
 
                 val result = Result.ADAPTER.decode(it.value)
+                log(Log.INFO, "State changed: $result")
                 trySend(result)
             }.launchIn(this)
 
+        val obscure = request.copy(
+            config = request.config?.copy(passphrase = "***".encodeUtf8())
+        )
+        log(Log.INFO, "Sending request: $obscure")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -255,6 +272,8 @@ internal class ProvisionerBleManager(
             .suspendForValidResponse<ByteArrayReadResponse>()
 
         verifyResponseSuccess(response.value)
+        // To confirm the provisioning, send Disconnected state.
+        trySend(Result(state = ConnectionState.DISCONNECTED))
 
         awaitClose {
             removeNotificationCallback(dataOutCharacteristic)
@@ -263,6 +282,8 @@ internal class ProvisionerBleManager(
 
     suspend fun forgetWifi() {
         val request = Request(op_code = OpCode.FORGET_CONFIG)
+
+        log(Log.INFO, "Sending request: $request")
         val response = waitForIndication(controlPointCharacteristic)
             .trigger(
                 writeCharacteristic(
@@ -276,12 +297,13 @@ internal class ProvisionerBleManager(
         verifyResponseSuccess(response.value)
     }
 
-    private fun verifyResponseSuccess(response: ByteArray) {
-        val status = Response.ADAPTER.decode(response).status
-        if (status != Status.SUCCESS) {
-            throw createResponseError(status)
+    private fun verifyResponseSuccess(bytes: ByteArray): Response =
+        Response.ADAPTER.decode(bytes).also {
+            log(Log.INFO, "Response received: $it")
+            if (it.status != Status.SUCCESS) {
+                throw createResponseError(it.status)
+            }
         }
-    }
 
     private fun createResponseError(status: Status?): Exception {
         val errorCode = when (status) {

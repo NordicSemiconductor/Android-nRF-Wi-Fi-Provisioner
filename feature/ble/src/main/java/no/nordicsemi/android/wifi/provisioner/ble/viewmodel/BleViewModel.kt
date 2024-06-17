@@ -58,12 +58,9 @@ import no.nordicsemi.android.wifi.provisioner.ble.view.BleWifiScannerDestination
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnUnprovisionEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OnVolatileMemoryChangedEvent
 import no.nordicsemi.android.wifi.provisioner.ble.view.OpenLoggerEvent
-import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
-import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnFinishedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnHidePasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnPasswordSelectedEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionClickEvent
@@ -101,12 +98,16 @@ class BleViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    override fun onCleared() {
+        release()
+        super.onCleared()
+    }
+
     fun onEvent(event: ProvisioningViewEvent) {
         if (event != OpenLoggerEvent) {
             cancelPendingJobs()
         }
         when (event) {
-            OnFinishedEvent -> finish()
             is OnPasswordSelectedEvent -> onPasswordSelected(event.password)
             OnSelectDeviceClickEvent -> requestBluetoothDevice()
             OnReconnectClickEvent -> (_state.value.device as? RealServerDevice)?.let { installBluetoothDevice(it) }
@@ -160,19 +161,8 @@ class BleViewModel @Inject constructor(
         _state.value = _state.value.copy(showPasswordDialog = false)
     }
 
-    private fun finish() {
-        viewModelScope.launch {
-            release()
-            _state.value = BleViewEntity()
-        }
-    }
-
-    private suspend fun release() {
-        try {
-            repository.release()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    private fun release() {
+        repository.release()
     }
 
     private fun requestBluetoothDevice() {

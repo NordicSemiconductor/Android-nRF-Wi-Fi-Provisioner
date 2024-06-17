@@ -34,12 +34,13 @@
     <string name="select_wifi">Select Access Point</string>
     <string name="set_wifi_passphrase">Set Wi-Fi password</string>
     <string name="set_passphrase_value">Password: ********</string>
-    <string name="provisioning_device_to_your_network">Sending Wi-Fi credentials…</string>
-    <string name="provisioning_completed">Wi-Fi credentials sent</string>
-    <string name="provisioning_rationale">Send Wi-Fi credentials</string>
-    <string name="optional_verification_rationale">Verify provisioning state (optional)</string>
-    <string name="locating_provisioned_device">Locating provisioned device…</string>
-    <string name="verification_completed">Verification completed</string>
+
+    <string name="wifi_status_provision">Send Wi-Fi credentials</string>
+    <string name="wifi_status_provisioning">Sending Wi-Fi credentials…</string>
+    <string name="wifi_status_provisioned">Wi-Fi credentials sent</string>
+    <string name="wifi_status_verify">Verify provisioning state (optional)</string>
+    <string name="wifi_status_verifying">Locating provisioned device…</string>
+    <string name="wifi_status_verified">Verification completed</string>
 
     <string name="please_enable_wi_fi">Please enable Wi-Fi!</string>
     <string name="failed_to_bind_to_network">Failed to bind to network!</string>

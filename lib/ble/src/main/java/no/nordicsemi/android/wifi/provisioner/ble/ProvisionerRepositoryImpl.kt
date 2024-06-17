@@ -85,7 +85,7 @@ class ProvisionerRepositoryImpl internal constructor(
         manager?.forgetWifi()
     }
 
-    override suspend fun release() {
+    override fun release() {
         manager?.release()
         manager = null
     }

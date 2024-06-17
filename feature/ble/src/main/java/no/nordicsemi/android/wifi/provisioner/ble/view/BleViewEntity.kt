@@ -59,7 +59,8 @@ data class BleViewEntity(
         return device != null && version == null
                 || version is Loading
                 || status is Loading
-                || provisioningStatus is Loading
+                || isProvisioningInProgress()
+                || isValidationInProgress()
                 || unprovisioningStatus is Loading
     }
 
@@ -79,8 +80,13 @@ data class BleViewEntity(
     }
 
     override fun isProvisioningInProgress(): Boolean {
+        return isConnected && provisioningStatus is Loading
+    }
+
+    override fun isValidationInProgress(): Boolean {
         return isConnected
                 && provisioningStatus != null
+                && provisioningStatus !is Loading
                 && !isProvisioningComplete()
                 && !hasProvisioningFailed()
     }

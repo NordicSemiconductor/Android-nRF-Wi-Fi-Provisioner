@@ -395,11 +395,10 @@ private fun Provisioning(
         ProgressItem(
             text = when {
                 isProvisioningRequested && provisioningState == WizardStepState.CURRENT -> stringResource(
-                    R.string.provisioning_device_to_your_network
+                    R.string.wifi_status_provisioning
                 )
-                provisioningState == WizardStepState.COMPLETED -> stringResource(R.string.provisioning_completed)
-                provisioningState == WizardStepState.INACTIVE -> stringResource(R.string.provisioning_rationale)
-                else -> stringResource(R.string.provisioning_rationale)
+                provisioningState == WizardStepState.COMPLETED -> stringResource(R.string.wifi_status_provisioned)
+                else -> stringResource(R.string.wifi_status_provision)
             },
             status = when {
                 isProvisioningRequested && provisioningState == WizardStepState.CURRENT -> ProgressItemStatus.WORKING
@@ -437,10 +436,9 @@ private fun Verify(
         ProgressItem(
             text = when {
                 isVerificationRequested && verificationState == WizardStepState.CURRENT ->
-                    stringResource(R.string.locating_provisioned_device)
-                verificationState == WizardStepState.CURRENT -> stringResource(R.string.optional_verification_rationale)
-                verificationState == WizardStepState.COMPLETED -> stringResource(R.string.verification_completed)
-                else -> stringResource(R.string.optional_verification_rationale)
+                    stringResource(R.string.wifi_status_verifying)
+                verificationState == WizardStepState.COMPLETED -> stringResource(R.string.wifi_status_verified)
+                else -> stringResource(R.string.wifi_status_verify)
             },
             status = when {
                 isVerificationRequested && verificationState == WizardStepState.CURRENT -> ProgressItemStatus.WORKING

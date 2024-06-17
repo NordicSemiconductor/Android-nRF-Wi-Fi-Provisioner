@@ -25,6 +25,8 @@ interface ViewEntity {
 
     fun isProvisioningInProgress(): Boolean
 
+    fun isValidationInProgress(): Boolean
+
     /**
      * Check if the provisioning has finished successfully.
      */
