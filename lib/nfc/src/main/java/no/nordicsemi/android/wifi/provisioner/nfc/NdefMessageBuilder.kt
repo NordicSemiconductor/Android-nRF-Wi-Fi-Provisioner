@@ -43,26 +43,25 @@ class NdefMessageBuilder {
      * @return the NDEF message for the Wi-Fi data.
      */
     fun createNdefMessage(wifiNetwork: WifiData): NdefMessage {
-        return generateNdefMessage(wifiNetwork)
+        val record = createWifiRecord(wifiNetwork)
+        return NdefMessage(arrayOf(record))
     }
 
     /**
-     * Generates the NDEF message for the given Wi-Fi network.
+     * Generates the NDEF record for the given Wi-Fi network.
      *
      * @param wifiNetwork the Wi-Fi network to be written to the NDEF message.
      */
-    private fun generateNdefMessage(wifiNetwork: WifiData): NdefMessage {
+    fun createWifiRecord(wifiNetwork: WifiData): NdefRecord {
         val payload: ByteArray = generateNdefPayload(wifiNetwork)
         val empty = byteArrayOf()
 
-        val mimeRecord = NdefRecord(
+        return NdefRecord(
             NdefRecord.TNF_MIME_MEDIA,
             NFC_TOKEN_MIME_TYPE.toByteArray(Charset.forName("US-ASCII")),
             empty,
             payload
         )
-
-        return NdefMessage(arrayOf(mimeRecord))
     }
 
     /**
