@@ -31,6 +31,7 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.view
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -43,6 +44,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,6 +52,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.permissions.ble.RequireBluetooth
 import no.nordicsemi.android.common.theme.view.NordicAppBar
+import no.nordicsemi.android.common.theme.view.NordicMediumAppBar
 import no.nordicsemi.android.wifi.provisioner.ble.sections.DeviceSelectionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ConnectionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.NetworkStatusSection
@@ -67,22 +70,40 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningVi
 @Composable
 fun BleProvisioningScreen() {
     val viewModel = hiltViewModel<BleViewModel>()
+    val isLargeScreen =
+        LocalConfiguration.current.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >=
+                Configuration.SCREENLAYOUT_SIZE_LARGE
+    val isLandscape =
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onEvent: (ProvisioningViewEvent) -> Unit = { viewModel.onEvent(it) }
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
-            NordicAppBar(
-                text = stringResource(id = R.string.provision_over_ble),
-                actions = {
-                    LoggerAppBarIcon(
-                        onClick = { viewModel.onEvent(OpenLoggerEvent) }
-                    )
-                },
-                showBackButton = true,
-                onNavigationButtonClick = viewModel::navigateUp
-            )
+            if (isLandscape || isLargeScreen) {
+                NordicAppBar(
+                    text = stringResource(id = R.string.provision_over_ble),
+                    actions = {
+                        LoggerAppBarIcon(
+                            onClick = { viewModel.onEvent(OpenLoggerEvent) }
+                        )
+                    },
+                    showBackButton = true,
+                    onNavigationButtonClick = viewModel::navigateUp
+                )
+            } else {
+                NordicMediumAppBar(
+                    text = stringResource(id = R.string.provision_over_ble),
+                    actions = {
+                        LoggerAppBarIcon(
+                            onClick = { viewModel.onEvent(OpenLoggerEvent) }
+                        )
+                    },
+                    showBackButton = true,
+                    onNavigationButtonClick = viewModel::navigateUp
+                )
+            }
         },
     ) { innerPadding ->
         Box(
