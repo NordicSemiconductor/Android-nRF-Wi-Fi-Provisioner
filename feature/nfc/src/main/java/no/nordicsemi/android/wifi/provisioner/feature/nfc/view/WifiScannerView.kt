@@ -80,8 +80,6 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
@@ -263,8 +261,7 @@ private fun NetworkItem(
     onEvent: (WifiScannerViewEvent) -> Unit,
 ) {
     val securityType = AuthenticationMode.get(network)
-    val isOpen = securityType.contains(WifiAuthTypeBelowTiramisu.OPEN) or
-            securityType.contains(WifiAuthTypeTiramisuOrAbove.OPEN)
+    val isOpen = securityType.contains(AuthenticationMode.OPEN)
 
     // Show the network.
     Row(
@@ -279,7 +276,7 @@ private fun NetworkItem(
                         ssid = network.SSID,
                         macAddress = network.BSSID,
                         password = null,
-                        authType = WifiAuthTypeBelowTiramisu.OPEN,
+                        authType = AuthenticationMode.OPEN,
                         encryptionMode = EncryptionMode.NONE
                     )
                     onEvent(OnPasswordSetEvent(wifiData))

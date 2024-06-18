@@ -4,8 +4,6 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.AuthenticationMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_EXPECTED_SIZE
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiHandoverDataType.AUTH_TYPE_FIELD_ID
@@ -145,12 +143,12 @@ class NdefMessageBuilder {
      */
     private fun getAuthBytes(auth: AuthenticationMode): Short {
         return when (auth) {
-            WifiAuthTypeBelowTiramisu.WEP, WifiAuthTypeTiramisuOrAbove.WEP -> AUTH_TYPE_SHARED
-            WifiAuthTypeBelowTiramisu.WPA_PSK, WifiAuthTypeTiramisuOrAbove.WPA_PSK -> AUTH_TYPE_WPA_PSK
-            WifiAuthTypeBelowTiramisu.WPA_EAP -> AUTH_TYPE_WPA_EAP
-            WifiAuthTypeBelowTiramisu.WPA2_PSK -> AUTH_TYPE_WPA2_PSK
-            WifiAuthTypeBelowTiramisu.WPA_WPA2_PSK -> AUTH_TYPE_WPA_WPA2_PSK
-            WifiAuthTypeBelowTiramisu.WPA2_EAP, WifiAuthTypeTiramisuOrAbove.WPA2_EAP -> AUTH_TYPE_WPA2_EAP
+            AuthenticationMode.WEP -> AUTH_TYPE_SHARED
+            AuthenticationMode.WPA_PSK -> AUTH_TYPE_WPA_PSK
+            AuthenticationMode.WPA_EAP -> AUTH_TYPE_WPA_EAP
+            AuthenticationMode.WPA2_PSK -> AUTH_TYPE_WPA2_PSK
+            AuthenticationMode.WPA_WPA2_PSK -> AUTH_TYPE_WPA_WPA2_PSK
+            AuthenticationMode.WPA2_EAP -> AUTH_TYPE_WPA2_EAP
             else -> AUTH_TYPE_OPEN
         }
     }
