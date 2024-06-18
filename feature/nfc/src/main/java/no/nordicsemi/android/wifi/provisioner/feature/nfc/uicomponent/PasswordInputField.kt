@@ -59,7 +59,10 @@ fun PasswordInputField(
         },
         label = { Text(text = label) },
         placeholder = { Text(text = placeholder) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(
+            autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Password
+        ),
         supportingText = {
             error?.let { errorMessage ->
                 Row(
