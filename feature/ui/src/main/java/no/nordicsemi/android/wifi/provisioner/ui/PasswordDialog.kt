@@ -31,6 +31,7 @@
 
 package no.nordicsemi.android.wifi.provisioner.ui
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -46,6 +47,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -93,6 +95,10 @@ fun PasswordDialog(
                 supportingText = {
                     Text(text = stringResource(id = R.string.password_empty))
                 },
+                keyboardOptions = KeyboardOptions(
+                    autoCorrectEnabled = false,
+                    keyboardType = KeyboardType.Password
+                ),
                 isError = modified && passwordField.isEmpty(),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
