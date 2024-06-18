@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.common.theme.nordicBlue
 
-
 /** Compose view for the NFC record item in the outlined card.
  * @param headline The headline of the record.
  * @param description The description of the record.
