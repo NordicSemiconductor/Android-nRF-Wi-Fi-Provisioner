@@ -5,7 +5,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 /**
- * Interface that represents the authentication mode of a Wi-Fi network.
+ * An enum class that represents the authentication mode of a Wi-Fi network.
  */
 @Parcelize
 enum class AuthenticationMode(private val stringRep: String) : Parcelable {
