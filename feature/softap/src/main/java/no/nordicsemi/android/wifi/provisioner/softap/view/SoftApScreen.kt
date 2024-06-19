@@ -38,12 +38,13 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.permissions.wifi.RequireWifi
-import no.nordicsemi.android.common.theme.view.NordicAppBar
-import no.nordicsemi.android.common.theme.view.ProgressItem
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
-import no.nordicsemi.android.common.theme.view.WizardStepAction
-import no.nordicsemi.android.common.theme.view.WizardStepComponent
-import no.nordicsemi.android.common.theme.view.WizardStepState
+import no.nordicsemi.android.common.ui.view.NordicAppBar
+import no.nordicsemi.android.common.ui.view.ProgressItem
+import no.nordicsemi.android.common.ui.view.ProgressItemStatus
+import no.nordicsemi.android.common.ui.view.StatusItem
+import no.nordicsemi.android.common.ui.view.WizardStepAction
+import no.nordicsemi.android.common.ui.view.WizardStepComponent
+import no.nordicsemi.android.common.ui.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 import no.nordicsemi.android.wifi.provisioner.softap.FailedToBindToNetwork
 import no.nordicsemi.android.wifi.provisioner.softap.OnConnectionLost
@@ -202,9 +203,10 @@ private fun ConfigureSoftAp(
             onClick = { showDialog = true },
             enabled = connectionState != WizardStepState.COMPLETED && !isConnectionRequested
         ),
-        showVerticalDivider = true
     ) {
-        Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: $ssidName")
+        StatusItem {
+            Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: $ssidName")
+        }
     }
     if (showDialog) {
         EditSsidDialog(
@@ -238,7 +240,6 @@ private fun ConnectToSoftAp(
             onClick = start,
             enabled = connectionState == WizardStepState.CURRENT && !isConnectionRequested
         ),
-        showVerticalDivider = false,
     ) {
         ProgressItem(
             text = when {
@@ -253,7 +254,6 @@ private fun ConnectToSoftAp(
                 connectionState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
-            iconRightPadding = 24.dp,
         )
         ProgressItem(
             text = when (serviceDiscoveryState) {
@@ -266,7 +266,6 @@ private fun ConnectToSoftAp(
                 WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
-            iconRightPadding = 24.dp,
         )
     }
 }
@@ -294,23 +293,24 @@ private fun SelectWifi(
                 enabled = !isProvisioningRequested,
             )
         } else null,
-        showVerticalDivider = true
     ) {
-        if (wifiData != null && selectWifiState != WizardStepState.INACTIVE) {
-            Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: ${wifiData.ssid}")
-            Text(style = MaterialTheme.typography.bodyMedium,
-                text = "Band: ${
-                    wifiData.let {
-                        it.selectedChannel?.wifiInfo?.band?.toDisplayString()
-                            ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
-                    }
-                }"
-            )
-        } else {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                text = stringResource(R.string.select_wifi)
-            )
+        StatusItem {
+            if (wifiData != null && selectWifiState != WizardStepState.INACTIVE) {
+                Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: ${wifiData.ssid}")
+                Text(style = MaterialTheme.typography.bodyMedium,
+                    text = "Band: ${
+                        wifiData.let {
+                            it.selectedChannel?.wifiInfo?.band?.toDisplayString()
+                                ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
+                        }
+                    }"
+                )
+            } else {
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = stringResource(R.string.select_wifi)
+                )
+            }
         }
     }
 }
@@ -338,35 +338,36 @@ private fun SetPassphrase(
                 enabled = wifiData?.authMode != AuthModeDomain.OPEN && !isProvisioningRequested
             )
         } else null,
-        showVerticalDivider = true
     ) {
-        if (wifiData != null) {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                text = "Security: ${wifiData.authMode.toDisplayString()}"
-            )
-
-            if (wifiData.authMode != AuthModeDomain.OPEN && password != null) {
+        StatusItem {
+            if (wifiData != null) {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(R.string.set_passphrase_value)
+                    text = "Security: ${wifiData.authMode.toDisplayString()}"
+                )
+
+                if (wifiData.authMode != AuthModeDomain.OPEN && password != null) {
+                    Text(
+                        style = MaterialTheme.typography.bodyMedium,
+                        text = stringResource(R.string.set_passphrase_value)
+                    )
+                }
+            } else {
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = stringResource(R.string.set_wifi_passphrase)
                 )
             }
-        } else {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                text = stringResource(R.string.set_wifi_passphrase)
-            )
         }
-        if (showDialog) {
-            PasswordDialog(
-                onConfirmPressed = {
-                    onPasswordEntered(it)
-                    showDialog = false
-                },
-                onDismiss = { showDialog = false }
-            )
-        }
+    }
+    if (showDialog) {
+        PasswordDialog(
+            onConfirmPressed = {
+                onPasswordEntered(it)
+                showDialog = false
+            },
+            onDismiss = { showDialog = false }
+        )
     }
 }
 
@@ -390,7 +391,6 @@ private fun Provisioning(
                 enabled = !isProvisioningRequested
             )
         } else null,
-        showVerticalDivider = false
     ) {
         ProgressItem(
             text = when {
@@ -405,7 +405,6 @@ private fun Provisioning(
                 provisioningState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
-            iconRightPadding = 24.dp,
         )
     }
 }
@@ -431,7 +430,6 @@ private fun Verify(
                 )
             }
         } else null,
-        showVerticalDivider = false
     ) {
         ProgressItem(
             text = when {
@@ -445,7 +443,6 @@ private fun Verify(
                 verificationState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
-            iconRightPadding = 24.dp,
         )
     }
 }

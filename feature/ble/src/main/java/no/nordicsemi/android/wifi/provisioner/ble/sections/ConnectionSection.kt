@@ -6,23 +6,22 @@ import androidx.compose.material.icons.outlined.BluetoothConnected
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import no.nordicsemi.android.common.theme.NordicTheme
-import no.nordicsemi.android.common.theme.view.ProgressItem
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
-import no.nordicsemi.android.common.theme.view.WizardStepAction
-import no.nordicsemi.android.common.theme.view.WizardStepComponent
-import no.nordicsemi.android.common.theme.view.WizardStepState
+import no.nordicsemi.android.common.ui.view.ProgressItem
+import no.nordicsemi.android.common.ui.view.ProgressItemStatus
+import no.nordicsemi.android.common.ui.view.WizardStepAction
+import no.nordicsemi.android.common.ui.view.WizardStepComponent
+import no.nordicsemi.android.common.ui.view.WizardStepState
 import no.nordicsemi.android.kotlin.ble.core.MockServerDevice
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnReconnectClickEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
+import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 
 @Composable
 fun ConnectionSection(
@@ -47,7 +46,6 @@ fun ConnectionSection(
                 state.version is Loading -> WizardStepAction.ProgressIndicator
                 else -> null
             },
-            showVerticalDivider = false,
         ) {
             val pairingText = when {
                 state.device == null -> stringResource(id = R.string.connect)
@@ -63,7 +61,6 @@ fun ConnectionSection(
                     !state.isConnected -> ProgressItemStatus.ERROR
                     else -> ProgressItemStatus.SUCCESS
                 },
-                iconRightPadding = 24.dp
             )
             val readingText = when {
                 !state.isConnected || state.version == null -> stringResource(id = R.string.read_version)
@@ -80,7 +77,6 @@ fun ConnectionSection(
                     state.status is Loading -> ProgressItemStatus.WORKING
                     else -> ProgressItemStatus.SUCCESS
                 },
-                iconRightPadding = 24.dp
             )
         }
     }

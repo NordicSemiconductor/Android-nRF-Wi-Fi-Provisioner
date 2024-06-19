@@ -54,7 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSortOption
 import no.nordicsemi.android.wifi.provisioner.ui.R
-import no.nordicsemi.android.common.theme.R as themeR
+import no.nordicsemi.android.common.ui.R as RUI
 
 @Composable
 fun WifiSortView(
@@ -67,7 +67,7 @@ fun WifiSortView(
         horizontalArrangement = Arrangement.Start,
         modifier = Modifier
             .fillMaxWidth()
-            .background(colorResource(id = themeR.color.appBarColor))
+            .background(colorResource(id = RUI.color.appBarColor))
             .padding(horizontal = 16.dp)
     ) {
         Text(

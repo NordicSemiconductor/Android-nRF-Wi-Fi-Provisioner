@@ -33,7 +33,7 @@ package no.nordicsemi.android.wifi.provisioner.ble.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
+import no.nordicsemi.android.common.ui.view.ProgressItemStatus
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionFailureReasonDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain

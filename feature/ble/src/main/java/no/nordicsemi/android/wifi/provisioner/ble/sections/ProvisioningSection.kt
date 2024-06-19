@@ -4,20 +4,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.NetworkCheck
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.common.theme.view.ProgressItem
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
-import no.nordicsemi.android.common.theme.view.WizardStepAction
-import no.nordicsemi.android.common.theme.view.WizardStepComponent
-import no.nordicsemi.android.common.theme.view.WizardStepState
+import no.nordicsemi.android.common.ui.view.ProgressItem
+import no.nordicsemi.android.common.ui.view.ProgressItemStatus
+import no.nordicsemi.android.common.ui.view.WizardStepAction
+import no.nordicsemi.android.common.ui.view.WizardStepComponent
+import no.nordicsemi.android.common.ui.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Error
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Loading
-import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
 import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Success
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnProvisionClickEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
@@ -51,7 +48,6 @@ fun ProvisioningSection(
                 )
             else -> null
         },
-        showVerticalDivider = false,
     ) {
         val progress = when (state.provisioningStatus) {
             is Loading -> ProgressItemStatus.WORKING
@@ -62,7 +58,6 @@ fun ProvisioningSection(
         ProgressItem(
             text = WifiConnectionStateDomain.Disconnected.toDisplayString(progress),
             status = progress,
-            iconRightPadding = 24.dp,
         )
     }
 }

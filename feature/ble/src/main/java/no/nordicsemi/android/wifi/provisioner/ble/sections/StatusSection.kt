@@ -5,11 +5,11 @@ import androidx.compose.material.icons.filled.Verified
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.common.theme.view.ProgressItem
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
-import no.nordicsemi.android.common.theme.view.WizardStepAction
-import no.nordicsemi.android.common.theme.view.WizardStepComponent
-import no.nordicsemi.android.common.theme.view.WizardStepState
+import no.nordicsemi.android.common.ui.view.ProgressItem
+import no.nordicsemi.android.common.ui.view.ProgressItemStatus
+import no.nordicsemi.android.common.ui.view.WizardStepAction
+import no.nordicsemi.android.common.ui.view.WizardStepComponent
+import no.nordicsemi.android.common.ui.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.ble.view.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
@@ -38,27 +38,22 @@ fun StatusSection(
             state.isValidationInProgress() -> WizardStepAction.ProgressIndicator
             else -> null
         },
-        showVerticalDivider = false,
     ) {
         ProgressItem(
             text = state.provisioningStatus.getText(WifiConnectionStateDomain.Authentication),
             status = state.provisioningStatus.getStatus(WifiConnectionStateDomain.Authentication),
-            iconRightPadding = 24.dp,
         )
         ProgressItem(
             text = state.provisioningStatus.getText(WifiConnectionStateDomain.Association),
             status = state.provisioningStatus.getStatus(WifiConnectionStateDomain.Association),
-            iconRightPadding = 24.dp,
         )
         ProgressItem(
             text = state.provisioningStatus.getText(WifiConnectionStateDomain.ObtainingIp),
             status = state.provisioningStatus.getStatus(WifiConnectionStateDomain.ObtainingIp),
-            iconRightPadding = 24.dp,
         )
         ProgressItem(
             text = state.provisioningStatus.getText(WifiConnectionStateDomain.Connected),
             status = state.provisioningStatus.getStatus(WifiConnectionStateDomain.Connected),
-            iconRightPadding = 24.dp,
         )
     }
 }

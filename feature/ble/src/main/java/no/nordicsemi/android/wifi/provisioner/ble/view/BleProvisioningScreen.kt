@@ -52,7 +52,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.permissions.ble.RequireBluetooth
-import no.nordicsemi.android.common.theme.view.NordicAppBar
+import no.nordicsemi.android.common.ui.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ConnectionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.DeviceSelectionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.NetworkStatusSection
