@@ -39,8 +39,8 @@ enum class AuthenticationMode(private val stringRep: String) : Parcelable {
         /**
          * @return The authentication mode(s) of a given [ScanResult].
          */
-        fun get(scanResult: ScanResult): List<AuthenticationMode> {
-            return listOf(AuthenticationMode.getSecurityTypes(scanResult))
+        fun get(scanResult: ScanResult): AuthenticationMode {
+            return AuthenticationMode.getSecurityTypes(scanResult)
         }
     }
 }

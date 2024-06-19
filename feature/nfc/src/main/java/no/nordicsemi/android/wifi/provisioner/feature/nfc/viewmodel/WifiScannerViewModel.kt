@@ -106,8 +106,7 @@ internal class WifiScannerViewModel @Inject constructor(
     fun onEvent(event: WifiScannerViewEvent) {
         when (event) {
             is OnNetworkSelectEvent -> {
-                val isOpen = AuthenticationMode.get(event.network)
-                    .contains(AuthenticationMode.OPEN)
+                val isOpen = AuthenticationMode.get(event.network) == AuthenticationMode.OPEN
                 // If the network is open, navigate to the NFC screen
                 if (isOpen) {
                     navigateToNfcScan(
