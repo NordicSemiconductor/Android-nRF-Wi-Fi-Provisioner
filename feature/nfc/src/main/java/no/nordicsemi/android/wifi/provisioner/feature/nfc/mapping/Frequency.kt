@@ -137,7 +137,7 @@ object Frequency {
      * Utility function to convert frequency in MHz to channel number.
      *
      * @param freqMhz frequency in MHz
-     * @return channel number associated with given frequency, [.UNSPECIFIED] if no match
+     * @return channel number associated with given frequency, [UNSPECIFIED] if no match
      */
     fun toChannelNumber(freqMhz: Int): Int {
         when {

@@ -19,8 +19,6 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.NetworkState
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSortOption
 import javax.inject.Inject
@@ -108,9 +106,7 @@ internal class WifiScannerViewModel @Inject constructor(
     fun onEvent(event: WifiScannerViewEvent) {
         when (event) {
             is OnNetworkSelectEvent -> {
-                val isOpen = AuthenticationMode.get(event.network)
-                    .contains(WifiAuthTypeBelowTiramisu.OPEN) or AuthenticationMode.get(event.network)
-                    .contains(WifiAuthTypeTiramisuOrAbove.OPEN)
+                val isOpen = AuthenticationMode.get(event.network) == AuthenticationMode.OPEN
                 // If the network is open, navigate to the NFC screen
                 if (isOpen) {
                     navigateToNfcScan(
@@ -118,7 +114,7 @@ internal class WifiScannerViewModel @Inject constructor(
                             ssid = event.network.SSID,
                             macAddress = event.network.BSSID,
                             password = null, // Empty password for open network.
-                            authType = WifiAuthTypeBelowTiramisu.OPEN,
+                            authType = AuthenticationMode.OPEN,
                             encryptionMode = EncryptionMode.NONE // No encryption for open network.
                         )
                     )

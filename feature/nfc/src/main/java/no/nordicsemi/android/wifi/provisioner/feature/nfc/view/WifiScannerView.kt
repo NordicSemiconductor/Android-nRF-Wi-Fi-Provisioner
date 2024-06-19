@@ -80,8 +80,6 @@ import no.nordicsemi.android.wifi.provisioner.nfc.domain.EncryptionMode
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Error
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Loading
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.Success
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeBelowTiramisu
-import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiAuthTypeTiramisuOrAbove
 import no.nordicsemi.android.wifi.provisioner.nfc.domain.WifiData
 import no.nordicsemi.android.wifi.provisioner.ui.PasswordDialog
 import no.nordicsemi.android.wifi.provisioner.ui.view.WifiSortView
@@ -97,7 +95,9 @@ internal fun WifiScannerScreen() {
     val onEvent: (WifiScannerViewEvent) -> Unit = { wifiScannerViewModel.onEvent(it) }
     val viewState by wifiScannerViewModel.viewState.collectAsStateWithLifecycle()
     var isGroupedBySsid by rememberSaveable { mutableStateOf(false) }
-    val groupIcon = if (isGroupedBySsid) Icons.AutoMirrored.Default.FormatListBulleted else Icons.AutoMirrored.Default.Segment
+    val groupIcon = if (isGroupedBySsid) {
+        Icons.AutoMirrored.Default.FormatListBulleted
+    } else Icons.AutoMirrored.Default.Segment
     val snackbarHostState = remember { SnackbarHostState() }
 
     // Handle the back press.
@@ -155,7 +155,7 @@ internal fun WifiScannerScreen() {
                                     ssid = scanResult.SSID,
                                     macAddress = scanResult.BSSID,
                                     password = password,
-                                    authType = AuthenticationMode.get(scanResult).first(),
+                                    authType = AuthenticationMode.get(scanResult),
                                     encryptionMode = EncryptionMode.get(scanResult)
                                 )
                                 onEvent(OnPasswordSetEvent(wifiData))
@@ -263,8 +263,7 @@ private fun NetworkItem(
     onEvent: (WifiScannerViewEvent) -> Unit,
 ) {
     val securityType = AuthenticationMode.get(network)
-    val isOpen = securityType.contains(WifiAuthTypeBelowTiramisu.OPEN) or
-            securityType.contains(WifiAuthTypeTiramisuOrAbove.OPEN)
+    val isOpen = securityType == AuthenticationMode.OPEN
 
     // Show the network.
     Row(
@@ -279,7 +278,7 @@ private fun NetworkItem(
                         ssid = network.SSID,
                         macAddress = network.BSSID,
                         password = null,
-                        authType = WifiAuthTypeBelowTiramisu.OPEN,
+                        authType = AuthenticationMode.OPEN,
                         encryptionMode = EncryptionMode.NONE
                     )
                     onEvent(OnPasswordSetEvent(wifiData))
@@ -311,7 +310,7 @@ private fun NetworkItem(
             }
             // Display the security type of the access point.
             Text(
-                text = securityType.joinToString(", ") { it.toDisplayString() },
+                text = securityType.toDisplayString(),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.alpha(0.7f)
             )
