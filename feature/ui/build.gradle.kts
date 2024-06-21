@@ -41,8 +41,7 @@ dependencies {
     implementation(project(":feature:common"))
     implementation(project(":lib:domain"))
 
-    implementation("no.nordicsemi.android.common:ui:2.0.0")
-    //implementation(libs.nordic.ui)
+    implementation(libs.nordic.ui)
     implementation(libs.nordic.theme)
 
     implementation(libs.androidx.compose.material.iconsExtended)

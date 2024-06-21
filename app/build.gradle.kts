@@ -32,6 +32,7 @@
 plugins {
     alias(libs.plugins.nordic.application.compose)
     alias(libs.plugins.nordic.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -54,8 +55,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.activity.compose)
 
-    implementation("no.nordicsemi.android.common:ui:2.0.0")
-    //implementation(libs.nordic.ui)
+    implementation(libs.nordic.ui)
     implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
     implementation(libs.timber)

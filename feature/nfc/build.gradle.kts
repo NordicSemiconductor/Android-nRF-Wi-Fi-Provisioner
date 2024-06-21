@@ -12,8 +12,7 @@ dependencies {
     implementation(project(":feature:ui"))
     implementation(project(":lib:nfc"))
 
-    implementation("no.nordicsemi.android.common:ui:2.0.0")
-    //implementation(libs.nordic.ui)
+    implementation(libs.nordic.ui)
     implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
     implementation(libs.nordic.permissions.nfc)
