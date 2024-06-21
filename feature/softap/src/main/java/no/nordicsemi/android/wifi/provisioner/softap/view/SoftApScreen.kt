@@ -108,7 +108,7 @@ fun SoftApScreen(
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            RequireWifi {
+            RequireWifi(isNearbyWifiDevicesPermissionRequired = false) {
                 OutlinedCard(
                     modifier = Modifier
                         .widthIn(max = 600.dp)
@@ -245,8 +245,10 @@ private fun ConnectToSoftAp(
             text = when {
                 isConnectionRequested && connectionState == WizardStepState.CURRENT ->
                     stringResource(id = R.string.connecting)
+
                 connectionState == WizardStepState.COMPLETED ->
                     stringResource(id = R.string.connected)
+
                 else -> stringResource(id = R.string.connect)
             },
             status = when {
@@ -284,9 +286,10 @@ private fun SelectWifi(
         title = stringResource(id = R.string.section_network),
         state = selectWifiState,
         decor = if (selectWifiState == WizardStepState.CURRENT
-                 || providePasswordState == WizardStepState.CURRENT
-                 || provisioningState == WizardStepState.CURRENT
-                 || providePasswordState == WizardStepState.COMPLETED) {
+            || providePasswordState == WizardStepState.CURRENT
+            || provisioningState == WizardStepState.CURRENT
+            || providePasswordState == WizardStepState.COMPLETED
+        ) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.action_select),
                 onClick = onSelectWifiPressed,
@@ -330,8 +333,9 @@ private fun SetPassphrase(
         title = stringResource(id = R.string.section_security),
         state = providePasswordState,
         decor = if (providePasswordState == WizardStepState.CURRENT
-                 || provisioningState == WizardStepState.CURRENT
-                 || provisioningState == WizardStepState.COMPLETED) {
+            || provisioningState == WizardStepState.CURRENT
+            || provisioningState == WizardStepState.COMPLETED
+        ) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.action_set_password),
                 onClick = { showDialog = true },
@@ -384,7 +388,8 @@ private fun Provisioning(
         decor = if (isProvisioningRequested && provisioningState == WizardStepState.CURRENT) {
             WizardStepAction.ProgressIndicator
         } else if (provisioningState == WizardStepState.CURRENT
-                || provisioningState == WizardStepState.COMPLETED) {
+            || provisioningState == WizardStepState.COMPLETED
+        ) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.action_provision),
                 onClick = onProvisionPressed,
@@ -397,6 +402,7 @@ private fun Provisioning(
                 isProvisioningRequested && provisioningState == WizardStepState.CURRENT -> stringResource(
                     R.string.wifi_status_provisioning
                 )
+
                 provisioningState == WizardStepState.COMPLETED -> stringResource(R.string.wifi_status_provisioned)
                 else -> stringResource(R.string.wifi_status_provision)
             },
@@ -435,6 +441,7 @@ private fun Verify(
             text = when {
                 isVerificationRequested && verificationState == WizardStepState.CURRENT ->
                     stringResource(R.string.wifi_status_verifying)
+
                 verificationState == WizardStepState.COMPLETED -> stringResource(R.string.wifi_status_verified)
                 else -> stringResource(R.string.wifi_status_verify)
             },
