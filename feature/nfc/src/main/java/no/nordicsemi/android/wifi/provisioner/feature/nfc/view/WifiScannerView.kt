@@ -135,7 +135,7 @@ internal fun WifiScannerScreen() {
         Box(
             modifier = Modifier.padding(innerPadding)
         ) {
-            RequireWifi {
+            RequireWifi(isNearbyWifiDevicesPermissionRequired = true) {
                 RequireLocationForWifi {
                     LaunchedEffect(key1 = it) {
                         wifiScannerViewModel.scanAvailableWifiNetworks()
