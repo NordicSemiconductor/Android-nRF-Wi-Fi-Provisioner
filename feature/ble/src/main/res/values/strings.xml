@@ -88,12 +88,10 @@
     <string name="error_fail_connection">Could not connect to provisioned network.</string>
 
     <string name="connection_info">Connection info</string>
-    <string name="status_title">Wi-Fi info</string>
 
     <string name="scan_param_title">Scan params</string>
     <string name="scan_param_passive">Passive: %s</string>
     <string name="scan_param_period_ms">Period: %s [ms]</string>
     <string name="scan_param_group_channels">Group channels: %s</string>
 
-    <string name="persistent_storage">Persistent storage</string>
 </resources>
