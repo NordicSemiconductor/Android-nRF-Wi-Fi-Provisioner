@@ -1,6 +1,9 @@
 # nRF Wi-Fi Provisioner for Android
 
-An Android library and a sample app for provisioning [nRF 7002 devices](https://www.nordicsemi.com/Products/nRF7002) to a Wi-Fi network.
+An Android library and a sample app for provisioning [nRF 7002 devices](https://www.nordicsemi.com/Products/nRF7002) to a Wi-Fi network. The libary and sample application supports 3 different modes of provisioning
+* Bluetooth LE
+* SoftAp
+* NFC (Note NFC is not a part of the current NCS release 2.7.0)
 
 ## Application
 
