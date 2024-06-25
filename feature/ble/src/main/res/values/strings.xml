@@ -46,6 +46,7 @@
     <string name="section_provision">Provision</string>
     <string name="section_status">Verify</string>
 
+    <string name="filter_unprovisioned">Unprovisioned</string>
     <string name="connect">Connect</string>
     <string name="connecting">Pairing…</string>
     <string name="connected">Connected</string>

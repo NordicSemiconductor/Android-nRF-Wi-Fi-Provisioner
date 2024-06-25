@@ -31,15 +31,18 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.scanner
 
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import no.nordicsemi.android.common.navigation.createDestination
 import no.nordicsemi.android.common.navigation.defineDestination
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.kotlin.ble.core.ServerDevice
+import no.nordicsemi.android.kotlin.ble.ui.scanner.CustomFilter
 import no.nordicsemi.android.kotlin.ble.ui.scanner.DeviceSelected
 import no.nordicsemi.android.kotlin.ble.ui.scanner.ScannerScreen
 import no.nordicsemi.android.kotlin.ble.ui.scanner.ScanningCancelled
 import no.nordicsemi.android.kotlin.ble.ui.scanner.main.DeviceListItem
+import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
 val BleScannerDestinationId =
     createDestination<Unit, ServerDevice>("ble-scanner-destination")
@@ -48,7 +51,18 @@ val BleScannerDestination = defineDestination(BleScannerDestinationId) {
     val viewModel = hiltViewModel<SimpleNavigationViewModel>()
 
     ScannerScreen(
-        uuid = ProvisioningData.parcelUuid,
+        filters = listOf(
+            CustomFilter(
+                title = stringResource(id = R.string.filter_unprovisioned),
+                initiallySelected = false,
+                filter = { isFilterSelected, result ->
+                    when (isFilterSelected) {
+                        true -> result.provisioningData()?.isProvisioned == false
+                        false -> result.provisioningData() != null
+                    }
+                }
+            )
+        ),
         onResult = { result ->
             when (result) {
                 is DeviceSelected -> viewModel.navigateUpWithResult(
