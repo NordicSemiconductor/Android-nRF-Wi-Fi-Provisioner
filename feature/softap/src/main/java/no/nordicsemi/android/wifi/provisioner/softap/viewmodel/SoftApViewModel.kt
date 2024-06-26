@@ -150,7 +150,9 @@ internal class SoftApViewModel @Inject constructor(
             throw WifiNotEnabledException
         }
         _state.value = _state.value.copy(discoveringServicesState = WizardStepState.CURRENT)
-        softApManager.discoverServices()
+        withTimeout(10_000L) {
+            softApManager.discoverServices()
+        }
         _state.value = _state.value.copy(discoveringServicesState = WizardStepState.COMPLETED)
         _state.value = _state.value.copy(selectWifiState = WizardStepState.CURRENT)
     }
