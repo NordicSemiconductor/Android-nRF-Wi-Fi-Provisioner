@@ -116,7 +116,7 @@ internal class SoftApViewModel @Inject constructor(
             Timber.uproot(logger!!)
             logger = null
         }
-        Timber.plant(nRFLoggerTree(context, "SoftAP Manager", ssid).also {
+        Timber.plant(nRFLoggerTree(context, ssid, "SoftAP Manager").also {
             logger = it
         })
         val handler = CoroutineExceptionHandler { _, throwable ->
