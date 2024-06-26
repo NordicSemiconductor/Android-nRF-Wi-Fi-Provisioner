@@ -130,7 +130,7 @@ class SoftApManager(
             @RequiresApi(Build.VERSION_CODES.Q)
             override fun onAvailable(network: Network) {
                 // do success processing here..\
-                logger.info("Binding to network: {}", network)
+                logger.trace("Binding to network {}...", network)
                 if (connectivityManager.bindProcessToNetwork(network)) {
                     isConnected = true
                     isBoundToNetwork = true
@@ -146,7 +146,7 @@ class SoftApManager(
             }
 
             override fun onUnavailable() {
-                logger.info("Network unavailable")
+                logger.error("Network unavailable")
                 // do failure processing here..
                 disconnect()
                 continuation.resumeWithException(exception = UnableToConnectToNetwork)
@@ -167,7 +167,7 @@ class SoftApManager(
             .setNetworkSpecifier(networkSpecifier)
             .build()
 
-        logger.info("Connecting to: {}", ssid)
+        logger.trace("Connecting to {}...", ssid)
         connectivityManager.requestNetwork(request, networkCallback!!)
 
         // Invoked if the coroutine calling this suspend function is cancelled.
@@ -225,6 +225,7 @@ class SoftApManager(
     suspend fun listSsids(): ScanResultsDomain {
         require(isWifiEnabled) { throw WifiNotEnabledException }
         require(isBoundToNetwork) { throw FailedToBindToNetwork }
+        logger.trace("Obtaining list of SSIDs...")
         return softApProvisioningService.listSsids().toDomain()
     }
 
@@ -240,11 +241,13 @@ class SoftApManager(
     suspend fun provision(config: WifiConfigDomain): Response<ResponseBody> {
         require(isWifiEnabled) { throw WifiNotEnabledException }
         require(isBoundToNetwork) { throw FailedToBindToNetwork }
-        logger.info("Provisioning device to: {}", config.info!!.ssid)
+        logger.trace("Provisioning to {}...", config.info!!.ssid)
         return softApProvisioningService.provision(config.toApi()).also {
             if (it.isSuccessful) {
-                logger.info("Provisioning succeeded: {}", config.info.ssid)
+                logger.info("Provisioning to {} succeeded", config.info.ssid)
                 softAp?.wifiConfigDomain = config
+            } else {
+                logger.error("Provisioning failed with error {}", it.code())
             }
         }
     }
@@ -258,10 +261,10 @@ class SoftApManager(
     @RequiresApi(Build.VERSION_CODES.Q)
     fun disconnect() {
         if (isConnected) {
-            logger.info("Disconnecting from network...")
             isConnected = false
             isBoundToNetwork = false
             connectivityManager.bindProcessToNetwork(null)
+            logger.info("Disconnected from network")
         }
 
         networkCallback?.let {

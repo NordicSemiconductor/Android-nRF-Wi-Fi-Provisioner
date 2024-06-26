@@ -53,6 +53,7 @@ import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.common.ui.view.WizardStepState
 import no.nordicsemi.android.log.LogSession
+import no.nordicsemi.android.log.Logger
 import no.nordicsemi.android.log.timber.nRFLoggerTree
 import no.nordicsemi.android.wifi.provisioner.softap.Open
 import no.nordicsemi.android.wifi.provisioner.softap.PassphraseConfiguration
@@ -85,7 +86,16 @@ internal class SoftApViewModel @Inject constructor(
         navigationManager.resultFrom(SoftApWifiScannerDestination)
             .mapNotNull { it as? NavigationResult.Success }
             .onEach {
-                onWifiSelected(it.value)
+                try {
+                    val record = it.value.getOrThrow()
+                    Timber.log(Log.INFO, "SSID selected: ${record.ssid} (${record.authMode})")
+                    Logger.setSessionDescription(logger?.session as? LogSession, record.ssid)
+                    onWifiSelected(record)
+                } catch (e: Exception) {
+                    Timber.e("Error while listing SSIDs. ${e.message}")
+                    _state.value = SoftApScreenState(error = e)
+                    Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_RED)
+                }
             }
             .launchIn(viewModelScope)
     }
@@ -97,33 +107,29 @@ internal class SoftApViewModel @Inject constructor(
     }
 
     fun onLoggerAppBarIconPressed(context: Context) {
-        context.packageManager
-            .getLaunchIntentForPackage("no.nordicsemi.android.log")
-            ?.let { launchIntent ->
-                context.startActivity(launchIntent)
-            } ?: run {
-            LoggerLauncher.launch(context, logger?.session as LogSession)
-        }
+        LoggerLauncher.launch(context, logger?.session as LogSession)
+    }
+
+    private fun initLogger(context: Context, ssid: String) {
+        logger?.let { Timber.uproot(it) }
+        logger = nRFLoggerTree(context, "SoftAP", ssid, "Provisioning over Wi-Fi")
+            .also { Timber.plant(it) }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun start(
         context: Context,
-        ssid: String = "nrf-wifiprov",
+        ssid: String,
         passphraseConfiguration: PassphraseConfiguration = Open
     ) {
-        if (logger != null) {
-            Timber.uproot(logger!!)
-            logger = null
-        }
-        Timber.plant(nRFLoggerTree(context, ssid, "SoftAP Manager").also {
-            logger = it
-        })
+        initLogger(context, ssid)
+
         val handler = CoroutineExceptionHandler { _, throwable ->
             if (throwable is UnableToConnectToNetwork || throwable is WifiNotEnabledException) {
                 _state.value = _state.value.copy(isConnectionRequested = false)
             }
             _state.value = _state.value.copy(error = throwable)
+            Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_RED)
         }
         viewModelScope.launch(handler) {
             _state.value = _state.value.copy(isConnectionRequested = true)
@@ -134,7 +140,7 @@ internal class SoftApViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private suspend fun connect(
-        ssid: String = "nrf-wifiprov",
+        ssid: String,
         passphraseConfiguration: PassphraseConfiguration = Open
     ) {
         require(softApManager.isWifiEnabled) {
@@ -198,16 +204,21 @@ internal class SoftApViewModel @Inject constructor(
                     )
                     val response = softApManager.provision(it)
                     if (response.isSuccessful) {
-                        Timber.log(Log.INFO, "Provisioning succeeded: $response")
+                        Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_STAR_BLUE)
+                    } else {
+                        _state.value = _state.value.copy(error = Throwable("Error: ${response.code()}"))
+                        Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_RED)
                     }
                 } catch (e: SocketTimeoutException) {
                     // There is always chance that a socket timeout is thrown from the DK during
                     // provisioning due to timing constraints. In such cases, we can ignore the response
                     // and assume that the provisioning was successful.
-                    Timber.log(Log.WARN, e, "Connection timed out, provisioning succeeded!")
+                    Timber.log(Log.WARN, "Provisioning succeeded (connection timed out)")
+                    Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_STAR_BLUE)
                 } catch (e: Exception) {
-                    Timber.log(Log.WARN, e, "Error occurred, provisioning may have succeeded!")
+                    Timber.log(Log.WARN, e, "Provisioning (probably) succeeded (error: ${e.message})")
                     _state.value = _state.value.copy(error = e)
+                    Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
                 } finally {
                     softApManager.disconnect()
                     _state.value = _state.value.copy(provisionState = WizardStepState.COMPLETED)
@@ -225,14 +236,20 @@ internal class SoftApViewModel @Inject constructor(
                     val verified = softApManager.verify()
                     if (verified) {
                         _state.value = _state.value.copy(verifyState = WizardStepState.COMPLETED)
+                        Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_STAR_BLUE)
+                    } else {
+                        Timber.log(Log.WARN, "Device not found")
+                        Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
                     }
                 }
             } catch (e: TimeoutCancellationException) {
-                Timber.log(Log.WARN, e, "Verification timed out!")
+                Timber.log(Log.WARN, e, "Verification timed out")
                 _state.value = _state.value.copy(error = e, isVerificationRequested = false)
+                Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
             } catch (e: Exception) {
-                Timber.log(Log.WARN, e, "Unknown error occurred!")
+                Timber.log(Log.WARN, e, "Unknown error occurred")
                 _state.value = _state.value.copy(error = e, isVerificationRequested = false)
+                Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
             }
         }
     }
