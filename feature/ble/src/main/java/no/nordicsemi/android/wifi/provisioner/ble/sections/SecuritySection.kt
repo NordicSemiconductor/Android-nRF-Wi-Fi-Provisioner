@@ -1,11 +1,15 @@
 package no.nordicsemi.android.wifi.provisioner.ble.sections
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WifiPassword
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import no.nordicsemi.android.common.ui.view.StatusItem
 import no.nordicsemi.android.common.ui.view.WizardStepAction
@@ -31,12 +35,13 @@ fun SecuritySection(
             else -> WizardStepState.INACTIVE
         },
         decor = when {
-            state.isConnected && state.network != null  ->
+            state.isConnected && state.network != null ->
                 WizardStepAction.Action(
                     text = stringResource(id = R.string.action_set_password),
                     onClick = { onEvent(OnShowPasswordDialog) },
                     enabled = state.network.isPasswordRequired() && !state.isRunning() && !state.isProvisioningComplete(),
                 )
+
             else -> null
         },
     ) {
