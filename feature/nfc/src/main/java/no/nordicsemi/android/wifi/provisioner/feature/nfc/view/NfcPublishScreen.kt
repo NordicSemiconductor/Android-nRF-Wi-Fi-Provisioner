@@ -30,11 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.permissions.nfc.RequireNfc
-import no.nordicsemi.android.common.theme.view.NordicAppBar
-import no.nordicsemi.android.common.theme.view.ProgressItem
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
-import no.nordicsemi.android.common.theme.view.WizardStepComponent
-import no.nordicsemi.android.common.theme.view.WizardStepState
+import no.nordicsemi.android.common.ui.view.NordicAppBar
+import no.nordicsemi.android.common.ui.view.ProgressItem
+import no.nordicsemi.android.common.ui.view.ProgressItemStatus
+import no.nordicsemi.android.common.ui.view.StatusItem
+import no.nordicsemi.android.common.ui.view.WizardStepComponent
+import no.nordicsemi.android.common.ui.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.uicomponent.NfcPasswordRow
@@ -96,91 +97,84 @@ internal fun NfcPublishScreen() {
                             title = stringResource(id = R.string.wifi_record),
                             state = WizardStepState.COMPLETED
                         ) {
-                            NfcTextRow(
-                                title = stringResource(id = R.string.ssid_title),
-                                text = wifiData.ssid
-                            )
-                            if (wifiData.password != null) {
-                                NfcPasswordRow(title = stringResource(id = R.string.password_title))
-                            }
-                            wifiData.macAddress?.let { address ->
+                            StatusItem {
                                 NfcTextRow(
-                                    title = stringResource(id = R.string.mac_address),
-                                    text = address.uppercase()
+                                    title = stringResource(id = R.string.ssid_title),
+                                    text = wifiData.ssid
+                                )
+                                if (wifiData.password != null) {
+                                    NfcPasswordRow(title = stringResource(id = R.string.password_title))
+                                }
+                                wifiData.macAddress?.let { address ->
+                                    NfcTextRow(
+                                        title = stringResource(id = R.string.mac_address),
+                                        text = address.uppercase()
+                                    )
+                                }
+                                NfcTextRow(
+                                    title = stringResource(id = R.string.authentication_title),
+                                    text = wifiData.authType.toDisplayString()
+                                )
+                                NfcTextRow(
+                                    title = stringResource(id = R.string.encryption_title),
+                                    text = wifiData.encryptionMode.toDisplayString()
+                                )
+                                NfcTextRow(
+                                    title = stringResource(id = R.string.message_size),
+                                    text = stringResource(
+                                        id = R.string.message_size_in_bytes,
+                                        ndefMessage.byteArrayLength
+                                    )
                                 )
                             }
-                            NfcTextRow(
-                                title = stringResource(id = R.string.authentication_title),
-                                text = wifiData.authType.toDisplayString()
-                            )
-                            NfcTextRow(
-                                title = stringResource(id = R.string.encryption_title),
-                                text = wifiData.encryptionMode.toDisplayString()
-                            )
-                            NfcTextRow(
-                                title = stringResource(id = R.string.message_size),
-                                text = stringResource(
-                                    id = R.string.message_size_in_bytes,
-                                    ndefMessage.byteArrayLength
-                                )
-                            )
                         }
 
                         WizardStepComponent(
                             icon = Icons.Default.Edit,
                             title = stringResource(id = R.string.discover_tag_title),
                             state = WizardStepState.CURRENT,
-                            showVerticalDivider = false,
                         ) {
-                            Column {
-                                when (val e = nfcScanEvent) {
-                                    is Error -> {
-                                        // Show the error message.
-                                        ProgressItem(
-                                            text = stringResource(id = R.string.write_failed),
-                                            status = ProgressItemStatus.ERROR,
-                                            iconRightPadding = 24.dp,
-                                        )
+                            when (val e = nfcScanEvent) {
+                                is Error -> {
+                                    // Show the error message.
+                                    ProgressItem(
+                                        status = ProgressItemStatus.ERROR,
+                                    ) {
+                                        Text(text = stringResource(id = R.string.write_failed))
                                         Text(
                                             text = e.message,
-                                            modifier = Modifier
-                                                .alpha(0.7f)
-                                                .padding(start = 48.dp),
+                                            modifier = Modifier.alpha(0.7f),
                                             style = MaterialTheme.typography.bodySmall,
                                         )
                                     }
+                                }
 
-                                    Loading -> {
-                                        // Show the loading indicator.
-                                        ProgressItem(
-                                            text = stringResource(id = R.string.discovering_tag),
-                                            status = ProgressItemStatus.WORKING,
-                                            iconRightPadding = 24.dp,
-                                        )
-                                    }
+                                Loading -> {
+                                    // Show the loading indicator.
+                                    ProgressItem(
+                                        text = stringResource(id = R.string.discovering_tag),
+                                        status = ProgressItemStatus.WORKING,
+                                    )
+                                }
 
-                                    Success -> {
-                                        ProgressItem(
-                                            text = stringResource(id = R.string.write_success),
-                                            status = ProgressItemStatus.SUCCESS,
-                                            iconRightPadding = 24.dp,
-                                        )
+                                Success -> {
+                                    ProgressItem(
+                                        status = ProgressItemStatus.SUCCESS,
+                                    ) {
+                                        Text(text = stringResource(id = R.string.write_success))
                                         Text(
                                             text = stringResource(id = R.string.success_des),
-                                            modifier = Modifier
-                                                .alpha(0.7f)
-                                                .padding(start = 48.dp),
+                                            modifier = Modifier.alpha(0.7f),
                                             style = MaterialTheme.typography.bodySmall,
                                         )
                                     }
+                                }
 
-                                    null -> {
-                                        ProgressItem(
-                                            text = stringResource(id = R.string.tap_nfc_tag),
-                                            status = ProgressItemStatus.WORKING,
-                                            iconRightPadding = 24.dp,
-                                        )
-                                    }
+                                null -> {
+                                    ProgressItem(
+                                        text = stringResource(id = R.string.tap_nfc_tag),
+                                        status = ProgressItemStatus.WORKING,
+                                    )
                                 }
                             }
                         }

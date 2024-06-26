@@ -9,9 +9,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import no.nordicsemi.android.common.core.parseBold
 import no.nordicsemi.android.common.theme.NordicTheme
-import no.nordicsemi.android.common.theme.view.WizardStepAction
-import no.nordicsemi.android.common.theme.view.WizardStepComponent
-import no.nordicsemi.android.common.theme.view.WizardStepState
+import no.nordicsemi.android.common.ui.view.StatusItem
+import no.nordicsemi.android.common.ui.view.WizardStepAction
+import no.nordicsemi.android.common.ui.view.WizardStepComponent
+import no.nordicsemi.android.common.ui.view.WizardStepState
 import no.nordicsemi.android.kotlin.ble.core.MockServerDevice
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleViewEntity
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
@@ -47,10 +48,12 @@ private fun NotSelectedDeviceView(
         ),
         state = WizardStepState.CURRENT,
     ) {
-        Text(
-            text = "Select a device",
-            style = MaterialTheme.typography.bodyMedium,
-        )
+        StatusItem {
+            Text(
+                text = "Select a device",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }
 
@@ -72,14 +75,16 @@ private fun SelectedDeviceView(
         ),
         state = WizardStepState.COMPLETED,
     ) {
-        Text(
-            text = String.format(DEVICE_NAME, state.device?.name ?: "No name").parseBold(),
-            style = MaterialTheme.typography.bodyMedium
-        )
-        Text(
-            text = String.format(DEVICE_ADDRESS, state.device?.address).parseBold(),
-            style = MaterialTheme.typography.bodyMedium,
-        )
+        StatusItem {
+            Text(
+                text = String.format(DEVICE_NAME, state.device?.name ?: "No name").parseBold(),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = String.format(DEVICE_ADDRESS, state.device?.address).parseBold(),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }
 

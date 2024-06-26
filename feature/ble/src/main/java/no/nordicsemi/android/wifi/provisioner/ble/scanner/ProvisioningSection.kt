@@ -45,7 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.common.theme.view.RssiIcon
+import no.nordicsemi.android.common.ui.view.RssiIcon
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
 
 @Composable

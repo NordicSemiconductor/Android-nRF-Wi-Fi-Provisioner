@@ -38,12 +38,13 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
 import no.nordicsemi.android.common.permissions.wifi.RequireWifi
-import no.nordicsemi.android.common.theme.view.NordicAppBar
-import no.nordicsemi.android.common.theme.view.ProgressItem
-import no.nordicsemi.android.common.theme.view.ProgressItemStatus
-import no.nordicsemi.android.common.theme.view.WizardStepAction
-import no.nordicsemi.android.common.theme.view.WizardStepComponent
-import no.nordicsemi.android.common.theme.view.WizardStepState
+import no.nordicsemi.android.common.ui.view.NordicAppBar
+import no.nordicsemi.android.common.ui.view.ProgressItem
+import no.nordicsemi.android.common.ui.view.ProgressItemStatus
+import no.nordicsemi.android.common.ui.view.StatusItem
+import no.nordicsemi.android.common.ui.view.WizardStepAction
+import no.nordicsemi.android.common.ui.view.WizardStepComponent
+import no.nordicsemi.android.common.ui.view.WizardStepState
 import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 import no.nordicsemi.android.wifi.provisioner.softap.FailedToBindToNetwork
 import no.nordicsemi.android.wifi.provisioner.softap.OnConnectionLost
@@ -107,7 +108,7 @@ fun SoftApScreen(
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            RequireWifi {
+            RequireWifi(isNearbyWifiDevicesPermissionRequired = false) {
                 OutlinedCard(
                     modifier = Modifier
                         .widthIn(max = 600.dp)
@@ -202,9 +203,10 @@ private fun ConfigureSoftAp(
             onClick = { showDialog = true },
             enabled = connectionState != WizardStepState.COMPLETED && !isConnectionRequested
         ),
-        showVerticalDivider = true
     ) {
-        Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: $ssidName")
+        StatusItem {
+            Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: $ssidName")
+        }
     }
     if (showDialog) {
         EditSsidDialog(
@@ -238,14 +240,15 @@ private fun ConnectToSoftAp(
             onClick = start,
             enabled = connectionState == WizardStepState.CURRENT && !isConnectionRequested
         ),
-        showVerticalDivider = false,
     ) {
         ProgressItem(
             text = when {
                 isConnectionRequested && connectionState == WizardStepState.CURRENT ->
                     stringResource(id = R.string.connecting)
+
                 connectionState == WizardStepState.COMPLETED ->
                     stringResource(id = R.string.connected)
+
                 else -> stringResource(id = R.string.connect)
             },
             status = when {
@@ -253,7 +256,6 @@ private fun ConnectToSoftAp(
                 connectionState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
-            iconRightPadding = 24.dp,
         )
         ProgressItem(
             text = when (serviceDiscoveryState) {
@@ -266,7 +268,6 @@ private fun ConnectToSoftAp(
                 WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
-            iconRightPadding = 24.dp,
         )
     }
 }
@@ -285,32 +286,34 @@ private fun SelectWifi(
         title = stringResource(id = R.string.section_network),
         state = selectWifiState,
         decor = if (selectWifiState == WizardStepState.CURRENT
-                 || providePasswordState == WizardStepState.CURRENT
-                 || provisioningState == WizardStepState.CURRENT
-                 || providePasswordState == WizardStepState.COMPLETED) {
+            || providePasswordState == WizardStepState.CURRENT
+            || provisioningState == WizardStepState.CURRENT
+            || providePasswordState == WizardStepState.COMPLETED
+        ) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.action_select),
                 onClick = onSelectWifiPressed,
                 enabled = !isProvisioningRequested,
             )
         } else null,
-        showVerticalDivider = true
     ) {
-        if (wifiData != null && selectWifiState != WizardStepState.INACTIVE) {
-            Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: ${wifiData.ssid}")
-            Text(style = MaterialTheme.typography.bodyMedium,
-                text = "Band: ${
-                    wifiData.let {
-                        it.selectedChannel?.wifiInfo?.band?.toDisplayString()
-                            ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
-                    }
-                }"
-            )
-        } else {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                text = stringResource(R.string.select_wifi)
-            )
+        StatusItem {
+            if (wifiData != null && selectWifiState != WizardStepState.INACTIVE) {
+                Text(style = MaterialTheme.typography.bodyMedium, text = "SSID: ${wifiData.ssid}")
+                Text(style = MaterialTheme.typography.bodyMedium,
+                    text = "Band: ${
+                        wifiData.let {
+                            it.selectedChannel?.wifiInfo?.band?.toDisplayString()
+                                ?: it.channelFallback.wifiInfo?.band?.toDisplayString()
+                        }
+                    }"
+                )
+            } else {
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = stringResource(R.string.select_wifi)
+                )
+            }
         }
     }
 }
@@ -330,43 +333,45 @@ private fun SetPassphrase(
         title = stringResource(id = R.string.section_security),
         state = providePasswordState,
         decor = if (providePasswordState == WizardStepState.CURRENT
-                 || provisioningState == WizardStepState.CURRENT
-                 || provisioningState == WizardStepState.COMPLETED) {
+            || provisioningState == WizardStepState.CURRENT
+            || provisioningState == WizardStepState.COMPLETED
+        ) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.action_set_password),
                 onClick = { showDialog = true },
                 enabled = wifiData?.authMode != AuthModeDomain.OPEN && !isProvisioningRequested
             )
         } else null,
-        showVerticalDivider = true
     ) {
-        if (wifiData != null) {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                text = "Security: ${wifiData.authMode.toDisplayString()}"
-            )
-
-            if (wifiData.authMode != AuthModeDomain.OPEN && password != null) {
+        StatusItem {
+            if (wifiData != null) {
                 Text(
                     style = MaterialTheme.typography.bodyMedium,
-                    text = stringResource(R.string.set_passphrase_value)
+                    text = "Security: ${wifiData.authMode.toDisplayString()}"
+                )
+
+                if (wifiData.authMode != AuthModeDomain.OPEN && password != null) {
+                    Text(
+                        style = MaterialTheme.typography.bodyMedium,
+                        text = stringResource(R.string.set_passphrase_value)
+                    )
+                }
+            } else {
+                Text(
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = stringResource(R.string.set_wifi_passphrase)
                 )
             }
-        } else {
-            Text(
-                style = MaterialTheme.typography.bodyMedium,
-                text = stringResource(R.string.set_wifi_passphrase)
-            )
         }
-        if (showDialog) {
-            PasswordDialog(
-                onConfirmPressed = {
-                    onPasswordEntered(it)
-                    showDialog = false
-                },
-                onDismiss = { showDialog = false }
-            )
-        }
+    }
+    if (showDialog) {
+        PasswordDialog(
+            onConfirmPressed = {
+                onPasswordEntered(it)
+                showDialog = false
+            },
+            onDismiss = { showDialog = false }
+        )
     }
 }
 
@@ -383,20 +388,21 @@ private fun Provisioning(
         decor = if (isProvisioningRequested && provisioningState == WizardStepState.CURRENT) {
             WizardStepAction.ProgressIndicator
         } else if (provisioningState == WizardStepState.CURRENT
-                || provisioningState == WizardStepState.COMPLETED) {
+            || provisioningState == WizardStepState.COMPLETED
+        ) {
             WizardStepAction.Action(
                 text = stringResource(id = R.string.action_provision),
                 onClick = onProvisionPressed,
                 enabled = !isProvisioningRequested
             )
         } else null,
-        showVerticalDivider = false
     ) {
         ProgressItem(
             text = when {
                 isProvisioningRequested && provisioningState == WizardStepState.CURRENT -> stringResource(
                     R.string.wifi_status_provisioning
                 )
+
                 provisioningState == WizardStepState.COMPLETED -> stringResource(R.string.wifi_status_provisioned)
                 else -> stringResource(R.string.wifi_status_provision)
             },
@@ -405,7 +411,6 @@ private fun Provisioning(
                 provisioningState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
-            iconRightPadding = 24.dp,
         )
     }
 }
@@ -431,12 +436,12 @@ private fun Verify(
                 )
             }
         } else null,
-        showVerticalDivider = false
     ) {
         ProgressItem(
             text = when {
                 isVerificationRequested && verificationState == WizardStepState.CURRENT ->
                     stringResource(R.string.wifi_status_verifying)
+
                 verificationState == WizardStepState.COMPLETED -> stringResource(R.string.wifi_status_verified)
                 else -> stringResource(R.string.wifi_status_verify)
             },
@@ -445,7 +450,6 @@ private fun Verify(
                 verificationState == WizardStepState.COMPLETED -> ProgressItemStatus.SUCCESS
                 else -> ProgressItemStatus.DISABLED
             },
-            iconRightPadding = 24.dp,
         )
     }
 }

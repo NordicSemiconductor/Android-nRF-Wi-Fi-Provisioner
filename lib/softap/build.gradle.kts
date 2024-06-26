@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.nordic.library)
-    alias(libs.plugins.nordic.kotlin)
+    alias(libs.plugins.nordic.kotlin.android)
     alias(libs.plugins.wire)
 }
 
@@ -17,12 +17,10 @@ dependencies {
     implementation(libs.slf4j)
 
     implementation(libs.retrofit.core)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.converter.scalars)
     implementation(libs.retrofit.converter.wire)
     implementation(libs.okhttp)
+    implementation(libs.okhttp.tls)
     implementation(libs.okhttp.logging)
-    implementation("com.squareup.okhttp3:okhttp-tls:5.0.0-alpha.12")
 }
 
 wire {

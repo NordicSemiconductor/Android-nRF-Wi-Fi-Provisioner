@@ -32,6 +32,7 @@
 plugins {
     alias(libs.plugins.nordic.application.compose)
     alias(libs.plugins.nordic.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -49,14 +50,12 @@ dependencies {
     implementation(project(":feature:ui"))
     implementation(project(":lib:ble"))
     implementation(project(":lib:softap"))
-    implementation(project(":feature:ui"))
-
-    implementation(libs.androidx.compose.ui)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.activity.compose)
 
+    implementation(libs.nordic.ui)
     implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
     implementation(libs.timber)

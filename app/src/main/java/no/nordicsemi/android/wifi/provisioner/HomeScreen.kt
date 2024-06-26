@@ -73,7 +73,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.navigation.DestinationId
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
-import no.nordicsemi.android.common.theme.view.NordicAppBar
+import no.nordicsemi.android.common.ui.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.app.BuildConfig
 import no.nordicsemi.android.wifi.provisioner.app.R
 import no.nordicsemi.android.wifi.provisioner.ble.view.BleDestination

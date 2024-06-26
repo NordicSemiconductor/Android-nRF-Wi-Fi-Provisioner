@@ -23,7 +23,7 @@ import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.ByteString.Companion.toByteString
-import retrofit2.Response
+import org.slf4j.LoggerFactory
 import retrofit2.Retrofit
 import retrofit2.converter.wire.WireConverterFactory
 import java.util.concurrent.TimeUnit
@@ -45,6 +45,7 @@ class SoftApManager(
     context: Context,
     hostNameConfiguration: HostNameConfiguration = HostNameConfiguration(),
 ) {
+    private val logger = LoggerFactory.getLogger(SoftApManager::class.java)
     var softAp: SoftAp? = null
         private set
 
@@ -128,6 +129,7 @@ class SoftApManager(
             @RequiresApi(Build.VERSION_CODES.Q)
             override fun onAvailable(network: Network) {
                 // do success processing here..\
+                logger.info("Binding to network: {}", network)
                 if (connectivityManager.bindProcessToNetwork(network)) {
                     isConnected = true
                     isBoundToNetwork = true
@@ -143,6 +145,7 @@ class SoftApManager(
             }
 
             override fun onUnavailable() {
+                logger.info("Network unavailable")
                 // do failure processing here..
                 disconnect()
                 continuation.resumeWithException(exception = UnableToConnectToNetwork)
@@ -163,6 +166,7 @@ class SoftApManager(
             .setNetworkSpecifier(networkSpecifier)
             .build()
 
+        logger.info("Connecting to: {}", ssid)
         connectivityManager.requestNetwork(request, networkCallback!!)
 
         // Invoked if the coroutine calling this suspend function is cancelled.
@@ -235,8 +239,10 @@ class SoftApManager(
     suspend fun provision(config: WifiConfigDomain): Response<ResponseBody> {
         require(isWifiEnabled) { throw WifiNotEnabledException }
         require(isBoundToNetwork) { throw FailedToBindToNetwork }
+        logger.info("Provisioning device to: {}", config.info!!.ssid)
         return softApProvisioningService.provision(config.toApi()).also {
             if (it.isSuccessful) {
+                logger.info("Provisioning succeeded: {}", config.info.ssid)
                 softAp?.wifiConfigDomain = config
             }
         }
@@ -251,6 +257,7 @@ class SoftApManager(
     @RequiresApi(Build.VERSION_CODES.Q)
     fun disconnect() {
         if (isConnected) {
+            logger.info("Disconnecting from network...")
             isConnected = false
             isBoundToNetwork = false
             connectivityManager.bindProcessToNetwork(null)

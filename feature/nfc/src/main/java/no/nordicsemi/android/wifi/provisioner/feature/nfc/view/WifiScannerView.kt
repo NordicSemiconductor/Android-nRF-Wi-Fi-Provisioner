@@ -59,8 +59,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.permissions.wifi.RequireLocationForWifi
 import no.nordicsemi.android.common.permissions.wifi.RequireWifi
 import no.nordicsemi.android.common.theme.NordicTheme
-import no.nordicsemi.android.common.theme.view.NordicAppBar
-import no.nordicsemi.android.common.theme.view.WarningView
+import no.nordicsemi.android.common.ui.view.NordicAppBar
+import no.nordicsemi.android.common.ui.view.WarningView
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.Frequency
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.mapping.toDisplayString
@@ -135,7 +135,7 @@ internal fun WifiScannerScreen() {
         Box(
             modifier = Modifier.padding(innerPadding)
         ) {
-            RequireWifi {
+            RequireWifi(isNearbyWifiDevicesPermissionRequired = true) {
                 RequireLocationForWifi {
                     LaunchedEffect(key1 = it) {
                         wifiScannerViewModel.scanAvailableWifiNetworks()
