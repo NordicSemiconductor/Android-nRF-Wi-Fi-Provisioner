@@ -111,14 +111,10 @@ class BleViewModel @Inject constructor(
         super.onCleared()
     }
 
-    private fun initLogger(device : RealServerDevice){
-        if (logger != null) {
-            Timber.uproot(logger!!)
-            logger = null
-        }
-        Timber.plant(nRFLoggerTree(context, device.address, device.name ?: "Unknown").also {
-            logger = it
-        })
+    private fun initLogger(device : RealServerDevice) {
+        logger?.let { Timber.uproot(it) }
+        logger = nRFLoggerTree(context, "BLE", device.address, device.name ?: "Unknown")
+            .also { Timber.plant(it) }
     }
 
     fun onEvent(event: ProvisioningViewEvent) {
@@ -133,15 +129,7 @@ class BleViewModel @Inject constructor(
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
             OnShowPasswordDialog -> showPasswordDialog()
-            OpenLoggerEvent -> {
-                context.packageManager
-                    .getLaunchIntentForPackage("no.nordicsemi.android.log")
-                    ?.let { launchIntent ->
-                        context.startActivity(launchIntent)
-                    } ?: run {
-                    LoggerLauncher.launch(context, logger?.session as LogSession)
-                }
-            }
+            OpenLoggerEvent -> LoggerLauncher.launch(context, logger?.session as? LogSession)
             OnUnprovisionEvent -> cancelConfig()
             OnProvisionNextDeviceEvent -> provisionNextDevice()
             OnVolatileMemoryChangedEvent -> onVolatileMemoryChangeEvent()
