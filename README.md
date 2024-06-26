@@ -29,6 +29,6 @@ The application requires nRF700x Wi-Fi device with a nRF5x companion chip with f
 #### Known Issues
 * Provisioning over SoftAP
   - Verification may fail at times and even though the device could be successfully provisioned to the network.
-  - During a successful verification the DnsResolver on certain Android versions/devices may cache the IP address of the SoftAP Provisioning service.
-    This may cause selecting a Wi-Fi network while provisioning/re-provisioning device to fail. 
+  - During a successful verification, the DnsResolver on certain Android versions/devices may cache the IP address of the SoftAP Provisioning service.
+    This can cause, selecting a Wi-Fi network while provisioning/re-provisioning a device to fail. 
     However, turning off and on the wifi on the Android device before re-provisioning should fix this issue. 
