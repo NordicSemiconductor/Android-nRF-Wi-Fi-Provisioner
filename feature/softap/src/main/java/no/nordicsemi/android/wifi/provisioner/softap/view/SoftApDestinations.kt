@@ -17,7 +17,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerVie
 
 val SoftApDestination = createSimpleDestination("softap")
 val SoftApProvisionerDestination = createSimpleDestination("softap-provisioner-destination")
-val SoftApWifiScannerDestination = createDestination<Unit, WifiData>(
+val SoftApWifiScannerDestination = createDestination<Unit, Result<WifiData>>(
     name = "wifi-access-points-softap-destination"
 )
 
