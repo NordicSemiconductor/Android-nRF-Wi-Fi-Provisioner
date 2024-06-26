@@ -95,7 +95,6 @@ class BleViewModel @Inject constructor(
     private val pendingJobs = mutableListOf<Job>()
 
     init {
-        initLogger()
         navigationManager.resultFrom(BleScannerDestinationId)
             .mapNotNull { it as? NavigationResult.Success }
             .onEach { installBluetoothDevice(it.value as RealServerDevice) }
@@ -112,12 +111,12 @@ class BleViewModel @Inject constructor(
         super.onCleared()
     }
 
-    private fun initLogger(){
+    private fun initLogger(device : RealServerDevice){
         if (logger != null) {
             Timber.uproot(logger!!)
             logger = null
         }
-        Timber.plant(nRFLoggerTree(context, "Provisioning over Bluetooth LE", "Unknown").also {
+        Timber.plant(nRFLoggerTree(context, device.address, device.name ?: "Unknown").also {
             logger = it
         })
     }
@@ -206,6 +205,7 @@ class BleViewModel @Inject constructor(
     }
 
     private fun installBluetoothDevice(device: RealServerDevice) {
+        initLogger(device = device)
         _state.value = BleViewEntity(device = device, version = Loading())
         viewModelScope.launchWithCatch {
             release()
