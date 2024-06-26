@@ -19,10 +19,16 @@ The application requires nRF700x Wi-Fi device with a nRF5x companion chip with f
 * Provisioning over SoftAP
   - List nearby Wi-Fi networks
   - Provisioning to Wi-Fi network
-  - Verifying provisioning status
+  - Verifying provisioning status -  Note that Verification is an experimental feature
 
 * Provisioning over NFC
   - Scan Wi-Fi network using the App
   - Manually Add a Wi-Fi Network
   - Provisioning to Wi-Fi network
 
+#### Known Issues
+* Provisioning over SoftAP
+  - Verification may fail at times and even though the device could be successfully provisioned to the network.
+  - During a successful verification the DnsResolver on certain Android versions/devices may cache the IP address of the SoftAP Provisioning service.
+    This may cause selecting a Wi-Fi network while provisioning/re-provisioning device to fail. 
+    However, turning off and on the wifi on the Android device before re-provisioning should fix this issue. 
