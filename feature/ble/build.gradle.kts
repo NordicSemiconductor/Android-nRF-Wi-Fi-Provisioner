@@ -52,4 +52,8 @@ dependencies {
     implementation(libs.nordic.core)
     implementation(libs.nordic.permissions.ble)
     implementation(libs.nordic.blek.uiscanner)
+
+    // Timber & SLF4J
+    implementation (libs.slf4j.timber)
+    implementation(libs.nordic.log.timber)
 }

@@ -38,13 +38,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import no.nordicsemi.android.wifi.provisioner.ble.ProvisionerRepository
-import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
-import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
-import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.VersionDomain
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
-import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
+import no.nordicsemi.kotlin.wifi.provisioner.domain.DeviceStatusDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.ScanRecordDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.WifiConnectionStateDomain
+import no.nordicsemi.kotlin.wifi.provisioner.domain.resource.Resource
 
 class ProvisionerResourceRepository(
     private val repository: ProvisionerRepository
