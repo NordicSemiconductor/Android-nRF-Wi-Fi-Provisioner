@@ -91,7 +91,9 @@ fun SoftApScreen(
             NordicAppBar(
                 title = { Text(text = stringResource(id = R.string.provision_over_wifi)) },
                 actions = {
-                    LoggerAppBarIcon(onClick = onLoggerAppBarIconPressed)
+                    if (state.isConnectionRequested || state.error != null) {
+                        LoggerAppBarIcon(onClick = onLoggerAppBarIconPressed)
+                    }
                 },
                 showBackButton = true,
                 onNavigationButtonClick = navigateUp

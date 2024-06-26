@@ -85,9 +85,11 @@ fun BleProvisioningScreen() {
                     )
                 },
                 actions = {
-                    LoggerAppBarIcon(
-                        onClick = { viewModel.onEvent(OpenLoggerEvent) }
-                    )
+                    if (state.device != null) {
+                        LoggerAppBarIcon(
+                            onClick = { viewModel.onEvent(OpenLoggerEvent) },
+                        )
+                    }
                 },
                 showBackButton = true,
                 onNavigationButtonClick = viewModel::navigateUp
