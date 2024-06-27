@@ -119,7 +119,7 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
         )
 
         continuation.invokeOnCancellation {
-            it?.let { logger.error("Service discovery cancelled with ${it.message}") }
+            logger.warn("Service discovery cancelled")
             stopServiceDiscovery(nsdListener)
         }
     }

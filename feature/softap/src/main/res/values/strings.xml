@@ -46,6 +46,6 @@
     <string name="failed_to_bind_to_network">Failed to bind to network!</string>
     <string name="unable_to_connect_to_network">Unable to connect to network!</string>
     <string name="connection_lost">Connection lost!</string>
-    <string name="verification_timed_out_please_retry">Verification timed out, please retry!</string>
+    <string name="timeout">Operation timed out, please retry!</string>
 
 </resources>
