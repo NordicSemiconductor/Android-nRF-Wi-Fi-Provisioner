@@ -56,6 +56,7 @@ import no.nordicsemi.android.common.ui.view.NordicAppBar
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ConnectionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.DeviceSelectionSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.NetworkStatusSection
+import no.nordicsemi.android.wifi.provisioner.ble.sections.PersistentStorage
 import no.nordicsemi.android.wifi.provisioner.ble.sections.ProvisioningSection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.SecuritySection
 import no.nordicsemi.android.wifi.provisioner.ble.sections.StatusSection
@@ -112,6 +113,7 @@ fun BleProvisioningScreen() {
                         ConnectionSection(state = state, onEvent = onEvent)
                         NetworkStatusSection(state = state, onEvent = onEvent)
                         SecuritySection(state = state, onEvent = onEvent)
+                        PersistentStorage(state = state, onEvent = onEvent)
                         ProvisioningSection(state = state, onEvent = onEvent)
                         StatusSection(state = state, onEvent = onEvent)
                     }

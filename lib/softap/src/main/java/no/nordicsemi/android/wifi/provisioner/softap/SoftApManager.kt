@@ -24,6 +24,7 @@ import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.ByteString.Companion.toByteString
 import org.slf4j.LoggerFactory
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.wire.WireConverterFactory
 import java.util.concurrent.TimeUnit

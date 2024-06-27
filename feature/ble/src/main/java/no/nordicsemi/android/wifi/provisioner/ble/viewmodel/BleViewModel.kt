@@ -31,9 +31,11 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,10 +46,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import no.nordicsemi.android.common.logger.LoggerLauncher
 import no.nordicsemi.android.common.navigation.NavigationResult
 import no.nordicsemi.android.common.navigation.Navigator
 import no.nordicsemi.android.common.navigation.viewmodel.SimpleNavigationViewModel
 import no.nordicsemi.android.kotlin.ble.core.RealServerDevice
+import no.nordicsemi.android.log.LogSession
+import no.nordicsemi.android.log.timber.nRFLoggerTree
 import no.nordicsemi.android.wifi.provisioner.ble.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.launchWithCatch
@@ -70,15 +75,18 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectDevice
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSelectWifiEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnShowPasswordDialog
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.ProvisioningViewEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class BleViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val navigationManager: Navigator,
     private val repository: ProvisionerResourceRepository,
     savedStateHandle: SavedStateHandle
 ) : SimpleNavigationViewModel(navigator = navigationManager, savedStateHandle) {
 
+    private var logger: nRFLoggerTree? = null
     private var connectionObserverJob: Job? = null
 
     private val _state = MutableStateFlow(BleViewEntity())
@@ -87,6 +95,7 @@ class BleViewModel @Inject constructor(
     private val pendingJobs = mutableListOf<Job>()
 
     init {
+        initLogger()
         navigationManager.resultFrom(BleScannerDestinationId)
             .mapNotNull { it as? NavigationResult.Success }
             .onEach { installBluetoothDevice(it.value as RealServerDevice) }
@@ -103,6 +112,16 @@ class BleViewModel @Inject constructor(
         super.onCleared()
     }
 
+    private fun initLogger(){
+        if (logger != null) {
+            Timber.uproot(logger!!)
+            logger = null
+        }
+        Timber.plant(nRFLoggerTree(context, "Provisioning over Bluetooth LE", "Unknown").also {
+            logger = it
+        })
+    }
+
     fun onEvent(event: ProvisioningViewEvent) {
         if (event != OpenLoggerEvent) {
             cancelPendingJobs()
@@ -115,7 +134,15 @@ class BleViewModel @Inject constructor(
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
             OnShowPasswordDialog -> showPasswordDialog()
-            OpenLoggerEvent -> {}//repository.openLogger()
+            OpenLoggerEvent -> {
+                context.packageManager
+                    .getLaunchIntentForPackage("no.nordicsemi.android.log")
+                    ?.let { launchIntent ->
+                        context.startActivity(launchIntent)
+                    } ?: run {
+                    LoggerLauncher.launch(context, logger?.session as LogSession)
+                }
+            }
             OnUnprovisionEvent -> cancelConfig()
             OnProvisionNextDeviceEvent -> provisionNextDevice()
             OnVolatileMemoryChangedEvent -> onVolatileMemoryChangeEvent()
