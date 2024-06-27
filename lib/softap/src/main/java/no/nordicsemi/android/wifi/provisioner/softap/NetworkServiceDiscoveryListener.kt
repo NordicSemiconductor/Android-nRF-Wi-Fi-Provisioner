@@ -38,17 +38,18 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
         val resolveListener = object : NsdManager.ResolveListener {
             override fun onResolveFailed(serviceInfo: NsdServiceInfo?, errorCode: Int) {
                 // Called when the resolve fails. Use the error code to debug.
-                logger.error("Resolve failed: {}", errorCode)
+                logger.error("Resolving failed with code {}", errorCode)
             }
 
             override fun onServiceResolved(serviceInfo: NsdServiceInfo?) {
-                logger.info("Resolve success: {}", serviceInfo)
+                logger.info("Resolved ({})", serviceInfo)
                 serviceInfo?.let {
                     if (macAddress == null) {
                         stopDiscovery(it)
                     } else {
                         val mac = serviceInfo.attributes?.get(KEY_LINK_ADDR)?.toByteString()?.utf8()
                         if (mac == macAddress) {
+                            logger.info("MAC addresses match")
                             stopDiscovery(it)
                         }
                     }
@@ -58,7 +59,7 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
             private fun stopDiscovery(serviceInfo: NsdServiceInfo) {
                 _discoveredIps.add(serviceInfo.host)
                 continuation.resume(serviceInfo)
-                nsdManager.stopServiceDiscovery(nsdListener)
+                stopServiceDiscovery(nsdListener)
             }
         }
 
@@ -66,14 +67,14 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
 
             // Called as soon as service discovery begins.
             override fun onDiscoveryStarted(regType: String) {
-                logger.trace("Service discovery started for {}", regType)
+                logger.info("Service discovery started for type {}", regType)
             }
 
             override fun onServiceFound(service: NsdServiceInfo) {
-                logger.info("Service discovered: {}", service)
+                logger.debug("Service discovered ({})", service)
                 // Check if the service name found matches the service name we are looking for.
                 if (service.serviceName == nsdServiceInfo.serviceName) {
-                    logger.info("Resolving service...")
+                    logger.trace("Resolving service...")
                     nsdManager.resolveService(service, resolveListener)
                 }
             }
@@ -81,34 +82,36 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
             override fun onServiceLost(service: NsdServiceInfo) {
                 // When the network service is no longer available.
                 // Internal bookkeeping code goes here.
+                logger.debug("Service lost ({})", service)
             }
 
             override fun onDiscoveryStopped(serviceType: String) {
-                logger.trace("Discovery stopped: {}", serviceType)
+                logger.info("Service discovery stopped")
             }
 
             override fun onStartDiscoveryFailed(serviceType: String, errorCode: Int) {
                 logger.error(
-                    "Error while starting service discovery for {} failed: {}",
+                    "Starting service discovery for {} failed with code {}",
                     serviceType,
                     errorCode
                 )
                 continuation.resumeWithException(
-                    Throwable("Discovery failed: Error code:$errorCode")
+                    Throwable("Starting service discovery failed with code: $errorCode")
                 )
             }
 
             override fun onStopDiscoveryFailed(serviceType: String, errorCode: Int) {
                 logger.error(
-                    "Error while stopping service discovery for {} failed: {}",
+                    "Stopping service discovery for {} failed with code {}",
                     serviceType,
                     errorCode
                 )
                 continuation.resumeWithException(
-                    Throwable("Discovery failed: Error code:$errorCode")
+                    Throwable("Stopping service discovery failed with code: $errorCode")
                 )
             }
         }
+        logger.trace("Starting service discovery for type {} using mDNS...", nsdServiceInfo.serviceType)
         nsdManager.discoverServices(
             nsdServiceInfo.serviceType,
             NsdManager.PROTOCOL_DNS_SD,
@@ -116,7 +119,13 @@ class NetworkServiceDiscoveryListener internal constructor(private val nsdManage
         )
 
         continuation.invokeOnCancellation {
-            nsdManager.stopServiceDiscovery(nsdListener)
+            logger.warn("Service discovery cancelled")
+            stopServiceDiscovery(nsdListener)
         }
+    }
+
+    private fun stopServiceDiscovery(nsdListener: NsdManager. DiscoveryListener) {
+        logger.trace("Stopping service discovery...")
+        nsdManager.stopServiceDiscovery(nsdListener)
     }
 }

@@ -41,7 +41,6 @@ import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApWifiScannerDesti
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiAggregator
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.WifiData
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.viewmodel.GenericWifiScannerViewModel
-import org.slf4j.LoggerFactory
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,15 +52,13 @@ internal class SoftApWifiScannerViewModel @Inject constructor(
     navigationManager = navigationManager,
     wifiAggregator = wifiAggregator
 ) {
-
-    private val logger = LoggerFactory.getLogger(SoftApWifiScannerViewModel::class.java)
     init {
         listSsids()
     }
 
     private fun listSsids() {
         val handler = CoroutineExceptionHandler { _, throwable ->
-            logger.error("Error while listing SSIDs: {}", throwable.message)
+            navigationManager.navigateUpWithResult(SoftApWifiScannerDestination, Result.failure(throwable))
         }
 
         viewModelScope.launch(handler) {
@@ -80,6 +77,6 @@ internal class SoftApWifiScannerViewModel @Inject constructor(
     }
 
     override fun navigateUp(wifiData: WifiData) {
-        navigationManager.navigateUpWithResult(SoftApWifiScannerDestination, wifiData)
+        navigationManager.navigateUpWithResult(SoftApWifiScannerDestination, Result.success(wifiData))
     }
 }

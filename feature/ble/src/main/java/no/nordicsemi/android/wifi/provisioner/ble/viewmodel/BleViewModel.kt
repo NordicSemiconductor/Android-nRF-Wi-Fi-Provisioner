@@ -32,6 +32,7 @@
 package no.nordicsemi.android.wifi.provisioner.ble.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -95,7 +96,6 @@ class BleViewModel @Inject constructor(
     private val pendingJobs = mutableListOf<Job>()
 
     init {
-        initLogger()
         navigationManager.resultFrom(BleScannerDestinationId)
             .mapNotNull { it as? NavigationResult.Success }
             .onEach { installBluetoothDevice(it.value as RealServerDevice) }
@@ -112,14 +112,10 @@ class BleViewModel @Inject constructor(
         super.onCleared()
     }
 
-    private fun initLogger(){
-        if (logger != null) {
-            Timber.uproot(logger!!)
-            logger = null
-        }
-        Timber.plant(nRFLoggerTree(context, "Provisioning over Bluetooth LE", "Unknown").also {
-            logger = it
-        })
+    private fun initLogger(device : RealServerDevice) {
+        logger?.let { Timber.uproot(it) }
+        logger = nRFLoggerTree(context, "BLE", device.address, device.name ?: "Unknown")
+            .also { Timber.plant(it) }
     }
 
     fun onEvent(event: ProvisioningViewEvent) {
@@ -134,15 +130,7 @@ class BleViewModel @Inject constructor(
             OnProvisionClickEvent -> provision()
             OnHidePasswordDialog -> hidePasswordDialog()
             OnShowPasswordDialog -> showPasswordDialog()
-            OpenLoggerEvent -> {
-                context.packageManager
-                    .getLaunchIntentForPackage("no.nordicsemi.android.log")
-                    ?.let { launchIntent ->
-                        context.startActivity(launchIntent)
-                    } ?: run {
-                    LoggerLauncher.launch(context, logger?.session as LogSession)
-                }
-            }
+            OpenLoggerEvent -> LoggerLauncher.launch(context, logger?.session as? LogSession)
             OnUnprovisionEvent -> cancelConfig()
             OnProvisionNextDeviceEvent -> provisionNextDevice()
             OnVolatileMemoryChangedEvent -> onVolatileMemoryChangeEvent()
@@ -154,6 +142,7 @@ class BleViewModel @Inject constructor(
             persistentMemory = _state.value.persistentMemory.not(),
             provisioningStatus = null
         )
+        Timber.log(Log.DEBUG, "Volatile memory changed to ${_state.value.persistentMemory}")
     }
 
     private fun provisionNextDevice() {
@@ -203,9 +192,11 @@ class BleViewModel @Inject constructor(
             provisioningStatus = null,
             showPasswordDialog = wifiData.isPasswordRequired()
         )
+        Timber.log(Log.DEBUG, "Wi-Fi selected: $wifiData")
     }
 
     private fun installBluetoothDevice(device: RealServerDevice) {
+        initLogger(device = device)
         _state.value = BleViewEntity(device = device, version = Loading())
         viewModelScope.launchWithCatch {
             release()
@@ -245,6 +236,7 @@ class BleViewModel @Inject constructor(
 
     private fun onPasswordSelected(password: String) {
         _state.value = _state.value.copy(password = password, provisioningStatus = null)
+        Timber.log(Log.DEBUG, "Setting password: ***")
         hidePasswordDialog()
     }
 
@@ -257,6 +249,7 @@ class BleViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
+        Timber.log(Log.DEBUG, "Provisioning device...")
     }
 
     private fun WifiData.toConfig(): WifiConfigDomain {
