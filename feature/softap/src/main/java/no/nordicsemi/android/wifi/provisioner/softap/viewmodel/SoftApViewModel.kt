@@ -124,17 +124,16 @@ internal class SoftApViewModel @Inject constructor(
     ) {
         initLogger(context, ssid)
 
-        val handler = CoroutineExceptionHandler { _, throwable ->
-            if (throwable is UnableToConnectToNetwork || throwable is WifiNotEnabledException) {
-                _state.value = _state.value.copy(isConnectionRequested = false)
+        viewModelScope.launch {
+            try {
+                _state.value = _state.value.copy(isConnectionRequested = true)
+                connect(ssid, passphraseConfiguration)
+                discoverServices()
+            } catch (throwable: Throwable) {
+                softApManager.disconnect()
+                _state.value = SoftApScreenState(error = throwable)
+                Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_RED)
             }
-            _state.value = _state.value.copy(error = throwable)
-            Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_RED)
-        }
-        viewModelScope.launch(handler) {
-            _state.value = _state.value.copy(isConnectionRequested = true)
-            connect(ssid, passphraseConfiguration)
-            discoverServices()
         }
     }
 

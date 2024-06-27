@@ -4,6 +4,7 @@ package no.nordicsemi.android.wifi.provisioner.softap
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
@@ -52,7 +53,6 @@ class SoftApManager(
 
     private val _discoveredServices = mutableListOf<NsdServiceInfo>()
     private var discoveredService: NsdServiceInfo? = null
-    private var isBoundToNetwork = false
     private var isConnected = false
 
     private val wifiManager =
@@ -125,15 +125,20 @@ class SoftApManager(
             return@suspendCancellableCoroutine
         }
 
+        if (isConnected) {
+            return@suspendCancellableCoroutine
+        }
+
+        networkCallback?.let {
+            connectivityManager.unregisterNetworkCallback(it)
+        }
         networkCallback = object : ConnectivityManager.NetworkCallback() {
 
             @RequiresApi(Build.VERSION_CODES.Q)
             override fun onAvailable(network: Network) {
-                // do success processing here..\
                 logger.trace("Binding to network {}...", network)
                 if (connectivityManager.bindProcessToNetwork(network)) {
                     isConnected = true
-                    isBoundToNetwork = true
                     softAp = SoftAp(
                         ssid = ssid,
                         passphraseConfiguration = passphraseConfiguration
@@ -145,11 +150,35 @@ class SoftApManager(
                 }
             }
 
+            override fun onLosing(network: Network, maxMsToLive: Int) {
+                logger.warn("Loosing network {}", network)
+            }
+
+            override fun onLost(network: Network) {
+                logger.error("Network {} lost", network)
+                disconnect()
+            }
+
+            override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
+                logger.debug("Link properties changed for network {} to {}", network, linkProperties)
+            }
+
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities
+            ) {
+                logger.debug("Capabilities changed for network {} to {}", network, networkCapabilities)
+            }
+
             override fun onUnavailable() {
                 logger.error("Network unavailable")
                 // do failure processing here..
-                disconnect()
-                continuation.resumeWithException(exception = UnableToConnectToNetwork)
+                connectivityManager.unregisterNetworkCallback(this)
+                networkCallback = null
+                if (isConnected) {
+                    disconnect()
+                    continuation.resumeWithException(exception = UnableToConnectToNetwork)
+                }
             }
         }
         val wifNetworkBuilder = WifiNetworkSpecifier.Builder()
@@ -172,10 +201,7 @@ class SoftApManager(
 
         // Invoked if the coroutine calling this suspend function is cancelled.
         continuation.invokeOnCancellation {
-            networkCallback?.let {
-                connectivityManager.unregisterNetworkCallback(it)
-                networkCallback = null
-            }
+            disconnect()
         }
     }
 
@@ -224,7 +250,7 @@ class SoftApManager(
      */
     suspend fun listSsids(): ScanResultsDomain {
         require(isWifiEnabled) { throw WifiNotEnabledException }
-        require(isBoundToNetwork) { throw FailedToBindToNetwork }
+        require(isConnected) { throw FailedToBindToNetwork }
         logger.trace("Obtaining list of SSIDs...")
         return softApProvisioningService.listSsids().toDomain()
     }
@@ -240,7 +266,7 @@ class SoftApManager(
      */
     suspend fun provision(config: WifiConfigDomain): Response<ResponseBody> {
         require(isWifiEnabled) { throw WifiNotEnabledException }
-        require(isBoundToNetwork) { throw FailedToBindToNetwork }
+        require(isConnected) { throw FailedToBindToNetwork }
         logger.trace("Provisioning to {}...", config.info!!.ssid)
         return softApProvisioningService.provision(config.toApi()).also {
             if (it.isSuccessful) {
@@ -262,7 +288,7 @@ class SoftApManager(
     fun disconnect() {
         if (isConnected) {
             isConnected = false
-            isBoundToNetwork = false
+            // don't clear softAP, as it's needed for verification
             connectivityManager.bindProcessToNetwork(null)
             logger.info("Disconnected from network")
         }

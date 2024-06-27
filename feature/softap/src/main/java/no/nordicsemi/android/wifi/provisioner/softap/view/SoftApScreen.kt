@@ -179,7 +179,7 @@ private fun showSnackBar(
             is FailedToBindToNetwork -> context.getString(R.string.failed_to_bind_to_network)
             is UnableToConnectToNetwork -> context.getString(R.string.unable_to_connect_to_network)
             is OnConnectionLost -> context.getString(R.string.connection_lost)
-            is TimeoutCancellationException -> context.getString(R.string.verification_timed_out_please_retry)
+            is TimeoutCancellationException -> context.getString(R.string.timeout)
             else -> "${throwable::class.simpleName}: ${throwable.message}"
         }
         val result = snackbarHostState.showSnackbar(message = message)
