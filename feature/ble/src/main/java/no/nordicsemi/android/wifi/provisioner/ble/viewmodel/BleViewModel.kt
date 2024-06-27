@@ -32,6 +32,7 @@
 package no.nordicsemi.android.wifi.provisioner.ble.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -141,6 +142,7 @@ class BleViewModel @Inject constructor(
             persistentMemory = _state.value.persistentMemory.not(),
             provisioningStatus = null
         )
+        Timber.log(Log.DEBUG, "Volatile memory changed to ${_state.value.persistentMemory}")
     }
 
     private fun provisionNextDevice() {
@@ -190,6 +192,7 @@ class BleViewModel @Inject constructor(
             provisioningStatus = null,
             showPasswordDialog = wifiData.isPasswordRequired()
         )
+        Timber.log(Log.DEBUG, "Wi-Fi selected: $wifiData")
     }
 
     private fun installBluetoothDevice(device: RealServerDevice) {
@@ -233,6 +236,7 @@ class BleViewModel @Inject constructor(
 
     private fun onPasswordSelected(password: String) {
         _state.value = _state.value.copy(password = password, provisioningStatus = null)
+        Timber.log(Log.DEBUG, "Setting password: ***")
         hidePasswordDialog()
     }
 
@@ -245,6 +249,7 @@ class BleViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
             .let { pendingJobs.add(it) }
+        Timber.log(Log.DEBUG, "Provisioning device...")
     }
 
     private fun WifiData.toConfig(): WifiConfigDomain {
