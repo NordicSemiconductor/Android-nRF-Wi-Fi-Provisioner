@@ -16,6 +16,18 @@
 default_platform(:android)
 
 platform :android do
+
+  desc "Deploy libraries to Nexus."
+  lane :deployNexus do
+    gradle(task: "publish")
+    gradle(task: "releaseStagingRepositories")
+  end
+
+  desc "Generate docs."
+  lane :generateDocs do
+    gradle(task: "dokkaHtmlMultiModule")
+  end
+
   desc "Runs all the tests"
   lane :test do
     gradle(task: "test")
@@ -37,12 +49,12 @@ platform :android do
   end
 
   desc "Deploy build to internal channel."
-    lane :deployInternal do
-      gradle(task: "clean bundleRelease")
-      gradle(task: "test")
-      upload_to_play_store(
-        track: 'internal',
-        aab: 'app/build/outputs/bundle/release/app-release.aab'
-      )
+  lane :deployInternal do
+    gradle(task: "clean bundleRelease")
+    gradle(task: "test")
+    upload_to_play_store(
+      track: 'internal',
+      aab: 'app/build/outputs/bundle/release/app-release.aab'
+    )
   end
 end

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Nordic Semiconductor
+ * Copyright (c) 2024, Nordic Semiconductor
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are
@@ -32,7 +32,20 @@
 plugins {
     alias(libs.plugins.nordic.library)
     alias(libs.plugins.nordic.kotlin.android)
+    alias(libs.plugins.nordic.nexus.android)
     alias(libs.plugins.wire)
+}
+
+group = "no.nordicsemi.android.wifi"
+
+nordicNexusPublishing {
+    POM_ARTIFACT_ID = "provisioning-ble"
+    POM_NAME = "Wi-Fi provisioning over BLE Library"
+    POM_DESCRIPTION = "A library for provisioning nRF700x devices over Bluetooth LE."
+    POM_URL = "https://github.com/NordicSemiconductor/Android-nRF-Wi-Fi-Provisioner"
+    POM_SCM_URL = "https://github.com/NordicSemiconductor/Android-nRF-Wi-Fi-Provisioner"
+    POM_SCM_CONNECTION = "scm:git@github.com:NordicSemiconductorAndroid-nRF-Wi-Fi-Provisioner.git"
+    POM_SCM_DEV_CONNECTION = "scm:git@github.com:NordicSemiconductor/Android-nRF-Wi-Fi-Provisioner.git"
 }
 
 android {
