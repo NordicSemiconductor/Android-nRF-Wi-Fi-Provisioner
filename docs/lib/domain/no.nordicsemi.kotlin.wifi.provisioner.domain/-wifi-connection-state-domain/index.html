@@ -1,0 +1,194 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>WifiConnectionStateDomain</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+<nav class="navigation" id="navigation-wrapper">
+    <div class="navigation--inner">
+        <div class="navigation-title">
+            <button class="menu-toggle" id="menu-toggle" type="button">toggle menu</button>
+            <div class="library-name">
+<a class="library-name--link" href="../../../../index.html">
+                            Android-nRF-Wifi-Provisioner
+                    </a>            </div>
+            <div class="library-version">
+            </div>
+        </div>
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":lib:domain:dokkaHtmlPartial/release">androidJvm</button>
+        </div>
+    </div>
+    <div class="navigation-controls">
+        <button class="navigation-controls--btn navigation-controls--theme" id="theme-toggle-button" type="button">switch theme</button>
+        <div class="navigation-controls--btn navigation-controls--search" id="searchBar" role="button">search in API</div>
+    </div>
+</nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="sidebar--inner" id="sideMenu"></div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="domain::no.nordicsemi.kotlin.wifi.provisioner.domain/WifiConnectionStateDomain///PointingToDeclaration//-28359910">
+  <div class="breadcrumbs"><a href="../../index.html">domain</a><span class="delimiter">/</span><a href="../index.html">no.nordicsemi.kotlin.wifi.provisioner.domain</a><span class="delimiter">/</span><span class="current">WifiConnectionStateDomain</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Wifi</span><wbr><span>Connection</span><wbr><span>State</span><wbr><span><span>Domain</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:domain:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="index.html">WifiConnectionStateDomain</a></div><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-disconnected/index.html">Disconnected</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-authentication/index.html">Authentication</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-association/index.html">Association</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-obtaining-ip/index.html">ObtainingIp</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-connected/index.html">Connected</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-connection-failed/index.html">ConnectionFailed</a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-541517975%2FClasslikes%2F-28359910" anchor-label="Association" id="-541517975%2FClasslikes%2F-28359910" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-association/index.html"><span><span>Association</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-541517975%2FClasslikes%2F-28359910"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:domain:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-association/index.html">Association</a> : <a href="index.html">WifiConnectionStateDomain</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1648475520%2FClasslikes%2F-28359910" anchor-label="Authentication" id="1648475520%2FClasslikes%2F-28359910" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-authentication/index.html"><span><span>Authentication</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1648475520%2FClasslikes%2F-28359910"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:domain:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-authentication/index.html">Authentication</a> : <a href="index.html">WifiConnectionStateDomain</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="936426529%2FClasslikes%2F-28359910" anchor-label="Connected" id="936426529%2FClasslikes%2F-28359910" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-connected/index.html"><span><span>Connected</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="936426529%2FClasslikes%2F-28359910"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:domain:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-connected/index.html">Connected</a> : <a href="index.html">WifiConnectionStateDomain</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-780555555%2FClasslikes%2F-28359910" anchor-label="ConnectionFailed" id="-780555555%2FClasslikes%2F-28359910" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-connection-failed/index.html"><span>Connection</span><wbr><span><span>Failed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-780555555%2FClasslikes%2F-28359910"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:domain:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-connection-failed/index.html">ConnectionFailed</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>reason<span class="token operator">: </span><a href="../-wifi-connection-failure-reason-domain/index.html">WifiConnectionFailureReasonDomain</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span> : <a href="index.html">WifiConnectionStateDomain</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="385394909%2FClasslikes%2F-28359910" anchor-label="Disconnected" id="385394909%2FClasslikes%2F-28359910" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-disconnected/index.html"><span><span>Disconnected</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="385394909%2FClasslikes%2F-28359910"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:domain:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-disconnected/index.html">Disconnected</a> : <a href="index.html">WifiConnectionStateDomain</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="156791334%2FClasslikes%2F-28359910" anchor-label="ObtainingIp" id="156791334%2FClasslikes%2F-28359910" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-obtaining-ip/index.html"><span>Obtaining</span><wbr><span><span>Ip</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="156791334%2FClasslikes%2F-28359910"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:domain:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-obtaining-ip/index.html">ObtainingIp</a> : <a href="index.html">WifiConnectionStateDomain</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="225828808%2FProperties%2F-28359910" anchor-label="id" id="225828808%2FProperties%2F-28359910" data-filterable-set=":lib:domain:dokkaHtmlPartial/release"></a>
+          <div class="table-row" data-filterable-current=":lib:domain:dokkaHtmlPartial/release" data-filterable-set=":lib:domain:dokkaHtmlPartial/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="id.html"><span><span>id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="225828808%2FProperties%2F-28359910"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:domain:dokkaHtmlPartial/release"><div class="symbol monospace"><span class="token keyword">val </span><a href="id.html">id</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
