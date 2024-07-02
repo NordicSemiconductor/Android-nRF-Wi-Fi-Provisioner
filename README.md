@@ -61,3 +61,7 @@ implementation 'no.nordicsemi.android.wifi:provisioning-nfc:<version>'
 ```
 
 Artifacts can be found on [Maven Central reopsitory](https://central.sonatype.com/search?q=no.nordicsemi.android.wifi&namespace=no.nordicsemi.android.wifi).
+
+### Documentation
+
+The documentation of the libraries is available [here](https://nordicsemiconductor.github.io/Android-nRF-Wi-Fi-Provisioner/).
