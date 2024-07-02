@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, Nordic Semiconductor
+ * Copyright (c) 2024, Nordic Semiconductor
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification, are
@@ -52,8 +52,16 @@ plugins {
     alias(libs.plugins.nordic.nexus.android) apply false
 }
 
+val libraries = listOf(
+    "lib:domain",
+    "lib:ble",
+    "lib:nfc",
+    "lib:softap",
+)
 subprojects {
-    apply(plugin = "org.jetbrains.dokka")
+    if (name in libraries) {
+        apply(plugin = "org.jetbrains.dokka")
+    }
 }
 
 tasks.dokkaHtmlMultiModule.configure {
