@@ -26,6 +26,28 @@ The application requires nRF700x Wi-Fi device with a nRF5x companion chip with f
   - Manually Add a Wi-Fi Network
   - Provisioning to Wi-Fi network
 
+## Libraries
+
+Include the library in your project by adding the following to your `build.gradle` file.
+
+```gradle
+dependencies {
+    implementation 'no.nordicsemi.android.wifi:provisioning-ble:<version>'
+}
+```
+
+```gradle
+dependencies {
+    implementation 'no.nordicsemi.android.wifi:provisioning-softap:<version>'
+}
+```
+
+```gradle
+dependencies {
+    implementation 'no.nordicsemi.android.wifi:provisioning-nfc:<version>'
+}
+```
+
 #### Known Issues
 * Provisioning over SoftAP
   - Verification may fail at times and even though the device could be successfully provisioned to the network.
