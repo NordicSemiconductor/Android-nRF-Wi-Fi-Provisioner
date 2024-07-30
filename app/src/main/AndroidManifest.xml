@@ -35,7 +35,8 @@
 
     <uses-feature
         android:name="android.hardware.nfc"
-        android:required="false" />
+        android:required="false"
+        tools:node="replace"/>
 
     <application
         android:name="no.nordicsemi.android.wifi.provisioner.WifiProvisionerApplication"
