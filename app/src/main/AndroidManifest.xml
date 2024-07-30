@@ -33,6 +33,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="false" />
+
     <application
         android:name="no.nordicsemi.android.wifi.provisioner.WifiProvisionerApplication"
         android:allowBackup="false"
