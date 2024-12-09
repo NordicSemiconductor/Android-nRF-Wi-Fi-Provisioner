@@ -31,8 +31,14 @@
 
 package no.nordicsemi.android.wifi.provisioner.ble.internal
 
-data class ResponseErrorException(val code: ResponseError) : Exception("Received error response.")
+data class ResponseErrorException(val code: ResponseError) : Exception(code.toString())
 
 enum class ResponseError {
-    INVALID_ARGUMENT, INVALID_PROTO, INTERNAL_ERROR
+    INVALID_ARGUMENT, INVALID_PROTO, INTERNAL_ERROR;
+
+    override fun toString() = when (this) {
+        INVALID_ARGUMENT -> "Invalid argument"
+        INVALID_PROTO -> "Invalid protocol"
+        INTERNAL_ERROR -> "Internal error"
+    }
 }
