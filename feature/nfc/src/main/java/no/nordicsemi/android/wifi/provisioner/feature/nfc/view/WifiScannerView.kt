@@ -89,7 +89,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import no.nordicsemi.android.common.permissions.wifi.RequireLocationForWifi
 import no.nordicsemi.android.common.permissions.wifi.RequireWifi
-import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.common.ui.view.NordicAppBar
 import no.nordicsemi.android.common.ui.view.WarningView
 import no.nordicsemi.android.wifi.provisioner.feature.nfc.R
@@ -443,46 +442,42 @@ private fun GroupBySsid(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun WiFiScannerContentLoading() {
-    NordicTheme {
-        WiFiScannerContent(
-            state = WifiScannerViewState(),
-            isGroupedBySsid = false,
-            onEvent = {}
-        )
-    }
+    WiFiScannerContent(
+        state = WifiScannerViewState(),
+        isGroupedBySsid = false,
+        onEvent = {}
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.R)
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun WiFiScannerContentNetworks() {
-    NordicTheme {
-        WiFiScannerContent(
-            state = WifiScannerViewState(
-                networks = Success(
-                    listOf(
-                        ScanResult().apply {
-                            SSID = "Network 1"
-                            BSSID = "00:11:22:33:44:55"
-                            level = -50
-                            frequency = 2437
-                            capabilities = "[WPA2-PSK-CCMP][ESS]"
-                        },
-                        ScanResult().apply {
-                            SSID = "Network 2"
-                            BSSID = "00:11:22:33:44:56"
-                            level = -60
-                            frequency = 2437
-                            capabilities = "[WPA2-PSK-CCMP][ESS]"
-                        }
-                    )
+    WiFiScannerContent(
+        state = WifiScannerViewState(
+            networks = Success(
+                listOf(
+                    ScanResult().apply {
+                        SSID = "Network 1"
+                        BSSID = "00:11:22:33:44:55"
+                        level = -50
+                        frequency = 2437
+                        capabilities = "[WPA2-PSK-CCMP][ESS]"
+                    },
+                    ScanResult().apply {
+                        SSID = "Network 2"
+                        BSSID = "00:11:22:33:44:56"
+                        level = -60
+                        frequency = 2437
+                        capabilities = "[WPA2-PSK-CCMP][ESS]"
+                    }
                 )
-            ),
-            isGroupedBySsid = false,
-            onEvent = {}
-        )
-    }
+            )
+        ),
+        isGroupedBySsid = false,
+        onEvent = {}
+    )
 }

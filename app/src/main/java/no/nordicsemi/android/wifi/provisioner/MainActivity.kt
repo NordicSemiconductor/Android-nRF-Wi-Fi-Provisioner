@@ -31,15 +31,9 @@
 
 package no.nordicsemi.android.wifi.provisioner
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import no.nordicsemi.android.common.navigation.NavigationView
 import no.nordicsemi.android.common.theme.NordicActivity
@@ -56,26 +50,24 @@ class MainActivity : NordicActivity() {
 
         setContent {
             NordicTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    NavigationView(
-                        destinations = (HomeDestination +
-                                BleProvisioningDestinations).run {
-                            // Soft AP is available on Android 10 and newer.
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                this + SoftApProvisionerDestinations
-                            } else {
-                                this
-                            }
-                        }.run {
-                            // NFC is available on Android 6.0 and newer.
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                this + NfcProvisionerDestinations
-                            } else {
-                                this
-                            }
+                NavigationView(
+                    destinations = (HomeDestination +
+                            BleProvisioningDestinations).run {
+                        // Soft AP is available on Android 10 and newer.
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            this + SoftApProvisionerDestinations
+                        } else {
+                            this
                         }
-                    )
-                }
+                    }.run {
+                        // NFC is available on Android 6.0 and newer.
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            this + NfcProvisionerDestinations
+                        } else {
+                            this
+                        }
+                    }
+                )
             }
         }
     }

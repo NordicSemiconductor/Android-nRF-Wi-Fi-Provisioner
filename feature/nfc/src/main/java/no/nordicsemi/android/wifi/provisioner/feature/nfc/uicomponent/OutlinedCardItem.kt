@@ -55,8 +55,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.common.theme.NordicTheme
-import no.nordicsemi.android.common.theme.nordicBlue
 
 /** Compose view for the NFC record item in the outlined card.
  * @param headline The headline of the record.
@@ -87,7 +85,7 @@ fun OutlinedCardItem(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.nordicBlue,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(28.dp)
             )
             Column(
@@ -112,17 +110,14 @@ fun OutlinedCardItem(
 @Preview
 @Composable
 private fun OutlinedCardItemPreview() {
-    NordicTheme {
-        OutlinedCardItem(
-            headline = "URI record",
-            description = {
-                Text(
-                    text = "https://www.nordicsemi.no",
-                    style = it,
-                )
-            },
-            icon = Icons.Default.TipsAndUpdates,
-        ) {
-        }
-    }
+    OutlinedCardItem(
+        headline = "URI record",
+        description = {
+            Text(
+                text = "https://www.nordicsemi.no",
+                style = it,
+            )
+        },
+        icon = Icons.Default.TipsAndUpdates,
+    ) {}
 }

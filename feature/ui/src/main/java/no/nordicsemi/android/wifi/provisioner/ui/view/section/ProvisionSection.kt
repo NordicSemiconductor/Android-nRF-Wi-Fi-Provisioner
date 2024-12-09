@@ -43,7 +43,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.common.theme.NordicTheme
 
 /**
  * A composable that displays a section with a title and a rationale.
@@ -75,11 +74,9 @@ fun ProvisionSection(
 @Preview
 @Composable
 private fun ProvisionSectionPreview() {
-    NordicTheme {
-        ProvisionSection(
-            sectionTitle = "Provision over BLE",
-            sectionRational = "Provision over BLE rationale.",
-            onClick = {}
-        )
-    }
+    ProvisionSection(
+        sectionTitle = "Provision over BLE",
+        sectionRational = "Provision over BLE rationale.",
+        onClick = {}
+    )
 }

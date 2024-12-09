@@ -44,7 +44,6 @@ dependencies {
     implementation(project(":lib:nfc"))
 
     implementation(libs.nordic.ui)
-    implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
     implementation(libs.nordic.permissions.nfc)
     implementation(libs.nordic.permissions.wifi)
