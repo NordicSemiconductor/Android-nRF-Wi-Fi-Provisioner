@@ -32,9 +32,16 @@
 package no.nordicsemi.android.wifi.provisioner.ble.view
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -95,19 +102,25 @@ fun BleProvisioningScreen() {
                 onNavigationButtonClick = viewModel::navigateUp
             )
         },
+        contentWindowInsets = WindowInsets.navigationBars
+            .union(WindowInsets.displayCutout)
+            .union(WindowInsets(left = 16.dp, right = 16.dp))
+            .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp),
+                .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             RequireBluetooth {
+
+                val insets = WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
                 OutlinedCard(
                     modifier = Modifier
                         .widthIn(max = 600.dp)
                         .verticalScroll(rememberScrollState())
+                        .windowInsetsPadding(insets)
                         .padding(vertical = 16.dp),
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {

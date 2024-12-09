@@ -48,19 +48,25 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material.icons.automirrored.filled.Segment
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -206,54 +212,64 @@ private fun WiFiScannerContent(
     onEvent: (WifiScannerViewEvent) -> Unit,
 ) {
     Column {
+        val insets = WindowInsets.displayCutout
+            .union(WindowInsets.navigationBars)
+            .only(WindowInsetsSides.Horizontal)
         WifiSortView(
             sortOption = state.sortOption,
             enabled = state.networks is Success,
+            insets = insets,
             onChanged = { option -> onEvent(OnSortOptionSelected(option)) }
         )
-        when (val scanningState = state.networks) {
-            is Error -> {
-                WarningView(
-                    imageVector = Icons.Default.Warning,
-                    title = stringResource(id = R.string.error_while_scanning),
-                    hint = scanningState.t.message ?: "Unknown error occurred."
-                )
-            }
-
-            is Loading -> {
-                // Show the loading indicator.
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.padding(16.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(insets)
+        ) {
+            when (val scanningState = state.networks) {
+                is Error -> {
+                    WarningView(
+                        imageVector = Icons.Rounded.Warning,
+                        title = stringResource(id = R.string.error_while_scanning),
+                        hint = scanningState.t.message ?: "Unknown error occurred."
                     )
                 }
-            }
 
-            is Success -> {
-                // Show the list of available networks.
-                PullToRefreshBox(
-                    isRefreshing = state.networks == Loading,
-                    onRefresh = { // Refreshing
-                        onEvent(RefreshWiFiNetworksEvent)
-                    },
-                ) {
-                    Column(
+                is Loading -> {
+                    // Show the loading indicator.
+                    Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                            .padding(bottom = 32.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        if (isGroupedBySsid) {
-                            // Group by SSID
-                            GroupBySsid(state.sortedItems, onEvent)
-                        } else {
-                            // Show the list of available networks grouped by SSIDs.
-                            WifiList(state.sortedItems, onEvent)
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                }
+
+                is Success -> {
+                    // Show the list of available networks.
+                    PullToRefreshBox(
+                        isRefreshing = state.networks == Loading,
+                        onRefresh = { // Refreshing
+                            onEvent(RefreshWiFiNetworksEvent)
+                        },
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                                .padding(bottom = 32.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            if (isGroupedBySsid) {
+                                // Group by SSID
+                                GroupBySsid(state.sortedItems, onEvent)
+                            } else {
+                                // Show the list of available networks grouped by SSIDs.
+                                WifiList(state.sortedItems, onEvent)
+                            }
                         }
                     }
                 }
