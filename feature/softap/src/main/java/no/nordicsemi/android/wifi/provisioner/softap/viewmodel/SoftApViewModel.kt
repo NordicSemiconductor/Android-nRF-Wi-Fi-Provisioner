@@ -38,7 +38,6 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -58,7 +57,6 @@ import no.nordicsemi.android.log.timber.nRFLoggerTree
 import no.nordicsemi.android.wifi.provisioner.softap.Open
 import no.nordicsemi.android.wifi.provisioner.softap.PassphraseConfiguration
 import no.nordicsemi.android.wifi.provisioner.softap.SoftApManager
-import no.nordicsemi.android.wifi.provisioner.softap.UnableToConnectToNetwork
 import no.nordicsemi.android.wifi.provisioner.softap.WifiNotEnabledException
 import no.nordicsemi.android.wifi.provisioner.softap.domain.WifiConfigDomain
 import no.nordicsemi.android.wifi.provisioner.softap.view.SoftApWifiScannerDestination
@@ -242,7 +240,7 @@ internal class SoftApViewModel @Inject constructor(
                     }
                 }
             } catch (e: TimeoutCancellationException) {
-                Timber.log(Log.WARN, e, "Verification timed out")
+                Timber.log(Log.WARN, "Verification timed out")
                 _state.value = _state.value.copy(error = e, isVerificationRequested = false)
                 Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
             } catch (e: Exception) {
