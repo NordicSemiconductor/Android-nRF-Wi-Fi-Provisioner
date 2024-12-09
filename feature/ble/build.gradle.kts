@@ -46,7 +46,6 @@ dependencies {
     implementation(libs.androidx.compose.material.iconsExtended)
 
     implementation(libs.nordic.ui)
-    implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
     implementation(libs.nordic.logger)
     implementation(libs.nordic.core)

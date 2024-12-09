@@ -64,7 +64,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.wifi.provisioner.feature.softap.R
 import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 
@@ -183,14 +182,12 @@ private fun SoftApConnectorContent(
     }
 }
 
-@Preview(widthDp = 250, heightDp = 140)
+@Preview(widthDp = 250, heightDp = 140, showBackground = true)
 @Composable
 private fun SoftApConnectorContentPreview() {
-    NordicTheme {
-        var ssid by rememberSaveable { mutableStateOf(TextFieldValue("value")) }
-        SoftApConnectorContent(
-            ssid = ssid,
-            onSsidChange = { ssid = TextFieldValue(it) },
-        )
-    }
+    var ssid by rememberSaveable { mutableStateOf(TextFieldValue("value")) }
+    SoftApConnectorContent(
+        ssid = ssid,
+        onSsidChange = { ssid = TextFieldValue(it) },
+    )
 }

@@ -38,17 +38,23 @@ import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -99,6 +105,10 @@ fun HomeScreen() {
                 title = { Text(text = stringResource(id = R.string.app_name)) }
             )
         },
+        contentWindowInsets = WindowInsets.navigationBars
+            .union(WindowInsets.displayCutout)
+            .union(WindowInsets(left = 16.dp, right = 16.dp))
+            .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
@@ -109,7 +119,9 @@ fun HomeScreen() {
                     context = context,
                     scope = scope,
                     snackbarHostState = snackbarHostState,
-                    innerPadding = innerPadding,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
                     navigateTo = vm::navigateTo
                 )
             }
@@ -119,7 +131,10 @@ fun HomeScreen() {
                     context = context,
                     scope = scope,
                     snackbarHostState = snackbarHostState,
-                    innerPadding = innerPadding,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(state = rememberScrollState())
+                        .padding(innerPadding),
                     navigateTo = vm::navigateTo
                 )
             }
@@ -132,15 +147,11 @@ private fun PortraitContent(
     context: Context,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    innerPadding: PaddingValues,
+    modifier: Modifier = Modifier,
     navigateTo: (DestinationId<Unit, *>) -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(state = rememberScrollState())
-            .padding(innerPadding)
-            .padding(horizontal = 16.dp),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(0.5f))
@@ -152,13 +163,19 @@ private fun PortraitContent(
                 .heightIn(min = 120.dp, max = 200.dp)
                 .padding(8.dp)
         )
+
         Spacer(modifier = Modifier.weight(0.5f))
+
+        val insets = WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
         ProvisioningMenu(
             context = context,
             scope = scope,
             snackbarHostState = snackbarHostState,
             navigateTo = navigateTo,
-            modifier = Modifier.widthIn(max = 600.dp)
+            modifier = Modifier
+                .widthIn(max = 600.dp)
+                .windowInsetsPadding(insets)
+                .padding(vertical = 16.dp)
         )
     }
 }
@@ -168,14 +185,11 @@ private fun SmallScreenLandscapeContent(
     context: Context,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    innerPadding: PaddingValues,
+    modifier: Modifier = Modifier,
     navigateTo: (DestinationId<Unit, *>) -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-            .padding(horizontal = 16.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
@@ -183,10 +197,12 @@ private fun SmallScreenLandscapeContent(
             painter = painterResource(id = R.drawable.ic_nrf70),
             contentDescription = stringResource(id = R.string.ic_nrf70),
         )
+        val insets = WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
         ProvisioningMenu(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(state = rememberScrollState())
+                .windowInsetsPadding(insets)
                 .padding(top = 16.dp),
             context = context,
             scope = scope,

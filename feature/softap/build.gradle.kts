@@ -43,7 +43,6 @@ dependencies {
     implementation(project(":lib:softap"))
 
     implementation(libs.nordic.ui)
-    implementation(libs.nordic.theme)
     implementation(libs.nordic.navigation)
     implementation(libs.nordic.logger)
     implementation(libs.nordic.permissions.wifi)

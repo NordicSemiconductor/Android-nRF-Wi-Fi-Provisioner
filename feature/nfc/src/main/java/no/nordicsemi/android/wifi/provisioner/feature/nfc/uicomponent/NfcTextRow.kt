@@ -39,7 +39,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
-import no.nordicsemi.android.common.theme.NordicTheme
 
 @Composable
 internal fun NfcTextRow(
@@ -77,13 +76,11 @@ internal fun NfcPasswordRow(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun NfcTextRowPreview() {
-    NordicTheme {
-        NfcTextRow(
-            title = "Title",
-            text = "Value",
-        )
-    }
+    NfcTextRow(
+        title = "Title",
+        text = "Value",
+    )
 }

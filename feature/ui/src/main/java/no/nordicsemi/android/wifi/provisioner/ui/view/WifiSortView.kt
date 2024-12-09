@@ -35,14 +35,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Label
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.NetworkWifi
-import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -52,14 +54,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSortOption
 import no.nordicsemi.android.wifi.provisioner.ui.R
+import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSortOption
 import no.nordicsemi.android.common.ui.R as RUI
 
 @Composable
 fun WifiSortView(
     sortOption: WifiSortOption,
     enabled: Boolean = true,
+    insets: WindowInsets,
     onChanged: (WifiSortOption) -> Unit,
 ) {
     Row(
@@ -68,7 +71,8 @@ fun WifiSortView(
         modifier = Modifier
             .fillMaxWidth()
             .background(colorResource(id = RUI.color.appBarColor))
-            .padding(horizontal = 16.dp)
+            .windowInsetsPadding(insets)
+            .padding(horizontal = 16.dp),
     ) {
         Text(
             text = stringResource(id = R.string.sorting_hint),
@@ -79,7 +83,7 @@ fun WifiSortView(
         Spacer(modifier = Modifier.size(16.dp))
 
         val isRssiSortSelected = sortOption == WifiSortOption.RSSI
-        ElevatedFilterChip(
+        FilterChip(
             selected = isRssiSortSelected,
             enabled = enabled,
             onClick = { onChanged(WifiSortOption.RSSI) },
@@ -96,7 +100,7 @@ fun WifiSortView(
         Spacer(modifier = Modifier.size(16.dp))
 
         val isNameSortSelected = sortOption == WifiSortOption.NAME
-        ElevatedFilterChip(
+        FilterChip(
             selected = isNameSortSelected,
             enabled = enabled,
             onClick = { onChanged(WifiSortOption.NAME) },

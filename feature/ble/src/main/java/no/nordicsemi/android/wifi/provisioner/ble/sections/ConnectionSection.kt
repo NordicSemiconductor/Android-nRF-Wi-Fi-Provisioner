@@ -37,7 +37,6 @@ import androidx.compose.material.icons.outlined.BluetoothConnected
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.common.ui.view.ProgressItem
 import no.nordicsemi.android.common.ui.view.ProgressItemStatus
 import no.nordicsemi.android.common.ui.view.WizardStepAction
@@ -113,62 +112,54 @@ fun ConnectionSection(
     }
 }
 
-@Preview(heightDp = 200)
+@Preview(heightDp = 200, showBackground = true)
 @Composable
 private fun DeviceStatusNotConnectedPreview() {
-    NordicTheme {
-        ConnectionSection(
-            state = BleViewEntity(
-                device = MockServerDevice("Device", "00:11:22:33:44:55"),
-                version = Success(VersionDomain(1)),
-                isConnected = false,
-            ),
-            onEvent = {},
-        )
-    }
+    ConnectionSection(
+        state = BleViewEntity(
+            device = MockServerDevice("Device", "00:11:22:33:44:55"),
+            version = Success(VersionDomain(1)),
+            isConnected = false,
+        ),
+        onEvent = {},
+    )
 }
 
-@Preview(heightDp = 200)
+@Preview(heightDp = 200, showBackground = true)
 @Composable
 private fun DeviceStatusPreview() {
-    NordicTheme {
-        ConnectionSection(
-            state = BleViewEntity(
-                device = MockServerDevice("Device", "00:11:22:33:44:55"),
-                version = Success(VersionDomain(1)),
-                status = Loading(),
-                isConnected = true,
-            ),
-            onEvent = {},
-        )
-    }
+    ConnectionSection(
+        state = BleViewEntity(
+            device = MockServerDevice("Device", "00:11:22:33:44:55"),
+            version = Success(VersionDomain(1)),
+            status = Loading(),
+            isConnected = true,
+        ),
+        onEvent = {},
+    )
 }
-@Preview(heightDp = 200)
+@Preview(heightDp = 200, showBackground = true)
 @Composable
 private fun DeviceStatusVersionErrorPreview() {
-    NordicTheme {
-        ConnectionSection(
-            state = BleViewEntity(
-                device = MockServerDevice("Device", "00:11:22:33:44:55"),
-                version = Error(Exception("Some error")),
-                isConnected = true,
-            ),
-            onEvent = {},
-        )
-    }
+    ConnectionSection(
+        state = BleViewEntity(
+            device = MockServerDevice("Device", "00:11:22:33:44:55"),
+            version = Error(Exception("Some error")),
+            isConnected = true,
+        ),
+        onEvent = {},
+    )
 }
-@Preview(heightDp = 200)
+@Preview(heightDp = 200, showBackground = true)
 @Composable
 private fun DeviceStatusStatusErrorPreview() {
-    NordicTheme {
-        ConnectionSection(
-            state = BleViewEntity(
-                device = MockServerDevice("Device", "00:11:22:33:44:55"),
-                version = Success(VersionDomain(1)),
-                status = Error(Exception("Some error")),
-                isConnected = true,
-            ),
-            onEvent = {},
-        )
-    }
+    ConnectionSection(
+        state = BleViewEntity(
+            device = MockServerDevice("Device", "00:11:22:33:44:55"),
+            version = Success(VersionDomain(1)),
+            status = Error(Exception("Some error")),
+            isConnected = true,
+        ),
+        onEvent = {},
+    )
 }

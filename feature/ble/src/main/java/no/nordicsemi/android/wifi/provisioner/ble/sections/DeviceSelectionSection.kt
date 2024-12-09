@@ -39,7 +39,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import no.nordicsemi.android.common.core.parseBold
-import no.nordicsemi.android.common.theme.NordicTheme
 import no.nordicsemi.android.common.ui.view.StatusItem
 import no.nordicsemi.android.common.ui.view.WizardStepAction
 import no.nordicsemi.android.common.ui.view.WizardStepComponent
@@ -119,24 +118,20 @@ private fun SelectedDeviceView(
     }
 }
 
-@Preview(heightDp = 200)
+@Preview(heightDp = 200, showBackground = true)
 @Composable
 private fun NotSelectedDeviceViewPreview() {
-    NordicTheme {
-        NotSelectedDeviceView(onEvent = {})
-    }
+    NotSelectedDeviceView(onEvent = {})
 }
 
-@Preview(heightDp = 200)
+@Preview(heightDp = 200, showBackground = true)
 @Composable
 private fun SelectedDeviceViewPreview() {
-    NordicTheme {
-        SelectedDeviceView(
-            state = BleViewEntity(
-                device = MockServerDevice(),
-                version = Loading(),
-            ),
-            onEvent = {},
-        )
-    }
+    SelectedDeviceView(
+        state = BleViewEntity(
+            device = MockServerDevice(),
+            version = Loading(),
+        ),
+        onEvent = {},
+    )
 }

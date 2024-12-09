@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -53,6 +54,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
@@ -107,6 +109,7 @@ internal fun NfcPublishScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             RequireNfc {
                 DisposableEffect(key1 = nfcManagerVm) {
@@ -115,6 +118,7 @@ internal fun NfcPublishScreen() {
                 }
                 OutlinedCard(
                     modifier = Modifier
+                        .widthIn(max = 600.dp)
                         .verticalScroll(rememberScrollState())
                         .padding(vertical = 16.dp, horizontal = 16.dp)
                     // Leave more space for the navigation bar.

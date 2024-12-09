@@ -39,15 +39,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -65,7 +73,6 @@ import no.nordicsemi.android.common.ui.view.NordicAppBar
 import no.nordicsemi.android.common.ui.view.WarningView
 import no.nordicsemi.android.common.ui.view.getWiFiRes
 import no.nordicsemi.android.wifi.provisioner.feature.ble.R
-import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 import no.nordicsemi.android.wifi.provisioner.ui.SelectChannelDialog
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toDisplayString
 import no.nordicsemi.android.wifi.provisioner.ui.mapping.toImageVector
@@ -78,6 +85,7 @@ import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.NavigateUpEven
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.OnSortOptionSelected
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiScannerViewEvent
 import no.nordicsemi.kotlin.wifi.provisioner.feature.common.event.WifiSelectedEvent
+import no.nordicsemi.android.wifi.provisioner.ui.R as RUI
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,13 +99,21 @@ internal fun BleWifiScannerScreen(
             onNavigationButtonClick = { onEvent(NavigateUpEvent) }
         )
 
-        Column {
-            WifiSortView(
-                sortOption = viewEntity.sortOption,
-                enabled = !viewEntity.isLoading && viewEntity.error == null
-            ) {
-                onEvent(OnSortOptionSelected(it))
-            }
+        val insets = WindowInsets.displayCutout
+            .union(WindowInsets.navigationBars)
+            .only(WindowInsetsSides.Horizontal)
+
+        WifiSortView(
+            sortOption = viewEntity.sortOption,
+            enabled = !viewEntity.isLoading && viewEntity.error == null,
+            insets = insets,
+            onChanged = { onEvent(OnSortOptionSelected(it)) },
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(insets)
+        ) {
             if (viewEntity.isLoading) {
                 LoadingItem()
             } else if (viewEntity.error != null) {
@@ -124,7 +140,8 @@ private fun LoadingItem() {
 @Composable
 private fun ErrorItem(error: Throwable) {
     WarningView(
-        imageVector = Icons.Default.Warning,
+        modifier = Modifier.fillMaxSize(),
+        imageVector = Icons.Rounded.Warning,
         title = stringResource(id = R.string.error_scanning_title),
         hint = error.message ?: stringResource(id = RUI.string.unknown_error),
     ) {}

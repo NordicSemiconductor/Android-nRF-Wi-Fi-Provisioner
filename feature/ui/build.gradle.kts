@@ -42,7 +42,6 @@ dependencies {
     implementation(project(":lib:domain"))
 
     implementation(libs.nordic.ui)
-    implementation(libs.nordic.theme)
 
     implementation(libs.androidx.compose.material.iconsExtended)
 

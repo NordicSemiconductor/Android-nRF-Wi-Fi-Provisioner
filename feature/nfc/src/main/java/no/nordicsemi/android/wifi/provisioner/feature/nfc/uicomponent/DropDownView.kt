@@ -56,7 +56,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import no.nordicsemi.android.common.theme.NordicTheme
 
 /**
  * Composable function to show the dropdown view.
@@ -144,15 +143,13 @@ private fun <T> NfcDropdownMenu(
     Spacer(modifier = Modifier.size(8.dp))
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun NfcDropDownViewPreview() {
-    NordicTheme {
-        DropdownView(
-            items = listOf("English", "Spanish", "French"),
-            label = "Language",
-            defaultSelectedItem = "English",
-            placeholder = "Select language",
-        ) {}
-    }
+    DropdownView(
+        items = listOf("English", "Spanish", "French"),
+        label = "Language",
+        defaultSelectedItem = "English",
+        placeholder = "Select language",
+    ) {}
 }
