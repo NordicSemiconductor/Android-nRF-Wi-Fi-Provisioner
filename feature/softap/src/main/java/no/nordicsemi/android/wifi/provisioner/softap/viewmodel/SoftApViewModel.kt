@@ -105,7 +105,7 @@ internal class SoftApViewModel @Inject constructor(
     }
 
     fun onLoggerAppBarIconPressed(context: Context) {
-        LoggerLauncher.launch(context, logger?.session as LogSession)
+        LoggerLauncher.launch(context, logger?.session as? LogSession)
     }
 
     private fun initLogger(context: Context, ssid: String) {
@@ -201,21 +201,21 @@ internal class SoftApViewModel @Inject constructor(
                     )
                     val response = softApManager.provision(it)
                     if (response.isSuccessful) {
-                        Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_STAR_BLUE)
+                        Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_STAR_BLUE)
                     } else {
                         _state.value = _state.value.copy(error = Throwable("Error: ${response.code()}"))
-                        Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_RED)
+                        Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_RED)
                     }
                 } catch (e: SocketTimeoutException) {
                     // There is always chance that a socket timeout is thrown from the DK during
                     // provisioning due to timing constraints. In such cases, we can ignore the response
                     // and assume that the provisioning was successful.
                     Timber.log(Log.WARN, "Provisioning succeeded (connection timed out)")
-                    Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_STAR_BLUE)
+                    Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_STAR_BLUE)
                 } catch (e: Exception) {
                     Timber.log(Log.WARN, e, "Provisioning (probably) succeeded (error: ${e.message})")
                     _state.value = _state.value.copy(error = e)
-                    Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
+                    Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_YELLOW)
                 } finally {
                     softApManager.disconnect()
                     _state.value = _state.value.copy(provisionState = WizardStepState.COMPLETED)
@@ -233,20 +233,20 @@ internal class SoftApViewModel @Inject constructor(
                     val verified = softApManager.verify()
                     if (verified) {
                         _state.value = _state.value.copy(verifyState = WizardStepState.COMPLETED)
-                        Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_STAR_BLUE)
+                        Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_STAR_BLUE)
                     } else {
                         Timber.log(Log.WARN, "Device not found")
-                        Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
+                        Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_YELLOW)
                     }
                 }
             } catch (e: TimeoutCancellationException) {
                 Timber.log(Log.WARN, "Verification timed out")
                 _state.value = _state.value.copy(error = e, isVerificationRequested = false)
-                Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
+                Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_YELLOW)
             } catch (e: Exception) {
                 Timber.log(Log.WARN, e, "Unknown error occurred")
                 _state.value = _state.value.copy(error = e, isVerificationRequested = false)
-                Logger.setSessionMark(logger?.session as LogSession, Logger.MARK_FLAG_YELLOW)
+                Logger.setSessionMark(logger?.session as? LogSession, Logger.MARK_FLAG_YELLOW)
             }
         }
     }
