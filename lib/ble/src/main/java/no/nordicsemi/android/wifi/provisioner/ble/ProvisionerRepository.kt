@@ -135,6 +135,14 @@ interface ProvisionerRepository {
          * Creates new instance of [ProvisionerRepository]
          *
          * @param context the application context
+         * @param provisioningServiceUuidOverride
+         * optional provisioning service UUID to use instead of the default one
+         * @param versionCharacteristicUuidOverride
+         * optional version characteristic UUID to use instead of the default one
+         * @param controlPointCharacteristicUuidOverride
+         * optional control point characteristic UUID to use instead of the default one
+         * @param dataOutCharacteristicUuidOverride
+         * optional data out characteristic UUID to use instead of the default one
          */
         fun newInstance(
             context: Context,
