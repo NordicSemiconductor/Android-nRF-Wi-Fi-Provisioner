@@ -73,6 +73,10 @@ private const val TIMEOUT_MILLIS = 60_000L
 
 internal class ProvisionerBleManager(
     context: Context,
+    private val provisioningServiceUuidOverride: UUID?,
+    private val versionCharacteristicUuidOverride: UUID?,
+    private val controlPointCharacteristicUuidOverride: UUID?,
+    private val dataOutCharacteristicUuidOverride: UUID?
 ) : BleManager(context) {
     private val logger = LoggerFactory.getLogger(ProvisionerBleManager::class.java)
 
@@ -131,12 +135,20 @@ internal class ProvisionerBleManager(
     }
 
     override fun isRequiredServiceSupported(gatt: BluetoothGatt): Boolean {
-        val service: BluetoothGattService? = gatt.getService(PROVISIONING_SERVICE_UUID)
+        val service: BluetoothGattService? = gatt.getService(
+            provisioningServiceUuidOverride ?: PROVISIONING_SERVICE_UUID
+        )
         if (service != null) {
-            versionCharacteristic = service.getCharacteristic(VERSION_CHARACTERISTIC_UUID)
+            versionCharacteristic = service.getCharacteristic(
+                versionCharacteristicUuidOverride ?: VERSION_CHARACTERISTIC_UUID
+            )
             controlPointCharacteristic =
-                service.getCharacteristic(CONTROL_POINT_CHARACTERISTIC_UUID)
-            dataOutCharacteristic = service.getCharacteristic(DATA_OUT_CHARACTERISTIC_UUID)
+                service.getCharacteristic(
+                    controlPointCharacteristicUuidOverride ?: CONTROL_POINT_CHARACTERISTIC_UUID
+                )
+            dataOutCharacteristic = service.getCharacteristic(
+                dataOutCharacteristicUuidOverride ?: DATA_OUT_CHARACTERISTIC_UUID
+            )
         }
         var writeRequest: Boolean
 

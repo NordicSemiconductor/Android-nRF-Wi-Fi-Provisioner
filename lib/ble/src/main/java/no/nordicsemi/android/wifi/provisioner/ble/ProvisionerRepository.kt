@@ -43,6 +43,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ResponseErrorException
 import no.nordicsemi.android.wifi.provisioner.ble.internal.NotificationTimeoutException
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 /**
  * A class responsible for establishing connection and maintaining communication with a nRF 7 device.
@@ -135,9 +136,21 @@ interface ProvisionerRepository {
          *
          * @param context the application context
          */
-        fun newInstance(context: Context): ProvisionerRepository {
+        fun newInstance(
+            context: Context,
+            provisioningServiceUuidOverride: UUID? = null,
+            versionCharacteristicUuidOverride: UUID? = null,
+            controlPointCharacteristicUuidOverride: UUID? = null,
+            dataOutCharacteristicUuidOverride: UUID? = null
+        ): ProvisionerRepository {
             val app = context.applicationContext
-            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
+            val newInstance = instance ?: ProvisionerFactory.createRepository(
+                app,
+                provisioningServiceUuidOverride,
+                versionCharacteristicUuidOverride,
+                controlPointCharacteristicUuidOverride,
+                dataOutCharacteristicUuidOverride
+            )
             instance = newInstance
             return newInstance
         }
