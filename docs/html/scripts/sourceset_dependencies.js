@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":lib:softap/debug":[],":lib:softap/main":[],":lib:softap/release":[],":lib:domain/debug":[],":lib:domain/main":[],":lib:domain/release":[],":lib:ble/debug":[],":lib:ble/main":[],":lib:ble/release":[],":lib:nfc/debug":[],":lib:nfc/main":[],":lib:nfc/release":[]}'

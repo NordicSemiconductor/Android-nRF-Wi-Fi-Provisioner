@@ -1,0 +1,270 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>SoftApManager</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../../../index.html">
+                    Android-nRF-Wifi-Provisioner
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.3.0
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":lib:softap/release">androidJvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":lib:softap/release" data-filter=":lib:softap/release">
+                                <span class="checkbox--icon"></span>
+                                androidJvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    Android-nRF-Wifi-Provisioner
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="softap::no.nordicsemi.android.wifi.provisioner.softap/SoftApManager///PointingToDeclaration//1691627641">
+  <div class="breadcrumbs"><a href="../../index.html">softap</a><span class="delimiter">/</span><a href="../index.html">no.nordicsemi.android.wifi.provisioner.softap</a><span class="delimiter">/</span><span class="current">SoftApManager</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Soft</span><wbr><span>Ap</span><wbr><span><span>Manager</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">SoftApManager</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">hostNameConfiguration<span class="token operator">: </span><a href="../-host-name-configuration/index.html">HostNameConfiguration</a><span class="token operator"> = </span>HostNameConfiguration()</span></span><span class="token punctuation">)</span></div><p class="paragraph">Entry point to the SoftApManager.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">Context of the application.</p></div></div></div></div><div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>host</span><wbr><span>Name</span><wbr><span><span>Configuration</span></span></u></div></span></div><div><div class="title"><p class="paragraph">HostNameConfiguration to be used for the SoftApManager.</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-307580094%2FConstructors%2F1691627641" anchor-label="SoftApManager" id="-307580094%2FConstructors%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-soft-ap-manager.html"><span>Soft</span><wbr><span>Ap</span><wbr><span><span>Manager</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-307580094%2FConstructors%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">hostNameConfiguration<span class="token operator">: </span><a href="../-host-name-configuration/index.html">HostNameConfiguration</a><span class="token operator"> = </span>HostNameConfiguration()</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Create empty SoftApManager.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="1514613548%2FProperties%2F1691627641" anchor-label="isWifiEnabled" id="1514613548%2FProperties%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-wifi-enabled.html"><span>is</span><wbr><span>Wifi</span><wbr><span><span>Enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1514613548%2FProperties%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><span class="token keyword">val </span><a href="is-wifi-enabled.html">isWifiEnabled</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1759002381%2FProperties%2F1691627641" anchor-label="softAp" id="-1759002381%2FProperties%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="soft-ap.html"><span>soft</span><wbr><span><span>Ap</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1759002381%2FProperties%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><span class="token keyword">var </span><a href="soft-ap.html">softAp</a><span class="token operator">: </span><a href="../-soft-ap/index.html">SoftAp</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-2072465972%2FFunctions%2F1691627641" anchor-label="connect" id="-2072465972%2FFunctions%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="connect.html"><span><span>connect</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2072465972%2FFunctions%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/RequiresApi.html"><span class="token annotation builtin">RequiresApi</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">29</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="connect.html"><span class="token function">connect</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ssid<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">passphraseConfiguration<span class="token operator">: </span><a href="../-passphrase-configuration/index.html">PassphraseConfiguration</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Connects to an unprovisioned wifi device by establishing a temporary wifi network connection with the given ssid and the password.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1915916336%2FFunctions%2F1691627641" anchor-label="disconnect" id="1915916336%2FFunctions%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="disconnect.html"><span><span>disconnect</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1915916336%2FFunctions%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/RequiresApi.html"><span class="token annotation builtin">RequiresApi</span></a><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="breakable-word"><span class="token constant">29</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">fun </span><a href="disconnect.html"><span class="token function">disconnect</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Disconnects from an unprovisioned or a newly provisioned device.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-321768222%2FFunctions%2F1691627641" anchor-label="discoverServices" id="-321768222%2FFunctions%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="discover-services.html"><span>discover</span><wbr><span><span>Services</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-321768222%2FFunctions%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="discover-services.html"><span class="token function">discoverServices</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">nsdServiceInfo<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/net/nsd/NsdServiceInfo.html">NsdServiceInfo</a><span class="token operator"> = </span>NsdServiceInfo()
+            .apply {
+                serviceName = "wifiprov"
+                serviceType = "_http._tcp."
+            }</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Discovers and resolves the mDNS services on the network.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1232081716%2FFunctions%2F1691627641" anchor-label="listSsids" id="1232081716%2FFunctions%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="list-ssids.html"><span>list</span><wbr><span><span>Ssids</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1232081716%2FFunctions%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="list-ssids.html"><span class="token function">listSsids</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../no.nordicsemi.android.wifi.provisioner.softap.domain/-scan-results-domain/index.html">ScanResultsDomain</a></div><div class="brief "><p class="paragraph">Lists the SSIDs scanned by the nRF700x device</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1461355321%2FFunctions%2F1691627641" anchor-label="provision" id="1461355321%2FFunctions%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="provision.html"><span><span>provision</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1461355321%2FFunctions%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="provision.html"><span class="token function">provision</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">config<span class="token operator">: </span><a href="../../no.nordicsemi.android.wifi.provisioner.softap.domain/-wifi-config-domain/index.html">WifiConfigDomain</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="retrofit2/Response///PointingToDeclaration/">Response</span><span class="token operator">&lt;</span><span data-unresolved-link="okhttp3/ResponseBody///PointingToDeclaration/">ResponseBody</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Provisions the nRF7002 device a wifi network with the given credentials.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1086184845%2FFunctions%2F1691627641" anchor-label="verify" id="-1086184845%2FFunctions%2F1691627641" data-filterable-set=":lib:softap/release"></a>
+          <div class="table-row" data-filterable-current=":lib:softap/release" data-filterable-set=":lib:softap/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="verify.html"><span><span>verify</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1086184845%2FFunctions%2F1691627641"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:softap/release"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="verify.html"><span class="token function">verify</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Verifies if the provisioning completed successfully.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>Copyright © 2022 - 2025 Nordic Semiconductor ASA. All Rights Reserved.</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

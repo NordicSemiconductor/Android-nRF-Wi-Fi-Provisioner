@@ -1,0 +1,362 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>no.nordicsemi.android.wifi.provisioner.ble.proto</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../../index.html">
+                    Android-nRF-Wifi-Provisioner
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.3.0
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":lib:ble/release">androidJvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":lib:ble/release" data-filter=":lib:ble/release">
+                                <span class="checkbox--icon"></span>
+                                androidJvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    Android-nRF-Wifi-Provisioner
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="ble::no.nordicsemi.android.wifi.provisioner.ble.proto////PointingToDeclaration//-712322977">
+  <div class="breadcrumbs"><a href="../index.html">ble</a><span class="delimiter">/</span><span class="current">no.nordicsemi.android.wifi.provisioner.ble.proto</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-2092963956%2FClasslikes%2F-712322977" anchor-label="AuthMode" id="-2092963956%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-auth-mode/index.html"><span>Auth</span><wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2092963956%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-auth-mode/index.html">AuthMode</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-auth-mode/index.html">AuthMode</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-auth-mode/index.html">AuthMode</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-auth-mode/index.html">AuthMode</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="brief "><p class="paragraph">Wi-Fi Authentication Mode.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-441068798%2FClasslikes%2F-712322977" anchor-label="Band" id="-441068798%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-band/index.html"><span><span>Band</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-441068798%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-band/index.html">Band</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-band/index.html">Band</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-band/index.html">Band</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-band/index.html">Band</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="brief "><p class="paragraph">Wi-Fi Band.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-838025509%2FClasslikes%2F-712322977" anchor-label="ConnectionFailureReason" id="-838025509%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-connection-failure-reason/index.html"><span>Connection</span><wbr><span>Failure</span><wbr><span><span>Reason</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-838025509%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-connection-failure-reason/index.html">ConnectionFailureReason</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-connection-failure-reason/index.html">ConnectionFailureReason</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-connection-failure-reason/index.html">ConnectionFailureReason</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-connection-failure-reason/index.html">ConnectionFailureReason</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="brief "><p class="paragraph">Connection failure reason.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="936901867%2FClasslikes%2F-712322977" anchor-label="ConnectionInfo" id="936901867%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-connection-info/index.html"><span>Connection</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="936901867%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-connection-info/index.html">ConnectionInfo</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ip4_addr<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-connection-info/index.html">ConnectionInfo</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-connection-info/index.html">ConnectionInfo</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ip4_addr<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-connection-info/index.html">ConnectionInfo</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Responses Information about the Wi-Fi connected state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="227381272%2FClasslikes%2F-712322977" anchor-label="ConnectionState" id="227381272%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-connection-state/index.html"><span>Connection</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="227381272%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-connection-state/index.html">ConnectionState</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-connection-state/index.html">ConnectionState</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-connection-state/index.html">ConnectionState</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-connection-state/index.html">ConnectionState</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="brief "><p class="paragraph">The state of Wi-Fi station.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-991866705%2FClasslikes%2F-712322977" anchor-label="DeviceStatus" id="-991866705%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-device-status/index.html"><span>Device</span><wbr><span><span>Status</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-991866705%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-device-status/index.html">DeviceStatus</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>state<span class="token operator">: </span><a href="[android-jvm]-connection-state/index.html">ConnectionState</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>provisioning_info<span class="token operator">: </span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>connection_info<span class="token operator">: </span><a href="[android-jvm]-connection-info/index.html">ConnectionInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>scan_info<span class="token operator">: </span><a href="[android-jvm]-scan-params/index.html">ScanParams</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-device-status/index.html">DeviceStatus</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-device-status/index.html">DeviceStatus</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>state<span class="token operator">: </span><a href="[android-jvm]-connection-state/index.html">ConnectionState</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>provisioning_info<span class="token operator">: </span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>connection_info<span class="token operator">: </span><a href="[android-jvm]-connection-info/index.html">ConnectionInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>scan_info<span class="token operator">: </span><a href="[android-jvm]-scan-params/index.html">ScanParams</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-device-status/index.html">DeviceStatus</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Response payload for GET_STATUS request.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1957658967%2FClasslikes%2F-712322977" anchor-label="Info" id="-1957658967%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-info/index.html"><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1957658967%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-info/index.html">Info</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>version<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-info/index.html">Info</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-info/index.html">Info</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>version<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-info/index.html">Info</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Response payload for returned from Version characteristic.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1045274007%2FClasslikes%2F-712322977" anchor-label="OpCode" id="-1045274007%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-op-code/index.html"><span>Op</span><wbr><span><span>Code</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1045274007%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-op-code/index.html">OpCode</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-op-code/index.html">OpCode</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-op-code/index.html">OpCode</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-op-code/index.html">OpCode</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="brief "><p class="paragraph">Common ENUMs The Op Code for requests.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1314112348%2FClasslikes%2F-712322977" anchor-label="Request" id="1314112348%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-request/index.html"><span><span>Request</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1314112348%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-request/index.html">Request</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>op_code<span class="token operator">: </span><a href="[android-jvm]-op-code/index.html">OpCode</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>scan_params<span class="token operator">: </span><a href="[android-jvm]-scan-params/index.html">ScanParams</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>config<span class="token operator">: </span><a href="[android-jvm]-wifi-config/index.html">WifiConfig</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-request/index.html">Request</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-request/index.html">Request</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>op_code<span class="token operator">: </span><a href="[android-jvm]-op-code/index.html">OpCode</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>scan_params<span class="token operator">: </span><a href="[android-jvm]-scan-params/index.html">ScanParams</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>config<span class="token operator">: </span><a href="[android-jvm]-wifi-config/index.html">WifiConfig</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-request/index.html">Request</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">The request type, sent to the device.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="865552246%2FClasslikes%2F-712322977" anchor-label="Response" id="865552246%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-response/index.html"><span><span>Response</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="865552246%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-response/index.html">Response</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>request_op_code<span class="token operator">: </span><a href="[android-jvm]-op-code/index.html">OpCode</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>status<span class="token operator">: </span><a href="[android-jvm]-status/index.html">Status</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>device_status<span class="token operator">: </span><a href="[android-jvm]-device-status/index.html">DeviceStatus</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-response/index.html">Response</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-response/index.html">Response</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>request_op_code<span class="token operator">: </span><a href="[android-jvm]-op-code/index.html">OpCode</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>status<span class="token operator">: </span><a href="[android-jvm]-status/index.html">Status</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>device_status<span class="token operator">: </span><a href="[android-jvm]-device-status/index.html">DeviceStatus</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-response/index.html">Response</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">A response type which is sent back from the device.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1126614170%2FClasslikes%2F-712322977" anchor-label="Result" id="1126614170%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-result/index.html"><span><span>Result</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1126614170%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-result/index.html">Result</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>scan_record<span class="token operator">: </span><a href="[android-jvm]-scan-record/index.html">ScanRecord</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>state<span class="token operator">: </span><a href="[android-jvm]-connection-state/index.html">ConnectionState</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>reason<span class="token operator">: </span><a href="[android-jvm]-connection-failure-reason/index.html">ConnectionFailureReason</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-result/index.html">Result</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-result/index.html">Result</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>scan_record<span class="token operator">: </span><a href="[android-jvm]-scan-record/index.html">ScanRecord</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>state<span class="token operator">: </span><a href="[android-jvm]-connection-state/index.html">ConnectionState</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>reason<span class="token operator">: </span><a href="[android-jvm]-connection-failure-reason/index.html">ConnectionFailureReason</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-result/index.html">Result</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">This type is returned by the Data Out characteristic using notifications. Scan records are returned when WiFi scanning is enabled. WiFi state is notified whenever connection state changes, or during provisioning.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1036585492%2FClasslikes%2F-712322977" anchor-label="ScanParams" id="1036585492%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-scan-params/index.html"><span>Scan</span><wbr><span><span>Params</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1036585492%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-scan-params/index.html">ScanParams</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>band<span class="token operator">: </span><a href="[android-jvm]-band/index.html">Band</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>passive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>period_ms<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>group_channels<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-scan-params/index.html">ScanParams</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-scan-params/index.html">ScanParams</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>band<span class="token operator">: </span><a href="[android-jvm]-band/index.html">Band</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>passive<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>period_ms<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>group_channels<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-scan-params/index.html">ScanParams</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Scanning parameters.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="753320361%2FClasslikes%2F-712322977" anchor-label="ScanRecord" id="753320361%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-scan-record/index.html"><span>Scan</span><wbr><span><span>Record</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="753320361%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-scan-record/index.html">ScanRecord</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>wifi<span class="token operator">: </span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>rssi<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-scan-record/index.html">ScanRecord</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-scan-record/index.html">ScanRecord</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>wifi<span class="token operator">: </span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>rssi<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-scan-record/index.html">ScanRecord</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">States are sent over Data Out characteristic Single Wi-Fi scan result.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1950431643%2FClasslikes%2F-712322977" anchor-label="Status" id="-1950431643%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-status/index.html"><span><span>Status</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1950431643%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-status/index.html">Status</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-status/index.html">Status</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="symbol monospace"><span class="token keyword">enum </span><a href="[android-jvm]-status/index.html">Status</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="[android-jvm]-status/index.html">Status</a><span class="token operator">&gt; </span>, <span data-unresolved-link="com.squareup.wire/WireEnum///PointingToDeclaration/">WireEnum</span></div><div class="brief "><p class="paragraph">Response status code.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="556838976%2FClasslikes%2F-712322977" anchor-label="WifiConfig" id="556838976%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-wifi-config/index.html"><span>Wifi</span><wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="556838976%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-wifi-config/index.html">WifiConfig</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>wifi<span class="token operator">: </span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>passphrase<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>volatileMemory<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>anyChannel<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-wifi-config/index.html">WifiConfig</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-wifi-config/index.html">WifiConfig</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>wifi<span class="token operator">: </span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>passphrase<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>volatileMemory<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>anyChannel<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-wifi-config/index.html">WifiConfig</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Requests Wi-Fi provisioning configuration for SET_CONFIG request.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1131966316%2FClasslikes%2F-712322977" anchor-label="WifiInfo" id="-1131966316%2FClasslikes%2F-712322977" data-filterable-set=":lib:ble/release"></a>
+          <div class="table-row" data-filterable-current=":lib:ble/release" data-filterable-set=":lib:ble/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="[android-jvm]-wifi-info/index.html"><span>Wifi</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1131966316%2FClasslikes%2F-712322977"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":lib:ble/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ssid<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>bssid<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>band<span class="token operator">: </span><a href="[android-jvm]-band/index.html">Band</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>channel<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>auth<span class="token operator">: </span><a href="[android-jvm]-auth-mode/index.html">AuthMode</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="symbol monospace"><span class="token keyword">class </span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ssid<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>bssid<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>band<span class="token operator">: </span><a href="[android-jvm]-band/index.html">Band</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>channel<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>auth<span class="token operator">: </span><a href="[android-jvm]-auth-mode/index.html">AuthMode</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">unknownFields<span class="token operator">: </span><span data-unresolved-link="okio/ByteString///PointingToDeclaration/">ByteString</span><span class="token operator"> = </span>ByteString.EMPTY</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.squareup.wire/Message///PointingToDeclaration/">Message</span><span class="token operator">&lt;</span><a href="[android-jvm]-wifi-info/index.html">WifiInfo</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-nothing/index.html">Nothing</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Wi-Fi details.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>Copyright © 2022 - 2025 Nordic Semiconductor ASA. All Rights Reserved.</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
