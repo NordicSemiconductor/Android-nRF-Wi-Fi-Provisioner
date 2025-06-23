@@ -45,16 +45,27 @@ import no.nordicsemi.android.wifi.provisioner.ble.domain.toApi
 import no.nordicsemi.android.wifi.provisioner.ble.domain.toDomain
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ProvisionerBleManager
+import java.util.UUID
 
 class ProvisionerRepositoryImpl internal constructor(
-    private val context: Context
+    private val context: Context,
+    private val provisioningServiceUuidOverride: UUID?,
+    private val versionCharacteristicUuidOverride: UUID?,
+    private val controlPointCharacteristicUuidOverride: UUID?,
+    private val dataOutCharacteristicUuidOverride: UUID?
 ) : ProvisionerRepository {
 
     private var manager: ProvisionerBleManager? = null
 
     @SuppressLint("MissingPermission")
     override suspend fun start(device: BluetoothDevice): Flow<ConnectionStatus> {
-        manager = ProvisionerFactory.createBleManager(context)
+        manager = ProvisionerFactory.createBleManager(
+            context,
+            provisioningServiceUuidOverride,
+            versionCharacteristicUuidOverride,
+            controlPointCharacteristicUuidOverride,
+            dataOutCharacteristicUuidOverride
+        )
         return manager!!.start(device)
     }
 
@@ -94,11 +105,35 @@ class ProvisionerRepositoryImpl internal constructor(
 
 internal object ProvisionerFactory {
 
-    fun createRepository(context: Context): ProvisionerRepositoryImpl {
-        return ProvisionerRepositoryImpl(context)
+    fun createRepository(
+        context: Context,
+        provisioningServiceUuidOverride: UUID?,
+        versionCharacteristicUuidOverride: UUID?,
+        controlPointCharacteristicUuidOverride: UUID?,
+        dataOutCharacteristicUuidOverride: UUID?
+    ): ProvisionerRepositoryImpl {
+        return ProvisionerRepositoryImpl(
+            context,
+            provisioningServiceUuidOverride,
+            versionCharacteristicUuidOverride,
+            controlPointCharacteristicUuidOverride,
+            dataOutCharacteristicUuidOverride
+        )
     }
 
-    fun createBleManager(context: Context): ProvisionerBleManager {
-        return ProvisionerBleManager(context)
+    fun createBleManager(
+        context: Context,
+        provisioningServiceUuidOverride: UUID?,
+        versionCharacteristicUuidOverride: UUID?,
+        controlPointCharacteristicUuidOverride: UUID?,
+        dataOutCharacteristicUuidOverride: UUID?
+    ): ProvisionerBleManager {
+        return ProvisionerBleManager(
+            context,
+            provisioningServiceUuidOverride,
+            versionCharacteristicUuidOverride,
+            controlPointCharacteristicUuidOverride,
+            dataOutCharacteristicUuidOverride
+        )
     }
 }

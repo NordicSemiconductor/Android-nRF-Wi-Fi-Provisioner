@@ -43,6 +43,7 @@ import no.nordicsemi.android.wifi.provisioner.ble.internal.ConnectionStatus
 import no.nordicsemi.android.wifi.provisioner.ble.internal.ResponseErrorException
 import no.nordicsemi.android.wifi.provisioner.ble.internal.NotificationTimeoutException
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 /**
  * A class responsible for establishing connection and maintaining communication with a nRF 7 device.
@@ -134,10 +135,30 @@ interface ProvisionerRepository {
          * Creates new instance of [ProvisionerRepository]
          *
          * @param context the application context
+         * @param provisioningServiceUuidOverride
+         * optional provisioning service UUID to use instead of the default one
+         * @param versionCharacteristicUuidOverride
+         * optional version characteristic UUID to use instead of the default one
+         * @param controlPointCharacteristicUuidOverride
+         * optional control point characteristic UUID to use instead of the default one
+         * @param dataOutCharacteristicUuidOverride
+         * optional data out characteristic UUID to use instead of the default one
          */
-        fun newInstance(context: Context): ProvisionerRepository {
+        fun newInstance(
+            context: Context,
+            provisioningServiceUuidOverride: UUID? = null,
+            versionCharacteristicUuidOverride: UUID? = null,
+            controlPointCharacteristicUuidOverride: UUID? = null,
+            dataOutCharacteristicUuidOverride: UUID? = null
+        ): ProvisionerRepository {
             val app = context.applicationContext
-            val newInstance = instance ?: ProvisionerFactory.createRepository(app)
+            val newInstance = instance ?: ProvisionerFactory.createRepository(
+                app,
+                provisioningServiceUuidOverride,
+                versionCharacteristicUuidOverride,
+                controlPointCharacteristicUuidOverride,
+                dataOutCharacteristicUuidOverride
+            )
             instance = newInstance
             return newInstance
         }
