@@ -75,7 +75,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.launch
 import no.nordicsemi.android.common.logger.view.LoggerAppBarIcon
-import no.nordicsemi.android.common.permissions.wifi.RequireWifi
+import no.nordicsemi.android.common.permissions.wifi.RequireWiFi
 import no.nordicsemi.android.common.ui.view.NordicAppBar
 import no.nordicsemi.android.common.ui.view.ProgressItem
 import no.nordicsemi.android.common.ui.view.ProgressItemStatus
@@ -151,7 +151,7 @@ fun SoftApScreen(
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            RequireWifi(isNearbyWifiDevicesPermissionRequired = false) {
+            RequireWiFi(isNearbyWifiDevicesPermissionRequired = false) {
 
                 val insets = WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
                 OutlinedCard(

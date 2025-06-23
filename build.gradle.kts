@@ -35,11 +35,16 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
-    alias(libs.plugins.kotlin.dokka)
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.wire) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
+
+    // This plugin is used to generate Dokka documentation.
+    alias(libs.plugins.kotlin.dokka) apply false
+    // This applies Nordic look & feel to generated Dokka documentation.
+    // https://github.com/NordicSemiconductor/Android-Gradle-Plugins/blob/main/plugins/src/main/kotlin/NordicDokkaPlugin.kt
+    alias(libs.plugins.nordic.dokka) apply true
 
     // Nordic plugins are defined in https://github.com/NordicSemiconductor/Android-Gradle-Plugins
     alias(libs.plugins.nordic.application) apply false
@@ -52,18 +57,9 @@ plugins {
     alias(libs.plugins.nordic.nexus.android) apply false
 }
 
-val libraries = listOf(
-    "lib:domain",
-    "lib:ble",
-    "lib:nfc",
-    "lib:softap",
-)
-subprojects {
-    if (name in libraries) {
-        apply(plugin = "org.jetbrains.dokka")
+// Configure main Dokka page
+dokka {
+    pluginsConfiguration.html {
+        homepageLink.set("https://github.com/NordicSemiconductor/Android-nRF-Wi-Fi-Provisioner")
     }
-}
-
-tasks.dokkaHtmlMultiModule.configure {
-    outputDirectory.set(rootDir.resolve("docs"))
 }
